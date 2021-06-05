@@ -1,0 +1,42 @@
+// NOTE: This file is auto-generated, do not modify!
+// terraform/modules/cognito/aws-exports.js.tmpl
+
+export const Auth = {
+  // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
+  identityPoolId: '${identity_pool_id}',
+
+  // REQUIRED - Amazon Cognito Region
+  region: '${region}',
+
+  // OPTIONAL - Amazon Cognito Federated Identity Pool Region
+  // Required only if it's different from Amazon Cognito Region
+  identityPoolRegion: '${region}',
+
+  // OPTIONAL - Amazon Cognito User Pool ID
+  userPoolId: '${user_pool_id}',
+
+  // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
+  userPoolWebClientId: '${user_pool_web_client_id}',
+
+  // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
+  mandatorySignIn: true,
+
+  // OPTIONAL - Configuration for cookie storage
+  // Note: if the secure flag is set to true, then the cookie transmission requires a secure protocol
+  //   cookieStorage: {
+  //     // REQUIRED - Cookie domain (only required if cookieStorage is provided)
+  //     domain: '.yourdomain.com',
+  //     // OPTIONAL - Cookie path
+  //     path: '/',
+  //     // OPTIONAL - Cookie expiration in days
+  //     expires: 365,
+  //     // OPTIONAL - See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
+  //     sameSite: 'strict' | 'lax',
+  //     // OPTIONAL - Cookie secure flag
+  //     // Either true or false, indicating if the cookie transmission requires a secure protocol (https).
+  //     secure: true,
+  //   },
+
+  // OPTIONAL - Manually set key value pairs that can be passed to Cognito Lambda Triggers
+  //   clientMetadata: { accountId: 'todo' },
+}
