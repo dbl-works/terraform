@@ -8,8 +8,8 @@ We create modules here for re-use between projects.
 
 - [cognito](cognito/README.md) - Crate user pools for use with authentication
 - [kms-key](kms-key/README.md) - Encryption keys for securing various AWS resources
-- [rds][rds/README.md] - Postgresql database managed by AWS
-- [vpc][vpc/README.md] - Virtual Private Cloud network to contain all resources for a project/environment
+- [rds](rds/README.md) - Postgresql database managed by AWS
+- [vpc](vpc/README.md) - Virtual Private Cloud network to contain all resources for a project/environment
 
 
 
