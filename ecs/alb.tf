@@ -29,14 +29,14 @@ resource "aws_alb_listener" "http" {
   }
 }
 
-# resource "aws_alb_listener" "https" {
-#   load_balancer_arn = aws_alb.alb.id
-#   port              = "443"
-#   protocol          = "HTTPS"
-#   certificate_arn    = var.certificate_arn
+resource "aws_alb_listener" "https" {
+  load_balancer_arn = aws_alb.alb.id
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn    = var.certificate_arn
 
-#   default_action {
-#     target_group_arn = aws_alb_target_group.ecs.arn
-#     type = "forward"
-#   }
-# }
+  default_action {
+    target_group_arn = aws_alb_target_group.ecs.arn
+    type = "forward"
+  }
+}

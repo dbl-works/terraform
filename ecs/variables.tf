@@ -14,9 +14,7 @@ variable "kms_key_arns" { type = list(string) }
 
 # Sets the certficate for https traffic into the cluster
 # If not passed, no SSL endpoint will be setup
-variable "certificate_arn" {
-  default = null
-}
+variable "certificate_arn" {}
 
 # CIDR blocks to allo traffic from
 # Setting this will enable NLB traffic
