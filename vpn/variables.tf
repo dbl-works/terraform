@@ -8,3 +8,4 @@ variable "server_certificate_arn" {}
 variable "client_cidr_block" {}
 variable "public_subnet_id" {}
 variable "vpc_general_network_cidr" {}
+variable "eip_id" {}
