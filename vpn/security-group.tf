@@ -6,7 +6,9 @@ resource "aws_security_group" "full_internet_access" {
   # find the rules at: vpn/aws-security-group-rules.tf
 
   tags = {
-    Name = "full-internet-access"
+    Name        = "full-internet-access"
+    Project     = var.project
+    Environment = var.environment
   }
 }
 
