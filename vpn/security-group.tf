@@ -3,23 +3,7 @@ resource "aws_security_group" "full_internet_access" {
   description = "Allow internet traffic for the VPN"
   vpc_id      = var.vpc_id
 
-  ingress {
-    description      = "All traffic"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  egress {
-    description      = "All traffic"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
+  # find the rules at: vpn/aws-security-group-rules.tf
 
   tags = {
     Name = "full-internet-access"
