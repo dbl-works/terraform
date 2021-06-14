@@ -6,6 +6,6 @@ variable "vpc_id" {}
 variable "root_certificate_chain_arn" {}
 variable "server_certificate_arn" {}
 variable "client_cidr_block" {}
-variable "public_subnet_id" {}
+variable "vpc_public_subnet_id" {}
 variable "vpc_general_network_cidr" {}
 variable "eip_id" {}

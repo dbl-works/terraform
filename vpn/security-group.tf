@@ -28,6 +28,6 @@ resource "aws_security_group" "full_internet_access" {
 
 resource "aws_ec2_client_vpn_network_association" "internet" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
-  subnet_id              = var.public_subnet_id
+  subnet_id              = var.vpc_public_subnet_id
   security_groups        = [aws_security_group.full_internet_access.id]
 }
