@@ -24,7 +24,7 @@ We create modules here for re-use between projects.
 
 Refer to specific module README for variables and recommended usage.
 
-```
+```terraform
 module "awesome-module" {
   source = "github.com/dbl-works/terraform//awesome-module?ref=v2021.07.05"
 
