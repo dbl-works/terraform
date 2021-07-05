@@ -5,7 +5,7 @@ Used for creating a new secret.
 
 ## Usage
 
-```
+```terraform
 module "db" {
   source = "github.com/dbl-works/terraform//secrets"
 
@@ -22,7 +22,7 @@ Currently, rotation is not yet available and therefore must be set to `false` or
 
 Optionally, blank key/value pairs can already be created:
 
-```
+```terraform
 variable "rails-default" {
   default = {
     RAILS_MASTER_KEY = "replace-me"
