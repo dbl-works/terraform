@@ -27,3 +27,7 @@ module "ssl-certificate" {
 Setting `add_wildcard_subdomains` to `false` will omit creating a wild-card certificate for subdomains, i.e. `*.${domain-name}`.
 
 You might want to user a more recent `ref`.
+
+## Outputs
+- `domain_validation_information`, used to validate DNS records
+- `arn`
