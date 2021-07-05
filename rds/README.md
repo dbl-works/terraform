@@ -5,7 +5,7 @@ Used for creating and configuring databases and their networking.
 
 ## Usage
 
-```
+```terraform
 module "db" {
   source = "github.com/dbl-works/terraform//rds?ref=v2021.07.01"
 
