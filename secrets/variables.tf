@@ -1,3 +1,3 @@
 variable "project" {}
 variable "environment" {}
-variable "application" {}
+variable "application" { default = "app" }
