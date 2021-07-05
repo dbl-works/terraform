@@ -6,8 +6,12 @@ variable "environment" {}
 
 variable "instance_class" { default = "db.t3.micro" }
 variable "engine_version" { default = "13.2" }
-variable "publicly_accessible" { default = false }
 variable "allocated_storage" { default = 100 }
+
+variable "publicly_accessible" {
+  type    = bool
+  default = false
+}
 
 variable "multi_az" {
   type    = bool

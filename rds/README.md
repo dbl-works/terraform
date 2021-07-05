@@ -22,6 +22,7 @@ module "db" {
   engine_version      = "13.2"
   publicly_accessible = false
   allocated_storage   = 100
+  multi_az            = false
 }
 ```
 

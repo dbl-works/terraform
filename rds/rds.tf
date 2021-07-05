@@ -11,7 +11,7 @@ resource "aws_db_instance" "main" {
   password = var.password
   parameter_group_name = aws_db_parameter_group.postgres13.name
   apply_immediately = true
-  multi_az = false
+  multi_az = var.multi_az
   publicly_accessible = var.publicly_accessible
   deletion_protection = true
   vpc_security_group_ids = [
