@@ -18,7 +18,9 @@ module "ssl-certificate" {
   project                 = "someproject"
   environment             = "staging"
   domain_name             = "my-domain.com"
-  add_wildcard_subdomains = true # default: true
+
+  # Optional
+  add_wildcard_subdomains = true
 }
 ```
 
