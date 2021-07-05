@@ -30,7 +30,7 @@ module "awesome-module" {
 
   # Required
   environment = "staging"
-  project = "someproject"
+  project     = "someproject"
 
   # Optional
   some_variable = "some_value"
