@@ -9,8 +9,8 @@ Used for creating a new secret.
 module "secrets" {
   source = "github.com/dbl-works/terraform//secrets?ref=v2021.07.05"
 
-  project     = "someproject" # no default
-  environment = "staging"     # no default
+  project     = "someproject"
+  environment = "staging"
 
   # Optional
   application = "app"
