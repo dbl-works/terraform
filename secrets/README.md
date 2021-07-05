@@ -18,14 +18,14 @@ module "secrets" {
 the name of the secret will be `project/application/environment-XXX` with `XXX` being a random string added by AWS.
 Currently, rotation is not yet implemented. This would require a `aws_secretsmanager_secret_rotation` resource and a AWS Lambda function that can then trigger the rotation.
 
-Optionally, blank key/value pairs can already be created:
+key/value pairs may be created via:
 
 ```terraform
 variable "rails-default" {
   default = {
-    RAILS_MASTER_KEY = "replace-me"
-    DATABASE_URL     = "replace-me"
-    REDIS_URL        = "replace-me"
+    RAILS_MASTER_KEY = "XXX"
+    DATABASE_URL     = "XXX"
+    REDIS_URL        = "XXX"
   }
 
   type = map(string)
