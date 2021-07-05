@@ -15,9 +15,9 @@ Thus, creating those will fail if the certificate has not been validated (manual
 module "ssl-certificate" {
   source = "github.com/dbl-works/terraform//certificate?ref=v2021.07.05"
 
-  project                 = "someproject"
-  environment             = "staging"
-  domain_name             = "my-domain.com"
+  project     = "someproject"
+  environment = "staging"
+  domain_name = "my-domain.com"
 
   # Optional
   add_wildcard_subdomains = true
