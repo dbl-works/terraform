@@ -8,7 +8,7 @@ resource "aws_acm_certificate" "main" {
   validation_method = "DNS"
 
   tags = {
-    Name        = "${var.project}-${var.environment}"
+    Name        = var.domain_name
     Project     = var.project
     Environment = var.environment
   }
