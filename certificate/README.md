@@ -10,7 +10,7 @@ Thus, creating those will fail if the certificate has not been validated (manual
 
 ## Usage
 
-```
+```terraform
 module "ssl-certificate" {
   source = "github.com/dbl-works/terraform//certificate"
 
