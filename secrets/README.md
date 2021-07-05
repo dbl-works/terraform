@@ -6,7 +6,7 @@ Used for creating a new secret.
 ## Usage
 
 ```terraform
-module "db" {
+module "secrets" {
   source = "github.com/dbl-works/terraform//secrets"
 
   project                         = "someproject"
