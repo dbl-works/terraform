@@ -44,4 +44,5 @@ Read more [here](# https://registry.terraform.io/providers/hashicorp/aws/latest/
 
 ## Outputs
 
-- `secrets_arn`
+- `arn`
+- `id`
