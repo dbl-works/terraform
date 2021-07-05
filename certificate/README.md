@@ -11,6 +11,7 @@ Thus, creating those will fail if the certificate has not been validated (manual
 ## Usage
 
 ```terraform
+# :warning: MUST be created and manually validated before any depending ressources
 module "ssl-certificate" {
   source = "github.com/dbl-works/terraform//certificate"
 
