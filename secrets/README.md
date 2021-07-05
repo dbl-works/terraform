@@ -9,16 +9,14 @@ Used for creating a new secret.
 module "secrets" {
   source = "github.com/dbl-works/terraform//secrets"
 
-  project                         = "someproject"
-  environment                     = "staging"
-  application                     = "rails"
-  rotate_automatically_after_days = 90
-  rotation_enabled                = false
+  project     = "someproject"
+  environment = "staging"
+  application = "rails"
 }
 ```
 
 the name of the secret will be `project/application/environment-XXX` with `XXX` being a random string added by AWS.
-Currently, rotation is not yet available and therefore must be set to `false` or left out (defaults to `false`).
+Currently, rotation is not yet implemented. This would require a `aws_secretsmanager_secret_rotation` resource and a AWS Lambda function that can then trigger the rotation.
 
 Optionally, blank key/value pairs can already be created:
 
@@ -45,4 +43,3 @@ Read more [here](# https://registry.terraform.io/providers/hashicorp/aws/latest/
 ## Outputs
 
 - `secrets_arn`
-- `secrets_rotation_enabled`
