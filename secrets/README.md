@@ -11,7 +11,9 @@ module "secrets" {
 
   project     = "someproject" # no default
   environment = "staging"     # no default
-  application = "app"         # default: "app"
+
+  # Optional
+  application = "app"
 }
 ```
 
