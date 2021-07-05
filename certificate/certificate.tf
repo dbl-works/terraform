@@ -1,3 +1,5 @@
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate
+
 resource "aws_acm_certificate" "main" {
   domain_name = var.domain_name
 
