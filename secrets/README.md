@@ -7,7 +7,7 @@ Used for creating a new secret.
 
 ```terraform
 module "secrets" {
-  source = "github.com/dbl-works/terraform//secrets"
+  source = "github.com/dbl-works/terraform//secrets?ref=v2021.07.05"
 
   project     = "someproject"
   environment = "staging"
@@ -18,7 +18,9 @@ module "secrets" {
 the name of the secret will be `project/application/environment-XXX` with `XXX` being a random string added by AWS.
 Currently, rotation is not yet implemented. This would require a `aws_secretsmanager_secret_rotation` resource and a AWS Lambda function that can then trigger the rotation.
 
-key/value pairs may be created via:
+You might want to user a more recent `ref`.
+
+Key/value pairs may be created via:
 
 ```terraform
 variable "rails-default" {
