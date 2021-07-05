@@ -41,7 +41,7 @@ resource "aws_secretsmanager_secret_version" "rails-default" {
 }
 ```
 
-Read more [here](# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version).
+Read more [here](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_version).
 
 
 ## Outputs
