@@ -26,7 +26,7 @@ Refer to specific module README for variables and recommended usage.
 
 ```
 module "awesome-module" {
-  source = "https://github.com/dbl-works/terraform//awesome-module"
+  source = "https://github.com/dbl-works/terraform//awesome-module?ref=v2021.07.05"
 
   # Required
   environment = "staging"
