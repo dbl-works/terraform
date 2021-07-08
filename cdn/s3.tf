@@ -26,7 +26,7 @@ EOF
   }
 
   tags = {
-    Name    = "cdn.${domain_name}"
+    Name    = "cdn.${var.domain_name}"
     Project = var.project
   }
 }
