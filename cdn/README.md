@@ -8,7 +8,7 @@ This will setup:
 ## Usage
 
 ```terraform
-module "ecr" {
+module "cdn" {
   source = "github.com/dbl-works/terraform//cdn?ref=v2021.07.08"
 
   project     = local.project
