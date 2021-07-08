@@ -1,4 +1,4 @@
-# Terraform Module: CDN Repository
+# Terraform Module: CDN
 
 All ressources required to host a simple CDN.
 
@@ -21,4 +21,4 @@ module "cdn" {
 
 
 ## Outputs
-- `dns_target`, Set this as the target for your CNAME record in e.g. Cloudflare.
+- `dns_target`, Set this as the target for your CNAME record in e.g. Cloudflare (without the `https://` prefix).
