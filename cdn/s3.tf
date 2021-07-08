@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "main" {
-  bucket = "cdn.${domain_name}"
+  bucket = "cdn.${var.domain_name}"
   acl    = "public-read"
 
   website {
