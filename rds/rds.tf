@@ -9,6 +9,7 @@ resource "aws_db_instance" "main" {
   skip_final_snapshot = true
   username = var.username
   password = var.password
+  iam_database_authentication_enabled = true
   parameter_group_name = aws_db_parameter_group.postgres13.name
   apply_immediately = true
   multi_az = var.multi_az
