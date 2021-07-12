@@ -13,7 +13,7 @@ To allow certain SSH keys on the bastion server, follow the instructions of [thi
 # :warning: the certificate MUST be created and manually validated before any depending ressources
 #
 module "ssl-certificate" {
-  source = "github.com/dbl-works/terraform//certificate?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//certificate?ref=v2021.07.12"
 
   project     = "ssh-proxy"
   environment = "production"
@@ -25,7 +25,6 @@ module "proxy" {
   source = "github.com/dbl-works/terraform//nat?ref=v2021.07.12"
 
   account_id          = "123456"
-  account_alias       = "aws-account-alias" # ???
   ssl_certificate_arn = "arn:aws:acm:...:certificateXXX"
   environment         = "production"
   public_ips = [
