@@ -16,6 +16,6 @@ module "vpc" {
 
   # optional
   region     = "eu-central-1"
-  cidr_block = "10.6.0.0/16"
+  cidr_block = "10.0.0.0/16"
 }
 ```
