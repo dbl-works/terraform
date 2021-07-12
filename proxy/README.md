@@ -12,7 +12,7 @@ To allow certain SSH keys on the bastion server, follow the instructions of [thi
 #
 # :warning: the certificate MUST be created and manually validated before any depending ressources
 #
-module "ssl-certificate" {
+module "ssl-certificate-proxy" {
   source = "github.com/dbl-works/terraform//certificate?ref=v2021.07.12"
 
   project                 = "ssh-proxy"
@@ -23,10 +23,10 @@ module "ssl-certificate" {
 
 
 module "proxy" {
-  source = "github.com/dbl-works/terraform//nat?ref=v2021.07.12"
+  source = "github.com/dbl-works/terraform//proxy?ref=v2021.07.12"
 
   account_id          = "123456"
-  ssl_certificate_arn = "arn:aws:acm:...:certificateXXX"
+  ssl_certificate_arn = module.ssl-certificate-proxy.arn # "arn:aws:acm:...:certificateXXX"
   environment         = "production"
   public_ips = [
     "123.123.123.123",
@@ -46,7 +46,23 @@ module "proxy" {
 }
 ```
 
-`public_ips` is a list of Elastic IPs that have to belong to the same AWS account that hosts the proxy.
+Add to your `outputs.tf`:
+
+```terraform
+output "cloudflare_domain_validation_information_proxy" {
+  value       = module.ssl-certificate-proxy.domain_validation_information
+  description = "Used to complete certificate validation in e.g. Cloudflare."
+}
+
+output "certificate_arn_proxy" {
+  value       = module.ssl-certificate-proxy.arn
+  description = "To be passed to the proxy module."
+}
+```
+
+- `public_ips` is a list of Elastic IPs that have to belong to the same AWS account that hosts the proxy.
+- ensure, to first create and validate the SSL certificate, then wait for the validation to finish, then apply the proxy
+- after creating the proxy, set up a CNAME record to point the `domain_name` to the ECS cluster
 
 ## Outputs
 _none_
