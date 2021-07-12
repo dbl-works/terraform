@@ -16,7 +16,7 @@ resource "aws_lb_target_group" "bastion" {
   name        = "${var.project}-${var.environment}-bastion"
   port        = 22
   protocol    = "TCP"
-  vpc_id      = module.vpc.id
+  vpc_id      = var.vpc_id
   target_type = "ip"
 }
 
