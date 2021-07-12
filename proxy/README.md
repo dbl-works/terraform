@@ -15,9 +15,10 @@ To allow certain SSH keys on the bastion server, follow the instructions of [thi
 module "ssl-certificate" {
   source = "github.com/dbl-works/terraform//certificate?ref=v2021.07.12"
 
-  project     = "ssh-proxy"
-  environment = "production"
-  domain_name = "proxy-${aws-account-alias}.dbl.works"
+  project                 = "ssh-proxy"
+  environment             = "production"
+  domain_name             = "proxy-${aws-account-alias}.dbl.works"
+  add_wildcard_subdomains = false
 }
 
 
