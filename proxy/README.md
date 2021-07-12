@@ -26,7 +26,7 @@ module "proxy" {
   source = "github.com/dbl-works/terraform//proxy?ref=v2021.07.12"
 
   account_id          = "123456"
-  ssl_certificate_arn = module.ssl-certificate-proxy.arn # "arn:aws:acm:...:certificateXXX"
+  ssl_certificate_arn = module.ssl-certificate-proxy.arn
   environment         = "production"
   public_ips = [
     "123.123.123.123",
@@ -52,11 +52,6 @@ Add to your `outputs.tf`:
 output "cloudflare_domain_validation_information_proxy" {
   value       = module.ssl-certificate-proxy.domain_validation_information
   description = "Used to complete certificate validation in e.g. Cloudflare."
-}
-
-output "certificate_arn_proxy" {
-  value       = module.ssl-certificate-proxy.arn
-  description = "To be passed to the proxy module."
 }
 ```
 
