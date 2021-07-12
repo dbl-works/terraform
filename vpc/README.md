@@ -11,11 +11,11 @@ module "vpc" {
 
   account_id         = "12345678"
   availability_zones = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
-  cidr_block         = "10.6.0.0/16"
   environment        = "staging"
   project            = "someproject"
 
   # optional
-  region = "eu-central-1"
+  region     = "eu-central-1"
+  cidr_block = "10.6.0.0/16"
 }
 ```
