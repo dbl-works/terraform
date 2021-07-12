@@ -9,8 +9,8 @@ module "ecs" {
   vpc_id              = module.vpc.id
   subnet_private_ids  = module.vpc.subnet_private_ids
   subnet_public_ids   = module.vpc.subnet_private_ids
-  secrets_arns        = []
-  kms_key_arns        = []
+  secrets_arns        = [] # do we need any?
+  kms_key_arns        = [module.kms-key.arn]
   health_check_path   = var.health_check_path
   certificate_arn     = var.ssl_certificate_arn
   allowlisted_ssh_ips = [var.cidr_block]
