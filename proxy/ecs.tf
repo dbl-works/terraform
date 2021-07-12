@@ -1,5 +1,5 @@
 module "ecs" {
-  source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.09"
 
   project            = var.project
   environment        = var.environment
