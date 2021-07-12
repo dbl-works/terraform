@@ -5,6 +5,8 @@ Connecting to the SSH Proxy can be done e.g. via setting up a SSH tunnel, then p
 
 To allow certain SSH keys on the bastion server, follow the instructions of [this repo](https://github.com/dbl-works/bastion), which hosts a Dockerfile to build an appropriate image.
 
+@TODO: document how to setup DNS records on Cloudflare
+
 
 ## Usage
 
