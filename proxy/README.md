@@ -3,6 +3,8 @@
 A reopsitory for setting up a proxy to allow accessing ressources through a fixed IP.
 Connecting to the SSH Proxy can be done e.g. via setting up a SSH tunnel, then proxying all network traffic through this tunnel. Authentication can be based on SSH keys that are whitelisted on bastion service.
 
+To allow certain SSH keys on the bastion server, follow the instructions of [this repo](https://github.com/dbl-works/bastion), which hosts a Dockerfile to build an appropriate image.
+
 
 ## Usage
 
