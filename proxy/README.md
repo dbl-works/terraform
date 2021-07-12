@@ -35,7 +35,7 @@ module "proxy" {
 
   # optional
   project           = "ssh-proxy"
-  health_check_path = "/healthz"
+  health_check_path = "/healthz" # Bastion!
   cidr_block        = "10.6.0.0/16"
   availability_zones = [
     "eu-central-1a",
