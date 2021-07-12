@@ -21,7 +21,7 @@ resource "aws_lb_target_group" "bastion" {
 }
 
 resource "aws_lb_listener" "ssh" {
-  load_balancer_arn = aws_lb.nlb.id
+  load_balancer_arn = aws_lb.nlb[0].id
   port              = "22"
   protocol          = "TCP"
 
