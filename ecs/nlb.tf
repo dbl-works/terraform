@@ -28,7 +28,7 @@ resource "aws_lb_listener" "ssh" {
   protocol          = "TCP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.bastion[count.index].arn
+    target_group_arn = aws_lb_target_group.ssh[count.index].arn
     type             = "forward"
   }
 }
