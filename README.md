@@ -6,11 +6,16 @@ We create modules here for re-use between projects.
 
 ## Modules
 
-- [cognito](cognito/README.md) - Create user pools for use with authentication
+- [cdn](cdn/README.md) - All ressources required to host a simple CDN.
+- [certificate](certificate/README.md) - Requests a certificate from the Amazon Certificate Manager.
+- [cognito](cognito/README.md) - Create user pools for use with authentication.
+- [ecr](ecr/README.md) - A reopsitory for storing built docker images.
 - [ecs](ecs/README.md) - Compute cluster for running docker containers
-- [kms-key](kms-key/README.md) - Encryption keys for securing various AWS resources
-- [rds](rds/README.md) - Postgresql database managed by AWS
-- [vpc](vpc/README.md) - Virtual Private Cloud network to contain all resources for a project/environment
+- [kms-key](kms-key/README.md) - Encryption keys for securing various AWS resources.
+- [nat](nat/README.md) - A reopsitory for setting up a network address translation (NAT).
+- [rds](rds/README.md) - Used for creating and configuring databases and their networking.
+- [secrets](secrets/README.md) - Used for creating a new secret.
+- [vpc](vpc/README.md) - Creates a VPC in AWS account. Also generates a group fo public and private submodules.
 
 
 
