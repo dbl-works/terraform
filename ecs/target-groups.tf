@@ -1,9 +1,9 @@
 # Main entrypoint for the cluster applications
 resource "aws_alb_target_group" "ecs" {
-  name = "${var.project}-${var.environment}-ecs"
-  port = 3000
-  protocol = "HTTP"
-  vpc_id = var.vpc_id
+  name        = "${var.project}-${var.environment}-ecs"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
@@ -16,8 +16,7 @@ resource "aws_alb_target_group" "ecs" {
   }
 
   tags = {
-    Project = var.project
+    Project     = var.project
     Environment = var.environment
   }
 }
-
