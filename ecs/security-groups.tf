@@ -1,5 +1,6 @@
 # Load balancer to receive all incoming traffic infront of the cluster
 resource "aws_security_group" "alb" {
+  count  = var.create_alb ? 1 : 0
   vpc_id = var.vpc_id
   name   = "${var.project}-${var.environment}-alb"
   tags = {
@@ -18,20 +19,22 @@ resource "aws_security_group" "alb" {
 }
 
 resource "aws_security_group_rule" "lb-http" {
+  count             = length(aws_security_group.alb)
   type              = "ingress"
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  security_group_id = aws_security_group.alb.id
+  security_group_id = aws_security_group.alb[count.index].id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "lb-https" {
+  count             = length(aws_security_group.alb)
   type              = "ingress"
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  security_group_id = aws_security_group.alb.id
+  security_group_id = aws_security_group.alb[count.index].id
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
@@ -58,12 +61,13 @@ resource "aws_security_group" "ecs" {
 }
 
 resource "aws_security_group_rule" "ecs-lb-3000" {
+  count                    = length(aws_security_group.alb)
   type                     = "ingress"
   from_port                = 3000
   to_port                  = 3000
   protocol                 = "tcp"
   security_group_id        = aws_security_group.ecs.id
-  source_security_group_id = aws_security_group.alb.id
+  source_security_group_id = aws_security_group.alb[count.index].id
 }
 
 resource "aws_security_group_rule" "ecs-ssh" {

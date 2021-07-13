@@ -16,7 +16,8 @@ resource "aws_alb" "alb" {
 }
 
 resource "aws_alb_listener" "http" {
-  load_balancer_arn = aws_alb.alb[0].id
+  count             = length(aws_alb.alb)
+  load_balancer_arn = aws_alb.alb[count.index].id
   port              = "80"
   protocol          = "HTTP"
 
@@ -31,7 +32,8 @@ resource "aws_alb_listener" "http" {
 }
 
 resource "aws_alb_listener" "https" {
-  load_balancer_arn = aws_alb.alb[0].id
+  count             = length(aws_alb.alb)
+  load_balancer_arn = aws_alb.alb[count.index].id
   port              = "443"
   protocol          = "HTTPS"
   certificate_arn   = var.certificate_arn
