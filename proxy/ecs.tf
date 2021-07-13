@@ -12,7 +12,6 @@ module "ecs" {
   secrets_arns        = [] # do we need any?
   kms_key_arns        = [module.kms-key.arn]
   health_check_path   = var.health_check_path
-  certificate_arn     = var.ssl_certificate_arn
   allowlisted_ssh_ips = [var.cidr_block]
   # allowlisted_ssh_ips = setunion(
   #   [var.cidr_block],

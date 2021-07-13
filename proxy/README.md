@@ -11,25 +11,11 @@ To allow certain SSH keys on the bastion server, follow the instructions of [thi
 ## Usage
 
 ```terraform
-#
-# :warning: the certificate MUST be created and manually validated before any depending ressources
-#
-module "ssl-certificate-proxy" {
-  source = "github.com/dbl-works/terraform//certificate?ref=v2021.07.12"
-
-  project                 = "ssh-proxy"
-  environment             = "production"
-  domain_name             = "proxy-${aws-account-alias}.dbl.works"
-  add_wildcard_subdomains = false
-}
-
-
 module "proxy" {
   source = "github.com/dbl-works/terraform//proxy?ref=v2021.07.12"
 
-  account_id          = "123456"
-  ssl_certificate_arn = module.ssl-certificate-proxy.arn
-  environment         = "production"
+  account_id  = "123456"
+  environment = "production"
   public_ips = [
     "123.123.123.123",
     "234.234.234.234",
@@ -48,18 +34,8 @@ module "proxy" {
 }
 ```
 
-Add to your `outputs.tf`:
-
-```terraform
-output "cloudflare_domain_validation_information_proxy" {
-  value       = module.ssl-certificate-proxy.domain_validation_information
-  description = "Used to complete certificate validation in e.g. Cloudflare."
-}
-```
-
 - `public_ips` is a list of Elastic IPs that have to belong to the same AWS account that hosts the proxy.
-- ensure, to first create and validate the SSL certificate, then wait for the validation to finish, then apply the proxy
-- after creating the proxy, set up a CNAME record to point the `domain_name` to the ECS cluster
+- after creating the proxy, .... @TODO: how to setup DNS record for a lookup
 
 ## Outputs
 _none_

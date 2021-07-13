@@ -1,6 +1,5 @@
 variable "account_id" {}
 variable "environment" {}
-variable "ssl_certificate_arn" {}
 
 variable "public_ips" {
   type = list(string)
