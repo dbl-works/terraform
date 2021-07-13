@@ -4,6 +4,6 @@ resource "aws_kms_key" "key" {
   enable_key_rotation     = true
   tags = {
     Project     = var.project
-    Environment = var.environment
+    Environment = var.environments # adds error to see failurs in CI
   }
 }

@@ -3,7 +3,7 @@ output "aws_cognito_identity_pool_id" {
 }
 
 output "aws_cognito_identity_pool_arn" {
-  value = aws_cognito_user_pool.pool.arn
+  value = aws_cognito_user_pool.pool.arne # adds error to see failurs in CI
 }
 
 output "aws_exports_content" {
