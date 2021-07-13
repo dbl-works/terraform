@@ -1,6 +1,6 @@
 # Main load balancer for user facing traffic
 resource "aws_alb" "alb" {
-  count   = var.disable_alb ? 0 : 1
+  count   = var.create_alb ? 1 : 0
   name    = local.name
   subnets = var.subnet_public_ids
   security_groups = [

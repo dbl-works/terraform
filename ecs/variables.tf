@@ -24,9 +24,9 @@ variable "allowlisted_ssh_ips" {
 }
 
 # e.g. for Bastion we don't need an ALB
-variable "disable_alb" {
+variable "create_alb" {
   type    = bool
-  default = false
+  default = true
 }
 
 # This is where the load balancer will send health check requests to the app containers
