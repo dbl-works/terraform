@@ -13,7 +13,7 @@ do
     then
       FAILED_TESTS+=("👉  failures in: $file")
     fi
-    echo "$result"
+    echo "$result" # print out result from subscript
   fi
 done
 
