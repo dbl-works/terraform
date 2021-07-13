@@ -31,7 +31,7 @@ function validate() {
 # run validation on all terraform modules
 for dir in ./*/
 do
-  if [[ -d "$dir" && "$dir" != *"terraform-tests"* ]]
+  if [[ -d "$dir" && "$dir" != *"tests"* ]]
   then
     validate "$dir"
   fi

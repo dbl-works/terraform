@@ -4,7 +4,7 @@ declare -a FAILED_TESTS=() # initialize empty array
 
 # use a subshell so we can capture the exit code, without exiting this script
 # if any subscript exists
-for file in ./terraform-tests/*.sh
+for file in ./tests/*.sh
 do
   if test -f "$file"
   then

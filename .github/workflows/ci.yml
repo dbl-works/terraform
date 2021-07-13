@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  terraform_validate:
+  validate:
     name: Terraform validate
     runs-on: ubuntu-latest
     steps:
@@ -15,5 +15,5 @@ jobs:
       - name: Runs terraform validate on each module
         run: |
           chmod +x run-tests.sh
-          find terraform-tests -name '*.sh' | xargs chmod +x
+          find tests -name '*.sh' | xargs chmod +x
           ./run-tests.sh
