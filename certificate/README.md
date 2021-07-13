@@ -12,7 +12,7 @@ Thus, creating those will fail if the certificate has not been validated (manual
 
 ```terraform
 # :warning: MUST be created and manually validated before any depending ressources
-module "ssl-certificate" {
+module "certificate" {
   source = "github.com/dbl-works/terraform//certificate?ref=v2021.07.05"
 
   project     = "someproject"
