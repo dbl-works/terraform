@@ -11,7 +11,6 @@ module "ecs" {
   subnet_public_ids   = module.vpc.subnet_private_ids
   secrets_arns        = [] # do we need any?
   kms_key_arns        = [module.kms-key.arn]
-  health_check_path   = var.health_check_path
   allowlisted_ssh_ips = [var.cidr_block]
   # allowlisted_ssh_ips = setunion(
   #   [var.cidr_block],

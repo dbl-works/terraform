@@ -6,7 +6,6 @@ variable "public_ips" {
 }
 
 variable "project" { default = "ssh-proxy" }
-variable "health_check_path" { default = "/healthz" }
 variable "cidr_block" { default = "10.6.0.0/16" }
 variable "availability_zones" {
   type    = list(string)
