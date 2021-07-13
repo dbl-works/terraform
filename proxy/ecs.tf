@@ -1,8 +1,5 @@
 module "ecs" {
-  # @TODO: must use this PR's release, since this PR also enables NLB's for the ECS module
-  # source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.12"
-  # for testing
-  source = "github.com/dbl-works/terraform//ecs?ref=ba8e35ce9c38fb7303e9cd6bdfce51e6f1f15bee"
+  source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.13"
 
   project             = var.project
   environment         = var.environment
