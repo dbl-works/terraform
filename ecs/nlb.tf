@@ -1,6 +1,6 @@
 resource "aws_lb" "nlb" {
   count              = length(var.allowlisted_ssh_ips) > 0 ? 1 : 0
-  name               = "${local.name}-bastion"
+  name               = "${local.name}-nlb"
   load_balancer_type = "network"
   subnets            = var.subnet_public_ids
   idle_timeout       = 600
