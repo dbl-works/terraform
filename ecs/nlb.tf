@@ -14,7 +14,7 @@ resource "aws_lb" "nlb" {
 # Bastion is allowed, only from some IPs
 resource "aws_lb_target_group" "ssh" {
   count       = length(aws_lb.nlb)
-  name        = "${var.project}-${var.environment}-nlb"
+  name        = "${var.project}-${var.environment}-ssh"
   port        = 22
   protocol    = "TCP"
   vpc_id      = var.vpc_id
@@ -28,7 +28,7 @@ resource "aws_lb_listener" "ssh" {
   protocol          = "TCP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.bastion[count.index].arn
+    target_group_arn = aws_lb_target_group.ssh[count.index].arn
     type             = "forward"
   }
 }
