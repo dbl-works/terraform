@@ -4,7 +4,7 @@ resource "aws_alb" "alb" {
   name    = local.name
   subnets = var.subnet_public_ids
   security_groups = [
-    aws_security_group.alb.id,
+    aws_security_group.alb[count.index].id,
   ]
   enable_http2 = "true"
   idle_timeout = 600

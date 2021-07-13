@@ -13,7 +13,7 @@ output "alb_target_group_ecs_arn" {
 
 # Security groups, for linking with other resources
 output "alb_security_group_id" {
-  value = aws_security_group.alb.id
+  value = aws_security_group.alb[0].id
 }
 output "ecs_security_group_id" {
   value = aws_security_group.ecs.id
