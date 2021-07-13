@@ -1,9 +1,9 @@
 resource "aws_kms_key" "key" {
-  description = var.description
+  description             = var.description
   deletion_window_in_days = var.deletion_window_in_days
-  enable_key_rotation = true
+  enable_key_rotation     = true
   tags = {
-    Project = var.project
+    Project     = var.project
     Environment = var.environment
   }
 }
