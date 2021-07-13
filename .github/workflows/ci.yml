@@ -13,4 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Runs terraform validate on each module
-        run: run-tests.sh
+        run: |
+          chmod +x run-tests.sh
+          find terraform-tests -name '*.sh' | xargs chmod +x
+          ./run-tests.sh
