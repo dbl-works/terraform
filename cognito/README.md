@@ -5,8 +5,8 @@ Create user pools for use with authentication.
 ## Usage
 
 ```terraform
-module "ssl-certificate" {
-  source = "github.com/dbl-works/terraform//certificate?ref=v2021.07.05"
+module "cognito" {
+  source = "github.com/dbl-works/terraform//cognito?ref=v2021.07.05"
 
   project         = local.project
   environment     = local.environment
