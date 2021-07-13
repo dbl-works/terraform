@@ -5,7 +5,7 @@ resource "aws_lb" "nlb" {
   subnets            = var.subnet_public_ids
   idle_timeout       = 600
   tags = {
-    Name        = "${var.project}-${var.environment}-bastion"
+    Name        = "${var.project}-${var.environment}-nlb"
     Project     = var.project
     Environment = var.environment
   }
