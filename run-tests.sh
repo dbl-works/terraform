@@ -17,13 +17,13 @@ do
   fi
 done
 
-# print all filed files at the end
+# print all failed files at the end
 for failure in "${FAILED_TESTS[@]}"
 do
   echo "$failure"
 done
 
-# CI needs a exit code 1 or 0
+# CI needs an exit code of 1 or 0
 if [[ "${#FAILED_TESTS[@]}" != 0 ]]
 then
   exit 1

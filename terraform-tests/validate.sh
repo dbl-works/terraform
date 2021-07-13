@@ -43,7 +43,7 @@ do
   echo "$error"
 done
 
-# CI needs a exit code 1 or 0
+# explicitly exit script with 0 or 1
 if [[ "${#ERRORS[@]}" != 0 ]]
 then
   exit 1
