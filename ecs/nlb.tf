@@ -12,7 +12,7 @@ resource "aws_lb" "nlb" {
 }
 
 # Bastion is allowed, only from some IPs
-resource "aws_lb_target_group" "bastion" {
+resource "aws_lb_target_group" "ssh" {
   count       = length(aws_lb.nlb)
   name        = "${var.project}-${var.environment}-nlb"
   port        = 22
