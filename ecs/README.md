@@ -19,7 +19,6 @@ module "ecs" {
 
   # optional
   health_check_path  = "/healthz"
-  create_alb         = true
   certificate_arn    = module.ssl-certificate.arn # requires a `certificate` module to be created separately
   allowlisted_ssh_ips = [
     local.cidr_block,

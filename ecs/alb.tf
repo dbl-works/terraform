@@ -1,45 +1,42 @@
 # Main load balancer for user facing traffic
 resource "aws_alb" "alb" {
-  count   = var.create_alb ? 1 : 0
-  name    = local.name
+  name = local.name
   subnets = var.subnet_public_ids
   security_groups = [
-    aws_security_group.alb[count.index].id,
+    aws_security_group.alb.id,
   ]
   enable_http2 = "true"
   idle_timeout = 600
   tags = {
-    Name        = "${var.project}-${var.environment}"
-    Project     = var.project
+    Name = "${var.project}-${var.environment}"
+    Project = var.project
     Environment = var.environment
   }
 }
 
 resource "aws_alb_listener" "http" {
-  count             = length(aws_alb.alb)
-  load_balancer_arn = aws_alb.alb[count.index].id
+  load_balancer_arn = aws_alb.alb.id
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type = "redirect"
     redirect {
-      port        = "443"
-      protocol    = "HTTPS"
+      port = "443"
+      protocol = "HTTPS"
       status_code = "HTTP_301"
     }
   }
 }
 
 resource "aws_alb_listener" "https" {
-  count             = length(aws_alb.alb)
-  load_balancer_arn = aws_alb.alb[count.index].id
+  load_balancer_arn = aws_alb.alb.id
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = var.certificate_arn
+  certificate_arn    = var.certificate_arn
 
   default_action {
-    target_group_arn = aws_alb_target_group.ecs[count.index].arn
-    type             = "forward"
+    target_group_arn = aws_alb_target_group.ecs.arn
+    type = "forward"
   }
 }

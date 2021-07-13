@@ -23,12 +23,6 @@ variable "allowlisted_ssh_ips" {
   default = []
 }
 
-# e.g. for Bastion we don't need an ALB
-variable "create_alb" {
-  type    = bool
-  default = true
-}
-
 # This is where the load balancer will send health check requests to the app containers
 # The default follows the methodology of Kubernetes, see: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
 # Find more about our own standard for health checks here: https://www.notion.so/tractioneng/Health-Checks-2555294b70ce4af4849e8d0fefeb16f8

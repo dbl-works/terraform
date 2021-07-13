@@ -1,6 +1,5 @@
 # Main entrypoint for the cluster applications
 resource "aws_alb_target_group" "ecs" {
-  count       = var.create_alb ? 1 : 0
   name        = "${var.project}-${var.environment}-ecs"
   port        = 3000
   protocol    = "HTTP"
