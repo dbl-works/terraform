@@ -1,6 +1,6 @@
-# Terraform Module: kms-key
+# Terraform Module: VPC
 
-Creates a KMS key.
+Creates a VPC in AWS account. Also generates a group fo public and private submodules.
 
 
 ## Usage
