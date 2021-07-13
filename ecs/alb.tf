@@ -1,5 +1,6 @@
 # Main load balancer for user facing traffic
 resource "aws_alb" "alb" {
+  count   = var.disable_alb ? 0 : 1
   name    = local.name
   subnets = var.subnet_public_ids
   security_groups = [
@@ -15,7 +16,7 @@ resource "aws_alb" "alb" {
 }
 
 resource "aws_alb_listener" "http" {
-  load_balancer_arn = aws_alb.alb.id
+  load_balancer_arn = aws_alb.alb[0].id
   port              = "80"
   protocol          = "HTTP"
 
@@ -30,7 +31,7 @@ resource "aws_alb_listener" "http" {
 }
 
 resource "aws_alb_listener" "https" {
-  load_balancer_arn = aws_alb.alb.id
+  load_balancer_arn = aws_alb.alb[0].id
   port              = "443"
   protocol          = "HTTPS"
   certificate_arn   = var.certificate_arn
