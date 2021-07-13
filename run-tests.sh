@@ -6,7 +6,6 @@ declare -a FAILED_TESTS=() # initialize empty array
 # if any subscript exists
 for file in ./terraform-tests/*.sh
 do
-  echo "$file"
   if test -f "$file"
   then
     result=$(source "$file")
