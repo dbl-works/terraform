@@ -19,7 +19,7 @@ module "ecs" {
 
   # optional
   health_check_path  = "/healthz"
-  certificate_arn    = module.ssl-certificate.arn # requires a `certificate` module to be created separately
+  certificate_arn    = "arn:aws:acm:...:certificateXXX" # my-domain.com
   allowlisted_ssh_ips = [
     local.cidr_block,
     "XX.XX.XX.XX/32", # e.g. a VPN

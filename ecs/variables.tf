@@ -16,10 +16,10 @@ variable "kms_key_arns" { type = list(string) }
 # If not passed, no SSL endpoint will be setup
 variable "certificate_arn" {}
 
-# CIDR blocks to allow traffic from
+# CIDR blocks to allo traffic from
 # Setting this will enable NLB traffic
 variable "allowlisted_ssh_ips" {
-  type    = list(string)
+  type = list(string)
   default = []
 }
 
