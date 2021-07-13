@@ -13,6 +13,7 @@ resource "aws_lb" "nlb" {
 
 # Bastion is allowed, only from some IPs
 resource "aws_lb_target_group" "bastion" {
+  count       = length(aws_lb.nlb)
   name        = "${var.project}-${var.environment}-bastion"
   port        = 22
   protocol    = "TCP"
@@ -21,12 +22,13 @@ resource "aws_lb_target_group" "bastion" {
 }
 
 resource "aws_lb_listener" "ssh" {
-  load_balancer_arn = aws_lb.nlb[0].id
+  count             = length(aws_lb.nlb)
+  load_balancer_arn = aws_lb.nlb[count.index].id
   port              = "22"
   protocol          = "TCP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.bastion.arn
+    target_group_arn = aws_lb_target_group.bastion[count.index].arn
     type             = "forward"
   }
 }
