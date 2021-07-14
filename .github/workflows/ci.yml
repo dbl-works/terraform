@@ -17,6 +17,7 @@ jobs:
           - rds
           - secrets
           - vpc
+      fail-fast: false
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
@@ -39,7 +40,7 @@ jobs:
           cd ${{ matrix.module }}
           terraform validate
 
-      - name: link ${{ matrix.module }} module
+      - name: lint formatting of ${{ matrix.module }} module
         run: |
           cd ${{ matrix.module }}
           terraform fmt
