@@ -15,6 +15,7 @@ jobs:
           - certificate
           - cognito
           - ecr
+          - ecs
           - kms-key
           - nat
           - rds
