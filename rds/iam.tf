@@ -8,7 +8,7 @@ locals {
 # Readonly access to system
 resource "aws_iam_group" "rds-db" {
   for_each = toset(local.db_roles)
-  name = "rds-db-${var.project}-${var.environment}-${each.key}"
+  name     = "rds-db-${var.project}-${var.environment}-${each.key}"
 }
 resource "aws_iam_policy" "rds-db-connect" {
   for_each    = toset(local.db_roles)
@@ -34,7 +34,7 @@ resource "aws_iam_policy" "rds-db-connect" {
 EOF
 }
 resource "aws_iam_group_policy_attachment" "rds-db-connect" {
-  for_each = toset(local.db_roles)
-  group = aws_iam_group.rds-db[each.key].name
+  for_each   = toset(local.db_roles)
+  group      = aws_iam_group.rds-db[each.key].name
   policy_arn = aws_iam_policy.rds-db-connect[each.key].arn
 }
