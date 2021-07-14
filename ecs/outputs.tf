@@ -8,7 +8,7 @@ output "nlb_dns_name" {
 
 # Target groups, for use in deployments
 output "alb_target_group_ecs_arn" {
-  value = aws_alb_target_group.ecs.arne # test errenous config on CI
+  value = aws_alb_target_group.ecs.arn
 }
 
 # Security groups, for linking with other resources
