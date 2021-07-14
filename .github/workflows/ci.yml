@@ -28,7 +28,9 @@ jobs:
 
       - uses: actions/cache@v2
         with:
-          path: vendor/bundle
+          path: |
+            ${{ matrix.module }}/.terraform/**/*
+            ${{ matrix.module }}/.terraform.lock.hcl
           key: ${{ runner.os }}-${{ matrix.module }}-terraform-${{ hashFiles('./${{ matrix.module }}/*.tf') }}
 
       - name: initialize ${{ matrix.module }} module
