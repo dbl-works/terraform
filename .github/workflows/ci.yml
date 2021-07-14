@@ -30,12 +30,12 @@ jobs:
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-${{ matrix.module }}-terraform-${{ hashFiles('./*.tf') }}
-      - name: Terraform init
+      - name: initialize ${{ matrix.module }} module
         run: |
           cd ${{ matrix.module }}
           terraform init
 
-      - name: Terraform validate
+      - name: validate ${{ matrix.module }} module
         run: |
           cd ${{ matrix.module }}
           terraform validate
