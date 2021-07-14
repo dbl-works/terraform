@@ -7,13 +7,34 @@ on:
     branches: [ main ]
 
 jobs:
-  validate:
-    name: Terraform validate
+  test:
+    strategy:
+      matrix:
+        module:
+          - cdn
+          - certificate
+          - cognito
+          - ecr
+          - kms-key
+          - nat
+          - rds
+          - secrets
+          - vpc
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - uses: actions/checkout@v2
-      - name: Runs terraform validate on each module
+
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-${{ matrix.module }}-terraform-${{ hashFiles('./*.tf') }}
+      - name: Terraform init
         run: |
-          chmod +x run-tests.sh
-          find tests -name '*.sh' | xargs chmod +x
-          ./run-tests.sh
+          cd ${{ matrix.module }}
+          terraform init
+
+      - name: Terraform validate
+        run: |
+          cd ${{ matrix.module }}
+          terraform validate
