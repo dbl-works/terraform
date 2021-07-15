@@ -36,7 +36,4 @@ jobs:
       - name: lint formatting of ${{ matrix.module }} module
         run: |
           cd ${{ matrix.module }}
-          terraform fmt
-          CHANGES=$(git diff)
-          echo "$CHANGES"
-          if [[ -z "$CHANGES" ]]; then exit 0; else exit 1; fi
+          terraform fmt -check
