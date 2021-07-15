@@ -7,6 +7,8 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 ## [Unreleased]
+### ECS
+- adds `allow_internal_traffic_to_ports` to allow configuring arbitrary ports for ECS to LB communication, [#24](https://github.com/dbl-works/terraform/pull/24)
 
 
 ## [v2021.07.15.2] - 2021-07-15
