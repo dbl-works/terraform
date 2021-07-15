@@ -1,7 +1,11 @@
 variable "environment" {}
 variable "project" {}
 variable "vpc_id" {}
-variable "allow_internal_traffic_to_ports" { type = list(string) }
+
+variable "allow_internal_traffic_to_ports" {
+  type    = list(string)
+  default = []
+}
 
 # Private IPs are where the app containers run
 variable "subnet_private_ids" { type = list(string) }
