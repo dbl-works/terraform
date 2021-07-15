@@ -1,19 +1,20 @@
 resource "aws_db_instance" "main" {
-  db_subnet_group_name = aws_db_subnet_group.main.name
-  allocated_storage    = var.allocated_storage
-  storage_type         = "gp2"
-  engine               = "postgres"
-  engine_version       = var.engine_version
-  instance_class       = var.instance_class
-  identifier           = "${var.project}-${var.environment}"
-  skip_final_snapshot  = true
-  username             = var.username
-  password             = var.password
-  parameter_group_name = aws_db_parameter_group.postgres13.name
-  apply_immediately    = true
-  multi_az             = var.multi_az
-  publicly_accessible  = var.publicly_accessible
-  deletion_protection  = true
+  db_subnet_group_name                = aws_db_subnet_group.main.name
+  allocated_storage                   = var.allocated_storage
+  storage_type                        = "gp2"
+  engine                              = "postgres"
+  engine_version                      = var.engine_version
+  instance_class                      = var.instance_class
+  identifier                          = "${var.project}-${var.environment}"
+  skip_final_snapshot                 = true
+  username                            = var.username
+  password                            = var.password
+  iam_database_authentication_enabled = true
+  parameter_group_name                = aws_db_parameter_group.postgres13.name
+  apply_immediately                   = true
+  multi_az                            = var.multi_az
+  publicly_accessible                 = var.publicly_accessible
+  deletion_protection                 = true
   vpc_security_group_ids = [
     aws_security_group.db.id,
   ]
