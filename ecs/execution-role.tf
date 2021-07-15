@@ -49,6 +49,14 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
           "ssmmessages:OpenDataChannel"
         ],
         "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ecs:DescribeServices",
+          "ecs:DescribeTasks"
+        ],
+        "Resource" : "*"
       }
     ]
   })
