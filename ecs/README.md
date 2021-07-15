@@ -28,4 +28,4 @@ module "ecs" {
 }
 ```
 
-E.g. for Rails apps, `allow_internal_traffic_to_ports` should be `[ 3000 ]`.
+`allow_internal_traffic_to_ports` will allow traffic from port `3000` (main entry point) to all given ports; these can be ports for e.g. side car services like a PDF renderer.
