@@ -7,6 +7,9 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 ## [Unreleased]
+
+
+## [v2021.07.15.2] - 2021-07-15
 ### ECS
 - allow `ecs:ListTasks` for `ecs-task-execution-policy`, [#23](https://github.com/dbl-works/terraform/pull/23/)
 
