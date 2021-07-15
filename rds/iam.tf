@@ -43,7 +43,7 @@ resource "aws_iam_group_policy_attachment" "rds-db-connect" {
 
 # Grant access to list and describe instances
 resource "aws_iam_group" "rds" {
-  name     = "rds-${var.project}-${var.environment}"
+  name = "rds-${var.project}-${var.environment}"
 }
 resource "aws_iam_policy" "rds" {
   name        = "rds_${var.project}_${var.environment}"
