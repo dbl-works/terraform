@@ -57,10 +57,11 @@ resource "aws_security_group" "ecs" {
   }
 }
 
-resource "aws_security_group_rule" "ecs-lb-3000" {
+resource "aws_security_group_rule" "ecs-lb" {
+  count                    = length(var.allow_internal_traffic_to_ports)
   type                     = "ingress"
-  from_port                = 3000
-  to_port                  = 3000
+  from_port                = count.index
+  to_port                  = count.index
   protocol                 = "tcp"
   security_group_id        = aws_security_group.ecs.id
   source_security_group_id = aws_security_group.alb.id
