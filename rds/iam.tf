@@ -77,6 +77,6 @@ EOF
 }
 resource "aws_iam_group_policy_attachment" "rds" {
   for_each   = toset(local.db_roles)
-  group      = aws_iam_group.rds[each.key].name
-  policy_arn = aws_iam_policy.rds[each.key].arn
+  group      = aws_iam_group.rds.name
+  policy_arn = aws_iam_policy.rds.arn
 }
