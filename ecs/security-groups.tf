@@ -58,10 +58,10 @@ resource "aws_security_group" "ecs" {
 }
 
 resource "aws_security_group_rule" "ecs-lb" {
-  count                    = length(var.allow_internal_traffic_to_ports)
+  for_each                 = toset(var.allow_internal_traffic_to_ports)
   type                     = "ingress"
-  from_port                = count.index
-  to_port                  = count.index
+  from_port                = each.key
+  to_port                  = each.key
   protocol                 = "tcp"
   security_group_id        = aws_security_group.ecs.id
   source_security_group_id = aws_security_group.alb.id
