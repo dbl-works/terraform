@@ -9,13 +9,14 @@ Create a compute cluster for hosting docker based apps.
 module "ecs" {
   source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.05"
 
-  project            = local.project
-  environment        = local.environment
-  vpc_id             = module.vpc.id
-  subnet_private_ids = module.vpc.subnet_private_ids
-  subnet_public_ids  = module.vpc.subnet_private_ids
-  secrets_arns       = []
-  kms_key_arns       = []
+  project                         = local.project
+  environment                     = local.environment
+  vpc_id                          = module.vpc.id
+  subnet_private_ids              = module.vpc.subnet_private_ids
+  subnet_public_ids               = module.vpc.subnet_private_ids
+  secrets_arns                    = []
+  kms_key_arns                    = []
+  allow_internal_traffic_to_ports = []
 
   # optional
   health_check_path  = "/healthz"
@@ -26,3 +27,5 @@ module "ecs" {
   ]
 }
 ```
+
+E.g. for Rails apps, `allow_internal_traffic_to_ports` should be `[ 3000 ]`.
