@@ -65,7 +65,7 @@ resource "aws_security_group_rule" "ecs-lb" {
   to_port                  = each.key
   protocol                 = "tcp"
   security_group_id        = aws_security_group.ecs.id
-  source_security_group_id = aws_security_group.alb.id
+  source_security_group_id = aws_security_group.ecs.id
 }
 
 # port 3000 is the main entry point for cluster applications
