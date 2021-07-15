@@ -5,7 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
-## [v2021.07.15.1]
+
+## [Unreleased]
+### ECS
+- allow `ecs:ListTasks` for `ecs-task-execution-policy`, [#23](https://github.com/dbl-works/terraform/pull/23/)
+
+
+## [v2021.07.15.1] - 2021-07-15
 ### Added
 - Grant access to managed RDS via IAM policy for the created database [#12](https://github.com/dbl-works/terraform/pull/12)
 
