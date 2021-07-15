@@ -1,0 +1,39 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        module:
+          - cdn
+          - certificate
+          - cognito
+          - ecr
+          - ecs
+          - kms-key
+          - nat
+          - rds
+          - secrets
+          - vpc
+      fail-fast: false
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: initialize ${{ matrix.module }} module
+        run: |
+          cd ${{ matrix.module }}
+          terraform init
+
+      - name: validate ${{ matrix.module }} module
+        run: |
+          cd ${{ matrix.module }}
+          terraform validate
+
+      - name: lint formatting of ${{ matrix.module }} module
+        run: |
+          cd ${{ matrix.module }}
+          terraform fmt -check
