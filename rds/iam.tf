@@ -6,15 +6,15 @@ locals {
 }
 
 # Readonly access to database
-resource "aws_iam_group" "rds-db" {
+resource "aws_iam_group" "rds-db-connect" {
   for_each = toset(local.db_roles)
-  name     = "rds-db-${var.project}-${var.environment}-${each.key}"
+  name     = "${var.project}-${var.environment}-rds-db-connect-${each.key}"
 }
 resource "aws_iam_policy" "rds-db-connect" {
   for_each    = toset(local.db_roles)
-  name        = "rds_db_${each.key}_connect_${var.project}_${var.environment}"
+  name        = "${var.project}-${var.environment}-rds-db-connect-${each.key}"
   path        = "/"
-  description = "Allow connecting as ${each.key} to ${var.project} ${var.environment} using their IAM roles"
+  description = "Allow connecting as ${each.key} to ${var.project} ${var.environment} using IAM roles"
 
   policy = <<EOF
 {
@@ -35,18 +35,18 @@ EOF
 }
 resource "aws_iam_group_policy_attachment" "rds-db-connect" {
   for_each   = toset(local.db_roles)
-  group      = aws_iam_group.rds-db[each.key].name
+  group      = aws_iam_group.rds-db-connect[each.key].name
   policy_arn = aws_iam_policy.rds-db-connect[each.key].arn
 }
 
 
 
 # Grant access to list and describe instances
-resource "aws_iam_group" "rds" {
-  name = "rds-${var.project}-${var.environment}"
+resource "aws_iam_group" "rds-view" {
+  name = "${var.project}-${var.environment}-rds-view"
 }
-resource "aws_iam_policy" "rds" {
-  name        = "rds_${var.project}_${var.environment}"
+resource "aws_iam_policy" "rds-view" {
+  name        = "${var.project}-${var.environment}-rds-view"
   path        = "/"
   description = "Allow viewing db instances for ${var.project} ${var.environment}"
 
@@ -75,8 +75,7 @@ resource "aws_iam_policy" "rds" {
 }
 EOF
 }
-resource "aws_iam_group_policy_attachment" "rds" {
-  for_each   = toset(local.db_roles)
-  group      = aws_iam_group.rds.name
-  policy_arn = aws_iam_policy.rds.arn
+resource "aws_iam_group_policy_attachment" "rds-view" {
+  group      = aws_iam_group.rds-view.name
+  policy_arn = aws_iam_policy.rds-view.arn
 }
