@@ -57,8 +57,9 @@ resource "aws_security_group" "ecs" {
   }
 }
 
-# allow traffic from main app to side car services
-resource "aws_security_group_rule" "ecs-lb" {
+# allow internal traffic to containers running services other than the main application
+# that expose their service on a given port
+resource "aws_security_group_rule" "ecs" {
   for_each                 = toset(var.allow_internal_traffic_to_ports)
   type                     = "ingress"
   from_port                = 0
