@@ -6,8 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [Unreleased]
+
+
+## [v2021.07.15] - 2021-07-15
+### Added
+- adds CI script to validate and lint all terraform modules, [#18](https://github.com/dbl-works/terraform/pull/18)
 ### ECS
 - Allow describe service & task for `ecs-task-execution-policy` , [#21](https://github.com/dbl-works/terraform/pull/21)
+
 
 ## [v2021.07.13] - 2021-07-13
 ### Added
