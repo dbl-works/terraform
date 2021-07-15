@@ -5,9 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
-## [Unreleased]
+## [v2021.07.15.1]
 ### Added
-- Grant access to managed RDS via IAM policy for the created database (#12)
+- Grant access to managed RDS via IAM policy for the created database [#12](https://github.com/dbl-works/terraform/pull/12)
 
 
 ## [v2021.07.15] - 2021-07-15
