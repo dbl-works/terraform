@@ -1,10 +1,6 @@
 name: ci
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
   test:
@@ -21,6 +17,7 @@ jobs:
           - rds
           - secrets
           - vpc
+      fail-fast: false
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
@@ -42,3 +39,11 @@ jobs:
         run: |
           cd ${{ matrix.module }}
           terraform validate
+
+      - name: lint formatting of ${{ matrix.module }} module
+        run: |
+          cd ${{ matrix.module }}
+          terraform fmt
+          CHANGES=$(git diff)
+          echo "$CHANGES"
+          if [[ -z "$CHANGES" ]]; then exit 0; else exit 1; fi
