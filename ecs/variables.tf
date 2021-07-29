@@ -1,6 +1,7 @@
 variable "environment" {}
 variable "project" {}
 variable "vpc_id" {}
+variable "region" {}
 
 variable "allow_internal_traffic_to_ports" {
   type    = list(string)
