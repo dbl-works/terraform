@@ -1,8 +1,8 @@
 # Terraform Module: CDN
 
-A reopsitory for setting up a S3 bucket to host static files such as a frontend app, images, fronts, etc.
+A repository for setting up an S3 bucket to host static files such as a frontend app, images, fronts, etc.
 
-Access is permitted only through a Cloudfront distribution, that requires a SSL certificate for your custom domain.
+Access is permitted only through a Cloudfront distribution that requires an SSL certificate for your custom domain.
 
 
 ## Usage
