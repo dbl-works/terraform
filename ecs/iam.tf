@@ -28,12 +28,6 @@ resource "aws_iam_policy" "ecs-view" {
         "ecs:Get*",
         "ecs:List*"
       ],
-      "Condition": {
-        "StringEquals": {
-          "aws:ResourceTag/Project": "${var.project}",
-          "aws:ResourceTag/Environment": "${var.environment}"
-        }
-      },
       "Resource": [
         "*"
       ]
