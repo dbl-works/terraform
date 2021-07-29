@@ -25,14 +25,14 @@ resource "aws_s3_bucket_policy" "main" {
         Action    = ["s3:ListBucket"],
         Effect    = "Allow",
         Resource  = "arn:aws:s3:::${var.domain_name}",
-        Principal = { "AWS" : "${aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn}" }
+        Principal = { "AWS" : "${aws_cloudfront_origin_access_identity.main.iam_arn}" }
       },
       {
         Sid       = "page_all",
         Action    = ["s3:GetObject"],
         Effect    = "Allow",
         Resource  = "arn:aws:s3:::${var.domain_name}/*",
-        Principal = { "AWS" : "${aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn}" }
+        Principal = { "AWS" : "${aws_cloudfront_origin_access_identity.main.iam_arn}" }
       }
     ]
   })
