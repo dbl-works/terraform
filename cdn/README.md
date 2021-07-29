@@ -1,21 +1,23 @@
 # Terraform Module: CDN
 
-All ressources required to host a simple CDN.
+A reopsitory for setting up a S3 bucket to host static files such as a frontend app, images, fronts, etc.
 
-This will setup:
-- S3 bucket "cdn.my-project.com"
+Access is permitted only through a Cloudfront distribution, that requires a SSL certificate for your custom domain.
+
 
 ## Usage
 
 ```terraform
 module "cdn" {
-  source = "github.com/dbl-works/terraform//cdn?ref=v2021.07.08"
+  source = "github.com/dbl-works/terraform//cdn?ref=v2021.07.XX" # @TODO: update on release
 
-  project     = local.project
-  domain_name = "my-project.com"
+  environment     = local.environment
+  project         = local.project
+  domain_name     = "my-project.com"
+  certificate_arn = module.ssl-certificate.arn # requires a `certificate` module to be created separately
 
-  # Optional
-  additional_allowed_origins = [] # e.g. add "https://my-project-staging.com", "https://*.my-project-staging.com"
+  # optional
+  price_class = "PriceClass_100" # For Cloudfront, other values: PriceClass_All, PriceClass_200
 }
 ```
 

@@ -1,3 +1,8 @@
 variable "project" {}
+variable "environment" {}
 variable "domain_name" {}
-variable "additional_allowed_origins" { default = [] }
+variable "certificate_arn" {}
+
+variable "price_class" {
+  default = "PriceClass_100"
+}
