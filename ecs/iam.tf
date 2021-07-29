@@ -1,3 +1,5 @@
+# https://docs.aws.amazon.com/AmazonECS/latest/userguide/security_iam_service-with-iam.html
+
 # Grant access to list and describe clusters
 resource "aws_iam_group" "ecs-view" {
   name = "${var.project}-${var.environment}-ecs-view"
@@ -29,7 +31,12 @@ resource "aws_iam_policy" "ecs-view" {
         "ecs:List*"
       ],
       "Resource": [
-        "*"
+        "arn:aws:ecs:*:*:task-definition/*",
+        "arn:aws:ecs:*:*:cluster/${local.name}",
+        "arn:aws:ecs:*:*:container/${local.name}/*",
+        "arn:aws:ecs:*:*:container-instance/${local.name}/*",
+        "arn:aws:ecs:*:*:service/${local.name}/*",
+        "arn:aws:ecs:*:*:task/${local.name}/*"
       ]
     },
     {
@@ -73,14 +80,13 @@ resource "aws_iam_policy" "ecs-console" {
       "Action": [
         "ecs:*"
       ],
-      "Condition": {
-        "StringEquals": {
-          "aws:ResourceTag/Project": "${var.project}",
-          "aws:ResourceTag/Environment": "${var.environment}"
-        }
-      },
       "Resource": [
-        "*"
+        "arn:aws:ecs:*:*:task-definition/*",
+        "arn:aws:ecs:*:*:cluster/${local.name}",
+        "arn:aws:ecs:*:*:container/${local.name}/*",
+        "arn:aws:ecs:*:*:container-instance/${local.name}/*",
+        "arn:aws:ecs:*:*:service/${local.name}/*",
+        "arn:aws:ecs:*:*:task/${local.name}/*"
       ]
     },
     {
