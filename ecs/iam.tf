@@ -55,6 +55,21 @@ resource "aws_iam_policy" "ecs-console" {
     {
       "Effect": "Allow",
       "Action": [
+        "ecs:*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Project": "${var.project}",
+          "aws:ResourceTag/Environment": "${var.environment}"
+        }
+      },
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "ssm:StartSession"
       ],
       "Condition": {
@@ -83,7 +98,7 @@ resource "aws_iam_policy" "ecs-console" {
         }
       },
       "Resource": [
-        "*"
+        "arn:aws:ssm:*:*:session/$${aws:username}-*"
       ]
     },
     {
@@ -92,15 +107,78 @@ resource "aws_iam_policy" "ecs-console" {
         "ssm:TerminateSession",
         "ssm:ResumeSession"
       ],
-      "Condition": {
-        "StringEquals": {
-          "aws:ResourceTag/Project": "${var.project}",
-          "aws:ResourceTag/Environment": "${var.environment}"
-        }
-      },
       "Resource": [
         "arn:aws:ssm:*:*:session/$${aws:username}-*"
       ]
+    },
+    {
+      "Action": "iam:PassRole",
+      "Effect": "Allow",
+      "Resource": [
+          "*"
+      ],
+      "Condition": {
+          "StringLike": {
+              "iam:PassedToService": "ecs-tasks.amazonaws.com"
+          }
+      }
+    },
+    {
+      "Action": [
+          "iam:ListAttachedRolePolicies",
+          "iam:ListInstanceProfiles",
+          "iam:ListRoles"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Action": "iam:PassRole",
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:iam::*:role/ecsInstanceRole*"
+      ],
+      "Condition": {
+        "StringLike": {
+          "iam:PassedToService": [
+            "ec2.amazonaws.com",
+            "ec2.amazonaws.com.cn"
+        ]
+      }
+    }
+    },
+    {
+      "Action": "iam:PassRole",
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:iam::*:role/ecsAutoscaleRole*"
+      ],
+      "Condition": {
+        "StringLike": {
+          "iam:PassedToService": [
+            "application-autoscaling.amazonaws.com",
+            "application-autoscaling.amazonaws.com.cn"
+          ]
+        }
+    }
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iam:CreateServiceLinkedRole",
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "iam:AWSServiceName": [
+            "autoscaling.amazonaws.com",
+            "ecs.amazonaws.com",
+            "ecs.application-autoscaling.amazonaws.com",
+            "spot.amazonaws.com",
+            "spotfleet.amazonaws.com"
+          ]
+        }
+      }
     }
   ]
 }
