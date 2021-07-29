@@ -9,9 +9,10 @@ A reopsitory for setting up a S3 bucket to host a static website/frontend app. A
 module "s3-cloudfront" {
   source = "github.com/dbl-works/terraform//s3-cloudfront?ref=v2021.07.XX" # @TODO: update on release
 
-  environment = local.environment
-  project     = local.project
-  domain_name = "my-project.com"
+  environment     = local.environment
+  project         = local.project
+  domain_name     = "my-project.com"
+  certificate_arn = module.ssl-certificate.arn # requires a `certificate` module to be created separately
 
   # optional
   price_class = "PriceClass_100" # others: PriceClass_All, PriceClass_200
