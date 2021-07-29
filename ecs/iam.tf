@@ -31,6 +31,18 @@ resource "aws_iam_policy" "ecs-view" {
       "Resource": [
         "*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:*",
+        "logs:Describe*",
+        "logs:Get*",
+        "logs:FilterLogEvents"
+      ],
+      "Resource": [
+        "*"
+      ]
     }
   ]
 }
