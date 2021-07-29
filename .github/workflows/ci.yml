@@ -15,6 +15,7 @@ jobs:
           - kms-key
           - nat
           - rds
+          - s3-cloudfront
           - secrets
           - vpc
       fail-fast: false
