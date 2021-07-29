@@ -14,6 +14,16 @@ resource "aws_iam_policy" "ecs-view" {
     {
       "Effect": "Allow",
       "Action": [
+        "ecs:DescribeClusters",
+        "ecs:ListClusters"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "ecs:Describe*",
         "ecs:Get*",
         "ecs:List*"
