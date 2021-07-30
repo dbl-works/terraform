@@ -28,7 +28,7 @@ module "ecs" {
     "XX.XX.XX.XX/32", # e.g. a VPN
   ]
 
-  allowlisted_buckets = []
+  grant_read_access_to_s3_arns = []
 }
 ```
 

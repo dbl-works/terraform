@@ -65,7 +65,7 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
           "s3:ListBucket",
           "s3:GetObject"
         ],
-        "Resource" : var.allowlisted_buckets
+        "Resource" : var.grant_read_access_to_s3_arns
       }
     ]
   })
