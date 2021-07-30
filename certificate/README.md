@@ -21,10 +21,12 @@ module "certificate" {
 
   # Optional
   add_wildcard_subdomains = true
+  configuration_aliases   = []
 }
 ```
 
 Setting `add_wildcard_subdomains` to `false` will omit creating a wild-card certificate for subdomains, i.e. `*.${domain-name}`.
+Set `configuration_aliases` to e.g. `[aws.acm]` if you need to pass in a different provider, e.g. to enforce having a certificate in a different region (CloudFront distributions require `us-east-1` for example).
 
 You might want to user a more recent `ref`.
 
