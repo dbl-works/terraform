@@ -33,6 +33,6 @@ variable "allowlisted_ssh_ips" {
 # Find more about our own standard for health checks here: https://www.notion.so/tractioneng/Health-Checks-2555294b70ce4af4849e8d0fefeb16f8
 variable "health_check_path" { default = "/healthz" }
 
-variable "allowlisted_buckets" {
+variable "grant_read_access_to_s3_arns" {
   default = []
 }
