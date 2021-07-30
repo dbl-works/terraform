@@ -13,7 +13,7 @@ module "cdn" {
 
   environment     = local.environment
   project         = local.project
-  domain_name     = "cdn.my-project.com"
+  domain_name     = "cdn.my-project.com" # or e.g. "admin.my-project.com"
   certificate_arn = aws_acm_certificate.cdn.arn # requires a `certificate` module to be created separately
 
   # optional
@@ -33,17 +33,19 @@ provider "aws" {
 }
 ```
 
-then create your certificate in this region
+then create your certificate in this region; Just create a wildcard one, in case you need multiple CDNs.
 
 ```terraform
 resource "aws_acm_certificate" "cdn" {
   provider = aws.acm
 
-  domain_name       = "cdn.my-project.com"
+  domain_name       = local.root_url
   validation_method = "DNS"
 
+  subject_alternative_names = ["*.${local.root_url}"]
+
   tags = {
-    Name        = "cdn.${local.root_url}"
+    Name        = local.root_url
     Project     = local.project
     Environment = local.environment
   }
