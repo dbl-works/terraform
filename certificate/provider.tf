@@ -9,7 +9,7 @@ terraform {
     aws = {
       source                = "hashicorp/aws"
       version               = "~> 3.41"
-      configuration_aliases = var.configuration_aliases
+      configuration_aliases = [aws.acm] # must be static
     }
   }
 }
