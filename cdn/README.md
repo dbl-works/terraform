@@ -36,14 +36,17 @@ provider "aws" {
 then create your certificate in this region
 
 ```terraform
-module "cdn-certificate" {
-  source    = "github.com/dbl-works/terraform//certificate?ref=v2021.07.05"
-  providers = { aws = "aws.acm" }
+resource "aws_acm_certificate" "cdn" {
+  provider    = "aws.acm"
 
-  project                 = local.project
-  environment             = local.environment
-  domain_name             = "cdn.my-project.com"
-  add_wildcard_subdomains = false
+  domain_name       = "cdn.my-project.com"
+  validation_method = "DNS"
+
+  tags = {
+    Name        = var.domain_name
+    Project     = var.project
+    Environment = var.environment
+  }
 }
 ```
 
