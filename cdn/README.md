@@ -46,7 +46,7 @@ routing_rules = <<EOF
 EOF
 ```
 
-:warning: The certificate MUST be in `us-east-1` to be associatable with a CloudFront distribution.
+:warning: The certificate MUST be in `us-east-1` to be associatable with a CloudFront distribution, [read the docs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html).
 
 You can add a second provider, according to the [docs](https://www.terraform.io/docs/configuration-0-11/providers.html#multiple-provider-instances)
 
