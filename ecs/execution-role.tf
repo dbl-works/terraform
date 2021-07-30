@@ -58,6 +58,14 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
           "ecs:ListTasks",
         ],
         "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:ListBucket",
+          "s3:GetObject",
+        ],
+        "Resource" : "*"
       }
     ]
   })
