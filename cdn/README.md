@@ -53,7 +53,7 @@ You can add a second provider, according to the [docs](https://www.terraform.io/
 ```terraform
 provider "aws" {
   alias   = "acm"       # Amazon Certificate Manager
-  region  = "us-east-1" # AWS ACM MUST be in us-east-1 to work for cloudfron
+  region  = "us-east-1" # AWS ACM MUST be in us-east-1 to work for Cloudfront
   profile = "your-profile-name"
 }
 ```
