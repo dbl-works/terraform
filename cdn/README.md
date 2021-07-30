@@ -21,6 +21,8 @@ module "cdn" {
 }
 ```
 
+The `PriceClass_100` serves requests from `North America` and `Europa`; all other regions might see an increased latency.
+
 :warning: The certificate MUST be in `us-east-1` to be associatable with a CloudFront distribution.
 
 You can add a second provider, according to the [docs](https://www.terraform.io/docs/configuration-0-11/providers.html#multiple-provider-instances)
