@@ -65,7 +65,7 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
           "s3:ListBucket",
           "s3:GetObject",
         ],
-        "Resource" : ["arn:aws:s3:*:*:*${var.project}*/*"]
+        "Resource" : ["arn:aws:s3:*:*${var.project}*/*"]
       }
     ]
   })
