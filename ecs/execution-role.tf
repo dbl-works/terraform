@@ -55,7 +55,7 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
         "Action" : [
           "ecs:DescribeServices",
           "ecs:DescribeTasks",
-          "ecs:ListTasks",
+          "ecs:ListTasks"
         ],
         "Resource" : "*"
       },
@@ -63,7 +63,7 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
         "Effect" : "Allow",
         "Action" : [
           "s3:ListBucket",
-          "s3:GetObject",
+          "s3:GetObject"
         ],
         "Resource" : ["arn:aws:s3:*:*${var.project}*/*"]
       }
