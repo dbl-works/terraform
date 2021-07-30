@@ -12,7 +12,7 @@ variable "index_document" {
 }
 
 variable "error_document" {
-  value = "404.html"
+  default = "404.html"
 }
 
 variable "single_page_application" {
