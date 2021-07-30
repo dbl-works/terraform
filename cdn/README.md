@@ -14,7 +14,7 @@ module "cdn" {
   environment     = local.environment
   project         = local.project
   domain_name     = "cdn.my-project.com"
-  certificate_arn = module.cdn-certificate.arn # requires a `certificate` module to be created separately
+  certificate_arn = aws_acm_certificate.cdn.arn # requires a `certificate` module to be created separately
 
   # optional
   price_class = "PriceClass_100" # For Cloudfront, other values: PriceClass_All, PriceClass_200
@@ -37,15 +37,15 @@ then create your certificate in this region
 
 ```terraform
 resource "aws_acm_certificate" "cdn" {
-  provider    = "aws.acm"
+  provider = aws.acm
 
   domain_name       = "cdn.my-project.com"
   validation_method = "DNS"
 
   tags = {
-    Name        = var.domain_name
-    Project     = var.project
-    Environment = var.environment
+    Name        = "cdn.${local.root_url}"
+    Project     = local.project
+    Environment = local.environment
   }
 }
 ```
