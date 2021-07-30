@@ -7,8 +7,14 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 ## [Unreleased]
+
+
+## [v2021.07.30] - 2021-07-30
 ### ECS
 - adds `allow_internal_traffic_to_ports` to allow configuring arbitrary ports for ECS to LB communication, [#24](https://github.com/dbl-works/terraform/pull/24)
+- adds `grant_read_access_to_s3_arns` to allow read access to S3 buckets, [#27](https://github.com/dbl-works/terraform/pull/27)
+### CDN
+- The CDN now uses CloudFront with SSL certificate, [#26](https://github.com/dbl-works/terraform/pull/26)
 
 
 ## [v2021.07.15.2] - 2021-07-15
