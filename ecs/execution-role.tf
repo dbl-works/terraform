@@ -55,9 +55,17 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
         "Action" : [
           "ecs:DescribeServices",
           "ecs:DescribeTasks",
-          "ecs:ListTasks",
+          "ecs:ListTasks"
         ],
         "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:ListBucket",
+          "s3:GetObject"
+        ],
+        "Resource" : var.grant_read_access_to_s3_arns
       }
     ]
   })
