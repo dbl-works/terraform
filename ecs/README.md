@@ -27,6 +27,8 @@ module "ecs" {
     local.cidr_block,
     "XX.XX.XX.XX/32", # e.g. a VPN
   ]
+
+  grant_read_access_to_s3_arns = []
 }
 ```
 
