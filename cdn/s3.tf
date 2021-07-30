@@ -3,8 +3,9 @@ resource "aws_s3_bucket" "main" {
   acl    = "private"
 
   website {
-    index_document = "index.html"
-    error_document = "index.html" # for SPAs. For service static files, this doesn't matter really.
+    index_document = var.index_document
+    error_document = var.single_page_application ? var.index_document : var.error_document
+    routing_rules  = var.routing_rules
   }
 
   tags = {

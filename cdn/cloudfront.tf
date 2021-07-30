@@ -16,7 +16,15 @@ resource "aws_cloudfront_distribution" "main" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  default_root_object = "index.html"
+  default_root_object = var.index_document
+
+  # for Single Page Applications (SPA) redirect all requests to the root of the SPA
+  custom_error_response {
+    error_code            = "404"
+    error_caching_min_ttl = "300"
+    response_code         = var.single_page_application ? "200" : "404"
+    response_page_path    = "/${var.single_page_application ? var.index_document : var.error_document}"
+  }
 
   aliases = [var.domain_name]
 

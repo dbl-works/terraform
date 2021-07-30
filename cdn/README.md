@@ -13,15 +13,38 @@ module "cdn" {
 
   environment     = local.environment
   project         = local.project
-  domain_name     = "cdn.my-project.com" # or e.g. "admin.my-project.com"
+  domain_name     = "cdn.my-project.com"        # or e.g. "admin.my-project.com"
   certificate_arn = aws_acm_certificate.cdn.arn # requires a `certificate` module to be created separately
 
   # optional
-  price_class = "PriceClass_100" # For Cloudfront, other values: PriceClass_All, PriceClass_200
+  price_class             = "PriceClass_100"
+  single_page_application = false
+  index_document          = "index.html"
+  error_document          = "404.html"
+  routing_rules           = ""
 }
 ```
 
-The `PriceClass_100` serves requests from `North America` and `Europa`; all other regions might see an increased latency.
+The `PriceClass_100` serves requests from `North America` and `Europa`; all other regions might see an increased latency. Other possible values are: `PriceClass_All`, and `PriceClass_200`.
+
+Setting `single_page_application` to `true` will redirect all `404` requests (i.e. `mypage.com/xx`) back to root (i.e. `mypage.com/`).
+
+Set `routing_rules` e.g. as:
+
+```
+routing_rules = <<EOF
+  [{
+    "Condition": {
+      "KeyPrefixEquals": "myprefix/"
+    },
+    "Redirect": {
+      "HostName": "www.example.com",
+      "HttpRedirectCode": "302",
+      "Protocol": "https"
+    }
+  }]
+EOF
+```
 
 :warning: The certificate MUST be in `us-east-1` to be associatable with a CloudFront distribution.
 
