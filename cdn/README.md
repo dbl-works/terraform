@@ -9,7 +9,7 @@ Access is permitted only through a Cloudfront distribution that requires an SSL 
 
 ```terraform
 module "cdn" {
-  source = "github.com/dbl-works/terraform//cdn?ref=v2021.07.XX" # @TODO: update on release
+  source = "github.com/dbl-works/terraform//cdn?ref=v2021.07.XX"
 
   environment     = local.environment
   project         = local.project
