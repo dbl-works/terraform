@@ -2,7 +2,7 @@
 
 A repository for setting up an S3 bucket to host static files such as a frontend app, images, fronts, etc.
 
-Access is permitted only through a Cloudfront distribution that requires an SSL certificate for your custom domain.
+Access is permitted only through a Cloudfront distribution that requires an SSL certificate for your domain. Due to Cloudfront limitations, this certificate must be in `us-east-1` (find more details on this below).
 
 
 ## Usage
