@@ -5,7 +5,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
+
 ## [Unreleased]
+
+
+## [v2021.07.30] - 2021-07-30
+### ECS
+- adds `allow_internal_traffic_to_ports` to allow configuring arbitrary ports for ECS to LB communication, [#24](https://github.com/dbl-works/terraform/pull/24)
+- adds `grant_read_access_to_s3_arns` to allow read access to S3 buckets, [#27](https://github.com/dbl-works/terraform/pull/27)
+### CDN
+- The CDN now uses CloudFront with SSL certificate, [#26](https://github.com/dbl-works/terraform/pull/26)
+
+
+## [v2021.07.15.2] - 2021-07-15
+### ECS
+- allow `ecs:ListTasks` for `ecs-task-execution-policy`, [#23](https://github.com/dbl-works/terraform/pull/23/)
+
+
+## [v2021.07.15.1] - 2021-07-15
+### Added
+- Grant access to managed RDS via IAM policy for the created database [#12](https://github.com/dbl-works/terraform/pull/12)
+
+
+## [v2021.07.15] - 2021-07-15
+### Added
+- adds CI script to validate and lint all terraform modules, [#18](https://github.com/dbl-works/terraform/pull/18)
+### ECS
+- Allow describe service & task for `ecs-task-execution-policy` , [#21](https://github.com/dbl-works/terraform/pull/21)
 
 
 ## [v2021.07.13] - 2021-07-13

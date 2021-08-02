@@ -18,11 +18,18 @@ module "ecs" {
   kms_key_arns       = []
 
   # optional
-  health_check_path  = "/healthz"
-  certificate_arn    = module.ssl-certificate.arn # requires a `certificate` module to be created separately
+  health_check_path = "/healthz"
+  certificate_arn   = module.ssl-certificate.arn # requires a `certificate` module to be created separately
+
+  allow_internal_traffic_to_ports = []
+
   allowlisted_ssh_ips = [
     local.cidr_block,
     "XX.XX.XX.XX/32", # e.g. a VPN
   ]
+
+  grant_read_access_to_s3_arns = []
 }
 ```
+
+`allow_internal_traffic_to_ports` allow traffic to given ports within the cluster, e.g. to call an internal service like a PDF renderer.

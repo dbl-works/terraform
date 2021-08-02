@@ -9,6 +9,8 @@ Used for creating and configuring databases and their networking.
 module "db" {
   source = "github.com/dbl-works/terraform//rds?ref=v2021.07.01"
 
+  account_id                 = "12345678"
+  region                     = "eu-central-1"
   vpc_id                     = "vpc-123"
   project                    = "someproject"
   environment                = "staging"

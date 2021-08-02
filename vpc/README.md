@@ -5,7 +5,7 @@ Creates a VPC in AWS account. Also generates a group fo public and private submo
 
 ## Usage
 
-```
+```terraform
 module "vpc" {
   source = "github.com/dbl-works/terraform//vpc?ref=v2021.07.05"
 

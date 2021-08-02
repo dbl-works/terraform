@@ -2,6 +2,11 @@ variable "environment" {}
 variable "project" {}
 variable "vpc_id" {}
 
+variable "allow_internal_traffic_to_ports" {
+  type    = list(string)
+  default = []
+}
+
 # Private IPs are where the app containers run
 variable "subnet_private_ids" { type = list(string) }
 
@@ -27,3 +32,7 @@ variable "allowlisted_ssh_ips" {
 # The default follows the methodology of Kubernetes, see: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
 # Find more about our own standard for health checks here: https://www.notion.so/tractioneng/Health-Checks-2555294b70ce4af4849e8d0fefeb16f8
 variable "health_check_path" { default = "/healthz" }
+
+variable "grant_read_access_to_s3_arns" {
+  default = []
+}

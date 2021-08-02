@@ -1,6 +1,6 @@
 name: ci
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   test:
@@ -24,20 +24,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: initialize ${{ matrix.module }} module
+      - name: init
         run: |
           cd ${{ matrix.module }}
           terraform init
 
-      - name: validate ${{ matrix.module }} module
+      - name: validate
         run: |
           cd ${{ matrix.module }}
           terraform validate
 
-      - name: lint formatting of ${{ matrix.module }} module
+      - name: fmt -check
         run: |
           cd ${{ matrix.module }}
-          terraform fmt
-          CHANGES=$(git diff)
-          echo "$CHANGES"
-          if [[ -z "$CHANGES" ]]; then exit 0; else exit 1; fi
+          terraform fmt -check
