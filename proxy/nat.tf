@@ -3,7 +3,7 @@ module "nat" {
 
   project     = var.project
   environment = var.environment
-  public_ips  = var.public_ips
+  public_ips  = [var.public_ip]
 
   vpc_id             = module.vpc.id
   subnet_public_ids  = module.vpc.subnet_public_ids
