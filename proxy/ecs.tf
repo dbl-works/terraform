@@ -10,8 +10,4 @@ module "ecs" {
   kms_key_arns        = [module.kms-key.arn]
   allowlisted_ssh_ips = [var.cidr_block]
   certificate_arn     = var.certificate_arn
-  # allowlisted_ssh_ips = setunion(
-  #   [var.cidr_block],
-  #   var.public_ips,
-  # )
 }
