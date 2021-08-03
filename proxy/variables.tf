@@ -1,9 +1,7 @@
 variable "account_id" {}
 variable "environment" {}
-
-variable "public_ips" {
-  type = list(string)
-}
+variable "certificate_arn" {}
+variable "public_ip" {}
 
 variable "project" { default = "ssh-proxy" }
 variable "cidr_block" { default = "10.6.0.0/16" }
