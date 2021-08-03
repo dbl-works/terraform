@@ -1,5 +1,5 @@
 module "ecs" {
-  source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.13"
+  source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.30"
 
   project             = var.project
   environment         = var.environment
@@ -9,6 +9,7 @@ module "ecs" {
   secrets_arns        = [] # do we need any?
   kms_key_arns        = [module.kms-key.arn]
   allowlisted_ssh_ips = [var.cidr_block]
+  certificate_arn     = var.certificate_arn
   # allowlisted_ssh_ips = setunion(
   #   [var.cidr_block],
   #   var.public_ips,
