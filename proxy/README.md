@@ -14,13 +14,10 @@ To allow certain SSH keys on the bastion server, follow the instructions of [thi
 module "proxy" {
   source = "github.com/dbl-works/terraform//proxy?ref=v2021.07.12"
 
-  account_id  = "123456"
-  environment = "production"
-  public_ips = [
-    "123.123.123.123",
-    "234.234.234.234",
-    "134.134.134.134",
-  ]
+  account_id      = "123456"
+  environment     = "production"
+  certificate_arn = module.ssl-certificate.arn # requires a `certificate` module to be created separately
+  public_ip       = "123.123.123.123"
 
   # optional
   project    = "ssh-proxy"
@@ -33,7 +30,7 @@ module "proxy" {
 }
 ```
 
-- `public_ips` is a list of Elastic IPs that have to belong to the same AWS account that hosts the proxy.
+- `public_ip` is an Elastic IPs that has to belong to the same AWS account that hosts the proxy.
 - after creating the proxy, .... @TODO: how to setup DNS record for a lookup
 
 ## Outputs
