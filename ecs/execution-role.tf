@@ -55,7 +55,8 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
         "Action" : [
           "ecs:DescribeServices",
           "ecs:DescribeTasks",
-          "ecs:ListTasks"
+          "ecs:ListTasks",
+          "ec2:DescribeNetworkInterfaces"
         ],
         "Resource" : "*"
       },
