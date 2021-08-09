@@ -1,6 +1,19 @@
 // NOTE: This file is auto-generated, do not modify!
 // terraform/modules/cognito/aws-exports.js.tmpl
 
+// Gets the environment for the current context
+const DOMAIN_MAP = {
+  development: 'tilla.test',
+  staging: 'tilla.cloud',
+  production: 'tilla.com',
+}
+type VALID_ENVIRONMENTS = keyof typeof DOMAIN_MAP
+const getAuthEnvironment = (): VALID_ENVIRONMENTS =>
+  (process.env.APP_ENV as unknown as VALID_ENVIRONMENTS) || 'development'
+const getDomain = (environment: keyof typeof DOMAIN_MAP) => {
+  return DOMAIN_MAP[environment] || DOMAIN_MAP.development
+}
+
 export const Auth = {
   // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
   identityPoolId: '${identity_pool_id}',
@@ -23,19 +36,19 @@ export const Auth = {
 
   // OPTIONAL - Configuration for cookie storage
   // Note: if the secure flag is set to true, then the cookie transmission requires a secure protocol
-  //   cookieStorage: {
-  //     // REQUIRED - Cookie domain (only required if cookieStorage is provided)
-  //     domain: '.yourdomain.com',
-  //     // OPTIONAL - Cookie path
-  //     path: '/',
-  //     // OPTIONAL - Cookie expiration in days
-  //     expires: 365,
-  //     // OPTIONAL - See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
-  //     sameSite: 'strict' | 'lax',
-  //     // OPTIONAL - Cookie secure flag
-  //     // Either true or false, indicating if the cookie transmission requires a secure protocol (https).
-  //     secure: true,
-  //   },
+  cookieStorage: {
+    // REQUIRED - Cookie domain (only required if cookieStorage is provided)
+    domain: `.$${getDomain(getAuthEnvironment())}`,
+    // OPTIONAL - Cookie path
+    path: '/',
+    // OPTIONAL - Cookie expiration in days
+    expires: 365,
+    // OPTIONAL - See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
+    sameSite: 'lax',
+    // OPTIONAL - Cookie secure flag
+    // Either true or false, indicating if the cookie transmission requires a secure protocol (https).
+    secure: getAuthEnvironment() !== 'development',
+  },
 
   // OPTIONAL - Manually set key value pairs that can be passed to Cognito Lambda Triggers
   //   clientMetadata: { accountId: 'todo' },
