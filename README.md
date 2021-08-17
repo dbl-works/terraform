@@ -21,7 +21,7 @@ We create modules here for re-use between projects.
 
 ## Conventions
 
-- Use `proejct` + `environment` combination for a workspace/module context
+- Use `project` + `environment` combination for a workspace/module context
 - Use `main` for core resource identifiers. e.g. `resource "aws_rds_instance" "main" {}`
 
 
