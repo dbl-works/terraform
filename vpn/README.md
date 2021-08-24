@@ -8,7 +8,7 @@ Launches an isolated Outline VPN instance with it's own VPC.
 
 ```terraform
 module "outline-vpn" {
-  source = "github.com/dbl-works/terraform//vpc?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//vpn?ref=v2021.08.24"
 
   account_id  = 12345678
   eip         = "0.0.0.0"
