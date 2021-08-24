@@ -7,16 +7,16 @@ Launches an isolated Outline VPN instance with it's own VPC.
 ## Usage
 
 ```terraform
-module "vpc" {
+module "outline-vpn" {
   source = "github.com/dbl-works/terraform//vpc?ref=v2021.07.05"
 
-  account_id    = 12345678
-  eip           = "0.0.0.0"
-  ami_id        = "ami-07e4ed4c95c385519"
-  project       = "dbl"
-  environment   = "production"
-  cidr_block    = "10.0.0.0/16"
-  key_name      = "outline-server-ssh"
+  account_id  = 12345678
+  eip         = "0.0.0.0"
+  ami_id      = "ami-07e4ed4c95c385519"
+  project     = "dbl"
+  environment = "production"
+  cidr_block  = "10.0.0.0/16"
+  key_name    = "outline-server-ssh"
 
   # optional
   region        = "eu-central-1"
