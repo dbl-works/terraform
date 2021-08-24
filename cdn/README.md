@@ -13,7 +13,7 @@ module "cdn" {
 
   environment     = local.environment
   project         = local.project
-  domain_name     = "cdn.my-project.com"        # or e.g. "admin.my-project.com"
+  domain_name     = "admin.my-project.com"      # or e.g. "admin.my-project.com"
   certificate_arn = aws_acm_certificate.cdn.arn # requires a `certificate` module to be created separately
 
   # optional
