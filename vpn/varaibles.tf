@@ -2,7 +2,6 @@ variable "account_id" {}
 variable "project" {}
 variable "environment" {}
 variable "eip" {}
-
 variable "ami_id" {}
 variable "cidr_block" {}
 variable "key_name" {}
