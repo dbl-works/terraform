@@ -25,6 +25,41 @@ module "outline-vpn" {
 ```
 
 
+## Initial Outline configuration after first launch
+
+```shell
+ssh -i workspaces/proxy/outline-server-ssh.pem ubuntu@{eip} "sudo cat /opt/outline/access.txt"
+```
+
+Copy the output to the following format, then paste into outline manager.
+
+```json
+{
+  "apiUrl": "https://0.0.0.0:1234/xxx",
+  "certSha256": "xxx",
+}
+```
+
+*NOTE:* The IP address in all the connection links will be wrong initially. This should be fixed vai the Outline API (to be documented).
+
+
+
+
+## Create EIP
+
+You need to create the EIP manually in the account first, then hard code in the value for the module config.
+
+https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#Addresses:
+
+
+
+## Create SSH Key
+
+You need to create a keypair in EC2 manually and have access to this locally (we store these in 1password).
+
+https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:
+
+
 
 ## Custom Domain
 
