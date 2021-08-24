@@ -8,6 +8,9 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## [Unreleased]
 
+## [v2021.08.24] - 2021-08-24
+### Added
+- Add new module: `vpn`, [#30](https://github.com/dbl-works/terraform/pull/30)
 
 ## [v2021.07.30] - 2021-07-30
 ### ECS
