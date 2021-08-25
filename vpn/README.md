@@ -27,21 +27,33 @@ module "outline-vpn" {
 
 ## Initial Outline configuration after first launch
 
+We cannot currently run ssh commands using Terraform, so we need to manually configure Outline after it's online. The easiest way to d this is to run the following command which is provided by terraform output
+
 ```shell
-ssh -i workspaces/proxy/outline-server-ssh.pem ubuntu@{eip} "sudo cat /opt/outline/access.txt"
+tf -chdir=workspaces/reveneo-vpn output -raw outline-access-command | sh
 ```
 
 Copy the output to the following format, then paste into outline manager.
 
 ```json
 {
-  "apiUrl": "https://0.0.0.0:1234/xxx",
+  "apiUrl": "https://127.0.0.1:1234/xxx",
   "certSha256": "xxx",
 }
 ```
 
-*NOTE:* The IP address in all the connection links will be wrong initially. This should be fixed vai the Outline API (to be documented).
+The next set is to configure the hostname/ip that will be used for generating access keys. By default, this will be the one created inside the packer ami. Using the same `apiUrl` as above, run the following command:
 
+```shell
+export API_URL=https://0.0.0.0:1234/xxx
+curl --insecure -X PUT -d '{"hostname":"127.0.0.1"}' -H "Content-Type: application/json" $API_URL/server/hostname-for-access-keys
+```
+
+To verify everything is setup correctly, you can view the current server status:
+
+```shell
+curl --insecure $API_URL/server
+```
 
 
 
