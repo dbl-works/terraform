@@ -27,10 +27,10 @@ module "outline-vpn" {
 
 ## Initial Outline configuration after first launch
 
-We cannot currently run ssh commands using Terraform, so we need to manually configure Outline after it's online. The easiest way to d this is to run the following command which is provided by terraform output
+We cannot currently run ssh commands using Terraform, so we need to manually configure Outline after it's online. The easiest way to do this is to run the following command which is provided by Terraform output
 
 ```shell
-tf -chdir=workspaces/reveneo-vpn output -raw outline-access-command | sh
+tf -chdir=workspaces/my-projects-vpn output -raw outline-access-command | sh
 ```
 
 Copy the output to the following format, then paste into outline manager.
@@ -42,7 +42,7 @@ Copy the output to the following format, then paste into outline manager.
 }
 ```
 
-The next set is to configure the hostname/ip that will be used for generating access keys. By default, this will be the one created inside the packer ami. Using the same `apiUrl` as above, run the following command:
+The next step is to configure the hostname/IP that will be used for generating access keys. By default, this will be the one created inside the packer AMI. Using the same `apiUrl` as above, run the following command:
 
 ```shell
 export API_URL=https://0.0.0.0:1234/xxx
@@ -67,7 +67,7 @@ https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#Addr
 
 ## Create SSH Key
 
-You need to create a keypair in EC2 manually and have access to this locally (we store these in 1password).
+You need to create a keypair in EC2 manually and have access to this locally (we store these in 1Password).
 
 https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:
 
