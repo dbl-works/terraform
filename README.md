@@ -11,6 +11,7 @@ We create modules here for re-use between projects.
 - [cognito](cognito/README.md) - Create user pools for use with authentication.
 - [ecr](ecr/README.md) - A reopsitory for storing built docker images.
 - [ecs](ecs/README.md) - Compute cluster for running docker containers
+- [elasticache](elasticache/README.md) - elasticache cluster based on Redis
 - [kms-key](kms-key/README.md) - Encryption keys for securing various AWS resources.
 - [nat](nat/README.md) - A reopsitory for setting up a network address translation (NAT).
 - [rds](rds/README.md) - Used for creating and configuring databases and their networking.
