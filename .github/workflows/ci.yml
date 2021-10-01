@@ -12,6 +12,7 @@ jobs:
           - cognito
           - ecr
           - ecs
+          - elasticache
           - kms-key
           - nat
           - rds
