@@ -79,10 +79,10 @@ function generate_rds_password () {
 
   if [[ -z "$AWS_PROFILE" ]]
   then
+    # ${3:-default}: evaluates to 3rd argument or the literal string "default"
     export AWS_PROFILE="${3:-default}"
   fi
 
-  # ${1:-50}: first argument or "default".
   aws rds generate-db-auth-token --hostname "$DATABASE_URL" --port "$DATABASE_PORT" --region eu-central-1 --username "$DATABASE_USERNAME"
 }
 alias rdspw=generate_rds_password
