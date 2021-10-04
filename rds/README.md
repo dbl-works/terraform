@@ -86,5 +86,4 @@ function generate_rds_password () {
   aws rds generate-db-auth-token --hostname "$DATABASE_URL" --port "$DATABASE_PORT" --region eu-central-1 --username "$DATABASE_USERNAME"
 }
 alias rdspw=generate_rds_password
-
 ```
