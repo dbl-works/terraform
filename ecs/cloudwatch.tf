@@ -16,7 +16,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         ],
         "view": "timeSeries",
         "stacked": false,
-        "region": "${var.region}",
+        "region": var.region,
         "title": "CPU Usage",
         "period": 60,
         "stat": "Maximum",
@@ -39,13 +39,13 @@ resource "aws_cloudwatch_dashboard" "main" {
       "type": "metric",
       "properties": {
         "metrics": [
-          [ { "expression": "100*(m1/m2)", "label": "MemoryUsage", "id": "e1", "region": "${var.region}", "yAxis": "left" } ],
+          [ { "expression": "100*(m1/m2)", "label": "MemoryUsage", "id": "e1", "region": var.region, "yAxis": "left" } ],
           [ "ECS/ContainerInsights", "MemoryUtilized", "ServiceName", "web", "ClusterName", "${var.project}-${var.environment}", { "id": "m1", "visible": false } ],
           [ ".", "MemoryReserved", ".", ".", ".", ".", { "id": "m2", "visible": false } ]
         ],
         "view": "timeSeries",
         "stacked": true,
-        "region": "${var.region}",
+        "region": var.region,
         "title": "Memory Usage",
         "period": 60,
         "stat": "Maximum",
@@ -67,11 +67,11 @@ resource "aws_cloudwatch_dashboard" "main" {
       "type": "metric",
       "properties": {
         "metrics": [
-          [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${aws_alb.alb.arn_suffix}" ]
+          [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", aws_alb.alb.arn_suffix ]
         ],
         "view": "timeSeries",
         "stacked": true,
-        "region": "${var.region}",
+        "region": var.region,
         "stat": "Sum",
         "period": 60,
         "title": "Throughput",
@@ -91,13 +91,13 @@ resource "aws_cloudwatch_dashboard" "main" {
       "type": "metric",
       "properties": {
         "metrics": [
-          [ "AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", "${aws_alb.alb.arn_suffix}", { "label": "Average", "id": "m1", "stat": "Average" } ],
+          [ "AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", aws_alb.alb.arn_suffix, { "label": "Average", "id": "m1", "stat": "Average" } ],
           [ "...", { "id": "m2", "label": "p95" } ],
           [ "...", { "id": "m3", "stat": "p90", "label": "p90" } ]
         ],
         "view": "timeSeries",
         "stacked": false,
-        "region": "${var.region}",
+        "region": var.region,
         "stat": "p95",
         "period": 60,
         "title": "Response Time",
