@@ -3,9 +3,9 @@
 
 // Gets the environment for the current context
 const DOMAIN_MAP = {
-  development: 'tilla.test',
-  staging: 'tilla.cloud',
-  production: 'tilla.com',
+  development: 'example.com',
+  staging: 'example.com',
+  production: 'example.com',
 }
 type VALID_ENVIRONMENTS = keyof typeof DOMAIN_MAP
 const getAuthEnvironment = (): VALID_ENVIRONMENTS =>
