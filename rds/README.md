@@ -60,7 +60,7 @@ function generate_rds_password () {
   current_folder_name="${PWD##*/}"
 
   # convention for DB username: project_environment_readonly => we want to assemble this from the folder name
-  database_username="$(echo $current_folder_name | tr - _)_${2:-readonly}"
+  database_username="$(echo "$current_folder_name" | tr - _)_${2:-readonly}"
 
   # ${1:-50}: first argument or "default".
   AWS_PROFILE="${1:-default}" aws rds generate-db-auth-token --hostname "$database_url" --port "$database_port" --region eu-central-1 --username "$database_username"
