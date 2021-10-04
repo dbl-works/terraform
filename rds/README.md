@@ -38,7 +38,7 @@ aws rds describe-db-engine-versions --engine postgres --engine-version 13 --regi
 ```
 
 
-## Temporary password for read-only users
+## Temporary password for AWS IAM role-based access
 If the database is set up to use IAM user role based authentication, a password has to be generated via the AWS cli. This passworde is valid for 15min.
 
 You can use the following bash script, which relies on being executed inside the terraform workspace folder, since it reads the database URL from the terraform state.
