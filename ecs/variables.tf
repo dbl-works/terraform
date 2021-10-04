@@ -1,6 +1,7 @@
 variable "environment" {}
 variable "project" {}
 variable "vpc_id" {}
+variable "region" { default = "eu-central-1" }
 
 variable "allow_internal_traffic_to_ports" {
   type    = list(string)
