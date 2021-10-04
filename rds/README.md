@@ -71,7 +71,7 @@ function generate_rds_password () {
     cd "$CURRENT_DIR" || exit
   fi
 
-  DATABASE_URL="${DATABASE_URL_WITH_PORT%%:*}"
+  DATABASE_URL=${DATABASE_URL_WITH_PORT%%:*}
   DATABASE_PORT=${DATABASE_URL_WITH_PORT##*:}
 
   # convention for DB username: project_environment_readonly, e.g. myproject_staging_readonly
