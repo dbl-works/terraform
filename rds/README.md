@@ -46,24 +46,45 @@ You can use the following bash script, which relies on being executed inside the
 ```bash
 #
 # params:
-#   $1: name of the AWS profile, optional, defaults to "default"
-#   $2: name of the user role, optional, defaults to "readonly"
+#   $1: project name, e.g. "myproject"
+#   $2: project environment, e.g. "staging"
+#   $3: name of the AWS profile, optional, defaults to "default", won't be set if `AWS_PROFILE` is already set
+#   $4: name of the user role, optional, defaults to "readonly"
 #
-# example usage: rdspw aws-profile-1
+# example usage: generate_rds_password myproject staging aws-profile-1
+# for the lazy ones: shortcut the function name to "rdspw"
 #
 function generate_rds_password () {
-  database_url_with_port=$(terraform output database_url |  tr -d '"')
-  database_url="${database_url_with_port%%:*}"
-  database_port=${database_url_with_port##*:}
+  PROJECT="$1" # project name, e.g. "myproject"
+  ENVIRONMENT="$2" # environment name, e.g. "staging"
 
-  # convention for folder: terraform/workspaces/project-environment => get the "project-environment" part
-  current_folder_name="${PWD##*/}"
+  TERRAFORM_DIR="terraform/workspaces/$PROJECT-$ENVIRONMENT" # terraform folder convention
+  declare DATABASE_URL_WITH_PORT
 
-  # convention for DB username: project_environment_readonly => we want to assemble this from the folder name
-  database_username="$(echo "$current_folder_name" | tr - _)_${2:-readonly}"
+  CURRENT_DIR="$PWD"
+  if [[ "$CURRENT_DIR" == *"$TERRAFORM_DIR" ]]
+  then
+    DATABASE_URL_WITH_PORT=$(terraform output database_url |  tr -d '"')
+  else
+    cd "$TERRAFORM_DIR" || exit
+    DATABASE_URL_WITH_PORT=$(terraform output database_url |  tr -d '"')
+    cd "$CURRENT_DIR" || exit
+  fi
+
+  DATABASE_URL="${DATABASE_URL_WITH_PORT%%:*}"
+  DATABASE_PORT=${DATABASE_URL_WITH_PORT##*:}
+
+  # convention for DB username: project_environment_readonly, e.g. myproject_staging_readonly
+  DATABASE_USERNAME="$PROJECT"_"$ENVIRONMENT"_"${4:-readonly}"
+
+  if [[ -z "$AWS_PROFILE" ]]
+  then
+    export AWS_PROFILE="${3:-default}"
+  fi
 
   # ${1:-50}: first argument or "default".
-  AWS_PROFILE="${1:-default}" aws rds generate-db-auth-token --hostname "$database_url" --port "$database_port" --region eu-central-1 --username "$database_username"
+  aws rds generate-db-auth-token --hostname "$DATABASE_URL" --port "$DATABASE_PORT" --region eu-central-1 --username "$DATABASE_USERNAME"
 }
 alias rdspw=generate_rds_password
+
 ```
