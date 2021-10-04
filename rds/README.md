@@ -51,7 +51,7 @@ You can use the following bash script, which relies on being executed inside the
 #
 # example usage: rdspw aws-profile-1
 #
-generate_rds_password () {
+function generate_rds_password () {
   database_url_with_port=$(terraform output database_url |  tr -d '"')
   database_url="${database_url_with_port%%:*}"
   database_port=${database_url_with_port##*:}
