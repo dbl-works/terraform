@@ -7,6 +7,8 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 ## [Unreleased]
+### RDS
+- allow ECS to write to specified buckets [#39](https://github.com/dbl-works/terraform/pull/39)
 
 ## [v2021.10.08] - 2021-10-08
 ### Changed
