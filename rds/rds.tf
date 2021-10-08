@@ -34,4 +34,11 @@ resource "aws_db_instance" "main" {
     Project     = var.project
     Environment = var.environment
   }
+
+  # Ignore engine version changes since AWS will auto-update minor version changes
+  lifecycle {
+    ignore_changes = [
+      engine_version,
+    ]
+  }
 }
