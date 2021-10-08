@@ -35,10 +35,11 @@ resource "aws_db_instance" "main" {
     Environment = var.environment
   }
 
-  # Ignore engine version changes since AWS will auto-update minor version changes
+  # Ignore certain variables, that are OK to change, or will automatically change due to their nature
   lifecycle {
     ignore_changes = [
-      engine_version,
+      engine_version, # AWS will auto-update minor version changes
+      latest_restorable_time,
     ]
   }
 }
