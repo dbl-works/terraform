@@ -7,8 +7,6 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 ## [Unreleased]
-
-## [v2021.10.01] - 2021-10-01
 ### Added
 - Add new module: `elasticache`, [#35](https://github.com/dbl-works/terraform/pull/35)
 
