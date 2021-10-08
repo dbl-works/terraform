@@ -30,8 +30,6 @@ variable "allowlisted_ssh_ips" {
 }
 
 # This is where the load balancer will send health check requests to the app containers
-# The default follows the methodology of Kubernetes, see: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
-# Find more about our own standard for health checks here: https://www.notion.so/tractioneng/Health-Checks-2555294b70ce4af4849e8d0fefeb16f8
 variable "health_check_path" { default = "/healthz" }
 
 variable "grant_read_access_to_s3_arns" {
