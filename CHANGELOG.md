@@ -9,16 +9,19 @@ This project does not follow SemVer, since modules are independent of each other
 ## [Unreleased]
 ### Added
 - Add new module: `elasticache`, [#35](https://github.com/dbl-works/terraform/pull/35)
-### RDS
+
+## [v2021.10.09] - 2021-10-09
+### ECS
 - allow ECS to write to specified buckets [#39](https://github.com/dbl-works/terraform/pull/39)
 
 ## [v2021.10.08] - 2021-10-08
-### Changed
+### RDS
 - Ignore minor version changes for RDS, [#37](https://github.com/dbl-works/terraform/pull/37)
 
 ## [v2021.10.04] - 2021-10-04
-### Changed
+### VPN
 - Add documentation for the Outline VPN setup [#31](https://github.com/dbl-works/terraform/pull/31)
+### ECS
 - Add Cloudwatch dashboard to ECS module, [#36](https://github.com/dbl-works/terraform/pull/36)
 
 ## [v2021.08.24] - 2021-08-24
