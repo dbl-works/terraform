@@ -35,3 +35,7 @@ variable "health_check_path" { default = "/healthz" }
 variable "grant_read_access_to_s3_arns" {
   default = []
 }
+
+variable "grant_write_access_to_s3_arns" {
+  default = []
+}
