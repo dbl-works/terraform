@@ -66,6 +66,16 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
           "s3:GetObject"
         ],
         "Resource" : var.grant_read_access_to_s3_arns
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:ListBucket",
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ],
+        "Resource" : var.grant_write_access_to_s3_arns
       }
     ]
   })
