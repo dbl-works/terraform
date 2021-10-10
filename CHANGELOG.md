@@ -7,8 +7,31 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 ## [Unreleased]
+
+## [v2021.10.09] - 2021-10-09
+### ECS
+- allow ECS to write to specified buckets [#39](https://github.com/dbl-works/terraform/pull/39)
+
+## [v2021.10.08] - 2021-10-08
+### RDS
+- Ignore minor version changes for RDS, [#37](https://github.com/dbl-works/terraform/pull/37)
+
+## [v2021.10.04] - 2021-10-04
+### VPN
+- Add documentation for the Outline VPN setup [#31](https://github.com/dbl-works/terraform/pull/31)
+### ECS
+- Add Cloudwatch dashboard to ECS module, [#36](https://github.com/dbl-works/terraform/pull/36)
+
+## [v2021.08.24] - 2021-08-24
+### Added
+- Add new module: `vpn`, [#30](https://github.com/dbl-works/terraform/pull/30)
+
+## [v2021.07.30] - 2021-07-30
 ### ECS
 - adds `allow_internal_traffic_to_ports` to allow configuring arbitrary ports for ECS to LB communication, [#24](https://github.com/dbl-works/terraform/pull/24)
+- adds `grant_read_access_to_s3_arns` to allow read access to S3 buckets, [#27](https://github.com/dbl-works/terraform/pull/27)
+### CDN
+- The CDN now uses CloudFront with SSL certificate, [#26](https://github.com/dbl-works/terraform/pull/26)
 
 
 ## [v2021.07.15.2] - 2021-07-15
