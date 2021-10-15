@@ -2,11 +2,6 @@ variable "project" {}
 variable "environment" {}
 variable "domain_name" {}
 
-variable "acl" {
-  default = "private"
-  type    = string
-}
-
 variable "index_document" {
   default = "index.html"
 }

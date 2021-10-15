@@ -20,6 +20,11 @@ To ensure a consistent standard across all projects, we recommend having the fol
 2. `storage`, i.e. `domain_name` = `storage.my-project.com`
    use this bucket for storing files specific to user/customer related records, for example invoices, user specific files, etc.
 
+The bucket is set to `private`, hence on sync you will have to be explicit if some files should be public:
+
+```shell
+aws s3 sync --acl public-read ./ s3://cdn.my-project.com/
+```
 
 
 ## Usage
@@ -34,7 +39,6 @@ module "cdn" {
 
   # optional
   single_page_application = false
-  acl                     = "private"
   index_document          = "index.html"
   error_document          = "404.html"
   routing_rules           = ""
