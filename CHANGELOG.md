@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## [Unreleased]
 ### CDN
-- removed CloudFront Distribution. Please use Cloudflare Workers intead, [#xx](https://github.com/dbl-works/terraform/pull/xx)
+- removed CloudFront Distribution. Please use Cloudflare Workers intead, [#42](https://github.com/dbl-works/terraform/pull/42)
 
 ## [v2021.10.09] - 2021-10-09
 ### ECS
