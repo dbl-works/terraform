@@ -3,7 +3,7 @@
 A repository for setting up an S3 bucket to host static files such as a frontend app, images, fronts, etc.
 
 To ensure we access files using a SSL encrypted protocol, we have two possibilities:
-- use a CloudFront Distribution
+- use a CloudFront Distribution (available in versions `v2021.07.30` to `v2021.10.09`)
 - use Cloudflare to route to the HTTPS URL of the file
 
 The first option comes with quite some overhead, and is less flexible (e.g. hosting a second app in the same bucket and have it accessed from a different URL requires additional AWS Lambdas to intercept the request; we would need a SSL certificate residing in `us-east-1` as a hard requirement, etc.).
