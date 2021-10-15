@@ -5,6 +5,9 @@ variable "certificate_arn" {}
 
 variable "price_class" {
   default = "PriceClass_100"
+variable "acl" {
+  default = "private"
+  type    = string
 }
 
 variable "index_document" {
