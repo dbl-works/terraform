@@ -2,34 +2,48 @@
 
 A repository for setting up an S3 bucket to host static files such as a frontend app, images, fronts, etc.
 
-Access is permitted only through a Cloudfront distribution that requires an SSL certificate for your domain. Due to Cloudfront limitations, this certificate must be in `us-east-1` (find more details on this below).
+To ensure we access files using a SSL encrypted protocol, we have two possibilities:
+- use a CloudFront Distribution
+- use Cloudflare to route to the HTTPS URL of the file
+
+The first option comes with quite some overhead, and is less flexible (e.g. hosting a second app in the same bucket and have it accessed from a different URL requires additional AWS Lambdas to intercept the request; we would need a SSL certificate residing in `us-east-1` as a hard requirement, etc.).
+
+Thus, we choose to use a Cloudflare Worker. Technically, it still intercepts the request and manipulates it as needed,
+however, this happens on the edge rather than in our server location, and thus is much faster.
+Also, Cloudflare Workers offer more flexibility with less overhead in infrastructure.
+
+Find our standarized way for Cloudflare Workers in this [repo](https://github.com/cloudflare/workers) (TODO: actual link still pending).
+
+To ensure a consistent standard across all projects, we recommend having the following two CDNs for every project and every environment (as far as needed):
+1. `cdn`, i.e. `domain_name` = `cdn.my-project.cloud` (staging), or `cdn.my-project.com` (production)
+   use this bucket for hosting all frontend applications and public files (e.g. fonts, images for the website, et.c)
+2. `storage`, i.e. `domain_name` = `storage.my-project.com`
+   use this bucket for storing files specific to user/customer related records, for example invoices, user specific files, etc.
+
 
 
 ## Usage
 
 ```terraform
 module "cdn" {
-  source = "github.com/dbl-works/terraform//cdn?ref=v2021.07.XX"
+  source = "github.com/dbl-works/terraform//cdn?ref=vXXX"
 
-  environment     = local.environment
-  project         = local.project
-  domain_name     = "admin.my-project.com"      # or e.g. "admin.my-project.com"
-  certificate_arn = aws_acm_certificate.cdn.arn # requires a `certificate` module to be created separately
+  environment = local.environment
+  project     = local.project
+  domain_name = "cdn.my-project.com"   # or e.g. "storage.my-project.com"
 
   # optional
-  price_class             = "PriceClass_100"
   single_page_application = false
+  acl                     = "private"
   index_document          = "index.html"
   error_document          = "404.html"
   routing_rules           = ""
 }
 ```
 
-The `PriceClass_100` serves requests from `North America` and `Europa`; all other regions might see an increased latency. Other possible values are: `PriceClass_All`, and `PriceClass_200`.
-
 Setting `single_page_application` to `true` will redirect all `404` requests (i.e. `mypage.com/xx`) back to root (i.e. `mypage.com/`).
 
-Set `routing_rules` e.g. as:
+You could define `routing_rules` for example as follows, but the prefered way is to use a Cloudflare Worker.
 
 ```
 routing_rules = <<EOF
@@ -44,37 +58,6 @@ routing_rules = <<EOF
     }
   }]
 EOF
-```
-
-:warning: The certificate MUST be in `us-east-1` to be associatable with a CloudFront distribution, [read the docs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html).
-
-You can add a second provider, according to the [docs](https://www.terraform.io/docs/configuration-0-11/providers.html#multiple-provider-instances)
-
-```terraform
-provider "aws" {
-  alias   = "acm"       # Amazon Certificate Manager
-  region  = "us-east-1" # AWS ACM MUST be in us-east-1 to work for Cloudfront
-  profile = "your-profile-name"
-}
-```
-
-then create your certificate in this region; Just create a wildcard one, in case you need multiple CDNs.
-
-```terraform
-resource "aws_acm_certificate" "cdn" {
-  provider = aws.acm
-
-  domain_name       = local.root_url
-  validation_method = "DNS"
-
-  subject_alternative_names = ["*.${local.root_url}"]
-
-  tags = {
-    Name        = local.root_url
-    Project     = local.project
-    Environment = local.environment
-  }
-}
 ```
 
 ## Outputs
