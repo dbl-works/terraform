@@ -2,7 +2,7 @@ terraform {
   required_providers {
     ssh = {
       source = "loafoe/ssh"
-      version = "0.2.2"
+      version = "1.0.0"
     }
   }
 }
@@ -15,4 +15,8 @@ resource "ssh_resource" "init" {
   commands = [
     "sudo cat /opt/outline/access.txt"
   ]
+}
+
+output "access_info" {
+  value = try(jsondecode(ssh_ressource.init.result), {})
 }
