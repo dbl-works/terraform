@@ -10,7 +10,7 @@ terraform {
 resource "ssh_resource" "init" {
   host = aws_instance.main.public_ip
   user = "ubuntu"
-  private_key = file("${local.key_name}.pem")
+  private_key = file("${var.key_name}.pem")
 
   commands = [
     "sudo cat /opt/outline/access.txt"
