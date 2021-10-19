@@ -1,15 +1,15 @@
 terraform {
   required_providers {
     ssh = {
-      source = "loafoe/ssh"
+      source  = "loafoe/ssh"
       version = "1.0.0"
     }
   }
 }
 
 resource "ssh_resource" "init" {
-  host = aws_instance.main.public_ip
-  user = "ubuntu"
+  host        = aws_instance.main.public_ip
+  user        = "ubuntu"
   private_key = file("${var.key_name}.pem")
 
   commands = [
@@ -18,5 +18,5 @@ resource "ssh_resource" "init" {
 }
 
 output "access_info" {
-  value = try(jsondecode(ssh_ressource.init.result), {})
+  value = try(jsondecode(ssh_resource.init.result), {})
 }
