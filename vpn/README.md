@@ -27,6 +27,8 @@ module "outline-vpn" {
 
 ## Initial Outline configuration after first launch
 
+:warning: Perform this initial setup only once during set up.
+
 We cannot currently run ssh commands using Terraform, so we need to manually configure Outline after it's online. The easiest way to do this is to run the following command which is provided by Terraform output
 
 ```shell
@@ -45,8 +47,9 @@ Copy the output to the following format, then paste into outline manager.
 The next step is to configure the hostname/IP that will be used for generating access keys. By default, this will be the one created inside the packer AMI. Using the same `apiUrl` as above, run the following command:
 
 ```shell
-export API_URL=https://0.0.0.0:1234/xxx
-curl --insecure -X PUT -d '{"hostname":"127.0.0.1"}' -H "Content-Type: application/json" $API_URL/server/hostname-for-access-keys
+export AWS_INSTANCE_PUBLIC_IP=123.123.123.123 # aws_instance.main.public_ip
+export API_URL=https://$AWS_INSTANCE_PUBLIC_IP:1234/xxx
+curl --insecure -X PUT -d '{"hostname":"$AWS_INSTANCE_PUBLIC_IP"}' -H "Content-Type: application/json" $API_URL/server/hostname-for-access-keys
 ```
 
 To verify everything is setup correctly, you can view the current server status:
@@ -56,6 +59,20 @@ curl --insecure $API_URL/server
 ```
 
 Find the full documentation of Outline's API [here](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/shadowbox/server/api.yml)
+
+
+## Get access credentials for Outline Manager
+
+```shell
+ssh -i outline-server-ssh.pem ubuntu@$AWS_INSTANCE_PUBLIC_IP
+
+# on the server
+sudo cat /opt/outline/access.txt
+```
+
+copy paste the output into Outline Manager (formatted as JSON).
+
+Potentially, we can get this in Terraform, find a draft in the experimental PR [#33](https://github.com/dbl-works/terraform/pull/33).
 
 
 
