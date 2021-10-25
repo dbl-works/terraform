@@ -7,6 +7,8 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 ## [Unreleased]
+### CDN
+- Added the Cloudfront distribution `id` to the export [#41](https://github.com/dbl-works/terraform/pull/41)
 ### RDS
 - Ignore changes to `latest_restorable_time` for RDS [#40](https://github.com/dbl-works/terraform/pull/40)
 
