@@ -7,6 +7,8 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 ## [Unreleased]
+### RDS
+- Ignore changes to `latest_restorable_time` for RDS [#40](https://github.com/dbl-works/terraform/pull/40)
 
 ## [v2021.10.09] - 2021-10-09
 ### ECS
