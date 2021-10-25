@@ -137,19 +137,19 @@ resource "aws_iam_policy" "ecs-console" {
       "Action": "iam:PassRole",
       "Effect": "Allow",
       "Resource": [
-          "*"
+        "*"
       ],
       "Condition": {
-          "StringLike": {
-              "iam:PassedToService": "ecs-tasks.amazonaws.com"
-          }
+        "StringLike": {
+          "iam:PassedToService": "ecs-tasks.amazonaws.com"
+        }
       }
     },
     {
       "Action": [
-          "iam:ListAttachedRolePolicies",
-          "iam:ListInstanceProfiles",
-          "iam:ListRoles"
+        "iam:ListAttachedRolePolicies",
+        "iam:ListInstanceProfiles",
+        "iam:ListRoles"
       ],
       "Effect": "Allow",
       "Resource": [
@@ -167,9 +167,9 @@ resource "aws_iam_policy" "ecs-console" {
           "iam:PassedToService": [
             "ec2.amazonaws.com",
             "ec2.amazonaws.com.cn"
-        ]
+          ]
+        }
       }
-    }
     },
     {
       "Action": "iam:PassRole",
@@ -184,7 +184,7 @@ resource "aws_iam_policy" "ecs-console" {
             "application-autoscaling.amazonaws.com.cn"
           ]
         }
-    }
+      }
     },
     {
       "Effect": "Allow",
