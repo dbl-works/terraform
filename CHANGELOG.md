@@ -10,8 +10,7 @@ This project does not follow SemVer, since modules are independent of each other
 ### Added
 - Add new module: `elasticache`, [#35](https://github.com/dbl-works/terraform/pull/35)
 ### CDN
-- Removed CloudFront Distribution. Please use Cloudflare Workers intead, [#42](https://github.com/dbl-works/terraform/pull/42)
-- Added the Cloudfront distribution `id` to the export [#41](https://github.com/dbl-works/terraform/pull/41)
+- Removed CloudFront Distribution. Please use Cloudflare Workers instead, [#42](https://github.com/dbl-works/terraform/pull/42)
 ### RDS
 - Ignore changes to `latest_restorable_time` for RDS [#40](https://github.com/dbl-works/terraform/pull/40)
 
