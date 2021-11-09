@@ -8,6 +8,14 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 
+## [v2021.11.09] - 2021-11-09
+
+### Added
+
+- ECS now returns nlb arn in outputs [#45](https://github.com/dbl-works/terraform/pull/45)
+
+
+
 ## [v2021.10.25] - 2021-10-25
 
 ### Added
