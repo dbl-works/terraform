@@ -10,6 +10,9 @@ output "nlb_dns_name" {
 output "alb_target_group_ecs_arn" {
   value = aws_alb_target_group.ecs.arn
 }
+output "nlb_target_group_ecs_arn" {
+  value = length(aws_lb.nlb) > 0 ? aws_lb_target_group.ssh[0].arn : null
+}
 
 # Security groups, for linking with other resources
 output "alb_security_group_id" {
