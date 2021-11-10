@@ -20,64 +20,76 @@ resource "aws_iam_role" "ecs-task-execution" {
   })
 }
 
+variable "ecs-task-execution-policy-default" {
+  value = [
+    {
+      "Effect" : "Allow",
+      "Action" : [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource" : "*"
+    },
+    {
+      "Effect" : "Allow",
+      "Action" : [
+        "ssmmessages:CreateControlChannel",
+        "ssmmessages:CreateDataChannel",
+        "ssmmessages:OpenControlChannel",
+        "ssmmessages:OpenDataChannel"
+      ],
+      "Resource" : "*"
+    },
+    {
+      "Effect" : "Allow",
+      "Action" : [
+        "ecs:DescribeServices",
+        "ecs:DescribeTasks",
+        "ecs:ListTasks"
+      ],
+      "Resource" : "*"
+    }
+  ]
+}
+
+variable "ecs-task-execution-policy-s3-read" {
+  value = length(var.grant_read_access_to_s3_arns) > 0 ? [{
+    "Effect" : "Allow",
+    "Action" : [
+      "s3:ListBucket",
+      "s3:GetObject"
+    ],
+    "Resource" : var.grant_read_access_to_s3_arns
+  }] : []
+}
+
+variable "ecs-task-execution-policy-s3-write" {
+  value = length(var.grant_write_access_to_s3_arns) > 0 ? [{
+    "Effect" : "Allow",
+    "Action" : [
+      "s3:ListBucket",
+      "s3:GetObject"
+    ],
+    "Resource" : var.grant_write_access_to_s3_arns
+  }] : []
+}
+
 resource "aws_iam_role_policy" "ecs-task-execution-policy" {
   name = "ecs-task-execution-policy"
   role = aws_iam_role.ecs-task-execution.name
 
   policy = jsonencode({
     "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ecr:GetAuthorizationToken",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage",
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ssmmessages:CreateControlChannel",
-          "ssmmessages:CreateDataChannel",
-          "ssmmessages:OpenControlChannel",
-          "ssmmessages:OpenDataChannel"
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ecs:DescribeServices",
-          "ecs:DescribeTasks",
-          "ecs:ListTasks"
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:ListBucket",
-          "s3:GetObject"
-        ],
-        "Resource" : var.grant_read_access_to_s3_arns
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "s3:ListBucket",
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject"
-        ],
-        "Resource" : var.grant_write_access_to_s3_arns
-      }
-    ]
+    "Statement" : concat(
+      var.ecs-task-execution-policy-default,
+      var.ecs-task-execution-policy-s3-read,
+      var.ecs-task-execution-policy-s3-write
+    )
   })
 }
 
