@@ -20,8 +20,8 @@ resource "aws_iam_role" "ecs-task-execution" {
   })
 }
 
-variable "ecs-task-execution-policy-default" {
-  value = [
+locals {
+  ecs-task-execution-policy-default = [
     {
       "Effect" : "Allow",
       "Action" : [
@@ -55,10 +55,8 @@ variable "ecs-task-execution-policy-default" {
       "Resource" : "*"
     }
   ]
-}
 
-variable "ecs-task-execution-policy-s3-read" {
-  value = length(var.grant_read_access_to_s3_arns) > 0 ? [{
+  ecs-task-execution-policy-s3-read = length(var.grant_read_access_to_s3_arns) > 0 ? [{
     "Effect" : "Allow",
     "Action" : [
       "s3:ListBucket",
@@ -66,10 +64,8 @@ variable "ecs-task-execution-policy-s3-read" {
     ],
     "Resource" : var.grant_read_access_to_s3_arns
   }] : []
-}
 
-variable "ecs-task-execution-policy-s3-write" {
-  value = length(var.grant_write_access_to_s3_arns) > 0 ? [{
+  ecs-task-execution-policy-s3-write = length(var.grant_write_access_to_s3_arns) > 0 ? [{
     "Effect" : "Allow",
     "Action" : [
       "s3:ListBucket",
@@ -86,9 +82,9 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : concat(
-      var.ecs-task-execution-policy-default,
-      var.ecs-task-execution-policy-s3-read,
-      var.ecs-task-execution-policy-s3-write
+      local.ecs-task-execution-policy-default,
+      local.ecs-task-execution-policy-s3-read,
+      local.ecs-task-execution-policy-s3-write
     )
   })
 }
