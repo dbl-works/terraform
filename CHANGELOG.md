@@ -8,6 +8,14 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 
+## [v2021.11.10] - 2021-11-10
+
+### ECS
+
+- `grant_read_access_to_s3_arns` and `grant_write_access_to_s3_arns` can now be omitted [#48](https://github.com/dbl-works/terraform/pull/48)
+
+
+
 ## [v2021.11.09] - 2021-11-09
 
 ### Added
