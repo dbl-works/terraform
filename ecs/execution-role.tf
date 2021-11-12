@@ -102,7 +102,8 @@ resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
         "Effect" : "Allow",
         "Action" : [
           "secretsmanager:GetSecretValue",
-          "kms:Decrypt"
+          "kms:Decrypt",
+          "kms:GenerateDataKey" # for writing to an encrypted S3 bucket
         ],
         "Resource" : flatten([
           var.secrets_arns,
