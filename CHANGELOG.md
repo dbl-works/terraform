@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 
-## [v2021.11.10] - 2021-11-10
+## [v2021.11.12] - 2021-11-12
 
 ### ECS
 
