@@ -22,6 +22,10 @@ This project does not follow SemVer, since modules are independent of each other
 
 - Add new module: `elasticache`, [#35](https://github.com/dbl-works/terraform/pull/35)
 
+### ECS
+
+- Add groups for ECS access [#25](https://github.com/dbl-works/terraform/pull/25)
+
 ### CDN
 
 - Added the Cloudfront distribution `id` to the export [#41](https://github.com/dbl-works/terraform/pull/41)
