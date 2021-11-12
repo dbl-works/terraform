@@ -8,6 +8,14 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 
+## [v2021.11.13] - 2021-11-13
+
+### ECS
+
+- grant `kms:GenerateDataKey` so we can write to encrypted S3 buckets [#49](https://github.com/dbl-works/terraform/pull/49)
+
+
+
 ## [v2021.11.12] - 2021-11-12
 
 ### ECS
