@@ -60,7 +60,8 @@ locals {
     "Effect" : "Allow",
     "Action" : [
       "s3:ListBucket",
-      "s3:GetObject"
+      "s3:GetObject",
+      "s3:GetObjectVersion"
     ],
     "Resource" : var.grant_read_access_to_s3_arns
   }] : []
@@ -70,8 +71,10 @@ locals {
     "Action" : [
       "s3:ListBucket",
       "s3:GetObject",
+      "s3:GetObjectVersion",
       "s3:PutObject",
-      "s3:DeleteObject"
+      "s3:DeleteObject",
+      "s3:DeleteObjectVersion"
     ],
     "Resource" : var.grant_write_access_to_s3_arns
   }] : []
