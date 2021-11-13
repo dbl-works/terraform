@@ -13,6 +13,7 @@ This project does not follow SemVer, since modules are independent of each other
 ### ECS
 
 - grant `kms:GenerateDataKey` so we can write to encrypted S3 buckets [#49](https://github.com/dbl-works/terraform/pull/49)
+- grant `s3:GetObjectVersion` & `s3:DeleteObjectVersion` so we can read & delete from S3 buckets with versioning [#50](https://github.com/dbl-works/terraform/pull/50)
 
 
 
