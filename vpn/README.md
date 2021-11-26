@@ -49,6 +49,7 @@ export AWS_INSTANCE_PUBLIC_IP=123.123.123.123 # aws_instance.main.public_ip
 export API_URL=https://$AWS_INSTANCE_PUBLIC_IP:1234/xxx
 # NOTE: you MUST replace the "PASTE_AWS_INSTANCE_PUBLIC_IP_HERE" before running the command
 #       because in bash, anything inside single quotes is preserved literally and not expanded
+#       You could also set an A-Record (e.g. in Cloudflare) to have a URL like "https://proxy.dbl.works/" instead of an IP
 curl --insecure -X PUT -d '{"hostname":"PASTE_AWS_INSTANCE_PUBLIC_IP_HERE"}' -H "Content-Type: application/json" $API_URL/server/hostname-for-access-keys
 ```
 
