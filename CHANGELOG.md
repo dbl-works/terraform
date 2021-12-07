@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
+## Unreleased
+
+### Added
+- new module `s3-storage`, a basic S3 bucket for private, encrypted files [#51](https://github.com/dbl-works/terraform/pull/51)
+
 
 ## [v2021.11.13] - 2021-11-13
 
