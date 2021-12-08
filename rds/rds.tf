@@ -6,6 +6,7 @@ resource "aws_db_instance" "main" {
   engine_version                      = var.engine_version
   instance_class                      = var.instance_class
   identifier                          = "${var.project}-${var.environment}"
+  name                                = "${var.project}_${var.environment}" # name of the initial database
   skip_final_snapshot                 = true
   username                            = var.username
   password                            = var.password
@@ -15,9 +16,11 @@ resource "aws_db_instance" "main" {
   multi_az                            = var.multi_az
   publicly_accessible                 = var.publicly_accessible
   deletion_protection                 = true
+
   vpc_security_group_ids = [
     aws_security_group.db.id,
   ]
+
   backup_retention_period         = 7
   storage_encrypted               = true
   kms_key_id                      = var.kms_key_arn
@@ -29,6 +32,7 @@ resource "aws_db_instance" "main" {
     "postgresql",
     "upgrade",
   ]
+
   tags = {
     Name        = "${var.project}-${var.environment}"
     Project     = var.project

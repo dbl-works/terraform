@@ -2,6 +2,8 @@
 
 Used for creating and configuring databases and their networking.
 
+Will create an initial database named `project_environment`.
+
 
 ## Usage
 
