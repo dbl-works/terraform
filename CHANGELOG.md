@@ -11,7 +11,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### Added
 
-- new module `s3-storage`, a basic S3 bucket for private, encrypted files [#51](https://github.com/dbl-works/terraform/pull/51)
+- new module `s3-private`, a basic S3 bucket for private, encrypted files [#51](https://github.com/dbl-works/terraform/pull/51)
 
 ### CDN
 
