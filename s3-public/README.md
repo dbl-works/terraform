@@ -13,12 +13,15 @@ Creates a bucket named `"cdn.${var.domain_name}"`.
 
 ```terraform
 module "s3-cdn" {
-  source = "github.com/dbl-works/terraform//s3-cdn?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//s3-public?ref=v2021.11.13"
 
   # Required
   environment = "staging"
   project     = "someproject"
   domain_name = "example.com"
+
+  # Optional
+  bucket_name = "cdn.${var.domain_name}"
 }
 ```
 

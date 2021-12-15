@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "main" {
-  bucket = "cdn.${var.domain_name}"
+  bucket = var.bucket_name
   acl    = "public-read"
 
   versioning {
