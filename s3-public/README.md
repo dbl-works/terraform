@@ -6,7 +6,7 @@ A repository for setting up an S3 bucket to host public files such as a frontend
 If you want to host multiple apps, you can use the [DBL Cloudflare Router](https://github.com/dbl-works/cloudflare-router) to route certain URLs to specific paths in this bucket.
 
 
-Creates a bucket named `"cdn.${var.domain_name}"`.
+Creates a bucket named `"${var.bucket_name_prefix}.${var.domain_name}"`.
 
 
 ## Usage
@@ -21,7 +21,7 @@ module "s3-cdn" {
   domain_name = "example.com"
 
   # Optional
-  bucket_name = "cdn.${var.domain_name}"
+  bucket_name_prefix = "cdn"
 }
 ```
 
