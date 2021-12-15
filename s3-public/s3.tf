@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "main" {
   acl    = "public-read"
 
   versioning {
-    enabled = true
+    enabled = var.versioning
   }
 
   lifecycle_rule {
