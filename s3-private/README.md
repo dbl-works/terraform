@@ -3,7 +3,7 @@
 Standarized set up for a private, encrypted S3 bucket with versioning.
 Used for any private files from an application, e.g. PDF files linked to a record.
 
-Creates a bucket named `"storage.${var.domain_name}"`.
+Creates a bucket named `"${var.bucket_name_prefix}.${var.domain_name}"`.
 
 ## Usage
 
@@ -18,7 +18,7 @@ module "s3-storage" {
 
   # Optional
   kms_deletion_window_in_days = 30
-  bucket_name                 = "storage.${var.domain_name}"
+  bucket_name_prefix          = "storage"
 }
 ```
 
