@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
+## Unreleased
+### CDN
+- removes CloudFront set up, refere to use CloudFront Workers instead. Is now a very simple public S3 container with standardzed settings and tags [#52](https://github.com/dbl-works/terraform/pull/52)
+
+
 
 ## [v2021.11.13] - 2021-11-13
 
