@@ -3,14 +3,14 @@ resource "aws_s3_bucket" "main" {
   acl    = "private"
 
   versioning {
-    enabled = true
+    enabled = var.versioning
   }
 
   lifecycle_rule {
-    enabled = true
+    enabled = var.primary_storage_class_retention == 0 ? false : false
 
     noncurrent_version_transition {
-      days          = 120
+      days          = var.primary_storage_class_retention == 0 ? 365 : var.primary_storage_class_retention
       storage_class = "STANDARD_IA"
     }
   }
