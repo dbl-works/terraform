@@ -9,7 +9,7 @@ Creates a bucket named `"storage.${var.domain_name}"`.
 
 ```terraform
 module "s3-storage" {
-  source = "github.com/dbl-works/terraform//s3-storage?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//s3-private?ref=v2021.11.13"
 
   # Required
   environment = "staging"
@@ -18,6 +18,7 @@ module "s3-storage" {
 
   # Optional
   kms_deletion_window_in_days = 30
+  bucket_name                 = "storage.${var.domain_name}"
 }
 ```
 
