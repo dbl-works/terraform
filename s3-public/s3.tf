@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "main" {
-  bucket = local.bucket_name
+  bucket = var.bucket_name
   acl    = "public-read"
 
   versioning {
@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   tags = {
-    Name        = local.bucket_name
+    Name        = var.bucket_name
     Project     = var.project
     Environment = var.environment
   }
