@@ -17,13 +17,14 @@ module "s3-storage" {
   bucket_name = "someproject-staging-storage"
 
   # Optional
-  kms_deletion_window_in_days = 30
-  bucket_name_prefix          = "storage"
+  kms_deletion_window_in_days     = 30
+  versioning                      = false
+  primary_storage_class_retention = 0
 }
 ```
 
 
 ## Outputs
 
-- `arn`: you probably want to pass this arn to ECS' `grant_write_access_to_s3_arns`
-- `kms-key-arn`: you probably want to pass this arn to ECS' `kms_key_arns`
+- `arn`: you probably want to pass this arn to ECS `grant_write_access_to_s3_arns`
+- `kms-key-arn`: you probably want to pass this arn to ECS `kms_key_arns`
