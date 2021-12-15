@@ -6,11 +6,12 @@ resource "aws_s3_bucket" "main" {
     enabled = var.versioning
   }
 
+  # Move data to a cheaper storage class after a period of time
   lifecycle_rule {
-    enabled = true
+    enabled = var.primary_storage_class_retention == -1 ? false : false
 
     noncurrent_version_transition {
-      days          = 120
+      days          = var.primary_storage_class_retention
       storage_class = "STANDARD_IA"
     }
   }
