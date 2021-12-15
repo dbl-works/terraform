@@ -24,7 +24,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   tags = {
-    Name        = "storage.${var.domain_name}"
+    Name        = var.bucket_name
     Project     = var.project
     Environment = var.environment
   }
