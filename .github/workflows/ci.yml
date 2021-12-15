@@ -15,7 +15,7 @@ jobs:
           - kms-key
           - nat
           - rds
-          - s3-cdn
+          - s3-public
           - secrets
           - vpc
           # - vpn # TODO: Figure out private module access

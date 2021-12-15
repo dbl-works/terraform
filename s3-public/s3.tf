@@ -13,15 +13,10 @@ resource "aws_s3_bucket" "main" {
       days          = 120
       storage_class = "STANDARD_IA"
     }
-
-    noncurrent_version_transition {
-      days          = 180
-      storage_class = "GLACIER"
-    }
   }
 
   tags = {
-    Name        = "cdn.${var.domain_name}"
+    Name        = var.bucket_name
     Project     = var.project
     Environment = var.environment
   }
