@@ -3,6 +3,7 @@ variable "environment" {}
 variable "bucket_name" {}
 variable "kms_deletion_window_in_days" {
   default = 30
+  type    = number
 }
 
 # If versioning is enabled then a history of all object changes and deletions is retained.
