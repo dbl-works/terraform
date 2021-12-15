@@ -18,7 +18,7 @@ module "s3-storage" {
 
   # Optional
   kms_deletion_window_in_days     = 30
-  versioning                      = false
+  versioning                      = true
   primary_storage_class_retention = 0
 }
 ```

@@ -7,7 +7,7 @@ variable "kms_deletion_window_in_days" {
 
 # If versioning is enabled then a history of all object changes and deletions is retained.
 variable "versioning" {
-  default = false
+  default = true
   type    = bool
 }
 
