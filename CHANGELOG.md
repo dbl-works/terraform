@@ -9,6 +9,9 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 
+
+## [v2021.12.17] - 2021-12-17
+
 ### RDS
 
 - an initial database is now created with the name `{project}_{environment}` [#52](https://github.com/dbl-works/terraform/pull/52)
@@ -16,8 +19,6 @@ This project does not follow SemVer, since modules are independent of each other
 ### Added
 
 - new module `s3-private`, a basic S3 bucket for private, encrypted files [#51](https://github.com/dbl-works/terraform/pull/51)
-
-
 
 ### CDN
 
