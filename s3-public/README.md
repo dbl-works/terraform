@@ -18,7 +18,7 @@ module "s3-frontend" {
   bucket_name = "someproject-staging-frontend"
 
   # Optional
-  versioning = false
+  versioning                      = false
   primary_storage_class_retention = 0
 }
 ```
