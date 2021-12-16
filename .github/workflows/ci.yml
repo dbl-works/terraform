@@ -15,6 +15,7 @@ jobs:
           - kms-key
           - nat
           - rds
+          - s3-private
           - s3-public
           - secrets
           - vpc

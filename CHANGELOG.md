@@ -8,7 +8,13 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 ## Unreleased
+
+### Added
+
+- new module `s3-private`, a basic S3 bucket for private, encrypted files [#51](https://github.com/dbl-works/terraform/pull/51)
+
 ### CDN
+
 - removes CloudFront set up, refere to use CloudFront Workers instead. Is now a very simple public S3 container with standardzed settings and tags [#52](https://github.com/dbl-works/terraform/pull/52)
 
 
