@@ -16,11 +16,9 @@ resource "aws_db_instance" "main" {
   multi_az                            = var.multi_az
   publicly_accessible                 = var.publicly_accessible
   deletion_protection                 = true
-
   vpc_security_group_ids = [
     aws_security_group.db.id,
   ]
-
   backup_retention_period         = 7
   storage_encrypted               = true
   kms_key_id                      = var.kms_key_arn
@@ -44,7 +42,7 @@ resource "aws_db_instance" "main" {
     ignore_changes = [
       engine_version, # AWS will auto-update minor version changes
       latest_restorable_time,
-      name, # if you didn't use this before it would re-created your RDS instance
+      name, # if you didn't use this before it would re-create your RDS instance
     ]
   }
 }

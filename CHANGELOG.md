@@ -10,7 +10,7 @@ This project does not follow SemVer, since modules are independent of each other
 ## Unreleased
 
 ### RDS
-- an initial database is now created with the name `project_environment` [#52](https://github.com/dbl-works/terraform/pull/52)
+- an initial database is now created with the name `{project}_{environment}` [#52](https://github.com/dbl-works/terraform/pull/52)
 
 ### CDN
 - removes CloudFront set up, refere to use CloudFront Workers instead. Is now a very simple public S3 container with standardzed settings and tags [#52](https://github.com/dbl-works/terraform/pull/52)
