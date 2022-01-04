@@ -23,6 +23,13 @@ resource "aws_s3_bucket" "main" {
     }
   }
 
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT"]
+    allowed_origins = ["*"]
+    expose_headers  = ["ETag"]
+  }
+
   tags = {
     Name        = var.bucket_name
     Project     = var.project
