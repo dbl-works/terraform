@@ -1,8 +1,6 @@
 resource "aws_s3_bucket" "main" {
-  bucket              = var.bucket_name
-  acl                 = "private"
-  block_public_acls   = true
-  block_public_policy = true
+  bucket = var.bucket_name
+  acl    = "private"
 
   versioning {
     enabled = var.versioning
@@ -37,4 +35,11 @@ resource "aws_s3_bucket" "main" {
     Project     = var.project
     Environment = var.environment
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "block-all-access" {
+  bucket = aws_s3_bucket.main.id
+
+  block_public_acls   = true
+  block_public_policy = true
 }
