@@ -1,6 +1,8 @@
 resource "aws_s3_bucket" "main" {
-  bucket = var.bucket_name
-  acl    = "private"
+  bucket              = var.bucket_name
+  acl                 = "private"
+  block_public_acls   = true
+  block_public_policy = true
 
   versioning {
     enabled = var.versioning
