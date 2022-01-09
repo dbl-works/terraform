@@ -4,7 +4,7 @@ resource "aws_iam_group" "usage" {
 
 resource "aws_iam_policy" "usage" {
   name        = "${var.project}-${var.environment}-s3-usage"
-  description = "For uploading/downloading encrypted storage files on S3"
+  description = "For uploading/downloading encrypted files on S3"
 
   policy = <<EOF
 {
@@ -28,8 +28,8 @@ resource "aws_iam_policy" "usage" {
         "s3:PutObjectAcl"
       ],
       "Resource": [
-        "arn:aws:s3:::${var.project}-${var.environment}-storage",
-        "arn:aws:s3:::${var.project}-${var.environment}-storage/*"
+        "arn:aws:s3:::${var.bucket_name}",
+        "arn:aws:s3:::${var.bucket_name}/*"
       ]
     },
     {
