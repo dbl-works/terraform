@@ -9,6 +9,10 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 
+### s3-private
+
+- Expose group for usage permissions on private s3 buckets
+
 
 ## [v2021.12.17] - 2021-12-17
 
