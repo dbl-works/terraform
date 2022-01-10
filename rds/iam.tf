@@ -61,8 +61,14 @@ resource "aws_iam_policy" "rds-view" {
         "rds:Get*",
         "rds:List*"
       ],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Project": "${var.project}",
+          "aws:ResourceTag/Environment": "${var.environment}"
+        }
+      },
       "Resource": [
-        "${aws_db_instance.main.arn}"
+        "*"
       ]
     }
   ]
