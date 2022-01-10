@@ -74,7 +74,7 @@ resource "aws_iam_policy" "rds-view" {
     {
       "Effect": "Allow",
       "Action": [
-        "rds::DescribeDBInstances"
+        "rds:DescribeDBInstances"
       ],
       "Resource": [
         "*"
