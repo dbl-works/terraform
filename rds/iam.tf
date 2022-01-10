@@ -62,7 +62,7 @@ resource "aws_iam_policy" "rds-view" {
         "rds:List*"
       ],
       "Resource": [
-        "arn:aws:rds-db:${var.region}:${var.account_id}:dbuser:${aws_db_instance.main.resource_id}/${var.project}_${var.environment}_${each.key}"
+        "${aws_db_instance.main.arn}"
       ]
     }
   ]
