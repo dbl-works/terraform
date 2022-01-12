@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
-## Unreleased
+## [v2022.01.12]
 
 ### s3-private
 
