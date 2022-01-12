@@ -12,6 +12,13 @@ This project does not follow SemVer, since modules are independent of each other
 ### s3-private
 
 - Expose group for usage permissions on private s3 buckets
+- Add CORS configuration to allow uploads directly from browsers
+- Disable allowing any public object, even if acl attempted manually
+
+### rds
+
+- Allow anyone with `{project}-{environment}-rds-view` role to list all databases
+
 
 
 ## [v2021.12.17] - 2021-12-17
