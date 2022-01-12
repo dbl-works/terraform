@@ -28,3 +28,4 @@ module "s3-storage" {
 
 - `arn`: you probably want to pass this arn to ECS `grant_write_access_to_s3_arns`
 - `kms-key-arn`: you probably want to pass this arn to ECS `kms_key_arns`
+- `group-usage-name`: name of the AWS IAM group to grant usage permissions to the bucket
