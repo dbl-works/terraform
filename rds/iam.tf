@@ -81,14 +81,16 @@ resource "aws_iam_policy" "rds-view" {
         "*"
       ]
     },
-    "Effect": "Allow",
+    {
+      "Effect": "Allow",
       "Action": [
-        "iam:ListPolicies*"
+        "iam:ListPolicies"
       ],
       "Resource": [
         "arn:aws:iam::${var.account_id}:policy/${var.project}-${var.environment}-rds-db-connect-*",
         "arn:aws:iam::${var.account_id}:policy/${var.project}-${var.environment}-rds-view"
       ]
+    }
   ]
 }
 EOF
