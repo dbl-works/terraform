@@ -6,6 +6,7 @@ locals {
 }
 
 # Readonly access to database
+# We allow `ListPolicies` to allow filtering all describable instances by those we can connect to
 resource "aws_iam_group" "rds-db-connect" {
   for_each = toset(local.db_roles)
   name     = "${var.project}-${var.environment}-rds-db-connect-${each.key}"
@@ -28,6 +29,16 @@ resource "aws_iam_policy" "rds-db-connect" {
       "Resource": [
         "arn:aws:rds-db:${var.region}:${var.account_id}:dbuser:${aws_db_instance.main.resource_id}/${var.project}_${var.environment}_${each.key}"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:ListPolicies"
+      ],
+      "Resource": [
+        "arn:aws:iam::${var.account_id}:policy/${var.project}-${var.environment}-rds-db-connect-*",
+        "arn:aws:iam::${var.account_id}:policy/${var.project}-${var.environment}-rds-view"
+      ]
     }
   ]
 }
@@ -42,7 +53,6 @@ resource "aws_iam_group_policy_attachment" "rds-db-connect" {
 
 
 # Grant access to list and describe instances
-# We allow `ListPolicies` to allow filtering all describable instances by those we can connect to
 resource "aws_iam_group" "rds-view" {
   name = "${var.project}-${var.environment}-rds-view"
 }
@@ -79,16 +89,6 @@ resource "aws_iam_policy" "rds-view" {
       ],
       "Resource": [
         "*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "iam:ListPolicies"
-      ],
-      "Resource": [
-        "arn:aws:iam::${var.account_id}:policy/${var.project}-${var.environment}-rds-db-connect-*",
-        "arn:aws:iam::${var.account_id}:policy/${var.project}-${var.environment}-rds-view"
       ]
     }
   ]
