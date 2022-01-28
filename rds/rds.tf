@@ -6,6 +6,7 @@ resource "aws_db_instance" "main" {
   engine_version                      = var.engine_version
   instance_class                      = var.instance_class
   identifier                          = "${var.project}-${var.environment}"
+  name                                = "${var.project}_${var.environment}" # name of the initial database
   skip_final_snapshot                 = true
   username                            = var.username
   password                            = var.password
@@ -29,6 +30,7 @@ resource "aws_db_instance" "main" {
     "postgresql",
     "upgrade",
   ]
+
   tags = {
     Name        = "${var.project}-${var.environment}"
     Project     = var.project
@@ -40,6 +42,7 @@ resource "aws_db_instance" "main" {
     ignore_changes = [
       engine_version, # AWS will auto-update minor version changes
       latest_restorable_time,
+      name, # if you didn't use this before it would re-create your RDS instance
     ]
   }
 }

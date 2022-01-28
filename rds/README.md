@@ -2,6 +2,8 @@
 
 Used for creating and configuring databases and their networking.
 
+Will create an initial database named `{project}_{environment}`.
+
 
 ## Usage
 
@@ -39,6 +41,15 @@ aws rds describe-db-engine-versions --engine postgres --engine-version 13 --regi
 
 
 ## Temporary password for AWS IAM role-based access
+### Attach correct roles to IAM user
+Attach the following roles to your IAM user:
+
+```terraform
+"${project}-${environment}-rds-db-connect-readonly"
+"${project}-${environment}-rds-view"
+```
+
+### Generate password in the console
 If the database is set up to use IAM user role based authentication, a password has to be generated via the AWS cli. This passworde is valid for 15min.
 
 You can use the following bash script, which relies on being executed inside the terraform workspace folder, since it reads the database URL from the terraform state.

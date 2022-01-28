@@ -7,6 +7,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
+## [v2022.01.12]
+
+### s3-private
+
+- Expose group for usage permissions on private s3 buckets
+- Add CORS configuration to allow uploads directly from browsers
+- Disable allowing any public object, even if acl attempted manually
+
+### rds
+
+- Allow anyone with `{project}-{environment}-rds-view` role to list all databases
+
+
+
+## [v2021.12.17] - 2021-12-17
+
+### RDS
+
+- an initial database is now created with the name `{project}_{environment}` [#52](https://github.com/dbl-works/terraform/pull/52)
+
+### Added
+
+- new module `s3-private`, a basic S3 bucket for private, encrypted files [#51](https://github.com/dbl-works/terraform/pull/51)
+
+### CDN
+
+- removes CloudFront set up, refere to use CloudFront Workers instead. Is now a very simple public S3 container with standardzed settings and tags [#52](https://github.com/dbl-works/terraform/pull/52)
+
+
 
 ## [v2021.11.13] - 2021-11-13
 

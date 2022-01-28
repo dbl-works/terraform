@@ -29,13 +29,11 @@ module "outline-vpn" {
 
 :warning: Perform this initial setup only once during set up.
 
-We cannot currently run ssh commands using Terraform, so we need to manually configure Outline after it's online. The easiest way to do this is to run the following command which is provided by Terraform output
-
-```shell
-tf -chdir=workspaces/my-projects-vpn output -raw outline-access-command | sh
-```
-
-Copy the output to the following format, then paste into outline manager.
+We cannot currently run ssh commands using Terraform, so we need to manually configure Outline after it's online. The easiest way to do this is to
+- SSH into the EC2: `ssh -i "outline-server-ssh.pem" ubuntu@$AWS_INSTANCE_PUBLIC_IP`
+- grab the initial config: `sudo cat /opt/outline/access.txt` (which still contains the wrong HOST)
+- Copy the config to your local editor, then update the HOST to be your EIP
+- Paste the config in the following format into outline manager:
 
 ```json
 {
@@ -49,7 +47,10 @@ The next step is to configure the hostname/IP that will be used for generating a
 ```shell
 export AWS_INSTANCE_PUBLIC_IP=123.123.123.123 # aws_instance.main.public_ip
 export API_URL=https://$AWS_INSTANCE_PUBLIC_IP:1234/xxx
-curl --insecure -X PUT -d '{"hostname":"$AWS_INSTANCE_PUBLIC_IP"}' -H "Content-Type: application/json" $API_URL/server/hostname-for-access-keys
+# NOTE: you MUST replace the "PASTE_AWS_INSTANCE_PUBLIC_IP_HERE" before running the command
+#       because in bash, anything inside single quotes is preserved literally and not expanded
+#       You could also set an A-Record (e.g. in Cloudflare) to have a URL like "https://proxy.dbl.works/" instead of an IP
+curl --insecure -X PUT -d '{"hostname":"PASTE_AWS_INSTANCE_PUBLIC_IP_HERE"}' -H "Content-Type: application/json" $API_URL/server/hostname-for-access-keys
 ```
 
 To verify everything is setup correctly, you can view the current server status:
