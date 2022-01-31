@@ -30,6 +30,9 @@ module "ecs" {
 
   grant_read_access_to_s3_arns  = []
   grant_write_access_to_s3_arns = []
+  
+  grant_read_access_to_sqs_arns = []
+  grant_write_access_to_sqs_arns = []
 }
 ```
 
