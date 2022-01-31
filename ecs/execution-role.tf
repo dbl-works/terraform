@@ -78,6 +78,25 @@ locals {
     ],
     "Resource" : var.grant_write_access_to_s3_arns
   }] : []
+
+  ecs-task-execution-policy-sqs-read = length(var.grant_read_access_to_sqs_arns) > 0 ? [{
+    "Effect" : "Allow",
+    "Action" : [
+        "sqs:ReceiveMessage",
+        "sqs:GetQueueAttributes"
+    ],
+    "Resource": var.grant_read_access_to_sqs_arns
+  }] : []
+
+  ecs-task-execution-policy-sqs-write = length(var.grant_write_access_to_sqs_arns) > 0 ? [{
+    "Effect" : "Allow",
+    "Action" : [
+      "sqs:SendMessage",
+      "sqs:DeleteMessage",
+      "sqs:SetQueueAttributes"
+    ],
+    "Resource": var.grant_write_access_to_sqs_arns
+  }] : []
 }
 
 resource "aws_iam_role_policy" "ecs-task-execution-policy" {
