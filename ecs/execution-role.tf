@@ -82,10 +82,10 @@ locals {
   ecs-task-execution-policy-sqs-read = length(var.grant_read_access_to_sqs_arns) > 0 ? [{
     "Effect" : "Allow",
     "Action" : [
-        "sqs:ReceiveMessage",
-        "sqs:GetQueueAttributes"
+      "sqs:ReceiveMessage",
+      "sqs:GetQueueAttributes"
     ],
-    "Resource": var.grant_read_access_to_sqs_arns
+    "Resource" : var.grant_read_access_to_sqs_arns
   }] : []
 
   ecs-task-execution-policy-sqs-write = length(var.grant_write_access_to_sqs_arns) > 0 ? [{
@@ -95,7 +95,7 @@ locals {
       "sqs:DeleteMessage",
       "sqs:SetQueueAttributes"
     ],
-    "Resource": var.grant_write_access_to_sqs_arns
+    "Resource" : var.grant_write_access_to_sqs_arns
   }] : []
 }
 
@@ -108,7 +108,9 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
     "Statement" : concat(
       local.ecs-task-execution-policy-default,
       local.ecs-task-execution-policy-s3-read,
-      local.ecs-task-execution-policy-s3-write
+      local.ecs-task-execution-policy-s3-write,
+      local.ecs-task-execution-policy-sqs-read,
+      local.ecs-task-execution-policy-sqs-write
     )
   })
 }
