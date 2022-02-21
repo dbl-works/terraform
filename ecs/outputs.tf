@@ -21,3 +21,8 @@ output "alb_security_group_id" {
 output "ecs_security_group_id" {
   value = aws_security_group.ecs.id
 }
+
+# Needed to attach additional ressources (e.g. certificates) to the ALB
+output "https_alb_listener_arn" {
+  value = aws_alb_listener.https.arn
+}
