@@ -7,6 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
+## [v2022.03.16]
+
+### ECS
+
+- Allow SQS access in ECS [#62](https://github.com/dbl-works/terraform/pull/62)
+- Adds SQS permissions to ecs execution policy [#63](https://github.com/dbl-works/terraform/pull/63)
+- Output HTTPS ALB ARN for ECS [#64](https://github.com/dbl-works/terraform/pull/64)
+
+
+
 ## [v2022.01.12]
 
 ### s3-private
