@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
+
+## Unreleased
+
+### s3-public, s3-private
+
+- Lock AWS provider to v3.x
+
+
+
 ## [v2022.03.16]
 
 ### ECS
