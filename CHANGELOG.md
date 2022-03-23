@@ -7,6 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
+
+## Unreleased
+
+### ecs
+
+- S3 ARNs for read/write will now be auto splatted to include `/*` keys [#65](https://github.com/dbl-works/terraform/pull/65)
+- Add PUT permissions on versions for S3 buckets [#66](https://github.com/dbl-works/terraform/pull/66)
+
+### s3-public, s3-private
+
+- Lock AWS provider to v3.x [#67](https://github.com/dbl-works/terraform/pull/67)
+
+
+
 ## [v2022.03.16]
 
 ### ECS
