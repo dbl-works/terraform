@@ -12,7 +12,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### Changed
 
-- S3 ARNs for read/write will now be auto splatted to include `/*` keys
+- S3 ARNs for read/write will now be auto splatted to include `/*` keys [#65](https://github.com/dbl-works/terraform/pull/65)
 
 
 
