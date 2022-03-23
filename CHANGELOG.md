@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
+
+## Unreleased
+
+### Changed
+
+- S3 ARNs for read/write will now be auto splatted to include `/*` keys
+
+
+
 ## [v2022.03.16]
 
 ### ECS
