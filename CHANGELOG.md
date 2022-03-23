@@ -10,9 +10,13 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 
-### Changed
+### ecs
 
 - S3 ARNs for read/write will now be auto splatted to include `/*` keys [#65](https://github.com/dbl-works/terraform/pull/65)
+
+### s3-public, s3-private
+
+- Lock AWS provider to v3.x
 
 
 
