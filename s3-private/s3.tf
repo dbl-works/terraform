@@ -1,27 +1,28 @@
 resource "aws_s3_bucket" "main" {
   bucket = var.bucket_name
-  acl    = "private"
 
-  versioning {
-    enabled = var.versioning
+  tags = {
+    Name        = var.bucket_name
+    Project     = var.project
+    Environment = var.environment
   }
+}
 
-  lifecycle_rule {
-    enabled = var.primary_storage_class_retention == 0 ? false : false
+resource "aws_s3_bucket_lifecycle_configuration" "main-bucket-lifecycle-rule" {
+  bucket = aws_s3_bucket.main.id
 
+  rule {
+    id     = "primary-storage-class-retention"
+    status = var.primary_storage_class_retention == 0 ? "Disabled" : "Enabled"
     noncurrent_version_transition {
-      days          = var.primary_storage_class_retention == 0 ? 365 : var.primary_storage_class_retention
-      storage_class = "STANDARD_IA"
+      noncurrent_days = var.primary_storage_class_retention == 0 ? 365 : var.primary_storage_class_retention
+      storage_class   = "STANDARD_IA"
     }
   }
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = module.kms-key-s3.arn
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "main-bucket-cors-configuration" {
+  bucket = aws_s3_bucket.main.bucket
 
   cors_rule {
     allowed_headers = ["*"]
@@ -29,11 +30,28 @@ resource "aws_s3_bucket" "main" {
     allowed_origins = ["*"]
     expose_headers  = ["ETag"]
   }
+}
 
-  tags = {
-    Name        = var.bucket_name
-    Project     = var.project
-    Environment = var.environment
+resource "aws_s3_bucket_versioning" "main-bucket-versioning" {
+  bucket = aws_s3_bucket.main.id
+  versioning_configuration {
+    status = var.versioning
+  }
+}
+
+resource "aws_s3_bucket_acl" "main-bucket-data-acl" {
+  bucket = aws_s3_bucket.main.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "main-bucket-sse-configuration" {
+  bucket = aws_s3_bucket.main.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = module.kms-key-s3.arn
+      sse_algorithm     = "aws:kms"
+    }
   }
 }
 
