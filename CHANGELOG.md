@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
+## Unreleased
+
+### s3-public, s3-private
+- replace deprecated syntax [#68](https://github.com/dbl-works/terraform/pull/68), new first-time contributer [samkahchiin](https://github.com/samkahchiin) - thanks! :tada:
+
+### RDS
+- Allow listing policies that grant RDS connect [#61](https://github.com/dbl-works/terraform/pull/61)
+
+
 
 ## [v2022.03.23]
 
