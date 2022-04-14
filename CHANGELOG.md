@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 
-## Unreleased
+## [v2022.04.14]
 
 ### s3-public, s3-private
 - replace deprecated syntax [#68](https://github.com/dbl-works/terraform/pull/68), new first-time contributer [samkahchiin](https://github.com/samkahchiin) - thanks! :tada:
