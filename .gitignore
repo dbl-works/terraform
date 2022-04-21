@@ -16,7 +16,6 @@
 !/tmp/pids/.keep
 
 # Special\Personal dev setup
-.vscode/*
 /.idea
 
 # os

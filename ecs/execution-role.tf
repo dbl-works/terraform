@@ -63,7 +63,10 @@ locals {
       "s3:GetObject",
       "s3:GetObjectVersion"
     ],
-    "Resource" : var.grant_read_access_to_s3_arns
+    "Resource" : sort(flatten([
+      var.grant_read_access_to_s3_arns,
+      [for arn in var.grant_read_access_to_s3_arns : "${arn}/*"],
+    ]))
   }] : []
 
   ecs-task-execution-policy-s3-write = length(var.grant_write_access_to_s3_arns) > 0 ? [{
@@ -73,10 +76,16 @@ locals {
       "s3:GetObject",
       "s3:GetObjectVersion",
       "s3:PutObject",
+      "s3:PutObjectAcl",
+      "s3:PutObjectVersion",
+      "s3:PutObjectVersionAcl",
       "s3:DeleteObject",
       "s3:DeleteObjectVersion"
     ],
-    "Resource" : var.grant_write_access_to_s3_arns
+    "Resource" : sort(flatten([
+      var.grant_write_access_to_s3_arns,
+      [for arn in var.grant_write_access_to_s3_arns : "${arn}/*"],
+    ]))
   }] : []
 
   ecs-task-execution-policy-sqs-read = length(var.grant_read_access_to_sqs_arns) > 0 ? [{
