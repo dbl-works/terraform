@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
+## [v2022.05.02]
+
+### ECS
+- allow passing any custom policies to ECS, [#71](https://github.com/dbl-works/terraform/pull/71)
+
+
 
 ## [v2022.04.14]
 
@@ -75,7 +81,7 @@ This project does not follow SemVer, since modules are independent of each other
 ### ECS
 
 - grant `kms:GenerateDataKey` so we can write to encrypted S3 buckets [#49](https://github.com/dbl-works/terraform/pull/49)
-- grant `s3:GetObjectVersion` & `s3:DeleteObjectVersion` so we can read & delete from S3 buckets with versioning [#50](https://github.com/dbl-works/terraform/pull/50)
+- grant `s3:GetObjectVersion` & `s3:DeleteObjectVersion` so we can read & delete from S3 buckets with versioning [#50](https://github.com/dbl-works/terraform/pull/50), new first-time contributer [UmarTayyab](https://github.com/UmarTayyab) - thanks! :tada:
 
 
 
