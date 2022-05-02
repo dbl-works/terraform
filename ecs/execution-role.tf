@@ -106,6 +106,8 @@ locals {
     ],
     "Resource" : var.grant_write_access_to_sqs_arns
   }] : []
+
+  ecs-task-execution-custom-policies = length(var.custom_policies) > 0 ? var.custom_policies : []
 }
 
 resource "aws_iam_role_policy" "ecs-task-execution-policy" {
@@ -119,7 +121,8 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
       local.ecs-task-execution-policy-s3-read,
       local.ecs-task-execution-policy-s3-write,
       local.ecs-task-execution-policy-sqs-read,
-      local.ecs-task-execution-policy-sqs-write
+      local.ecs-task-execution-policy-sqs-write,
+      local.ecs-task-execution-custom-policies
     )
   })
 }
