@@ -48,6 +48,6 @@ variable "grant_write_access_to_sqs_arns" {
   default = []
 }
 
-variable "grant_write_access_to_sfn_arns" {
+variable "custom_policies" {
   default = []
 }
