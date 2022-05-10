@@ -1,7 +1,6 @@
 # Terraform Module: NAT
 
-A reopsitory for setting up a network address translation (NAT).
-
+A repository for setting up a network address translation (NAT).
 
 
 ## Usage
@@ -28,4 +27,5 @@ module "nat" {
 
 
 ## Outputs
+
 _none_

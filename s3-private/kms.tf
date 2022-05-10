@@ -1,5 +1,5 @@
 module "kms-key-s3" {
-  source = "github.com/dbl-works/terraform//kms-key?ref=v2022.04.13"
+  source = "../kms-key"
 
   alias                   = "s3-${var.bucket_name}"
   project                 = var.project
