@@ -2,10 +2,6 @@
 
 Launches an isolated Outline VPN instance with it's own VPC.
 
-
-
-## Usage
-
 ```terraform
 module "outline-vpn" {
   source = "github.com/dbl-works/terraform//vpn?ref=v2021.08.24"
@@ -24,12 +20,12 @@ module "outline-vpn" {
 }
 ```
 
-
 ## Initial Outline configuration after first launch
 
 :warning: Perform this initial setup only once during set up.
 
 We cannot currently run ssh commands using Terraform, so we need to manually configure Outline after it's online. The easiest way to do this is to
+
 - SSH into the EC2: `ssh -i "outline-server-ssh.pem" ubuntu@$AWS_INSTANCE_PUBLIC_IP`
 - grab the initial config: `sudo cat /opt/outline/access.txt` (which still contains the wrong HOST)
 - Copy the config to your local editor, then update the HOST to be your EIP
@@ -38,7 +34,7 @@ We cannot currently run ssh commands using Terraform, so we need to manually con
 ```json
 {
   "apiUrl": "https://127.0.0.1:1234/xxx",
-  "certSha256": "xxx",
+  "certSha256": "xxx"
 }
 ```
 
@@ -61,7 +57,6 @@ curl --insecure $API_URL/server
 
 Find the full documentation of Outline's API [here](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/shadowbox/server/api.yml)
 
-
 ## Get access credentials for Outline Manager
 
 ```shell
@@ -75,23 +70,17 @@ copy paste the output into Outline Manager (formatted as JSON).
 
 Potentially, we can get this in Terraform, find a draft in the experimental PR [#33](https://github.com/dbl-works/terraform/pull/33).
 
-
-
 ## Create EIP
 
 You need to create the EIP manually in the account first, then hard code in the value for the module config.
 
 https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#Addresses:
 
-
-
 ## Create SSH Key
 
 You need to create a keypair in EC2 manually and have access to this locally (we store these in 1Password).
 
 https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:
-
-
 
 ## Custom Domain
 
