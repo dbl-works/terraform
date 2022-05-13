@@ -2,10 +2,10 @@
 
 output "id" {
   description = "AWS secrets manager rsources id"
-  value = aws_secretsmanager_secret.main.id
+  value       = aws_secretsmanager_secret.main.id
 }
 
 output "arn" {
   description = "AWS secrets manager AWS resources name"
-  value = aws_secretsmanager_secret.main.arn
+  value       = aws_secretsmanager_secret.main.arn
 }
