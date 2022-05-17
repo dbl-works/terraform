@@ -22,8 +22,13 @@ variable "multi_az" {
 
 # Credentials for the root RDS user
 # Only to be used in initial setup, never by applications
-variable "username" { default = "root" }
-variable "password" {}
+variable "username" {
+  default   = "root"
+  sensitive = true
+}
+variable "password" {
+  sensitive = true
+}
 
 # Allow traffic from CIDR blocks
 # e.g. 0.0.0.0/0 would allow all traffic
