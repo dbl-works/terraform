@@ -31,5 +31,7 @@ variable "password" {}
 #      1.2.3.4/32 would allow traffic from 1.2.3.4 only
 variable "allow_from_cidr_blocks" { default = [] }
 
-# Allow traffic from security groups
-variable "allow_from_security_groups" { default = [] }
+variable "allow_from_security_groups" {
+  description = "Security groups which RDS allow traffics from"
+  default     = []
+}

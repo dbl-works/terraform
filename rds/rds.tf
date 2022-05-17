@@ -6,7 +6,7 @@ resource "aws_db_instance" "main" {
   engine_version                      = var.engine_version
   instance_class                      = var.instance_class
   identifier                          = "${var.project}-${var.environment}"
-  name                                = "${var.project}_${var.environment}" # name of the initial database
+  db_name                             = "${var.project}_${var.environment}" # name of the initial database
   skip_final_snapshot                 = true
   username                            = var.username
   password                            = var.password
