@@ -24,3 +24,20 @@ variable "account_id" {
 variable "domain_name" {
   type = string
 }
+
+variable "private_buckets_list" {
+  type = set(object({
+    bucket_name                     = string
+    versioning                      = bool
+    primary_storage_class_retention = number
+    kms_deletion_window_in_days     = number
+  }))
+}
+
+variable "public_buckets_list" {
+  type = set(object({
+    bucket_name                     = string
+    versioning                      = bool
+    primary_storage_class_retention = number
+  }))
+}

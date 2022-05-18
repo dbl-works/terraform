@@ -2,7 +2,7 @@
 
 resource "aws_secretsmanager_secret" "main" {
   name        = "${var.project}/${var.application}/${var.environment}"
-  description = "Secrets that are not to be stored inside ${var.application}."
+  description = try(var.secretsmanager_description, "Secrets that are not to be stored inside ${var.application}.")
 
   tags = {
     Project     = var.project

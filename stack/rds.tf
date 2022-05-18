@@ -2,17 +2,18 @@
 module "rds" {
   source = "github.com/dbl-works/terraform//rds?ref=${var.module_version}"
 
-  account_id                 = var.account_id
-  region                     = var.region
-  vpc_id                     = "vpc-123"
   project                    = var.project
   environment                = var.environment
-  password                   = "xxx"
-  kms_key_arn                = "arn:aws:kms:eu-central-1:12345678:key/xxx-xxx"
-  subnet_ids                 = ["subnet-1", "subnet-2"]
+  account_id                 = var.account_id
+  region                     = var.region
+  vpc_id                     = module.vpc.id
+  password                   = local.credentials.db_root_password
+  kms_key_arn                = module.kms-key.arn
+  subnet_ids                 = module.vpc.subnet_private_ids
   allow_from_security_groups = [module.ecs.ecs_security_group_id]
 
   # optional
+  username = local.credentials.db_username
   # TODO: Larger for production
   instance_class = "db.t3.micro"
   # TODO: Check on the list of existing engine version
