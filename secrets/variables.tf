@@ -2,6 +2,6 @@ variable "project" {}
 variable "environment" {}
 variable "application" { default = "app" }
 
-variable "secretsmanager_description" {
+variable "description" {
   type = string
 }

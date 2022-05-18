@@ -25,8 +25,7 @@ module "secrets" {
 
   # Optional
   application = each.key
-  # TODO: Rename to description
-  secretsmanager_description = each.value.description
+  description = each.value.description
 }
 
 data "aws_secretsmanager_secret_version" "terraform" {

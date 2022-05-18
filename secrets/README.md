@@ -15,7 +15,7 @@ module "secrets" {
 
   # Optional
   application = "app"
-  secretsmanager_description = "App secrets"
+  description = "App secrets"
 }
 ```
 
