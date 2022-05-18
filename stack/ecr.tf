@@ -1,5 +1,5 @@
 module "ecr" {
-  source = "github.com/dbl-works/terraform//ecr?ref=${var.module_version}"
+  source = "../ecr"
 
   project = var.project
 

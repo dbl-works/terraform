@@ -13,16 +13,19 @@ locals {
   )
 }
 
+# TODO: Add KMS key to secrets
+# TODO: Allow more secrets to be declared if provided by users
 module "secrets" {
-  source = "github.com/dbl-works/terraform//secrets?ref=${var.module_version}"
+  source = "../secrets"
 
-  for_each = locals.secret_vaults
+  for_each = local.secret_vaults
 
   project     = var.project
   environment = var.environment
 
   # Optional
-  application                = each.key
+  application = each.key
+  # TODO: Rename to description
   secretsmanager_description = each.value.description
 }
 

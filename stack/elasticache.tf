@@ -1,5 +1,5 @@
 module "elasticache" {
-  source = "github.com/dbl-works/terraform//elasticache?ref=${var.module_version}"
+  source = "../elasticache"
 
   project     = var.project
   environment = var.environment

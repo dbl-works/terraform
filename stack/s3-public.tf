@@ -1,5 +1,5 @@
 module "s3-frontend" {
-  source = "github.com/dbl-works/terraform//s3-public?ref=${var.module_version}"
+  source = "../s3-public"
 
   # This defines bucket_name as the key,
   # thus allows terraform to track the resources by bucket_name (the key)

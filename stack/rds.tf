@@ -1,6 +1,6 @@
 
 module "rds" {
-  source = "github.com/dbl-works/terraform//rds?ref=${var.module_version}"
+  source = "../rds"
 
   project                    = var.project
   environment                = var.environment

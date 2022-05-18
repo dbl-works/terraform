@@ -1,5 +1,5 @@
 module "certificate" {
-  source = "github.com/dbl-works/terraform//certificate?ref=${var.module_version}"
+  source = "../certificate"
 
   project     = var.project
   environment = var.environment

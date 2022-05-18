@@ -1,5 +1,5 @@
 module "kms-key" {
-  source = "github.com/dbl-works/terraform//kms-key?ref=${var.module_version}"
+  source = "../kms-key"
 
   # Required
   environment = var.environment

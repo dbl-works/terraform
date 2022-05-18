@@ -1,5 +1,5 @@
 module "ecs" {
-  source = "github.com/dbl-works/terraform//ecs?ref=${var.module_version}"
+  source = "../ecs"
 
   project            = var.project
   environment        = var.environment
@@ -15,7 +15,7 @@ module "ecs" {
   ]))
 
   # optional
-  health_check_path = "/livez"
+  health_check_path = var.health_check_path
   # requires a `certificate` module to be created separately
   certificate_arn = module.certificate.arn
 
@@ -23,18 +23,20 @@ module "ecs" {
 
   allowlisted_ssh_ips = var.allowlisted_ssh_ips
 
-  grant_read_access_to_s3_arns = []
-  grant_write_access_to_s3_arns = [
+  grant_read_access_to_s3_arns = var.grant_read_access_to_s3_arns
+  grant_write_access_to_s3_arns = flatten(concat([
     "${module.s3-storage.arn}/*",
-  ]
+    var.grant_write_access_to_sqs_arns
+  ]))
 
-  grant_read_access_to_sqs_arns  = []
-  grant_write_access_to_sqs_arns = []
+  grant_read_access_to_sqs_arns  = var.grant_read_access_to_sqs_arns
+  grant_write_access_to_sqs_arns = var.grant_write_access_to_sqs_arns
 
   custom_policies = var.ecs_custom_policies
 
   depends_on = [
     module.certificate.arn,
+    # TODO: Make sure kms-key is defined properly
     module.kms-key.arn,
     module.s3-storage.kms-key-arn
   ]

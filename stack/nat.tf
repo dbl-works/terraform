@@ -1,5 +1,5 @@
 module "nat" {
-  source = "github.com/dbl-works/terraform//nat?ref=${var.module_version}"
+  source = "../nat"
 
   project            = var.project
   environment        = var.environment
