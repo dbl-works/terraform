@@ -41,3 +41,25 @@ variable "public_buckets_list" {
     primary_storage_class_retention = number
   }))
 }
+
+variable "allow_internal_traffic_to_ports" {
+  type    = list(string)
+  default = []
+}
+
+variable "allowlisted_ssh_ips" {
+  type    = list(string)
+  default = []
+}
+
+variable "grant_read_access_to_s3_arns" {
+  default = []
+}
+
+variable "grant_write_access_to_sqs_arns" {
+  default = []
+}
+
+variable "custom_policies" {
+  default = []
+}

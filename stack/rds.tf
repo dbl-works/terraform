@@ -13,13 +13,9 @@ module "rds" {
   allow_from_security_groups = [module.ecs.ecs_security_group_id]
 
   # optional
-  username = local.credentials.db_username
-  # TODO: Larger for production
-  instance_class = "db.t3.micro"
-  # TODO: Check on the list of existing engine version
-  engine_version = "13.2"
-  # TODO: Do we need so much for staging?
-  allocated_storage = 100
-  # TODO: true for production?
-  multi_az = false
+  username          = local.credentials.db_username
+  instance_class    = var.rds_instance_class
+  engine_version    = var.rds_engine_version
+  allocated_storage = var.rds_allocated_storage
+  multi_az          = var.environment == "production"
 }
