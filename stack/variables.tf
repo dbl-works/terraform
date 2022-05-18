@@ -63,3 +63,12 @@ variable "grant_write_access_to_sqs_arns" {
 variable "custom_policies" {
   default = []
 }
+
+variable "vpc_availability_zones" {
+  type    = list(string)
+  default = []
+}
+
+variable "vpc_cidr_block" {
+  type = string
+}
