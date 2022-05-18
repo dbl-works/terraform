@@ -6,5 +6,5 @@ module "certificate" {
   domain_name = var.domain_name
 
   # Optional
-  add_wildcard_subdomains = true
+  add_wildcard_subdomains = var.add_wildcard_subdomains
 }

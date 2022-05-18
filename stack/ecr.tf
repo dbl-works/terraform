@@ -4,5 +4,5 @@ module "ecr" {
   project = var.project
 
   # Optional
-  mutable = false
+  mutable = var.mutable_ecr
 }

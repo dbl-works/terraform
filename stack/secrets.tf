@@ -7,5 +7,5 @@ module "secrets" {
   environment = var.environment
 
   # Optional
-  application = "app"
+  application = var.application
 }

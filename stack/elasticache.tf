@@ -9,6 +9,6 @@ module "elasticache" {
   availability_zones = var.availability_zones
 
   # optional
-  node_count = 1
-  node_type  = "cache.t3.micro"
+  node_count = var.node_count
+  node_type  = var.node_type
 }
