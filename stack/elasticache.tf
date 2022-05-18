@@ -1,12 +1,11 @@
 module "elasticache" {
   source = "github.com/dbl-works/terraform//elasticache?ref=${var.module_version}"
 
-  project            = var.project
-  environment        = var.environment
-  vpc_id             = module.vpc.id
-  vpc_cidr           = var.cidr_block
-  subnet_ids         = module.vpc.subnet_private_ids
-  availability_zones = var.availability_zones
+  project     = var.project
+  environment = var.environment
+  vpc_id      = module.vpc.id
+  subnet_ids  = module.vpc.subnet_private_ids
+  vpc_cidr    = module.vpc.cidr_block
 
   # optional
   node_count = var.node_count

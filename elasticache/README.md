@@ -15,7 +15,6 @@ module "elasticache" {
   vpc_id             = module.vpc.id
   vpc_cidr           = local.cidr_block
   subnet_ids         = module.vpc.subnet_private_ids
-  availability_zones = local.availability_zones
 
   # optional
   node_count = 1
