@@ -28,6 +28,7 @@ variable "add_wildcard_subdomains" {
 
 # =============== S3 private ================ #
 variable "private_buckets_list" {
+  default = []
   type = set(object({
     bucket_name                     = string
     versioning                      = bool
@@ -38,6 +39,7 @@ variable "private_buckets_list" {
 
 # =============== S3 public ================ #
 variable "public_buckets_list" {
+  default = []
   type = set(object({
     bucket_name                     = string
     versioning                      = bool
@@ -72,6 +74,7 @@ variable "vpc_cidr_block" {
 # =============== ECR ================ #
 variable "mutable_ecr" {
   type = bool
+  default = false
 }
 # =============== ECR ================ #
 

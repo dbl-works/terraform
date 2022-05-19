@@ -25,7 +25,7 @@ module "stack" {
   project            = "someproject"
   environment        = "staging"
 
-  # certificate manager
+  # Certificate manager
   domain_name = "my-domain.com"
 
   # VPC
@@ -37,6 +37,15 @@ module "stack" {
     "234.234.234.234",
     "134.134.134.134",
   ]
+
+  # Optional
+  region     = "eu-central-1"
+
+  # certificate manager
+  add_wildcard_subdomains = true
+
+  # ECR
+  mutable_ecr = false
 
   # S3 Private
   private_buckets_list = [
@@ -60,15 +69,6 @@ module "stack" {
       primary_storage_class_retention = 0,
     },
   ]
-
-  # Optional
-  region     = "eu-central-1"
-
-  # certificate manager
-  add_wildcard_subdomains = true
-
-  # ECR
-  mutable_ecr = false
 
   # KMS
   kms_deletion_window_in_days = 30
