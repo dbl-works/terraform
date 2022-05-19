@@ -3,6 +3,7 @@
 A reopsitory for setting up a network address translation (NAT).
 
 
+
 ## Usage
 
 ```terraform
@@ -23,6 +24,8 @@ module "nat" {
 ```
 
 `public_ips` is a list of Elastic IPs that have to belong to the same AWS account that hosts the NAT.
+
+
 
 ## Outputs
 _none_

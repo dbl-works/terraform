@@ -1,6 +1,7 @@
 # Terraform Module: ECR Repository
 
-A reopsitory for storing built docker images.
+A repository for storing built docker images.
+
 
 
 ## Usage

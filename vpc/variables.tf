@@ -1,4 +1,6 @@
-variable "availability_zones" {}
+variable "availability_zones" {
+  type = list(string)
+}
 variable "environment" {}
 variable "project" {}
 variable "account_id" {}

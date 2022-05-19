@@ -25,11 +25,13 @@ module "outline-vpn" {
 ```
 
 
+
 ## Initial Outline configuration after first launch
 
 :warning: Perform this initial setup only once during set up.
 
 We cannot currently run ssh commands using Terraform, so we need to manually configure Outline after it's online. The easiest way to do this is to
+
 - SSH into the EC2: `ssh -i "outline-server-ssh.pem" ubuntu@$AWS_INSTANCE_PUBLIC_IP`
 - grab the initial config: `sudo cat /opt/outline/access.txt` (which still contains the wrong HOST)
 - Copy the config to your local editor, then update the HOST to be your EIP
@@ -38,7 +40,7 @@ We cannot currently run ssh commands using Terraform, so we need to manually con
 ```json
 {
   "apiUrl": "https://127.0.0.1:1234/xxx",
-  "certSha256": "xxx",
+  "certSha256": "xxx"
 }
 ```
 
@@ -60,6 +62,7 @@ curl --insecure $API_URL/server
 ```
 
 Find the full documentation of Outline's API [here](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/shadowbox/server/api.yml)
+
 
 
 ## Get access credentials for Outline Manager
