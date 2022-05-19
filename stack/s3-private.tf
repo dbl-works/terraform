@@ -11,7 +11,7 @@ module "s3-storage" {
   bucket_name = each.value.bucket_name
 
   # Optional
-  kms_deletion_window_in_days     = each.value.kms_deletion_window_in_days
+  kms_deletion_window_in_days     = var.kms_deletion_window_in_days
   versioning                      = each.value.versioning
   primary_storage_class_retention = each.value.primary_storage_class_retention
 }

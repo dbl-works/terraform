@@ -33,7 +33,6 @@ variable "private_buckets_list" {
     bucket_name                     = string
     versioning                      = bool
     primary_storage_class_retention = number
-    kms_deletion_window_in_days     = number
   }))
 }
 # =============== S3 private ================ #
