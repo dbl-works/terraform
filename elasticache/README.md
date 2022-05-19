@@ -1,6 +1,6 @@
 # Terraform Module: Elasticache
 
-A reopsitory for setting up an elasticache cluster.
+A repository for setting up an elasticache cluster.
 
 
 

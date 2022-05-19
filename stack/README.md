@@ -9,6 +9,7 @@ This is our stack convention which brings all modules together, including:
 - ECS
   - Compute cluster for hosting docker based apps.
 - Elasticache
+  - Fully managed, in-memory caching service
 - KMS
   - Encryption keys for securing various AWS resources (eg. Secrets Manager, RDS, S3)
 - NAT (network address translation)
@@ -97,8 +98,6 @@ module "stack" {
 
 ## NOTES
 
-1. User need to prepare the secret file for uploading secrets
-2. Certificate module MUST be created before other modules that depend on it.
-   Take the validation information from the output, then perform the validation with your provider (e.g. on Cloudflare).
-   Some resources depend on the certificate being created **and** validated, for example Listerns for Load Balancers.
-   Thus, creating those will fail if the certificate has not been validated (manually) in a previous step.
+1. To populate secrets to the secret manager, user need to prepare 2 json files
+   - app-secrets.json (Used by the ecs)
+   - terraform-secrets.json (Used in the terraform setup)
