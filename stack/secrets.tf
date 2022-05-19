@@ -13,7 +13,6 @@ locals {
   )
 }
 
-# TODO: Allow more secrets to be declared if provided by users
 module "secrets" {
   source = "../secrets"
 
