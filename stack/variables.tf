@@ -48,13 +48,6 @@ variable "public_buckets_list" {
 # =============== S3 public ================ #
 
 # =============== KMS ================ #
-variable "kms_list" {
-  default = []
-  type = set(object({
-    alias = string
-    description = string
-  }))
-}
 variable "kms_deletion_window_in_days" {
   type = number
 }
