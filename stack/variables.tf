@@ -24,7 +24,6 @@ variable "add_wildcard_subdomains" {
   type    = bool
   default = true
 }
-
 # =============== Certificate Manager ================ #
 
 # =============== S3 private ================ #
@@ -60,7 +59,6 @@ variable "public_ips" {
 # =============== NAT ================ #
 
 # =============== VPC ================ #
-
 variable "vpc_availability_zones" {
   type    = list(string)
   default = []
