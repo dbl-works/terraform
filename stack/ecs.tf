@@ -1,3 +1,16 @@
+module "ecs-kms-key" {
+  source = "../kms-key"
+
+  # Required
+  environment = var.environment
+  project     = var.project
+  alias       = "ecs"
+  description = "kms key for ${var.project} ECS"
+
+  # Optional
+  deletion_window_in_days = var.kms_deletion_window_in_days
+}
+
 module "ecs" {
   source = "../ecs"
 
@@ -10,7 +23,7 @@ module "ecs" {
     module.secrets["app"].arn
   ]
   kms_key_arns = flatten(concat([
-    module.kms-key.arn,
+    module.ecs-kms-key.arn,
     module.s3-storage.kms-key-arn
   ]))
 

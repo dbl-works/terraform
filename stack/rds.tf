@@ -5,7 +5,7 @@ module "rds-kms-key" {
   environment = var.environment
   project     = var.project
   alias       = "rds"
-  description = "kms key for ${var.project} ${each.key} RDS"
+  description = "kms key for ${var.project} RDS"
 
   # Optional
   deletion_window_in_days = var.kms_deletion_window_in_days
