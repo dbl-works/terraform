@@ -1,4 +1,3 @@
-
 module "rds" {
   source = "../rds"
 
@@ -8,7 +7,7 @@ module "rds" {
   region                     = var.region
   vpc_id                     = module.vpc.id
   password                   = local.credentials.db_root_password
-  kms_key_arn                = module.kms-key.arn
+  kms_key_arn                = module.rds-kms-key.arn
   subnet_ids                 = module.vpc.subnet_private_ids
   allow_from_security_groups = [module.ecs.ecs_security_group_id]
 
