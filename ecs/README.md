@@ -2,6 +2,8 @@
 
 Create a compute cluster for hosting docker based apps.
 
+
+
 ## Usage
 
 ```terraform
@@ -38,6 +40,8 @@ module "ecs" {
 ```
 
 `allow_internal_traffic_to_ports` allow traffic to given ports within the cluster, e.g. to call an internal service like a PDF renderer.
+
+
 
 ## Health checks
 

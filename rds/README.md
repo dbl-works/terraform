@@ -4,6 +4,8 @@ Used for creating and configuring databases and their networking.
 
 Will create an initial database named `{project}_{environment}`.
 
+
+
 ## Usage
 
 ```terraform
@@ -29,6 +31,8 @@ module "db" {
 }
 ```
 
+
+
 ## RDS Engine Versions
 
 To get a list of RDS versions, you can use the following command:
@@ -36,6 +40,8 @@ To get a list of RDS versions, you can use the following command:
 ```shell
 aws rds describe-db-engine-versions --engine postgres --engine-version 13 --region us-east-1 --endpoint https://rds.us-east-1.amazonaws.com --output text --query 'DBEngineVersions[*].{Engine:Engine,EngineVersion:EngineVersion}'
 ```
+
+
 
 ## Temporary password for AWS IAM role-based access
 
@@ -47,6 +53,8 @@ Attach the following roles to your IAM user:
 "${project}-${environment}-rds-db-connect-readonly"
 "${project}-${environment}-rds-view"
 ```
+
+
 
 ### Generate password in the console
 

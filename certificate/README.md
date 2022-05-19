@@ -8,6 +8,7 @@ Some resources depend on the certificate being created **and** validated, for ex
 Thus, creating those will fail if the certificate has not been validated (manually) in a previous step.
 
 
+
 ## Usage
 
 ```terraform
@@ -27,6 +28,8 @@ module "certificate" {
 Setting `add_wildcard_subdomains` to `false` will omit creating a wild-card certificate for subdomains, i.e. `*.${domain-name}`.
 
 You might want to user a more recent `ref`.
+
+
 
 ## Outputs
 - `domain_validation_information`, used to validate DNS records

@@ -24,6 +24,7 @@ module "s3-storage" {
 ```
 
 
+
 ## Outputs
 
 - `arn`: you probably want to pass this arn to ECS `grant_write_access_to_s3_arns`
