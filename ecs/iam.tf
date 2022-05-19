@@ -61,7 +61,6 @@ resource "aws_iam_group_policy_attachment" "ecs-view" {
 }
 
 
-
 # Grant access to console
 resource "aws_iam_group" "ecs-console" {
   name = "${var.project}-${var.environment}-ecs-console"

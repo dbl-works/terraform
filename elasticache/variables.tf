@@ -11,4 +11,13 @@ variable "node_count" {
   type    = number
   default = 1
 }
-# variable "engine_version" { default = "6.x" }
+
+variable "parameter_group_name" {
+  type    = string
+  default = "default.redis6.x"
+}
+
+variable "engine_version" {
+  type    = string
+  default = "6.x"
+}

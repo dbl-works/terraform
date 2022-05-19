@@ -1,6 +1,11 @@
 resource "aws_cognito_user_pool" "pool" {
   name = "${var.project}-${var.environment}"
 
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+  }
+
   account_recovery_setting {
     recovery_mechanism {
       name     = "verified_email"
