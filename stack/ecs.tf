@@ -33,11 +33,4 @@ module "ecs" {
   grant_write_access_to_sqs_arns = var.grant_write_access_to_sqs_arns
 
   custom_policies = var.ecs_custom_policies
-
-  depends_on = [
-    module.certificate.arn,
-    # TODO: Make sure kms-key is defined properly
-    module.kms-key.arn,
-    module.s3-storage.kms-key-arn
-  ]
 }
