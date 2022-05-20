@@ -1,7 +1,7 @@
 # Terraform Module: Stack Setup
 ## Getting Started
 
-This is the pre-setup for stack modules. It will create the secrets manager and populate the secrets to AWS.
+This is the pre-setup of stack modules. It will create the secrets manager and populate the secrets to AWS.
 It should only be run once prior to the creation of stack modules.
 
 1. To populate secrets to the secret manager, you'll need to prepare 2 json files

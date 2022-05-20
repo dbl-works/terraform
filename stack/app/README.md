@@ -17,6 +17,11 @@ This is our stack convention which brings all modules together, including:
 - Secrets Manager
 - VPC
 
+## Getting Started
+
+1. Refer to the [stack/setup module](stack/setup/README.md) on the pre-setup of stack modules
+2. Add the following block to your terraform configurations
+
 ```terraform
 module "stack" {
   source = "github.com/dbl-works/terraform//stack/app?ref=v2022.05.18"
@@ -96,8 +101,7 @@ module "stack" {
 }
 ```
 
-## NOTES
+3. Add the following terraform output to the AWS secret manager
 
-1. To populate secrets to the secret manager, user need to prepare 2 json files
-   - app-secrets.json (Used by the ecs)
-   - terraform-secrets.json (Used in the terraform setup)
+- REDIS_URL: <endpoint>
+- DATABASE_URL: <database_url>
