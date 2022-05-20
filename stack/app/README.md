@@ -102,6 +102,5 @@ module "stack" {
 ```
 
 3. Add the following terraform output to the AWS secret manager
-
-- REDIS_URL: <endpoint>
-- DATABASE_URL: <database_url>
+- REDIS_URL
+- DATABASE_URL
