@@ -9,8 +9,8 @@ It should only be run once prior to the creation of stack modules.
      - RAILS_MASTER_KEY
      - SIDEKIQ_USER
      - SIDEKIQ_PASS
-     - REDIS_URL (Can leave blank and fill in after getting the info from the terraform output of stack module)
-     - DATABASE_URL (Can leave blank and fill in after getting the info from the terraform output of stack module)
+     - REDIS_URL (Can leave blank until getting the info from the terraform output of stack module)
+     - DATABASE_URL (Can leave blank until getting the info from the terraform output of stack module)
 
    - terraform-secrets.json (Stores secrets for use in terraform workspace)
      - db_root_password

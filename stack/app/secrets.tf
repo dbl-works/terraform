@@ -5,5 +5,5 @@ locals {
 }
 
 data "aws_secretsmanager_secret_version" "terraform" {
-  secret_id = module.secrets["terraform"].id
+  secret_id = "${var.project}/terraform/${var.environment}"
 }
