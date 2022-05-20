@@ -73,7 +73,7 @@ variable "vpc_cidr_block" {
 
 # =============== ECR ================ #
 variable "mutable_ecr" {
-  type = bool
+  type    = bool
   default = false
 }
 # =============== ECR ================ #

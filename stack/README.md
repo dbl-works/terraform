@@ -19,7 +19,7 @@ This is our stack convention which brings all modules together, including:
 
 ```terraform
 module "stack" {
-  source = "github.com/dbl-works/terraform//stack?ref=v2022.05.18"
+  source = "github.com/dbl-works/terraform//stack/app?ref=v2022.05.18"
 
   account_id         = "12345678"
   project            = "someproject"
