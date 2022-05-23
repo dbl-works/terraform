@@ -1,5 +1,5 @@
 module "rds-kms-key" {
-  source = "../kms-key"
+  source = "../../kms-key"
 
   # Required
   environment = var.environment
@@ -12,7 +12,7 @@ module "rds-kms-key" {
 }
 
 module "rds" {
-  source = "../rds"
+  source = "../../rds"
 
   project                    = var.project
   environment                = var.environment

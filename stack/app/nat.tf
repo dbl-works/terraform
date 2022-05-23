@@ -1,5 +1,5 @@
 module "nat" {
-  source = "../nat"
+  source = "../../nat"
 
   project            = var.project
   environment        = var.environment

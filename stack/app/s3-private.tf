@@ -1,5 +1,5 @@
 module "s3-storage" {
-  source = "../s3-private"
+  source = "../../s3-private"
 
   # This defines bucket_name as the key,
   # thus allows terraform to track the resources by bucket_name (the key)

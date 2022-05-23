@@ -1,5 +1,5 @@
 module "ecs-kms-key" {
-  source = "../kms-key"
+  source = "../../kms-key"
 
   # Required
   environment = var.environment

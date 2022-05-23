@@ -1,5 +1,5 @@
 module "elasticache" {
-  source = "../elasticache"
+  source = "../../elasticache"
 
   project     = var.project
   environment = var.environment

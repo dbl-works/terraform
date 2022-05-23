@@ -1,5 +1,5 @@
 module "ecr" {
-  source = "../ecr"
+  source = "../../ecr"
 
   project = var.project
 

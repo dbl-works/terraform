@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "../vpc"
+  source = "../../vpc"
 
   account_id         = var.account_id
   environment        = var.environment

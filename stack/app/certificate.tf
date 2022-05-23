@@ -1,5 +1,5 @@
 module "certificate" {
-  source = "../certificate"
+  source = "../../certificate"
 
   project     = var.project
   environment = var.environment
