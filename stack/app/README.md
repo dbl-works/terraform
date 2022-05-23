@@ -102,6 +102,19 @@ module "stack" {
 }
 ```
 
+```terraform
+# output.tf
+
+output "database_url" {
+  value = module.stack.database_url
+}
+
+output "redis_url" {
+  value = module.stack.redis_url
+}
+```
+
+
 3. Add the following terraform output to the AWS secret manager
-- REDIS_URL
-- DATABASE_URL
+- redis_url
+- database_url

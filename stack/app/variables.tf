@@ -79,12 +79,12 @@ variable "mutable_ecr" {
 # =============== ECR ================ #
 
 # =============== Elasticache ================ #
-variable "node_type" {
+variable "elasticache_node_type" {
   type    = string
   default = "cache.t3.micro"
 }
 
-variable "node_count" {
+variable "elasticache_node_count" {
   type    = number
   default = 1
 }
@@ -118,6 +118,10 @@ variable "allowlisted_ssh_ips" {
 }
 
 variable "grant_read_access_to_s3_arns" {
+  default = []
+}
+
+variable "grant_write_access_to_s3_arns" {
   default = []
 }
 

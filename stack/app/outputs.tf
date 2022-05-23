@@ -1,7 +1,7 @@
-output "DATABASE_URL" {
+output "database_url" {
   value = module.rds.database_url
 }
 
-output "REDIS_URL" {
+output "redis_url" {
   value = module.elasticache.endpoint
 }

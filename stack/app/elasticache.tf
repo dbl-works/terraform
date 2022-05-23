@@ -8,6 +8,6 @@ module "elasticache" {
   vpc_cidr    = module.vpc.cidr_block
 
   # optional
-  node_count = var.node_count
-  node_type  = var.node_type
+  node_count = var.elasticache_node_count
+  node_type  = var.elasticache_node_type
 }

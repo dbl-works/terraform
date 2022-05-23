@@ -12,7 +12,7 @@ module "ecs-kms-key" {
 }
 
 module "ecs" {
-  source = "../ecs"
+  source = "../../ecs"
 
   project            = var.project
   environment        = var.environment
@@ -26,7 +26,7 @@ module "ecs" {
 
   kms_key_arns = flatten(concat([
     module.ecs-kms-key.arn,
-    module.s3-storage.kms-key-arn
+    values(module.s3-storage)[*].kms-key-arn
   ]))
 
   # optional
@@ -40,8 +40,8 @@ module "ecs" {
 
   grant_read_access_to_s3_arns = var.grant_read_access_to_s3_arns
   grant_write_access_to_s3_arns = flatten(concat([
-    "${module.s3-storage.arn}/*",
-    var.grant_write_access_to_sqs_arns
+    [for arn in values(module.s3-storage)[*].arn : "${arn}/*"],
+    var.grant_write_access_to_s3_arns
   ]))
 
   grant_read_access_to_sqs_arns  = var.grant_read_access_to_sqs_arns

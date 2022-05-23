@@ -38,3 +38,16 @@ module "stack-setup" {
   # KMS
   kms_deletion_window_in_days = 30
 }
+```
+
+```terraform
+# output.tf
+
+output "app_secrets_arn" {
+  value = module.stack-setup.app_secrets_arn
+}
+
+output "terraform_secrets_arn" {
+  value = module.stack-setup.terraform_secrets_arn
+}
+```
