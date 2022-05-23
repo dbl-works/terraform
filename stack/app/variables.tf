@@ -132,4 +132,9 @@ variable "grant_read_access_to_sqs_arns" {
 variable "ecs_custom_policies" {
   default = []
 }
+
+variable "secret_arns" {
+  description = "Secret manager arns that ECS can access"
+  default     = []
+}
 # =============== ECS ================ #

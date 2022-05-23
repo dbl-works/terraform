@@ -91,6 +91,10 @@ module "stack" {
   grant_read_access_to_sqs_arns  = []
   grant_write_access_to_sqs_arns = []
   ecs_custom_policies = []
+  # Should add the app secrets manager arn here so that ECS
+  # can access the value
+  # Value can be obtained thru the output of the [setup module](stack/setup/README.md) or data source
+  secret_arns = [data.aws_secretsmanager_secret.app.arn]
 
   # Elasticache
   elasticache_node_count = 1
@@ -98,6 +102,12 @@ module "stack" {
 
   # vpc
   vpc_cidr_block = "10.0.0.0/16"
+}
+
+# Optional
+# Value can also be obtained thru the output of the [setup module](stack/setup/README.md)
+data "aws_secretsmanager_secret" "app" {
+  name        = "${var.project}/app/${var.environment}"
 }
 ```
 

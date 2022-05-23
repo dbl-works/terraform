@@ -19,9 +19,7 @@ module "ecs" {
   vpc_id             = module.vpc.id
   subnet_private_ids = module.vpc.subnet_private_ids
   subnet_public_ids  = module.vpc.subnet_public_ids
-  secrets_arns = [
-    module.secrets["app"].arn
-  ]
+  secrets_arns       = var.secret_arns
   kms_key_arns = flatten(concat([
     module.ecs-kms-key.arn,
     module.s3-storage.kms-key-arn
