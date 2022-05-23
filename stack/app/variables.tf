@@ -134,7 +134,7 @@ variable "ecs_custom_policies" {
 }
 
 variable "secret_arns" {
-  description = "Secret manager arns that ECS can access"
+  description = "arns of the secret manager that ECS can access"
   default     = []
 }
 # =============== ECS ================ #
