@@ -28,6 +28,8 @@ variable "worker_script_name" {
   type = string
 }
 
-variable "s3_bucket_cdn_subdomain" {
-  type = string
+variable "s3_cdn_buckets" {
+  type = map(object({
+    cdn_path : string
+  }))
 }

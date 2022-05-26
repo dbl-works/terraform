@@ -1,8 +1,9 @@
 # Terraform Module: Cloudflare
 
-Setting up the following in this repository:
+This module done the following:
 
 - Domain validation
+  - Configure a CNAME record in DNS configuration to establish control of your domain name. This allows ACM to automatically renew DNS-validated certificates before they expire, as long as the DNS record has not changed
 - Route to defaults routes
     - api.my-project.com to the NLB
     - bastion.my-project.com
@@ -10,11 +11,12 @@ Setting up the following in this repository:
     - xx.my-project.com to the S3-Bucket (using Cloudflare Workers) for any subdomain needed
 
 ## Pre-setup
-1. Setup and publish your cdn cloudflare worker.
+1. Setup and publish your CDN cloudflare worker.
 - Some useful references:
-  - https://developers.cloudflare.com/workers/get-started/quickstarts/
-  - https://developers.cloudflare.com/workers/tutorials/configure-your-cdn/
-  - https://egghead.io/courses/introduction-to-cloudflare-workers-5aa3
+  - Quickstart: https://developers.cloudflare.com/workers/get-started/quickstarts/
+  - Cloudflare CDN tutorials: https://developers.cloudflare.com/workers/tutorials/configure-your-cdn/
+  - Introduction to Cloudflare Worker: https://egghead.io/courses/introduction-to-cloudflare-workers-5aa3
+  - Cloudflare Router: https://github.com/dbl-works/cloudflare-router
 
 2. Make sure you have create API token in your cloudflare account with sufficient permissions
 - You can have a look at the cloudflare permissions [here](https://developers.cloudflare.com/api/tokens/create/permissions/)
@@ -34,6 +36,14 @@ module "cloudflare" {
   bastion_eip_id = "project-staging-xxxxx.elb.eu-central-1.amazonaws.com"
   nlb_dns_name = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
   worker_script_name = "serve-cdn"
+  s3_cdn_buckets = {
+    a-bucket = {
+      cdn_path = "cdn"
+    }
+    b-bucket = {
+      cdn_path = "images"
+    }
+  }
 }
 ```
 
