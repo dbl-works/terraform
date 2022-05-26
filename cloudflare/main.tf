@@ -52,7 +52,7 @@ resource "cloudflare_record" "bastion" {
 # cdn.my-project.com to the S3-Bucket (using Cloudflare Workers)
 # xx.my-project.com to the S3-Bucket (using Cloudflare Workers) for any subdomain needed
 resource "cloudflare_record" "s3" {
-  for_each = var.s3_cdn_buckets
+  for_each = { for bucket in var.s3_cdn_buckets : bucket.name => bucket }
 
   zone_id = cloudflare_zone.default.id
   name    = each.key
@@ -62,8 +62,9 @@ resource "cloudflare_record" "s3" {
 }
 
 resource "cloudflare_worker_route" "cdn_route" {
-  for_each    = var.s3_cdn_buckets
+  for_each = { for bucket in var.s3_cdn_buckets : bucket.name => bucket }
+
   zone_id     = cloudflare_zone.default.id
-  pattern     = [for bucket in var.s3_cdn_buckets : "*${bucket.cdn_path}.${var.domain}/*"]
+  pattern     = "*${each.value.cdn_path}.${var.domain}/*"
   script_name = var.cdn_worker_script_name
 }

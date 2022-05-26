@@ -21,8 +21,9 @@ variable "cdn_worker_script_name" {
 }
 
 variable "s3_cdn_buckets" {
-  type = map(object({
+  type = list(object({
+    name : string
     cdn_path : string
   }))
-  default = {}
+  default = []
 }
