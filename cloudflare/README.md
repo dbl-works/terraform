@@ -1,6 +1,6 @@
 # Terraform Module: Cloudflare
 
-This module done the following:
+This module will do the following:
 
 - Domain validation
   - Configure a CNAME record in DNS configuration to establish control of your domain name. This allows ACM to automatically renew DNS-validated certificates before they expire, as long as the DNS record has not changed
@@ -21,7 +21,7 @@ This module done the following:
 2. Make sure you have create API token in your cloudflare account with sufficient permissions
 - You can have a look at the cloudflare permissions [here](https://developers.cloudflare.com/api/tokens/create/permissions/)
 - You should have access to
-  - Edit: Worker Routers, DNS
+  - All zones - Zone:Edit, Workers Routes:Edit, DNS:Edit
 
 ## Usage
 
@@ -29,13 +29,11 @@ This module done the following:
 module "cloudflare" {
   source = "github.com/dbl-works/terraform//cloudflare?ref=v2022.05.26"
 
-  cloudflare_email = "user@gmail.com"
-  cloudflare_api_key = var.cloudflare_api_key
   domain = "example.com"
   subject_alternative_names = ["*.example.com"]
-  bastion_eip_id = "project-staging-xxxxx.elb.eu-central-1.amazonaws.com"
+  bastion_public_dns = "project-staging-xxxxx.elb.eu-central-1.amazonaws.com"
   nlb_dns_name = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
-  worker_script_name = "serve-cdn"
+  cdn_worker_script_name = "serve-cdn"
   s3_cdn_buckets = {
     a-bucket = {
       cdn_path = "cdn"

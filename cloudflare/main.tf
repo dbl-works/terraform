@@ -1,8 +1,3 @@
-provider "cloudflare" {
-  email   = var.cloudflare_email
-  api_key = var.cloudflare_api_key
-}
-
 locals {
   distinct_domain_names = distinct(
     [for s in concat([var.domain], var.subject_alternative_names) : replace(s, "*.", "")]
@@ -45,16 +40,12 @@ resource "cloudflare_record" "api" {
   proxied = true
 }
 
-data "aws_eip" "bastion" {
-  id = var.bastion_eip_id
-}
-
 # bastion.my-project.com
 resource "cloudflare_record" "bastion" {
   zone_id = cloudflare_zone.default.id
   name    = "bastion"
   type    = "CNAME"
-  value   = data.aws_eip.bastion.public_dns
+  value   = var.bastion_public_dns
   proxied = false
 }
 
@@ -74,5 +65,5 @@ resource "cloudflare_worker_route" "cdn_route" {
   for_each    = var.s3_cdn_buckets
   zone_id     = cloudflare_zone.default.id
   pattern     = [for bucket in var.s3_cdn_buckets : "*${bucket.cdn_path}.${var.domain}/*"]
-  script_name = var.worker_script_name
+  script_name = var.cdn_worker_script_name
 }
