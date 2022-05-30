@@ -41,7 +41,7 @@ data "aws_iam_policy_document" "developer" {
 }
 
 # TODO: Would this be too generous to allow the user to see the following list?
-# TODO: Move this to non-taggable resources
+# TODO: Move this to developer group?
 # List action generally does not support resource-level permissions
 # https://stackoverflow.com/questions/58993574/iam-policy-with-awsresourcetag-not-supported
 data "aws_iam_policy_document" "list" {
@@ -53,6 +53,12 @@ data "aws_iam_policy_document" "list" {
         "s3:List*",
         "ecr:List*",
         "ecs:List*",
+        "acm:List*",
+        "cloudwatch:List*",
+        "elasticache:List*",
+        "elasticloadbalancing:DescribeLoadBalancers",
+        "cognito-identity:List*",
+        "cognito-idp:List*",
     ]
     resources = ["*"]
   }
