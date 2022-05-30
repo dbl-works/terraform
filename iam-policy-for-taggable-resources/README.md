@@ -41,7 +41,7 @@ module "organization_level_iam_policy" {
   environment = "staging"
 }
 
-resource "aws_iam_user_policy_attachment" "test-attach" {
+resource "aws_iam_user_policy_attachment" "organization_level_iam_policy" {
   for_each = aws_iam_user.user
 
   user       = each.value.name

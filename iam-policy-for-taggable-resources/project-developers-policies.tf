@@ -1,38 +1,69 @@
-# This does not cover the Tag and iam management
-# resource "aws_iam_policy" "developer-usage-for-taggable-resources" {
-#   name        = "TaggableResourcesDeveloperUsage"
-#   path        = "/"
-#   description = "Allow developers to have list + read access level in the project"
+locals {
+  resources = [
+    "acm",
+    "cloudwatch",
+    "cognito-identity",
+    "cognito-idp",
+    "ecr",
+    "ecs",
+    "ec2",
+    "elasticloadbalancing",
+    "elasticache",
+    "kms",
+    "s3",
+    "secretsmanager",
+    "rds",
+  ]
+}
 
-#   policy = <<EOF
-# {
-#   "Effect": "Allow",
-#   "Resource": "*",
-#   "Action": [
-#     "*:Describe*",
-#     "*:Get*",
-#     "*:List*",
-#     "*:Search*"
-#   ],
-#   "Condition":{
-#       "StringLike":{
-#           "aws:ResourceTag/Project":"&{aws:PrincipalTag/${var.environment}-developer-access-projects}"
-#       }
-#       "StringEqual":{
-#           "aws:ResourceTag/Environment": ${var.environment}
-#       }
-#   },
-# },
-# EOF
-# }
+data "aws_iam_policy_document" "deny_invalid_env_developer_access" {
+  statement {
+    sid    = "DenyDeveloperAccessForInvalidEnvironment"
+    effect = "Deny"
+    actions = flatten([for resource in local.resources : [
+      "${resource}:Describe*",
+      "${resource}:Get*"
+    ]])
 
-# "rds:Describe*",
-# "rds:Get*",
-# "rds:List*"
-# "ec2:Describe*",
-# "ec2:Get*",
-# "ec2:Search*",
-# "ecr:BatchGet*",
-# "ecr:Describe*",
-# "ecr:Get*",
-# "ecr:List*",
+    resources = ["*"]
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:ResourceTag/Environment"
+      values   = [var.environment]
+    }
+
+  }
+}
+
+data "aws_iam_policy_document" "deny_invalid_project_developer_access" {
+  statement {
+    sid    = "DenyDeveloperAccessForInvalidProject"
+    effect = "Deny"
+    actions = flatten([for resource in local.resources : [
+      "${resource}:Describe*",
+      "${resource}:Get*"
+    ]])
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringNotLike"
+      variable = "aws:ResourceTag/Project"
+      values   = ["&{aws:PrincipalTag/${var.environment}-developer-access-projects}"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "developer" {
+  statement {
+    sid = "AllowListAccessToAllResources"
+    actions = flatten([for resource in local.resources : [
+      "${resource}:List*",
+      "${resource}:Describe*",
+      "${resource}:Get*"
+    ]])
+
+    resources = ["*"]
+  }
+}
