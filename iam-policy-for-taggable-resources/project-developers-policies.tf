@@ -54,3 +54,17 @@ data "aws_iam_policy_document" "deny_invalid_project_developer_access" {
     }
   }
 }
+
+# Allow access to non-taggable resources
+data "aws_iam_policy_document" "list" {
+  statement {
+    sid = "AllowListAccessToAllResources"
+    actions = flatten([for resource in local.resources : [
+      "${resource}:List*",
+      "${resource}:Describe*",
+      "${resource}:Get*"
+    ]])
+
+    resources = ["*"]
+  }
+}
