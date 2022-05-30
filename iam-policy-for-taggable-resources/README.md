@@ -13,9 +13,9 @@ locals {
       iam    = "gh-user"
       github = "user"
       name   = "Mary Lamb"
-      staging-developer-access-projects    = "metaverse"
+      staging-developer-access-projects    = "metaverse:messenger"
       staging-admin-access-projects        = "metaverse"
-      production-developer-access-projects = "metaverse"
+      production-developer-access-projects = "metaverse:facebook"
       production-admin-access-projects     = ""
     }
   }
@@ -48,14 +48,14 @@ module "production_iam_policy" {
   environment = "production"
 }
 
-resource "aws_iam_user_policy_attachment" "organization_level_staging_iam_policy" {
+resource "aws_iam_user_policy_attachment" "staging_iam_policy" {
   for_each = aws_iam_user.user
 
   user       = each.value.name
   policy_arn = module.staging_iam_policy.policy_arn
 }
 
-resource "aws_iam_user_policy_attachment" "organization_level_production_iam_policy" {
+resource "aws_iam_user_policy_attachment" "production_iam_policy" {
   for_each = aws_iam_user.user
 
   user       = each.value.name
