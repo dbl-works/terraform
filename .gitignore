@@ -24,3 +24,8 @@
 # terraform
 **/*.terraform
 **/*.lock.hcl
+
+.env
+.terraform/*
+.terraform*
+terraform.tfstate
