@@ -16,49 +16,9 @@ locals {
   ]
 }
 
-data "aws_iam_policy_document" "deny_invalid_env_developer_access" {
+data "aws_iam_policy_document" "developer" {
   statement {
-    sid    = "DenyDeveloperAccessForInvalidEnvironment"
-    effect = "Deny"
-    actions = flatten([for resource in local.resources : [
-      "${resource}:Describe*",
-      "${resource}:Get*"
-    ]])
-
-    resources = ["*"]
-
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:ResourceTag/Environment"
-      values   = [var.environment]
-    }
-
-  }
-}
-
-data "aws_iam_policy_document" "deny_invalid_project_developer_access" {
-  statement {
-    sid    = "DenyDeveloperAccessForInvalidProject"
-    effect = "Deny"
-    actions = flatten([for resource in local.resources : [
-      "${resource}:Describe*",
-      "${resource}:Get*"
-    ]])
-
-    resources = ["*"]
-
-    condition {
-      test     = "StringNotLike"
-      variable = "aws:ResourceTag/Project"
-      values   = ["&{aws:PrincipalTag/${var.environment}-developer-access-projects}"]
-    }
-  }
-}
-
-# Allow access to non-taggable resources
-data "aws_iam_policy_document" "list" {
-  statement {
-    sid = "AllowListAccessToAllResources"
+    sid = "AllowDeveloperAccessToAllResources"
     actions = flatten([for resource in local.resources : [
       "${resource}:List*",
       "${resource}:Describe*",
@@ -66,5 +26,17 @@ data "aws_iam_policy_document" "list" {
     ]])
 
     resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:ResourceTag/Environment"
+      values   = [var.environment]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "aws:ResourceTag/Project"
+      values   = ["&{aws:PrincipalTag/${var.environment}-developer-access-projects}"]
+    }
   }
 }
