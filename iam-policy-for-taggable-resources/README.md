@@ -34,32 +34,31 @@ resource "aws_iam_user" "user" {
   }
 }
 
-module "staging_iam_policy" {
-  source = "github.com/dbl-works/terraform//iam-policy-for-taggable-resources?ref=v2021.07.05"
-
-  # Required
-  environment = "staging"
+locals {
+  environments = ["staging", "production"]
 }
 
-module "production_iam_policy" {
-  source = "github.com/dbl-works/terraform//iam-policy-for-taggable-resources?ref=v2021.07.05"
+module "iam_policies" {
+  count  = length(local.environments)
+  source = "../iam-policy-for-taggable-resources"
 
   # Required
-  environment = "production"
+  environment = local.environments[count.index]
 }
 
-resource "aws_iam_user_policy_attachment" "staging_iam_policy" {
+
+resource "aws_iam_user_policy_attachment" "staging" {
   for_each = aws_iam_user.user
 
   user       = each.value.name
-  policy_arn = module.staging_iam_policy.policy_arn
+  policy_arn = module.iam_policies[0].policy_arn
 }
 
-resource "aws_iam_user_policy_attachment" "production_iam_policy" {
+resource "aws_iam_user_policy_attachment" "production" {
   for_each = aws_iam_user.user
 
   user       = each.value.name
-  policy_arn = module.production_iam_policy.policy_arn
+  policy_arn = module.iam_policies[1].policy_arn
 }
 
 ```
