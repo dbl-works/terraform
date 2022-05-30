@@ -1,4 +1,3 @@
-# TODO: Not sure whether user can manage Tag
 data "aws_iam_policy_document" "admin" {
   statement {
     sid       = "AllowAdminAccessBasedOnTags"

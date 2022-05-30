@@ -1,7 +1,20 @@
+# Allow access to non-taggable resources
+data "aws_iam_policy_document" "list" {
+  statement {
+    sid = "AllowListAccessToAllResources"
+    actions = flatten([for resource in local.resources : [
+      "${resource}:List*",
+      "${resource}:Describe*",
+      "${resource}:Get*"
+    ]])
+
+    resources = ["*"]
+  }
+}
 data "aws_iam_policy_document" "taggable_resources" {
   source_policy_documents = [
     data.aws_iam_policy_document.admin.json,
-    data.aws_iam_policy_document.developer.json,
+    data.aws_iam_policy_document.list.json,
     data.aws_iam_policy_document.deny_invalid_env_developer_access.json,
     data.aws_iam_policy_document.deny_invalid_project_developer_access.json,
   ]
