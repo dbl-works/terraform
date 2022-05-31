@@ -63,6 +63,6 @@ module "iam_policies" {
 resource "aws_iam_group_policy_attachment" "engineer" {
   count      = length(module.iam_policies.*.policy_arn)
   group      = aws_iam_group.engineer.name
-  policy_arn = module.iam_policies*.policy_arn[count.index]
+  policy_arn = module.iam_policies.*.policy_arn[count.index]
 }
 ```

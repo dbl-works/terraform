@@ -18,7 +18,7 @@ locals {
 
 data "aws_iam_policy_document" "developer" {
   statement {
-    sid = "AllowDeveloperAccessToAllResources"
+    sid = "AllowDeveloperAccessBasedOnTags"
     actions = flatten([for resource in local.resources : [
       "${resource}:List*",
       "${resource}:Describe*",
@@ -34,6 +34,9 @@ data "aws_iam_policy_document" "developer" {
     }
 
     condition {
+      # Using StringLike here because currently tag cannot take multivalue
+      # We can only create a custom multivalue structure in the single value
+      # https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html
       test     = "StringLike"
       variable = "aws:ResourceTag/Project"
       values   = ["&{aws:PrincipalTag/${var.environment}-developer-access-projects}"]
