@@ -27,11 +27,25 @@ resource "aws_iam_user" "user" {
   tags = {
     name                                 = each.value["name"]
     github                               = each.value["github"]
-    staging-developer-access-projects    = each.value["staging-developer-access-projects"]
-    staging-admin-access-projects        = each.value["staging-admin-access-projects"]
-    production-developer-access-projects = each.value["production-developer-access-projects"]
-    production-admin-access-projects     = each.value["production-admin-access-projects"]
+    staging-developer-access-projects    = try(each.value["staging-developer-access-projects"], "")
+    staging-admin-access-projects        = try(each.value["staging-admin-access-projects"], "")
+    production-developer-access-projects = try(each.value["production-developer-access-projects"], "")
+    production-admin-access-projects     = try(each.value["production-admin-access-projects"], "")
   }
+}
+
+resource "aws_iam_group" "engineer" {
+  name = "engineer"
+  path = "/"
+}
+
+resource "aws_iam_user_group_membership" "memberships" {
+  for_each = local.users
+  user     = each.value["iam"]
+  groups   = each.value["groups"]
+  depends_on = [
+    aws_iam_group.engineer,
+  ]
 }
 
 locals {
@@ -40,25 +54,15 @@ locals {
 
 module "iam_policies" {
   count  = length(local.environments)
-  source = "../iam-policy-for-taggable-resources"
+  source = "github.com/dbl-works/terraform//iam-policy-for-taggable-resources?ref=v2021.07.05"
 
   # Required
   environment = local.environments[count.index]
 }
 
-
-resource "aws_iam_user_policy_attachment" "staging" {
-  for_each = aws_iam_user.user
-
-  user       = each.value.name
-  policy_arn = module.iam_policies[0].policy_arn
+resource "aws_iam_group_policy_attachment" "engineer" {
+  count      = length(module.iam_policies.*.policy_arn)
+  group      = aws_iam_group.engineer.name
+  policy_arn = module.iam_policies*.policy_arn[count.index]
 }
-
-resource "aws_iam_user_policy_attachment" "production" {
-  for_each = aws_iam_user.user
-
-  user       = each.value.name
-  policy_arn = module.iam_policies[1].policy_arn
-}
-
 ```
