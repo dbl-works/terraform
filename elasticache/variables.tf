@@ -2,6 +2,7 @@ variable "project" {}
 variable "environment" {}
 variable "vpc_id" {}
 variable "vpc_cidr" {}
+variable "kms_key_arn" {}
 variable "subnet_ids" { type = list(string) }
 variable "availability_zones" { type = list(string) }
 

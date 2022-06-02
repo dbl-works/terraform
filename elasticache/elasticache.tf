@@ -1,13 +1,15 @@
 resource "aws_elasticache_replication_group" "main" {
-  replication_group_id = "${var.project}-${var.environment}"
-  description          = "Collection of Redis cache clusters for ${var.project}-${var.environment}"
-  engine               = "redis"
-  node_type            = var.node_type
-  num_cache_clusters   = var.node_count
-  parameter_group_name = var.parameter_group_name
-  engine_version       = var.engine_version
-  port                 = 6379
-  subnet_group_name    = aws_elasticache_subnet_group.main.name
+  replication_group_id       = "${var.project}-${var.environment}"
+  description                = "Collection of Redis cache clusters for ${var.project}-${var.environment}"
+  engine                     = "redis"
+  node_type                  = var.node_type
+  num_cache_clusters         = var.node_count
+  parameter_group_name       = var.parameter_group_name
+  engine_version             = var.engine_version
+  port                       = 6379
+  subnet_group_name          = aws_elasticache_subnet_group.main.name
+  at_rest_encryption_enabled = true
+  kms_key_id                 = var.kms_key_arn
   # When you change an attribute, such as engine_version,
   # by default the ElastiCache API applies it in the next maintenance window.
   # Because of this, Terraform may report a difference in its planning phase
