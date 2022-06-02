@@ -29,6 +29,7 @@ resource "aws_elasticache_replication_group" "main" {
   lifecycle {
     ignore_changes = [
       engine_version,
+      num_cache_clusters
     ]
   }
 }
