@@ -12,7 +12,12 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### certificate
 
-- Allow extra certificate domains
+- Allow extra certificate domains [#79](https://github.com/dbl-works/terraform/pull/79)
+
+### ecs
+
+- Unique IAM execution role name to allow multi region support [#78](https://github.com/dbl-works/terraform/pull/78)
+
 
 
 ## [v2022.05.27]
