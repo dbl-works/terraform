@@ -10,12 +10,6 @@ resource "aws_acm_certificate" "main" {
 
   validation_method = "DNS"
 
-  # New replacement object is created first,
-  # and the prior object is destroyed after the replacement is created.
-  lifecycle {
-    create_before_destroy = true
-  }
-
   tags = {
     Name        = var.domain_name
     Project     = var.project
