@@ -8,6 +8,13 @@ This project does not follow SemVer, since modules are independent of each other
 
 
 
+## [Unreleased]
+
+### certificate
+
+- Allow extra certificate domains
+
+
 ## [v2022.05.27]
 
 ### common
