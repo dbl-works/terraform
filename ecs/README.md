@@ -21,6 +21,7 @@ module "ecs" {
   # optional
   health_check_path = "/healthz"
   certificate_arn   = module.ssl-certificate.arn # requires a `certificate` module to be created separately
+  regional          = true
 
   allow_internal_traffic_to_ports = []
 
