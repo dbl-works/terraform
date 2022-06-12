@@ -2,6 +2,12 @@ variable "environment" {}
 variable "project" {}
 variable "vpc_id" {}
 
+# A custom name overrides the default {project}-{environment} convention
+variable "name" {
+  type    = string
+  default = null
+}
+
 # Regional allows clusters with the same name to be in multiple regions
 variable "region" { default = "eu-central-1" }
 variable "regional" {
