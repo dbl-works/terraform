@@ -4,8 +4,9 @@ variable "vpc_id" {}
 
 # A custom name overrides the default {project}-{environment} convention
 variable "name" {
-  type    = string
-  default = null
+  type        = string
+  description = "Custom name for the cluster. Must be unique per account if deploying to multiple regions."
+  default     = null
 }
 
 # Regional allows clusters with the same name to be in multiple regions
