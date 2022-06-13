@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_dashboard" "main" {
-  dashboard_name = "${local.name}-ecs"
+  dashboard_name = "${var.project}-${var.environment}-ecs"
 
   dashboard_body = <<EOF
 {
@@ -12,7 +12,7 @@ resource "aws_cloudwatch_dashboard" "main" {
       "type": "metric",
       "properties": {
         "metrics": [
-          [ "ECS/ContainerInsights", "CpuUtilized", "ServiceName", "web", "ClusterName", "${local.name}" ]
+          [ "ECS/ContainerInsights", "CpuUtilized", "ServiceName", "web", "ClusterName", "${var.project}-${var.environment}" ]
         ],
         "view": "timeSeries",
         "stacked": false,
@@ -40,7 +40,7 @@ resource "aws_cloudwatch_dashboard" "main" {
       "properties": {
         "metrics": [
           [ { "expression": "100*(m1/m2)", "label": "MemoryUsage", "id": "e1", "region": "${var.region}", "yAxis": "left" } ],
-          [ "ECS/ContainerInsights", "MemoryUtilized", "ServiceName", "web", "ClusterName", "${local.name}", { "id": "m1", "visible": false } ],
+          [ "ECS/ContainerInsights", "MemoryUtilized", "ServiceName", "web", "ClusterName", "${var.project}-${var.environment}", { "id": "m1", "visible": false } ],
           [ ".", "MemoryReserved", ".", ".", ".", ".", { "id": "m2", "visible": false } ]
         ],
         "view": "timeSeries",

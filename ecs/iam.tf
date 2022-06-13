@@ -2,12 +2,12 @@
 
 # Grant access to list and describe clusters
 resource "aws_iam_group" "ecs-view" {
-  name = "${local.name}-ecs-view"
+  name = "${var.project}-${var.environment}-ecs-view"
 }
 resource "aws_iam_policy" "ecs-view" {
-  name        = "${local.name}-ecs-view"
+  name        = "${var.project}-${var.environment}-ecs-view"
   path        = "/"
-  description = "Allow viewing ECS clusters for ${local.name}"
+  description = "Allow viewing ECS clusters for ${var.project} ${var.environment}"
 
   policy = <<EOF
 {
@@ -63,12 +63,12 @@ resource "aws_iam_group_policy_attachment" "ecs-view" {
 
 # Grant access to console
 resource "aws_iam_group" "ecs-console" {
-  name = "${local.name}-ecs-console"
+  name = "${var.project}-${var.environment}-ecs-console"
 }
 resource "aws_iam_policy" "ecs-console" {
-  name        = "${local.name}-ecs-console"
+  name        = "${var.project}-${var.environment}-ecs-console"
   path        = "/"
-  description = "Allow console into ECS clusters for ${local.name}"
+  description = "Allow console into ECS clusters for ${var.project} ${var.environment}"
 
   policy = <<EOF
 {

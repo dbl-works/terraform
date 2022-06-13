@@ -1,12 +1,13 @@
 resource "aws_ecs_cluster" "main" {
-  name = local.name
+  name = "${var.project}-${var.environment}"
 
   setting {
     name  = "containerInsights"
     value = "enabled"
   }
+
   tags = {
-    Name        = local.name
+    Name        = "${var.project}-${var.environment}"
     Project     = var.project
     Environment = var.environment
   }
