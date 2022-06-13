@@ -18,7 +18,7 @@ This module will do the following:
   - Introduction to Cloudflare Worker: https://egghead.io/courses/introduction-to-cloudflare-workers-5aa3
   - Cloudflare Router: https://github.com/dbl-works/cloudflare-router
 
-2. Make sure you have create API token in your cloudflare account with sufficient permissions
+2. Make sure you have created an API token in your Cloudflare account with sufficient permissions
 - You can have a look at the cloudflare permissions [here](https://developers.cloudflare.com/api/tokens/create/permissions/)
 - You should have access to
   - All zones - Zone:Edit, Workers Routes:Edit, DNS:Edit
