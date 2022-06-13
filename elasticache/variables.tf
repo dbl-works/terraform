@@ -12,6 +12,8 @@ variable "node_count" {
   default = 1
 }
 
+variable "availability_zones" { type = list(string) }
+
 variable "parameter_group_name" {
   type    = string
   default = "default.redis6.x"
