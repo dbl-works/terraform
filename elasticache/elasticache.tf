@@ -23,6 +23,10 @@ resource "aws_elasticache_replication_group" "main" {
     "${aws_security_group.main.id}",
   ]
 
+  # Cluster Mode
+  num_node_groups         = var.num_node_groups
+  replicas_per_node_group = var.replicas_per_node_group
+
   tags = {
     Project     = var.project
     Environment = var.environment

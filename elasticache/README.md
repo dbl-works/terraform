@@ -26,6 +26,10 @@ module "elasticache" {
   # If the value of snapshot_retention_limit is set to zero (0), backups are turned off.
   # Please note that setting a snapshot_retention_limit is not supported on cache.t1.micro cache nodes
   snapshot_retention_limit = 0
+
+  # Compulsory for Cluster Mode
+  num_node_groups = 2
+  replicas_per_node_group = 1
 }
 ```
 
