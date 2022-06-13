@@ -25,4 +25,12 @@
 **/*.terraform
 **/*.lock.hcl
 
+
 .env
+
+**/terraform.tfstate
+**/terraform.tfstate.backup
+
+**/terraform-secrets.json
+**/app-secrets.json
+

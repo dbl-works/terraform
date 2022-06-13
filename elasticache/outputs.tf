@@ -1,4 +1,4 @@
 output "endpoint" {
-  description = "Elasticache cluster cache node address"
-  value       = aws_elasticache_cluster.main.cache_nodes[0].address
+  description = "The endpoint of the primary node in this node group (shard)"
+  value       = aws_elasticache_replication_group.main.primary_endpoint_address
 }

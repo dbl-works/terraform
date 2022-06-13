@@ -1,7 +1,6 @@
 # Terraform Module: VPC
 
-Creates a VPC in AWS account. Also generates a group fo public and private submodules.
-
+Creates a VPC in AWS account. Also generates a group of public and private submodules.
 
 
 ## Usage
