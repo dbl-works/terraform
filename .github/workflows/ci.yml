@@ -18,6 +18,8 @@ jobs:
           - s3-private
           - s3-public
           - secrets
+          - stack/app
+          - stack/setup
           - vpc
           # - vpn # TODO: Figure out private module access
       fail-fast: false
