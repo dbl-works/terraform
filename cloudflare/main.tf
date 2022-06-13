@@ -42,6 +42,8 @@ resource "cloudflare_record" "api" {
 
 # bastion.my-project.com
 resource "cloudflare_record" "bastion" {
+  count = var.bastion_public_dns ? 1 : 0
+
   zone_id = cloudflare_zone.default.id
   name    = "bastion"
   type    = "CNAME"
