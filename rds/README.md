@@ -28,6 +28,7 @@ module "db" {
   publicly_accessible = false
   allocated_storage   = 100
   multi_az            = false
+  username            = "root"
 }
 ```
 

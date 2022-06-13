@@ -1,6 +1,6 @@
 # Terraform Module: Elasticache
 
-A reopsitory for setting up an elasticache cluster.
+A repository for setting up an elasticache cluster.
 
 
 
@@ -15,7 +15,6 @@ module "elasticache" {
   vpc_id             = module.vpc.id
   vpc_cidr           = local.cidr_block
   subnet_ids         = module.vpc.subnet_private_ids
-  availability_zones = local.availability_zones
 
   # optional
   node_count = 1
