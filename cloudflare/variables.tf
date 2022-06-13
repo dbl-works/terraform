@@ -9,7 +9,8 @@ variable "subject_alternative_names" {
 }
 
 variable "bastion_public_dns" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "nlb_dns_name" {
