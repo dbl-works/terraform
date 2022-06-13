@@ -22,10 +22,6 @@ module "certificate" {
 
   # Optional
   add_wildcard_subdomains = true
-  alternative_domains = [
-    "www.example.com",
-    "another.domain.co.uk",
-  ]
 }
 ```
 

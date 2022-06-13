@@ -6,44 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
-
-
-## [Unreleased]
-
-### certificate
-
-- Allow extra certificate domains [#79](https://github.com/dbl-works/terraform/pull/79)
-
-### ecs
-
-- Unique IAM execution role name to allow multi region support [#78](https://github.com/dbl-works/terraform/pull/78)
-
-
-
-## [v2022.05.27]
-
-### common
-
-- Added `versions.tf` to all modules [#72](https://github.com/dbl-works/terraform/pull/72)
-
-### ECS
-
-- Fixed capacity providers definition [#72](https://github.com/dbl-works/terraform/pull/72)
-
-### RDS
-
-- Mark password variable as sensitive [#72](https://github.com/dbl-works/terraform/pull/72)
-
-### Cognito
-
-- Added tags to user pools [#72](https://github.com/dbl-works/terraform/pull/72)
-
-
-
 ## [v2022.05.02]
 
 ### ECS
-
 - allow passing any custom policies to ECS, [#71](https://github.com/dbl-works/terraform/pull/71)
 
 
