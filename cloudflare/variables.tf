@@ -20,7 +20,7 @@ variable "cdn_worker_script_name" {
   type = string
 }
 
-variable "s3_cdn_buckets" {
+variable "s3_public_buckets" {
   type = list(object({
     name : string
     cdn_path : string
