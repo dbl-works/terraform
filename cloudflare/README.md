@@ -31,7 +31,6 @@ module "cloudflare" {
 
   domain = "example.com"
   subject_alternative_names = ["*.example.com"]
-  bastion_public_dns = "project-staging-xxxxx.elb.eu-central-1.amazonaws.com"
   nlb_dns_name = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
   cdn_worker_script_name = "serve-cdn"
   s3_public_buckets = [
@@ -44,6 +43,9 @@ module "cloudflare" {
       cdn_path = "images"
     }
    ]
+
+  # optional
+  bastion_public_dns = "project-staging-xxxxx.elb.eu-central-1.amazonaws.com"
 }
 ```
 
