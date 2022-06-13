@@ -5,6 +5,7 @@ resource "aws_ecs_cluster" "main" {
     name  = "containerInsights"
     value = "enabled"
   }
+
   tags = {
     Name        = local.name
     Project     = var.project
