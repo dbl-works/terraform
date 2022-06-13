@@ -1,7 +1,20 @@
 variable "environment" {}
 variable "project" {}
 variable "vpc_id" {}
+
+# A custom name overrides the default {project}-{environment} convention
+variable "name" {
+  type        = string
+  description = "Custom name for the cluster. Must be unique per account if deploying to multiple regions."
+  default     = null
+}
+
+# Regional allows clusters with the same name to be in multiple regions
 variable "region" { default = "eu-central-1" }
+variable "regional" {
+  default = false
+  type    = bool
+}
 
 variable "allow_internal_traffic_to_ports" {
   type    = list(string)

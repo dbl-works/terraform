@@ -5,7 +5,7 @@ resource "aws_lb" "nlb" {
   subnets            = var.subnet_public_ids
   idle_timeout       = 600
   tags = {
-    Name        = "${var.project}-${var.environment}-nlb"
+    Name        = "${local.name}-nlb"
     Project     = var.project
     Environment = var.environment
   }
@@ -14,7 +14,7 @@ resource "aws_lb" "nlb" {
 # Bastion is allowed, only from some IPs
 resource "aws_lb_target_group" "ssh" {
   count       = length(aws_lb.nlb)
-  name        = "${var.project}-${var.environment}-ssh"
+  name        = "${local.name}-ssh"
   port        = 22
   protocol    = "TCP"
   vpc_id      = var.vpc_id
