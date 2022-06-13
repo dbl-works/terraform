@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecs-task-execution" {
-  name = "ecs-task-execution-${var.project}-${var.environment}"
+  name = "ecs-task-execution-${local.name}"
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
