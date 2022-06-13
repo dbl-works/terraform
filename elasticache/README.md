@@ -22,6 +22,10 @@ module "elasticache" {
   node_type  = "cache.t3.micro"
   engine_version = "6.x"
   parameter_group_name = "default.redis6.x"
+  # Number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them.
+  # If the value of snapshot_retention_limit is set to zero (0), backups are turned off.
+  # Please note that setting a snapshot_retention_limit is not supported on cache.t1.micro cache nodes
+  snapshot_retention_limit = 0
 }
 ```
 

@@ -22,3 +22,8 @@ variable "engine_version" {
   type    = string
   default = "6.x"
 }
+
+variable "snapshot_retention_limit" {
+  type    = number
+  default = 0
+}

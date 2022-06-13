@@ -10,6 +10,7 @@ resource "aws_elasticache_replication_group" "main" {
   subnet_group_name          = aws_elasticache_subnet_group.main.name
   at_rest_encryption_enabled = true
   kms_key_id                 = var.kms_key_arn
+  snapshot_retention_limit   = var.snapshot_retention_limit
   # When you change an attribute, such as engine_version,
   # by default the ElastiCache API applies it in the next maintenance window.
   # Because of this, Terraform may report a difference in its planning phase
