@@ -12,6 +12,7 @@ jobs:
           - ecr
           - ecs
           - elasticache
+          - iam-policy-for-taggable-resources
           - kms-key
           - nat
           - rds
