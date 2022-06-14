@@ -44,6 +44,11 @@ module "cloudflare" {
     }
    ]
 
+  # Refer to the output value in certificate/outputs.tf
+  certificate_resource_record_name = module.certificate.domain_validation_information.0.resource_record_name
+  certificate_resource_record_type = module.certificate.domain_validation_information.0.resource_record_type
+  certificate_resource_record_value = module.certificate.domain_validation_information.0.resource_record_value
+
   # optional
   bastion_public_dns = "project-staging-xxxxx.elb.eu-central-1.amazonaws.com"
 }

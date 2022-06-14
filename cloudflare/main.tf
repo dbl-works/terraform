@@ -17,11 +17,11 @@ resource "cloudflare_record" "validation" {
   count = length(local.distinct_domain_names)
 
   zone_id = cloudflare_zone.default.id
-  name    = data.aws_acm_certificate.default.domain_validation_options.0.resource_record_name
-  type    = data.aws_acm_certificate.default.domain_validation_options.0.resource_record_type
+  name    = var.certificate_resource_record_name
+  type    = var.certificate_resource_record_type
   # ACM DNS validation record returns the value with a trailing dot however the Cloudflare API trims it off.
   # https://github.com/cloudflare/terraform-provider-cloudflare/issues/154
-  value = trimsuffix(data.aws_acm_certificate.default.domain_validation_options.0.resource_record_value, ".")
+  value = trimsuffix(var.certificate_resource_record_value, ".")
 }
 
 # domain validation
