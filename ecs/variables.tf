@@ -10,7 +10,10 @@ variable "name" {
 }
 
 # Regional allows clusters with the same name to be in multiple regions
-variable "region" { default = "eu-central-1" }
+variable "region" {
+  type    = string
+  default = "eu-central-1"
+}
 variable "regional" {
   default = false
   type    = bool
