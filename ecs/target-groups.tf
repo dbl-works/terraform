@@ -1,6 +1,6 @@
 # Main entrypoint for the cluster applications
 resource "aws_alb_target_group" "ecs" {
-  name        = "${local.name}-ecs"
+  name        = "${var.project}-${var.environment}-ecs"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = var.vpc_id

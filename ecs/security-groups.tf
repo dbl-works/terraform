@@ -1,9 +1,9 @@
 # Load balancer to receive all incoming traffic infront of the cluster
 resource "aws_security_group" "alb" {
   vpc_id = var.vpc_id
-  name   = "${local.name}-alb"
+  name   = "${var.project}-${var.environment}-alb"
   tags = {
-    Name        = "${local.name}-alb"
+    Name        = "${var.project}-${var.environment}-alb"
     Description = "Incoming internet traffic to Load Balancer"
     Project     = var.project
     Environment = var.environment
@@ -40,9 +40,9 @@ resource "aws_security_group_rule" "lb-https" {
 # ECS cluster should only be able to receive traffic to container ports from the ALB
 resource "aws_security_group" "ecs" {
   vpc_id = var.vpc_id
-  name   = "${local.name}-ecs"
+  name   = "${var.project}-${var.environment}-ecs"
   tags = {
-    Name        = "${local.name}-ecs"
+    Name        = "${var.project}-${var.environment}-ecs"
     Description = "Internal ECS communication"
     Project     = var.project
     Environment = var.environment
