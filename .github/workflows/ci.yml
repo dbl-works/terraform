@@ -8,6 +8,7 @@ jobs:
       matrix:
         module:
           - certificate
+          - cloudflare
           - cognito
           - ecr
           - ecs
