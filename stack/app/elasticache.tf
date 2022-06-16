@@ -1,6 +1,7 @@
 module "elasticache" {
   source = "../../elasticache"
 
+
   project            = var.project
   environment        = var.environment
   vpc_id             = module.vpc.id
@@ -12,4 +13,6 @@ module "elasticache" {
   # optional
   node_count = var.elasticache_node_count
   node_type  = var.elasticache_node_type
+
+  depends_on = [module.vpc]
 }
