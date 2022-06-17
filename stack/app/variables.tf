@@ -89,7 +89,7 @@ variable "elasticache_node_count" {
   default = 1
 }
 
-variable "elasticache_replicas_count" {
+variable "elasticache_replicas_per_node_group" {
   type    = number
   default = 0
 }
