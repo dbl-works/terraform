@@ -24,7 +24,7 @@ module "db" {
 
   # optional
   instance_class      = "db.t3.micro"
-  engine_version      = "13.2"
+  engine_version      = "13"
   publicly_accessible = false
   allocated_storage   = 100
   multi_az            = false
