@@ -96,7 +96,7 @@ variable "rds_instance_class" {
 }
 variable "rds_engine_version" {
   type    = string
-  default = "13.2"
+  default = "13"
 }
 variable "rds_allocated_storage" {
   type    = number

@@ -80,7 +80,7 @@ module "stack" {
 
   # RDS
   rds_instance_class     = "db.t3.micro"
-  rds_engine_version     = "13.2"
+  rds_engine_version     = "13"
   rds_allocated_storage  = 100
 
   # ECS
