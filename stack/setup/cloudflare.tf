@@ -1,6 +1,6 @@
 locals {
   distinct_domain_names = distinct(
-    [for s in concat([var.domain], var.subject_alternative_names) : replace(s, "*.", "")]
+    [for s in concat([var.domain], aws_acm_certificate.main.subject_alternative_names) : replace(s, "*.", "")]
   )
   # https://github.com/hashicorp/terraform/issues/26043
   domain_validation_option = tolist(aws_acm_certificate.main.domain_validation_options)[0]
