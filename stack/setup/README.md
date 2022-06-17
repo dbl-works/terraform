@@ -33,6 +33,9 @@ module "stack-setup" {
 
   project            = "someproject"
   environment        = "staging"
+  domain             = "example.com"
+  add_wildcard_subdomains = true
+  subject_alternative_names = ["*.example.com"]
 
   # Optional
   # KMS
