@@ -91,9 +91,9 @@ module "stack" {
   secret_arns = []
 
   # Elasticache
-  elasticache_node_count   = 1
-  elasticache_node_type    = "cache.t3.micro"
-  snapshot_retention_limit = 0
+  elasticache_node_count               = 1
+  elasticache_node_type                = "cache.t3.micro"
+  elasticache_snapshot_retention_limit = 0
 
   # vpc
   vpc_cidr_block = "10.0.0.0/16"
