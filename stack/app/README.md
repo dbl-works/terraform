@@ -88,12 +88,14 @@ module "stack" {
   grant_read_access_to_sqs_arns  = []
   grant_write_access_to_sqs_arns = []
   ecs_custom_policies = []
+  # This is only needed when we want to add additional secrets to the ECS
   secret_arns = []
 
   # Elasticache
-  elasticache_node_count               = 1
-  elasticache_node_type                = "cache.t3.micro"
-  elasticache_snapshot_retention_limit = 0
+  elasticache_node_type                     = "cache.t3.micro"
+  elasticache_replicas_per_node_group       = 1
+  elasticache_shards_per_replication_group  = 1
+  elasticache_snapshot_retention_limit      = 0
 
   # vpc
   vpc_cidr_block = "10.0.0.0/16"
