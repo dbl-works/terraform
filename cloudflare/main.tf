@@ -2,10 +2,6 @@ resource "cloudflare_zone" "default" {
   zone = var.domain
 }
 
-data "aws_acm_certificate" "default" {
-  domain = var.domain
-}
-
 # api.my-project.com to the NLB
 resource "cloudflare_record" "api" {
   zone_id = cloudflare_zone.default.id

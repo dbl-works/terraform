@@ -15,6 +15,12 @@ variable "account_id" {
   type = string
 }
 
+# =============== Certificate Manager ================ #
+variable "domain_name" {
+  type = string
+}
+# =============== Certificate Manager ================ #
+
 # =============== S3 private ================ #
 variable "private_buckets_list" {
   default = []

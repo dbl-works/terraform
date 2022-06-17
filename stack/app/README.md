@@ -110,11 +110,6 @@ output "database_url" {
 output "redis_url" {
   value = module.stack.redis_url
 }
-
-output "domain_validation_information" {
-  value       = module.stack.domain_validation_information
-  description = "Used to complete certificate validation, e.g. in Cloudflare."
-}
 ```
 
 

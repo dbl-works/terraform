@@ -11,6 +11,10 @@ module "ecs-kms-key" {
   deletion_window_in_days = var.kms_deletion_window_in_days
 }
 
+data "aws_acm_certificate" "default" {
+  domain = var.domain_name
+}
+
 module "ecs" {
   source = "../../ecs"
 
@@ -31,8 +35,7 @@ module "ecs" {
 
   # optional
   health_check_path = var.health_check_path
-  # requires a `certificate` module to be created separately
-  certificate_arn = module.certificate.arn
+  certificate_arn   = data.aws_acm_certificate.default.arn
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
 
