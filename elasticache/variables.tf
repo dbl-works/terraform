@@ -29,8 +29,13 @@ variable "replicas_per_node_group" {
   description = "Replicas per Shard."
 }
 
-variable "num_node_groups" {
+variable "shard_count" {
   type        = number
   default     = 0
   description = "Number of Shards (nodes)."
+}
+
+variable "cluster_mode" {
+  type    = bool
+  default = true
 }
