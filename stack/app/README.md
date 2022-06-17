@@ -46,8 +46,8 @@ module "stack" {
   # Optional
   region     = "eu-central-1"
 
-  # certificate manager
-  add_wildcard_subdomains = true
+  # ECR
+  mutable_ecr = false
 
   # S3 Private
   private_buckets_list = [

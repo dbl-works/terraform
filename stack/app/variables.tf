@@ -15,17 +15,6 @@ variable "account_id" {
   type = string
 }
 
-# =============== Certificate Manager ================ #
-variable "domain_name" {
-  type = string
-}
-
-variable "add_wildcard_subdomains" {
-  type    = bool
-  default = true
-}
-# =============== Certificate Manager ================ #
-
 # =============== S3 private ================ #
 variable "private_buckets_list" {
   default = []
