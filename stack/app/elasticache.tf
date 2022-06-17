@@ -11,7 +11,8 @@ module "elasticache" {
   kms_key_arn        = module.ecs-kms-key.arn
 
   # optional
-  node_type               = var.elasticache_node_type
-  replicas_per_node_group = var.elasticache_replicas_per_node_group
-  num_node_groups         = var.elasticache_shards_per_replication_group
+  node_type                = var.elasticache_node_type
+  replicas_per_node_group  = var.elasticache_replicas_per_node_group
+  num_node_groups          = var.elasticache_shards_per_replication_group
+  snapshot_retention_limit = var.elasticache_snapshot_retention_limit
 }

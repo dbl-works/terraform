@@ -87,6 +87,13 @@ variable "elasticache_shards_per_replication_group" {
   type    = number
   default = 1
 }
+
+# Number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them
+# If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.
+variable "elasticache_shards_per_replication_group" {
+  type    = number
+  default = 0
+}
 # =============== Elasticache ================ #
 
 # =============== RDS ================ #

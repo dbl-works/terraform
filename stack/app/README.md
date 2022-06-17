@@ -93,6 +93,7 @@ module "stack" {
   # Elasticache
   elasticache_node_count = 1
   elasticache_node_type  = "cache.t3.micro"
+  elasticache_shards_per_replication_group = 0
 
   # vpc
   vpc_cidr_block = "10.0.0.0/16"
