@@ -2,10 +2,7 @@
 
 This is our stack convention which brings all modules together, including:
 
-- AWS Certificate Manager
 - RDS (Postgres DB)
-- ECR
-  - Storing built docker images.
 - ECS
   - Compute cluster for hosting docker based apps.
 - Elasticache
@@ -45,9 +42,6 @@ module "stack" {
 
   # Optional
   region     = "eu-central-1"
-
-  # ECR
-  mutable_ecr = false
 
   # S3 Private
   private_buckets_list = [
