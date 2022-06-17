@@ -71,12 +71,6 @@ variable "vpc_cidr_block" {
 }
 # =============== VPC ================ #
 
-# =============== ECR ================ #
-variable "mutable_ecr" {
-  type    = bool
-  default = false
-}
-# =============== ECR ================ #
 
 # =============== Elasticache ================ #
 variable "elasticache_node_type" {
