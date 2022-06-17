@@ -29,11 +29,13 @@ variable "snapshot_retention_limit" {
 }
 
 variable "replicas_per_node_group" {
-  default     = ""
+  type        = number
+  default     = 0
   description = "Replicas per Shard."
 }
 
 variable "num_node_groups" {
-  default     = ""
+  type        = number
+  default     = 0
   description = "Number of Shards (nodes)."
 }

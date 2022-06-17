@@ -88,6 +88,11 @@ variable "elasticache_node_count" {
   type    = number
   default = 1
 }
+
+variable "elasticache_replicas_count" {
+  type    = number
+  default = 0
+}
 # =============== Elasticache ================ #
 
 # =============== RDS ================ #
