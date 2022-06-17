@@ -8,11 +8,6 @@ variable "availability_zones" { type = list(string) }
 
 variable "node_type" { default = "cache.t3.micro" }
 
-variable "node_count" {
-  type    = number
-  default = 1
-}
-
 variable "parameter_group_name" {
   type    = string
   default = "default.redis6.x"
@@ -30,7 +25,7 @@ variable "snapshot_retention_limit" {
 
 variable "replicas_per_node_group" {
   type        = number
-  default     = 0
+  default     = 1
   description = "Replicas per Shard."
 }
 

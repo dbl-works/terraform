@@ -3,7 +3,6 @@ resource "aws_elasticache_replication_group" "main" {
   description                = "Collection of Redis cache clusters for ${var.project}-${var.environment}"
   engine                     = "redis"
   node_type                  = var.node_type
-  num_cache_clusters         = var.node_count
   parameter_group_name       = var.parameter_group_name
   engine_version             = var.engine_version
   port                       = 6379

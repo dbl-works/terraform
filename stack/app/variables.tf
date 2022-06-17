@@ -84,14 +84,14 @@ variable "elasticache_node_type" {
   default = "cache.t3.micro"
 }
 
-variable "elasticache_node_count" {
+variable "elasticache_replicas_per_node_group" {
   type    = number
   default = 1
 }
 
-variable "elasticache_replicas_per_node_group" {
+variable "elasticache_shards_per_replication_group" {
   type    = number
-  default = 0
+  default = 1
 }
 # =============== Elasticache ================ #
 
