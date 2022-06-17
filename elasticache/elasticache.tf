@@ -16,8 +16,8 @@ resource "aws_elasticache_replication_group" "main" {
   # because the actual modification has not yet taken place.
   # Set apply_immediately flag to true to instruct the service to apply the change immediately
   # but will result in a brief downtime as servers reboots.
-  apply_immediately           = true
-  preferred_cache_cluster_azs = var.availability_zones
+  apply_immediately = true
+  # preferred_cache_cluster_azs = var.availability_zones
   security_group_ids = [
     "${aws_security_group.main.id}",
   ]
