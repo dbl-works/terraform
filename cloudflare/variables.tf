@@ -22,16 +22,3 @@ variable "s3_public_buckets" {
   }))
   default = []
 }
-
-variable "certificate_resource_record_name" {
-  type = string
-}
-
-variable "certificate_resource_record_type" {
-  type        = string
-  description = "Record type such as CNAME, A, MX etc"
-}
-
-variable "certificate_resource_record_value" {
-  type = string
-}
