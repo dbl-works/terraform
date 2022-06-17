@@ -17,10 +17,10 @@ module "elasticache" {
   subnet_ids         = module.vpc.subnet_private_ids
 
   # required only for non cluster mode
-  availability_zones = local.availability_zones
+  availability_zones = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
+  node_count = 1
 
   # optional
-  node_count = 1
   node_type  = "cache.t3.micro"
   engine_version = "6.x"
   cluster_mode = true
