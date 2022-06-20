@@ -7,7 +7,7 @@ module "elasticache" {
   vpc_id      = module.vpc.id
   subnet_ids  = module.vpc.subnet_private_ids
   vpc_cidr    = var.vpc_cidr_block
-  kms_key_arn = module.ecs-kms-key.arn
+  kms_key_arn = var.kms_app_arn
 
   # optional
   node_type                = var.elasticache_node_type
