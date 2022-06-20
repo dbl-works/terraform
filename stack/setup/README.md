@@ -19,8 +19,17 @@ It should only be run once prior to the creation of stack modules.
      - db_root_password
      - db_username
 
-2. Run `terraform apply`
-3. Remove the secrets file from your local machine. Secret should ONLY exist in the secret managers.
+2. For accessing we need to create a `aws_iam_group` once globally across all projects in one AWS account:
+
+```terraform
+resource "aws_iam_group" "engineer" {
+  name = "engineer"
+  path = "/"
+}
+```
+
+3. Run `terraform apply`
+4. Remove the secrets file from your local machine. Secret should ONLY exist in the secret managers.
 When commit the changes, exclude the json file from the commit history.
 You can avoid this by adding the file to .gitignore
 
