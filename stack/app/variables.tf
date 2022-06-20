@@ -47,6 +47,10 @@ variable "public_buckets_list" {
 variable "kms_deletion_window_in_days" {
   type = number
 }
+
+variable "kms_app_arn" {
+  type = string
+}
 # =============== KMS ================ #
 
 # =============== NAT ================ #

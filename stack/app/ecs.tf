@@ -1,16 +1,3 @@
-module "ecs-kms-key" {
-  source = "../../kms-key"
-
-  # Required
-  environment = var.environment
-  project     = var.project
-  alias       = "ecs"
-  description = "kms key for ${var.project} ECS"
-
-  # Optional
-  deletion_window_in_days = var.kms_deletion_window_in_days
-}
-
 data "aws_acm_certificate" "default" {
   domain = var.domain_name
 }
@@ -29,7 +16,7 @@ module "ecs" {
   ])
 
   kms_key_arns = flatten(concat([
-    module.ecs-kms-key.arn,
+    var.kms_app_arn,
     values(module.s3-storage)[*].kms-key-arn
   ]))
 
