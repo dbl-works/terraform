@@ -7,7 +7,7 @@ resource "aws_iam_group" "ecs-view" {
 resource "aws_iam_policy" "ecs-view" {
   name        = "${local.name}-ecs-view"
   path        = "/"
-  description = "Allow viewing ECS clusters for ${var.project} ${var.environment}"
+  description = "Allow viewing ECS clusters for ${local.name}"
 
   policy = <<EOF
 {
@@ -68,7 +68,7 @@ resource "aws_iam_group" "ecs-console" {
 resource "aws_iam_policy" "ecs-console" {
   name        = "${local.name}-ecs-console"
   path        = "/"
-  description = "Allow console into ECS clusters for ${var.project} ${var.environment}"
+  description = "Allow console into ECS clusters for ${local.name}"
 
   policy = <<EOF
 {
