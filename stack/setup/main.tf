@@ -90,7 +90,7 @@ resource "aws_eip" "nat" {
   vpc = true
 
   tags = {
-    Name        = "${var.project}-nat-${var.environment}-${each.index}"
+    Name        = "${var.project}-nat-${var.environment}-${each.key}"
     Project     = var.project
     Environment = var.environment
   }
