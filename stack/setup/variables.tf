@@ -10,3 +10,12 @@ variable "environment" {
 variable "project" {
   type = string
 }
+
+variable "domain" {
+  type = string
+}
+
+variable "add_wildcard_subdomains" {
+  type    = bool
+  default = true
+}

@@ -48,3 +48,24 @@ module "secrets-kms-key" {
   # Optional
   deletion_window_in_days = var.kms_deletion_window_in_days
 }
+
+resource "aws_acm_certificate" "main" {
+  domain_name = var.domain
+
+  subject_alternative_names = var.add_wildcard_subdomains ? ["*.${var.domain}"] : []
+
+  validation_method = "DNS"
+
+  tags = {
+    Name        = var.domain
+    Project     = var.project
+    Environment = var.environment
+  }
+}
+
+# domain validation
+resource "aws_acm_certificate_validation" "default" {
+  certificate_arn = aws_acm_certificate.main.arn
+
+  validation_record_fqdns = cloudflare_record.validation.*.hostname
+}

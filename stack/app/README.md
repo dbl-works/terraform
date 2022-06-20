@@ -2,10 +2,7 @@
 
 This is our stack convention which brings all modules together, including:
 
-- AWS Certificate Manager
 - RDS (Postgres DB)
-- ECR
-  - Storing built docker images.
 - ECS
   - Compute cluster for hosting docker based apps.
 - Elasticache
@@ -46,9 +43,6 @@ module "stack" {
   # Optional
   region     = "eu-central-1"
 
-  # certificate manager
-  add_wildcard_subdomains = true
-
   # S3 Private
   private_buckets_list = [
     {
@@ -88,12 +82,14 @@ module "stack" {
   grant_read_access_to_sqs_arns  = []
   grant_write_access_to_sqs_arns = []
   ecs_custom_policies = []
+  # This is only needed when we want to add additional secrets to the ECS
   secret_arns = []
 
   # Elasticache
-  elasticache_node_count               = 1
-  elasticache_node_type                = "cache.t3.micro"
-  elasticache_snapshot_retention_limit = 0
+  elasticache_node_type                     = "cache.t3.micro"
+  elasticache_replicas_per_node_group       = 1
+  elasticache_shards_per_replication_group  = 1
+  elasticache_snapshot_retention_limit      = 0
 
   # vpc
   vpc_cidr_block = "10.0.0.0/16"
@@ -109,11 +105,6 @@ output "database_url" {
 
 output "redis_url" {
   value = module.stack.redis_url
-}
-
-output "domain_validation_information" {
-  value       = module.stack.domain_validation_information
-  description = "Used to complete certificate validation, e.g. in Cloudflare."
 }
 ```
 

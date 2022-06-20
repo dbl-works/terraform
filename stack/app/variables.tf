@@ -19,11 +19,6 @@ variable "account_id" {
 variable "domain_name" {
   type = string
 }
-
-variable "add_wildcard_subdomains" {
-  type    = bool
-  default = true
-}
 # =============== Certificate Manager ================ #
 
 # =============== S3 private ================ #

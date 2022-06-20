@@ -1,34 +1,5 @@
-locals {
-  distinct_domain_names = distinct(
-    [for s in concat([var.domain], var.subject_alternative_names) : replace(s, "*.", "")]
-  )
-}
-
 resource "cloudflare_zone" "default" {
   zone = var.domain
-}
-
-data "aws_acm_certificate" "default" {
-  domain = var.domain
-}
-
-# domain validation
-resource "cloudflare_record" "validation" {
-  count = length(local.distinct_domain_names)
-
-  zone_id = cloudflare_zone.default.id
-  name    = var.certificate_resource_record_name
-  type    = var.certificate_resource_record_type
-  # ACM DNS validation record returns the value with a trailing dot however the Cloudflare API trims it off.
-  # https://github.com/cloudflare/terraform-provider-cloudflare/issues/154
-  value = trimsuffix(var.certificate_resource_record_value, ".")
-}
-
-# domain validation
-resource "aws_acm_certificate_validation" "default" {
-  certificate_arn = data.aws_acm_certificate.default.arn
-
-  validation_record_fqdns = cloudflare_record.validation.*.hostname
 }
 
 # api.my-project.com to the NLB

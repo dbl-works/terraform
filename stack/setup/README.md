@@ -1,7 +1,10 @@
 # Terraform Module: Stack Setup
 ## Getting Started
 
-This is the pre-setup of stack modules. It will create the secrets manager and populate the secrets to AWS.
+This is the pre-setup of stack modules. It will
+- create the secrets manager and populate the secrets to AWS
+- do domain validation
+  - Configure a CNAME record in DNS configuration to establish control of your domain name. This allows ACM to automatically renew DNS-validated certificates before they expire, as long as the DNS record has not changed
 It should only be run once prior to the creation of stack modules.
 
 1. To populate secrets to the secret manager, you'll need to prepare 2 json files
@@ -33,6 +36,8 @@ module "stack-setup" {
 
   project            = "someproject"
   environment        = "staging"
+  domain             = "example.com"
+  add_wildcard_subdomains = true
 
   # Optional
   # KMS
