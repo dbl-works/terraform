@@ -13,6 +13,7 @@ locals {
       iam    = "gh-user"
       github = "user"
       name   = "Mary Lamb"
+      groups = ["engineer"]
       staging-developer-access-projects    = "metaverse:messenger"
       staging-admin-access-projects        = "metaverse"
       production-developer-access-projects = "metaverse:facebook"
