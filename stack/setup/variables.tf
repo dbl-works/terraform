@@ -19,3 +19,8 @@ variable "add_wildcard_subdomains" {
   type    = bool
   default = true
 }
+
+variable "eips_nat_count" {
+  type    = number
+  default = 1
+}

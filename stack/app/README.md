@@ -33,7 +33,7 @@ module "stack" {
   # VPC
   vpc_availability_zones = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
 
-  # NAT
+  # NAT -> you get these from the set-up
   public_ips = [
     "123.123.123.123",
     "234.234.234.234",

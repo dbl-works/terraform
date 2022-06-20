@@ -13,3 +13,9 @@ output "app_secrets-kms-key" {
 output "terraform_secrets-kms-key" {
   value = module.secrets-kms-key["terraform"].arn
 }
+
+output "eips-nat" {
+  value = [
+    for eip in aws_eip.nat : eip.public_ip
+  ]
+}

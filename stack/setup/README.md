@@ -51,6 +51,7 @@ module "stack-setup" {
   # Optional
   # KMS
   kms_deletion_window_in_days = 30
+  eips_nat_count              = 1 # for production use, set this to the number of AZs
 }
 ```
 

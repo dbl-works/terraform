@@ -81,3 +81,17 @@ resource "aws_iam_group_policy_attachment" "engineer" {
   group      = "engineer" # from global infrastructure: `aws_iam_group.engineer.name`
   policy_arn = module.iam_policies.policy_arn
 }
+
+
+## EIP
+resource "aws_eip" "nat" {
+  for_each = var.eips_nat_count
+
+  vpc = true
+
+  tags = {
+    Name        = "${var.project}-nat-${var.environment}-${each.index}"
+    Project     = var.project
+    Environment = var.environment
+  }
+}
