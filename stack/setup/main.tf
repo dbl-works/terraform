@@ -82,12 +82,12 @@ resource "aws_acm_certificate_validation" "default" {
 
 ## EIP
 resource "aws_eip" "nat" {
-  for_each = var.eips_nat_count
+  count = var.eips_nat_count # 1 per NAT / AZ
 
   vpc = true
 
   tags = {
-    Name        = "${var.project}-nat-${var.environment}-${each.key}"
+    Name        = "${var.project}-nat-${var.environment}-${count.index + 1}"
     Project     = var.project
     Environment = var.environment
   }
