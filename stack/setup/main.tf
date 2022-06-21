@@ -72,12 +72,12 @@ resource "aws_acm_certificate" "main" {
   }
 }
 
-# domain validation
-resource "aws_acm_certificate_validation" "default" {
-  certificate_arn = aws_acm_certificate.main.arn
+# # domain validation
+# resource "aws_acm_certificate_validation" "default" {
+#   certificate_arn = aws_acm_certificate.main.arn
 
-  validation_record_fqdns = cloudflare_record.validation.*.hostname
-}
+#   validation_record_fqdns = cloudflare_record.validation.*.hostname
+# }
 
 
 ## EIP
