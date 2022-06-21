@@ -53,7 +53,7 @@ resource "aws_acm_certificate" "main" {
   domain_name = var.domain
 
   subject_alternative_names = flatten(concat(
-    var.add_wildcard_subdomains ? ["*.${var.domain_name}"] : [],
+    var.add_wildcard_subdomains ? ["*.${var.domain}"] : [],
     var.alternative_domains,
   ))
 
