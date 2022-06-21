@@ -49,18 +49,15 @@ module "secrets-kms-key" {
   deletion_window_in_days = var.kms_deletion_window_in_days
 }
 
-resource "aws_acm_certificate" "main" {
+resource "aws-acm-certificate" {
+  source = "../../certificate"
+
+  project     = var.project
+  environment = var.environment
   domain_name = var.domain
 
-  subject_alternative_names = var.add_wildcard_subdomains ? ["*.${var.domain}"] : []
-
-  validation_method = "DNS"
-
-  tags = {
-    Name        = var.domain
-    Project     = var.project
-    Environment = var.environment
-  }
+  # Optional
+  add_wildcard_subdomains = var.add_wildcard_subdomains
 }
 
 # domain validation
