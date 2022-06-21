@@ -1,5 +1,8 @@
 # Terraform Module: IAM - Attribute-based access control
 
+You can test policies for IAM users: https://policysim.aws.amazon.com/home/index.jsp
+
+
 IAM authorization strategy that defines permissions based on AWS tags - project and environment
 
 This only need to applied once in the organization level
