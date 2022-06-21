@@ -58,7 +58,7 @@ locals {
 
 module "iam_policies" {
   count  = length(local.environments)
-  source = "github.com/dbl-works/terraform//iam-policy-for-taggable-resources?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//iam/iam-policy-for-taggable-resources?ref=v2021.07.05"
 
   # Required
   environment = local.environments[count.index]

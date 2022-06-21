@@ -1,6 +1,6 @@
 ## IAM
 module "iam_policies" {
-  source      = "../../iam-policy-for-taggable-resources"
+  source      = "../../iam/iam-policy-for-taggable-resources"
   environment = var.environment
 }
 
