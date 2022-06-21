@@ -49,7 +49,7 @@ module "secrets-kms-key" {
   deletion_window_in_days = var.kms_deletion_window_in_days
 }
 
-resource "aws-acm-certificate" {
+module "aws-acm-certificate" {
   source = "../../certificate"
 
   project     = var.project
