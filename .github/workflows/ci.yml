@@ -13,7 +13,9 @@ jobs:
           - ecr
           - ecs
           - elasticache
-          - iam-policy-for-taggable-resources
+          - iam/iam-for-deploy-bot
+          - iam/iam-for-humans
+          - iam/iam-policy-for-taggable-resources
           - kms-key
           - nat
           - rds
