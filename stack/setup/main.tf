@@ -49,15 +49,27 @@ module "secrets-kms-key" {
   deletion_window_in_days = var.kms_deletion_window_in_days
 }
 
-module "aws-acm-certificate" {
-  source = "../../certificate"
-
-  project     = var.project
-  environment = var.environment
+resource "aws_acm_certificate" "main" {
   domain_name = var.domain
 
-  # Optional
-  add_wildcard_subdomains = var.add_wildcard_subdomains
+  subject_alternative_names = flatten(concat(
+    var.add_wildcard_subdomains ? ["*.${var.domain_name}"] : [],
+    var.alternative_domains,
+  ))
+
+  validation_method = "DNS"
+
+  tags = {
+    Name        = var.domain
+    Project     = var.project
+    Environment = var.environment
+  }
+
+  # When attached to a load balancer it cannot be destroyed.
+  # This means we need to create a new one, attach it, then destroy the original.
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # domain validation
@@ -70,12 +82,12 @@ resource "aws_acm_certificate_validation" "default" {
 
 ## EIP
 resource "aws_eip" "nat" {
-  count = var.eips_nat_count # 1 NAT/IP per region
+  for_each = var.eips_nat_count
 
   vpc = true
 
   tags = {
-    Name        = "${var.project}-nat-${var.environment}-${count.index + 1}"
+    Name        = "${var.project}-nat-${var.environment}-${each.key}"
     Project     = var.project
     Environment = var.environment
   }

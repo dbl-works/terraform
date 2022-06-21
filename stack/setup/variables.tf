@@ -24,3 +24,8 @@ variable "eips_nat_count" {
   type    = number
   default = 1
 }
+
+variable "alternative_domains" {
+  default = []
+  type    = list(string)
+}

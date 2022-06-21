@@ -46,9 +46,11 @@ module "stack-setup" {
   project            = "someproject"
   environment        = "staging"
   domain             = "example.com"
-  add_wildcard_subdomains = true
 
   # Optional
+  add_wildcard_subdomains = true
+  alternative_domains         = []
+
   # KMS
   kms_deletion_window_in_days = 30
   eips_nat_count              = 1 # for production use, set this to the number of AZs
