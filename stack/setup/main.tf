@@ -71,18 +71,6 @@ resource "aws_acm_certificate_validation" "default" {
 }
 
 
-## IAM
-module "iam_policies" {
-  source      = "../../iam-policy-for-taggable-resources"
-  environment = var.environment
-}
-
-resource "aws_iam_group_policy_attachment" "engineer" {
-  group      = "engineer" # from global infrastructure: `aws_iam_group.engineer.name`
-  policy_arn = module.iam_policies.policy_arn
-}
-
-
 ## EIP
 resource "aws_eip" "nat" {
   for_each = var.eips_nat_count
