@@ -327,6 +327,26 @@ EOF
 }
 
 
+resource "aws_iam_policy" "deploy-bot-s3-full-access" {
+  name        = "S3FullAccess"
+  path        = "/"
+  description = "Allow full access to S3 for deploy-bot"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "S3:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
 
 resource "aws_iam_group" "deploy-bot-deploy-access" {
   name = "deploy-bot-deploy-access"
@@ -344,4 +364,9 @@ resource "aws_iam_group_policy_attachment" "deploy-bot-ecr-access" {
 resource "aws_iam_group_policy_attachment" "deploy-bot-secrets-access" {
   group      = aws_iam_group.deploy-bot-deploy-access.name
   policy_arn = aws_iam_policy.deploy-bot-secrets-readonly.arn
+}
+
+resource "aws_iam_group_policy_attachment" "deploy-bot-s3-access" {
+  group      = aws_iam_group.deploy-bot-deploy-access.name
+  policy_arn = aws_iam_policy.deploy-bot-s3-full-access.arn
 }
