@@ -8,16 +8,22 @@ jobs:
       matrix:
         module:
           - certificate
+          - cloudflare
           - cognito
           - ecr
           - ecs
           - elasticache
+          - iam/iam-for-deploy-bot
+          - iam/iam-for-humans
+          - iam/iam-policy-for-taggable-resources
           - kms-key
           - nat
           - rds
           - s3-private
           - s3-public
           - secrets
+          - stack/app
+          - stack/setup
           - vpc
           # - vpn # TODO: Figure out private module access
       fail-fast: false

@@ -209,4 +209,3 @@ resource "aws_iam_group_policy_attachment" "ecs-console" {
   group      = aws_iam_group.ecs-console.name
   policy_arn = aws_iam_policy.ecs-console.arn
 }
-
