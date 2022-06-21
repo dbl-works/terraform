@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
-## [Unreleased]
+## [v2022.06.21]
+
 ### Stack
 - added new "Stack" module that combines all modules, [#74](https://github.com/dbl-works/terraform/pull/74)
 
@@ -19,6 +20,7 @@ This project does not follow SemVer, since modules are independent of each other
 ### Elasticache
 - added `snapshot_retention_limit` (defaults to 0) to allow snapshotting, [#77](https://github.com/dbl-works/terraform/pull/77)
 - splitted the existing module into two so we can now choose between "cluster mode" or "non-cluster mode". Also fixes usage of `num_cache_nodes` which one previously could not set to any value other than `1` (it now uses a replication group), [#77](https://github.com/dbl-works/terraform/pull/77)
+
 
 
 ## [v2022.05.02]
