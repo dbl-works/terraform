@@ -20,7 +20,6 @@ data "aws_iam_policy_document" "developer" {
   statement {
     sid = "AllowDeveloperAccessBasedOnTags"
     actions = flatten([for resource in local.resources : [
-      "${resource}:List*",
       "${resource}:Describe*",
       "${resource}:Get*"
     ]])
@@ -41,5 +40,15 @@ data "aws_iam_policy_document" "developer" {
       variable = "aws:ResourceTag/Project"
       values   = ["&{aws:PrincipalTag/${var.environment}-developer-access-projects}"]
     }
+  }
+
+  # "List" cannot be matched using tags
+  statement {
+    sid = "AllowDeveloperListAccess"
+    actions = flatten([for resource in local.resources : [
+      "${resource}:List*"
+    ]])
+
+    resources = ["*"]
   }
 }
