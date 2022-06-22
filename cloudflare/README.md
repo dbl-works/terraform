@@ -33,19 +33,11 @@ export CLOUDFLARE_API_TOKEN=xxx
 module "cloudflare" {
   source = "github.com/dbl-works/terraform//cloudflare?ref=v2022.05.26"
 
-  domain = "example.com"
-  nlb_dns_name = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
+  domain                 = "example.com"
+  nlb_dns_name           = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
   cdn_worker_script_name = "serve-cdn"
-  s3_public_buckets = [
-    {
-      name = "a-bucket "
-      cdn_path = "cdn"
-    },
-    {
-      name = "b-bucket "
-      cdn_path = "images"
-    }
-   ]
+  app_worker_script_name = "serve-app"
+  public_bucket_name     = "appname-staging-public"
 
   # optional
   bastion_public_dns = "project-staging-xxxxx.elb.eu-central-1.amazonaws.com"
