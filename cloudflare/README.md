@@ -21,6 +21,12 @@ This module will do the following:
 - You should have access to
   - All zones - Zone:Edit, Workers Routes:Edit, DNS:Edit
 
+
+```shell
+export CLOUDFLARE_API_TOKEN=xxx
+```
+
+
 ## Usage
 
 ```terraform
