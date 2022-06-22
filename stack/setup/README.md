@@ -69,10 +69,10 @@ output "terraform_secrets_arn" {
 }
 
 output "app_secrets-kms-key" {
-  value = module.secrets-kms-key["app"].arn
+  value = module.stack-setup.app_secrets-kms-key
 }
 
 output "terraform_secrets-kms-key" {
-  value = module.secrets-kms-key["terraform"].arn
+  value = module.stack-setup.terraform_secrets-kms-key
 }
 ```
