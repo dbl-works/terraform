@@ -87,8 +87,7 @@ data "aws_iam_policy_document" "s3_policy" {
 }
 
 resource "aws_iam_policy" "s3" {
-  # TODO: naming is weird with the current format
-  name        = "S3AccessFor${var.username}"
+  name        = "S3AccessFor${title(var.username)}"
   path        = "/"
   description = "Allow access to s3 resources for ${var.username}"
 
