@@ -10,7 +10,6 @@ locals {
     "elasticloadbalancing",
     "elasticache",
     "kms",
-    "s3",
     "secretsmanager",
     "rds",
   ]
