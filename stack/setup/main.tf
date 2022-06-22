@@ -72,14 +72,6 @@ resource "aws_acm_certificate" "main" {
   }
 }
 
-# # domain validation
-# resource "aws_acm_certificate_validation" "default" {
-#   certificate_arn = aws_acm_certificate.main.arn
-
-#   validation_record_fqdns = cloudflare_record.validation.*.hostname
-# }
-
-
 ## EIP
 resource "aws_eip" "nat" {
   count = var.eips_nat_count # 1 per NAT / AZ
