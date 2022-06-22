@@ -33,7 +33,6 @@ locals {
   )
 }
 
-# Attach to user in the user-level
 data "aws_iam_policy_document" "s3_list" {
   statement {
     sid = "AllowListAccessToS3"
@@ -52,7 +51,6 @@ data "aws_iam_policy_document" "s3_read" {
       "s3:Get*",
       "s3:List*"
     ]
-    # TODO: Add production
     resources = concat(
       [for project in local.staging_read_access_projects : "arn:aws:s3:::${project}-staging-storage"],
       [for project in local.production_read_access_projects : "arn:aws:s3:::${project}-production-storage"]
