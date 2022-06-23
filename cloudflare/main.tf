@@ -1,5 +1,5 @@
 data "cloudflare_zone" "default" {
-  zone = var.domain
+  name = var.domain
 }
 
 # api.my-project.com to the NLB
