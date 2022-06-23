@@ -17,6 +17,7 @@ We create modules here for re-use between projects.
 - [s3-private](s3-private/README.md) - Private, encrypted S3 bucket with versioning.
 - [s3-public](s3-public/README.md) - S3 bucket to host public files such as a frontend app, or anything you want to servce via a CDN.
 - [secrets](secrets/README.md) - Used for creating a new secret.
+- [stack](stack/README.md) - Creates all resources required to launch and entire application
 - [vpc](vpc/README.md) - Creates a VPC in AWS account. Also generates a group fo public and private submodules.
 - [vpn](vpn/README.md) - Launches an isolated Outline VPN inside a new VPC.
 

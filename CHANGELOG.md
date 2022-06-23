@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
+## [v2022.06.23]
+
+## Cloudflare
+- several fixes to the previously released Cloudflare module.A test application was lauchned deployed find screenshots here: [#91](https://github.com/dbl-works/terraform/pull/91)
+
+## Stack
+- several fixes to the previously released Stack module. A test application was lauchned deployed find screenshots here: [#91](https://github.com/dbl-works/terraform/pull/91)
+
+
+
 ## [v2022.06.21]
 
 ### Stack
