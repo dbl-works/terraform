@@ -1,4 +1,4 @@
-resource "cloudflare_zone" "default" {
+data "cloudflare_zone" "default" {
   zone = var.domain
 }
 

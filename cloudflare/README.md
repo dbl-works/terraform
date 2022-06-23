@@ -9,14 +9,15 @@ This module will do the following:
     - xx.my-project.com to the S3-Bucket (using Cloudflare Workers) for any subdomain needed
 
 ## Pre-setup
-1. Setup and publish your CDN cloudflare worker.
+1. Setup the domain in Cloudflare
+2. Setup and publish your CDN cloudflare worker.
 - Some useful references:
   - Quickstart: https://developers.cloudflare.com/workers/get-started/quickstarts/
   - Cloudflare CDN tutorials: https://developers.cloudflare.com/workers/tutorials/configure-your-cdn/
   - Introduction to Cloudflare Worker: https://egghead.io/courses/introduction-to-cloudflare-workers-5aa3
   - Cloudflare Router: https://github.com/dbl-works/cloudflare-router
 
-2. Make sure you have created an API token in your Cloudflare account with sufficient permissions
+3. Make sure you have created an API token in your Cloudflare account with sufficient permissions
 - You can have a look at the cloudflare permissions [here](https://developers.cloudflare.com/api/tokens/create/permissions/)
 - You should have access to
   - All zones - Zone:Edit, Workers Routes:Edit, DNS:Edit
