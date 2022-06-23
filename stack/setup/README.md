@@ -46,9 +46,11 @@ module "stack-setup" {
   project            = "someproject"
   environment        = "staging"
   domain             = "example.com"
-  add_wildcard_subdomains = true
 
   # Optional
+  add_wildcard_subdomains = true
+  alternative_domains         = []
+
   # KMS
   kms_deletion_window_in_days = 30
   eips_nat_count              = 1 # for production use, set this to the number of AZs
@@ -64,5 +66,13 @@ output "app_secrets_arn" {
 
 output "terraform_secrets_arn" {
   value = module.stack-setup.terraform_secrets_arn
+}
+
+output "app_secrets-kms-key" {
+  value = module.stack-setup.app_secrets-kms-key
+}
+
+output "terraform_secrets-kms-key" {
+  value = module.stack-setup.terraform_secrets-kms-key
 }
 ```

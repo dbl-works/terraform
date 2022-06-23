@@ -52,7 +52,10 @@ module "secrets-kms-key" {
 resource "aws_acm_certificate" "main" {
   domain_name = var.domain
 
-  subject_alternative_names = var.add_wildcard_subdomains ? ["*.${var.domain}"] : []
+  subject_alternative_names = flatten(concat(
+    var.add_wildcard_subdomains ? ["*.${var.domain}"] : [],
+    var.alternative_domains,
+  ))
 
   validation_method = "DNS"
 
@@ -61,24 +64,22 @@ resource "aws_acm_certificate" "main" {
     Project     = var.project
     Environment = var.environment
   }
+
+  # When attached to a load balancer it cannot be destroyed.
+  # This means we need to create a new one, attach it, then destroy the original.
+  lifecycle {
+    create_before_destroy = true
+  }
 }
-
-# domain validation
-resource "aws_acm_certificate_validation" "default" {
-  certificate_arn = aws_acm_certificate.main.arn
-
-  validation_record_fqdns = cloudflare_record.validation.*.hostname
-}
-
 
 ## EIP
 resource "aws_eip" "nat" {
-  for_each = var.eips_nat_count
+  count = var.eips_nat_count # 1 per NAT / AZ
 
   vpc = true
 
   tags = {
-    Name        = "${var.project}-nat-${var.environment}-${each.key}"
+    Name        = "${var.project}-nat-${var.environment}-${count.index + 1}"
     Project     = var.project
     Environment = var.environment
   }
