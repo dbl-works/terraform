@@ -38,7 +38,6 @@ module "cloudflare" {
   nlb_dns_name           = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
   cdn_worker_script_name = "serve-cdn"
   app_worker_script_name = "serve-app"
-  public_bucket_name     = "appname-staging-public"
 
   # optional
   bastion_public_dns = "project-staging-xxxxx.elb.eu-central-1.amazonaws.com"
