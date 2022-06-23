@@ -1,5 +1,6 @@
 module "cloudflare" {
-  source = "github.com/dbl-works/terraform//cloudflare?ref=v2022.05.26"
+  source = "../../cloudflare"
+
   depends_on = [
     module.ecs,
     module.s3-frontend,
