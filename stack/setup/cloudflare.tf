@@ -10,15 +10,15 @@ locals {
   )
 }
 
-resource "cloudflare_zone" "default" {
-  zone = var.domain
+data "cloudflare_zone" "default" {
+  name = var.domain
 }
 
 # domain validation
 resource "cloudflare_record" "validation" {
   count = length(local.distinct_domain_names)
 
-  zone_id = cloudflare_zone.default.id
+  zone_id = data.cloudflare_zone.default.id
   name    = element(local.domain_validation_options, count.index)["resource_record_name"]
   type    = element(local.domain_validation_options, count.index)["resource_record_type"]
   # ACM DNS validation record returns the value with a trailing dot however the Cloudflare API trims it off.
