@@ -12,5 +12,5 @@ module "cloudflare" {
   app_worker_script_name = "serve-app"
 
   # optional
-  bastion_public_dns = module.ecs.nlb_target_group_ecs_arn
+  # bastion_public_dns = module.ecs.nlb_target_group_ecs_arn
 }
