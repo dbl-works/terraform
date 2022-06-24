@@ -7,7 +7,7 @@ resource "cloudflare_record" "api" {
   zone_id = data.cloudflare_zone.default.id
   name    = "api"
   type    = "CNAME"
-  value   = var.nlb_dns_name
+  value   = var.alb_dns_name
   proxied = true
 }
 
