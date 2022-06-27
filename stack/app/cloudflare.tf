@@ -13,5 +13,5 @@ module "cloudflare" {
 
   # optional
   bastion_enabled    = true
-  bastion_public_dns = module.ecs.nlb_target_group_ecs_arn
+  bastion_public_dns = module.ecs.nlb_dns_name
 }
