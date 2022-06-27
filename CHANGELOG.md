@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
+## [unreleased]
+
+## Stack & Cloudflare
+- fixed issues when setting up a bastion, [#93](https://github.com/dbl-works/terraform/pull/93)
+
+
 ## [v2022.06.23]
 
 ## Cloudflare
