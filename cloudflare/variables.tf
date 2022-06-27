@@ -7,7 +7,12 @@ variable "bastion_public_dns" {
   default = null
 }
 
-variable "nlb_dns_name" {
+variable "bastion_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "alb_dns_name" {
   type = string
 }
 

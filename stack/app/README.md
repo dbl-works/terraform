@@ -107,6 +107,31 @@ output "database_url" {
 output "redis_url" {
   value = module.stack.redis_url
 }
+
+# Security groups, for linking with other resources
+output "alb_security_group_id" {
+  value = module.stack.alb_security_group_id
+}
+output "ecs_security_group_id" {
+  value = module.stack.ecs_security_group_id
+}
+
+output "subnet_public_ids" {
+  value = module.stack.subnet_public_ids
+}
+
+output "subnet_private_ids" {
+  value = module.stack.subnet_private_ids
+}
+
+# Target groups, for use in deployments
+output "alb_target_group_ecs_arn" {
+  value = module.stack.alb_target_group_ecs_arn
+}
+output "nlb_target_group_ecs_arn" {
+  value = module.stack.nlb_target_group_ecs_arn
+}
+
 ```
 
 

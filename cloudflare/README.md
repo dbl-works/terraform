@@ -30,6 +30,8 @@ export CLOUDFLARE_API_TOKEN=xxx
 
 ## Usage
 
+We cannot check if `bastion_public_dns` is present and use that as a condition to set up bastion (or not), since the DNS is unknown at the time of creation.
+
 ```terraform
 module "cloudflare" {
   source = "github.com/dbl-works/terraform//cloudflare?ref=v2022.05.26"
@@ -40,6 +42,7 @@ module "cloudflare" {
   app_worker_script_name = "serve-app"
 
   # optional
-  bastion_public_dns = "project-staging-xxxxx.elb.eu-central-1.amazonaws.com"
+  bastion_enabled    = false # set to true if required
+  bastion_public_dns = "project-staging-xxxxx.nlb.eu-central-1.amazonaws.com"
 }
 ```

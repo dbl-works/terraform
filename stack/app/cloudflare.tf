@@ -7,10 +7,11 @@ module "cloudflare" {
   ]
 
   domain                 = var.domain_name
-  nlb_dns_name           = module.ecs.alb_target_group_ecs_arn
+  alb_dns_name           = module.ecs.alb_dns_name
   cdn_worker_script_name = "serve-cdn"
   app_worker_script_name = "serve-app"
 
   # optional
-  bastion_public_dns = module.ecs.nlb_target_group_ecs_arn
+  bastion_enabled    = true
+  bastion_public_dns = module.ecs.nlb_dns_name
 }

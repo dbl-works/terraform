@@ -7,13 +7,13 @@ resource "cloudflare_record" "api" {
   zone_id = data.cloudflare_zone.default.id
   name    = "api"
   type    = "CNAME"
-  value   = var.nlb_dns_name
+  value   = var.alb_dns_name
   proxied = true
 }
 
 # bastion.my-project.com
 resource "cloudflare_record" "bastion" {
-  count = var.bastion_public_dns == null ? 0 : 1
+  count = var.bastion_enabled ? 1 : 0
 
   zone_id = data.cloudflare_zone.default.id
   name    = "bastion"
