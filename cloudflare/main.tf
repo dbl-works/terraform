@@ -13,7 +13,7 @@ resource "cloudflare_record" "api" {
 
 # bastion.my-project.com
 resource "cloudflare_record" "bastion" {
-  count = var.bastion_public_dns == null ? 0 : 1
+  count = var.bastion_enabled ? 0 : 1
 
   zone_id = data.cloudflare_zone.default.id
   name    = "bastion"
