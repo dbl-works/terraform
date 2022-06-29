@@ -31,6 +31,8 @@ locals {
     local.staging_write_access_projects,
     local.production_write_access_projects
   )
+
+  region = "eu-central-1"
 }
 
 data "aws_iam_policy_document" "ecs_list" {
@@ -92,40 +94,6 @@ data "aws_iam_policy_document" "ecs_write" {
   statement {
     sid = "AllowWriteAccessToECS"
     actions = [
-      "ecs:Describe*",
-      "ecs:Get*",
-      "ecs:List*"
-    ]
-    resources = flatten(concat(
-      [
-        for project in local.staging_read_access_projects : [
-          "arn:aws:ecs:*:*:task-definition/*",
-          "arn:aws:ecs:*:*:cluster/${project}-staging",
-          "arn:aws:ecs:*:*:container/${project}-staging/*",
-          "arn:aws:ecs:*:*:container-instance/${project}-staging/*",
-          "arn:aws:ecs:*:*:service/${project}-staging/*",
-          "arn:aws:ecs:*:*:task/${project}-staging/*"
-        ]
-      ],
-      [
-        for project in local.production_read_access_projects : [
-          "arn:aws:ecs:*:*:task-definition/*",
-          "arn:aws:ecs:*:*:cluster/${project}-production",
-          "arn:aws:ecs:*:*:container/${project}-production/*",
-          "arn:aws:ecs:*:*:container-instance/${project}-production/*",
-          "arn:aws:ecs:*:*:service/${project}-production/*",
-          "arn:aws:ecs:*:*:task/${project}-production/*"
-        ]
-      ]
-    ))
-  }
-}
-
-
-data "aws_iam_policy_document" "ecs_write" {
-  statement {
-    sid = "AllowWriteAccessToECS"
-    actions = [
       "ecs:*",
     ]
     resources = flatten(concat(
@@ -161,7 +129,7 @@ data "aws_iam_policy_document" "ecs_taggable_ssm" {
     ]
     resources = [
       "*",
-      "arn:aws:ssm:${var.region}:*:document/AmazonECS-ExecuteInteractiveCommand"
+      "arn:aws:ssm:${local.region}:*:document/AmazonECS-ExecuteInteractiveCommand"
     ]
 
     condition {
@@ -187,7 +155,7 @@ data "aws_iam_policy_document" "ecs_taggable_ssm" {
     ]
     resources = [
       "*",
-      "arn:aws:ssm:${var.region}:*:document/AmazonECS-ExecuteInteractiveCommand"
+      "arn:aws:ssm:${local.region}:*:document/AmazonECS-ExecuteInteractiveCommand"
     ]
 
     condition {
@@ -360,4 +328,25 @@ data "aws_iam_policy_document" "ecs_iam" {
       ]
     }
   }
+}
+
+data "aws_iam_policy_document" "ecs_policy" {
+  source_policy_documents = concat(
+    [data.aws_iam_policy_document.ecs_list.json, data.aws_iam_policy_document.ecs_taggable_ssm.json],
+    (length(local.read_access_projects) == 0 ? [] : [data.aws_iam_policy_document.ecs_read.json]),
+    (length(local.write_access_projects) == 0 ? [] : [data.aws_iam_policy_document.ecs_write.json, data.aws_iam_policy_document.ecs_ssm.json, data.aws_iam_policy_document.ecs_iam.json])
+  )
+}
+
+resource "aws_iam_policy" "ecs" {
+  name        = "ECSAccessFor${title(var.username)}"
+  path        = "/"
+  description = "Allow access to ECS resources for ${var.username}"
+
+  policy = data.aws_iam_policy_document.ecs_policy.json
+}
+
+resource "aws_iam_user_policy_attachment" "user" {
+  user       = data.aws_iam_user.main.user_name
+  policy_arn = aws_iam_policy.ecs.arn
 }
