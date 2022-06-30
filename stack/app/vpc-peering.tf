@@ -2,6 +2,11 @@ module "vpc-peering" {
   source = "../../vpc-peering"
   count  = var.rds_is_read_replica ? 1 : 0
 
+  providers = {
+    aws      = aws
+    aws.peer = aws.peer
+  }
+
   project     = var.project
   environment = var.environment
 
