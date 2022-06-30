@@ -40,6 +40,11 @@ provider "aws" {
 module "vpc-peering" {
   source = "github.com/dbl-works/terraform//vpc-peering?ref=v2021.07.01"
 
+  providers = {
+    aws      = aws
+    aws.peer = aws.peer
+  }
+
   project     = "project-name"
   environment = "production"
 
