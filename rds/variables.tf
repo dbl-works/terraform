@@ -40,3 +40,15 @@ variable "allow_from_security_groups" {
   description = "Security groups which RDS allow traffics from"
   default     = []
 }
+
+
+## Read replica mode
+variable "master_db_instance_arn" {
+  default = null
+  type    = string
+}
+
+variable "is_read_replica" {
+  type    = bool
+  default = false
+}

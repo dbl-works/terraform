@@ -8,6 +8,9 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## [unreleased]
 
+## RDS
+- added the option to create a read-replica, [#96](https://github.com/dbl-works/terraform/pull/96)
+
 ## VPC-Peering
 - added a new module `vpc-peering` to create a VPC Peering Resource, [#96](https://github.com/dbl-works/terraform/pull/96)
 

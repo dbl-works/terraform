@@ -5,6 +5,8 @@ Used for creating and configuring databases and their networking.
 Will create an initial database named `{project}_{environment}`.
 
 
+:warning: If you create a read replica in another VPC you need a [VPC-Peering-Resource](vpc-peering/README.md).
+
 
 ## Usage
 
@@ -28,6 +30,10 @@ module "db" {
   publicly_accessible = false
   allocated_storage   = 100
   multi_az            = false
+
+  # when creating a read-replica
+  master_db_instance_arn = null  # ARN of the master database
+  is_read_replica        = false # if true, this will be a read-replica
 }
 ```
 
