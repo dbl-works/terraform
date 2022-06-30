@@ -19,6 +19,7 @@ We create modules here for re-use between projects.
 - [secrets](secrets/README.md) - Used for creating a new secret.
 - [stack](stack/README.md) - Creates all resources required to launch and entire application
 - [vpc](vpc/README.md) - Creates a VPC in AWS account. Also generates a group fo public and private submodules.
+- [vpc-peering](vpc-peering/README.md) - Creates a VPC Peering Resource.
 - [vpn](vpn/README.md) - Launches an isolated Outline VPN inside a new VPC.
 
 

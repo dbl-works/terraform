@@ -8,6 +8,9 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## [unreleased]
 
+## VPC-Peering
+- added a new module `vpc-peering` to create a VPC Peering Resource, [#96](https://github.com/dbl-works/terraform/pull/96)
+
 ## Stack & Cloudflare
 - fixed issues when setting up a bastion, [#93](https://github.com/dbl-works/terraform/pull/93)
 
