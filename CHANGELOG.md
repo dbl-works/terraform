@@ -16,6 +16,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Stack & Cloudflare
 - fixed issues when setting up a bastion, [#93](https://github.com/dbl-works/terraform/pull/93)
+- added the option to launch a stack with a RDS read-replica, [#96](https://github.com/dbl-works/terraform/pull/96)
 
 
 ## [v2022.06.23]

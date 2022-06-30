@@ -75,6 +75,16 @@ module "stack" {
   rds_engine_version     = "13"
   rds_allocated_storage  = 100
 
+  ## set these, if you want to create a read-replica instead of a master DB
+  ## the master-instance-arn MUST be the ARN of the DB, if the master DB is in
+  ## another region. Otherwise, the instance-identifier may be used.
+  ## Will create a VPC Peering Resource to allow connections to the master DB;
+  ## This stack is the requester, the stack with the main DB is the accepter.
+  rds_is_read_replica        = false
+  rds_master_db_instance_arn = null
+  rds_master_db_region       = null
+  rds_master_db_vpc_id       = null
+
   # ECS
   allow_internal_traffic_to_ports = []
   allowlisted_ssh_ips = []

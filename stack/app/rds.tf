@@ -25,9 +25,11 @@ module "rds" {
   allow_from_security_groups = [module.ecs.ecs_security_group_id]
 
   # optional
-  username          = local.credentials.db_username
-  instance_class    = var.rds_instance_class
-  engine_version    = var.rds_engine_version
-  allocated_storage = var.rds_allocated_storage
-  multi_az          = var.environment == "production"
+  username               = local.credentials.db_username
+  instance_class         = var.rds_instance_class
+  engine_version         = var.rds_engine_version
+  allocated_storage      = var.rds_allocated_storage
+  multi_az               = var.environment == "production"
+  master_db_instance_arn = var.rds_master_db_instance_arn
+  is_read_replica        = var.rds_is_read_replica
 }

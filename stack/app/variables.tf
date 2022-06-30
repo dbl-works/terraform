@@ -96,6 +96,22 @@ variable "elasticache_snapshot_retention_limit" {
 # =============== Elasticache ================ #
 
 # =============== RDS ================ #
+variable "rds_is_read_replica" {
+  type    = bool
+  default = false
+}
+variable "rds_master_db_instance_arn" {
+  default = null
+  type    = string
+}
+variable "rds_master_db_region" {
+  type    = string
+  default = null
+}
+variable "rds_master_db_vpc_id" {
+  type    = string
+  default = null
+}
 variable "rds_instance_class" {
   type    = string
   default = "db.t3.micro"
