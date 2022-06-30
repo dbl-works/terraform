@@ -40,6 +40,9 @@ jobs:
       - name: validate
         run: |
           cd ${{ matrix.module }}
+          # the stack/app module must have a provider block because the sub-module requires a non-standard "provider
+          # see: https://github.com/hashicorp/terraform/issues/28490
+          if [[ "${{ matrix.module }}" == "stack/app" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> vpc-peering.tf; fi
           terraform validate
 
       - name: fmt -check
