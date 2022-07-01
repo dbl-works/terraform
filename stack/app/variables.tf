@@ -166,4 +166,9 @@ variable "secret_arns" {
   description = "arns of the secret manager that ECS can access"
   default     = []
 }
+
+variable "regional" {
+  type    = bool
+  default = true
+}
 # =============== ECS ================ #

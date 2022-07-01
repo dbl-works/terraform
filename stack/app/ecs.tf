@@ -23,6 +23,7 @@ module "ecs" {
   # optional
   health_check_path = var.health_check_path
   certificate_arn   = data.aws_acm_certificate.default.arn
+  regional          = var.regional
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
 
