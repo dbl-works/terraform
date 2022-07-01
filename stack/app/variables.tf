@@ -112,6 +112,10 @@ variable "rds_master_db_vpc_id" {
   type    = string
   default = null
 }
+variable "rds_master_db_kms_key_arn" {
+  type    = string
+  default = null
+}
 variable "rds_instance_class" {
   type    = string
   default = "db.t3.micro"
