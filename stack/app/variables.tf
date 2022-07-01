@@ -19,6 +19,11 @@ variable "account_id" {
 variable "domain_name" {
   type = string
 }
+
+variable "skip_cloudflare" {
+  type    = bool
+  default = false
+}
 # =============== Certificate Manager ================ #
 
 # =============== S3 private ================ #

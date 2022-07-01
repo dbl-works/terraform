@@ -41,7 +41,8 @@ module "stack" {
   ]
 
   # Optional
-  region     = "eu-central-1"
+  region          = "eu-central-1"
+  skip_cloudflare = false
 
   # S3 Private
   private_buckets_list = [

@@ -1,6 +1,6 @@
 module "cloudflare" {
   source = "../../cloudflare"
-  count  = var.rds_is_read_replica ? 0 : 1
+  count  = var.skip_cloudflare ? 0 : 1
 
   depends_on = [
     module.ecs,
