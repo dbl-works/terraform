@@ -2,6 +2,10 @@ output "database_url" {
   value = module.rds.database_url
 }
 
+output "database_arn" {
+  value = module.rds.database_arn
+}
+
 output "redis_url" {
   value = module.elasticache.endpoint
 }
