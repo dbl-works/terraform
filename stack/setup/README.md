@@ -48,8 +48,9 @@ module "stack-setup" {
   domain             = "example.com"
 
   # Optional
-  add_wildcard_subdomains = true
-  alternative_domains         = []
+  add_wildcard_subdomains        = true
+  alternative_domains            = []
+  is_read_replica_on_same_domain = false # skips cloudflare
 
   # KMS
   kms_deletion_window_in_days = 30
