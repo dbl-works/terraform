@@ -16,7 +16,8 @@ data "cloudflare_zone" "default" {
 
 # domain validation
 resource "cloudflare_record" "validation" {
-  count = length(local.distinct_domain_names)
+  # We assume that a read-replica stack runs on the same domain, hence we skip Cloudflare
+  count = var.rds_is_read_replica ? 0 : length(local.distinct_domain_names)
 
   zone_id = data.cloudflare_zone.default.id
   name    = element(local.domain_validation_options, count.index)["resource_record_name"]
@@ -27,7 +28,8 @@ resource "cloudflare_record" "validation" {
 }
 
 resource "aws_acm_certificate_validation" "default" {
-  certificate_arn = aws_acm_certificate.main.arn
+  count = var.rds_is_read_replica ? 0 : 1
 
+  certificate_arn         = aws_acm_certificate.main.arn
   validation_record_fqdns = cloudflare_record.validation.*.hostname
 }
