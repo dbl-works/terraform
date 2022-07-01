@@ -2,11 +2,11 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name                = aws_db_subnet_group.main.name
   allocated_storage                   = var.allocated_storage
   storage_type                        = "gp2"
-  engine                              = "postgres"
-  engine_version                      = var.engine_version
+  engine                              = var.is_read_replica ? null : "postgres"
+  engine_version                      = var.is_read_replica ? null : var.engine_version
   instance_class                      = var.instance_class
   identifier                          = "${var.project}-${var.environment}${var.is_read_replica ? "-read-replica" : ""}"
-  db_name                             = "${var.project}_${var.environment}" # name of the initial database
+  db_name                             = var.is_read_replica ? null : "${var.project}_${var.environment}" # name of the initial database
   skip_final_snapshot                 = true
   username                            = var.is_read_replica ? null : var.username # credentials of the master DB are used
   password                            = var.is_read_replica ? null : var.password # credentials of the master DB are used
