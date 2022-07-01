@@ -100,6 +100,8 @@ module "stack" {
   # appends region to the name (usually ${project}-${environment}) for globally unique names
   regional = true
 
+  ecs_name = null # custom name when convention exceeds 32 chars
+
   # Elasticache
   elasticache_node_type                     = "cache.t3.micro"
   elasticache_replicas_per_node_group       = 1

@@ -24,6 +24,7 @@ module "ecs" {
   health_check_path = var.health_check_path
   certificate_arn   = data.aws_acm_certificate.default.arn
   regional          = var.regional
+  name              = var.ecs_name # custom name when convention exceeds 32 chars
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
 

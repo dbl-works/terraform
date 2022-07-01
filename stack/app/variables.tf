@@ -137,6 +137,11 @@ variable "allow_internal_traffic_to_ports" {
   default = []
 }
 
+variable "ecs_name" {
+  type    = string
+  default = null
+}
+
 variable "allowlisted_ssh_ips" {
   type    = list(string)
   default = []
