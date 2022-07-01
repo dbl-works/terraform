@@ -3,8 +3,8 @@ module "vpc-peering" {
   count  = var.rds_is_read_replica ? 1 : 0
 
   providers = {
-    aws.default = aws.default
-    aws.peer    = aws.peer
+    aws      = aws
+    aws.peer = aws.peer
   }
 
   project     = var.project
