@@ -20,13 +20,13 @@ module "rds" {
   account_id                 = var.account_id
   region                     = var.region
   vpc_id                     = module.vpc.id
-  password                   = local.credentials.db_root_password
+  password                   = var.rds_is_read_replica ? null : local.credentials.db_root_password
   kms_key_arn                = var.rds_master_db_kms_key_arn == null ? module.rds-kms-key[0].arn : var.rds_master_db_kms_key_arn
   subnet_ids                 = module.vpc.subnet_private_ids
   allow_from_security_groups = [module.ecs.ecs_security_group_id]
 
   # optional
-  username               = local.credentials.db_username
+  username               = var.rds_is_read_replica ? null : local.credentials.db_username
   instance_class         = var.rds_instance_class
   engine_version         = var.rds_engine_version
   allocated_storage      = var.rds_allocated_storage
