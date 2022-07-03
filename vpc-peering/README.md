@@ -53,5 +53,8 @@ module "vpc-peering" {
 
   accepter_region = "us-east-1"
   accepter_vpc_id = "module.vpc-us.id"
+
+  # optional
+  cross_region_kms_keys_arns = [] # to allow using the same key across regions, e.g. for RDS read replicas
 }
 ```
