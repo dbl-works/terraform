@@ -109,6 +109,11 @@ variable "rds_cross_region_kms_keys_arns" {
   type    = list(string)
   default = []
 }
+# set the key for the master DB to multi-region if you have read replicas in other regions
+variable "multi_region_kms_key" {
+  type    = bool
+  default = false
+}
 variable "rds_is_read_replica" {
   type    = bool
   default = false

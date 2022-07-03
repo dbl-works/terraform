@@ -10,6 +10,7 @@ module "rds-kms-key" {
 
   # Optional
   deletion_window_in_days = var.kms_deletion_window_in_days
+  multi_region            = var.rds_multi_region_kms_key
 }
 
 module "rds" {

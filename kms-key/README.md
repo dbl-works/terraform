@@ -18,5 +18,6 @@ module "kms-key" {
 
   # Optional
   deletion_window_in_days = 30
+  multi_region            = false # use with caution. E.g. when having a cross region RDS read replica
 }
 ```
