@@ -30,6 +30,8 @@ module "db" {
   publicly_accessible = false
   allocated_storage   = 100
   multi_az            = false
+  regional            = false # set to `true` to append region to name, unless name given
+  name                = null # defaults to "${var.project}-${var.environment}", may need to be unique per region
 
   # when creating a read-replica
   master_db_instance_arn = null  # ARN of the master database

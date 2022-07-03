@@ -101,6 +101,10 @@ variable "elasticache_snapshot_retention_limit" {
 # =============== Elasticache ================ #
 
 # =============== RDS ================ #
+variable "rds_name" {
+  type    = string
+  default = null
+}
 variable "rds_is_read_replica" {
   type    = bool
   default = false

@@ -10,6 +10,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## RDS
 - added the option to create a read-replica, [#97](https://github.com/dbl-works/terraform/pull/97)
+- allow to create unique names across regions by setting `regional`, [#97](https://github.com/dbl-works/terraform/pull/97)
 
 ## VPC-Peering
 - added a new module `vpc-peering` to create a VPC Peering Resource, [#97](https://github.com/dbl-works/terraform/pull/97)

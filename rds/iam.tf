@@ -3,19 +3,21 @@ locals {
     "admin",
     "readonly",
   ]
+
+  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
 }
 
 # Readonly access to database
 # We allow `ListPolicies` to allow filtering all describable instances by those we can connect to
 resource "aws_iam_group" "rds-db-connect" {
   for_each = toset(local.db_roles)
-  name     = "${var.project}-${var.environment}-rds-db-connect-${each.key}"
+  name     = "${local.name}-rds-db-connect-${each.key}"
 }
 resource "aws_iam_policy" "rds-db-connect" {
   for_each    = toset(local.db_roles)
-  name        = "${var.project}-${var.environment}-rds-db-connect-${each.key}"
+  name        = "${local.name}-rds-db-connect-${each.key}"
   path        = "/"
-  description = "Allow connecting as ${each.key} to ${var.project} ${var.environment} using IAM roles"
+  description = "Allow connecting as ${each.key} to ${var.project} ${var.environment} (${var.region}) using IAM roles"
 
   policy = <<EOF
 {
@@ -36,8 +38,8 @@ resource "aws_iam_policy" "rds-db-connect" {
         "iam:ListPolicies"
       ],
       "Resource": [
-        "arn:aws:iam::${var.account_id}:policy/${var.project}-${var.environment}-rds-db-connect-*",
-        "arn:aws:iam::${var.account_id}:policy/${var.project}-${var.environment}-rds-view"
+        "arn:aws:iam::${var.account_id}:policy/${local.name}-rds-db-connect-*",
+        "arn:aws:iam::${var.account_id}:policy/${local.name}-rds-view"
       ]
     }
   ]
@@ -54,10 +56,10 @@ resource "aws_iam_group_policy_attachment" "rds-db-connect" {
 
 # Grant access to list and describe instances
 resource "aws_iam_group" "rds-view" {
-  name = "${var.project}-${var.environment}-rds-view"
+  name = "${local.name}-rds-view"
 }
 resource "aws_iam_policy" "rds-view" {
-  name        = "${var.project}-${var.environment}-rds-view"
+  name        = "${local.name}-rds-view"
   path        = "/"
   description = "Allow viewing db instances for ${var.project} ${var.environment}"
 

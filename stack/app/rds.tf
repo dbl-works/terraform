@@ -33,4 +33,6 @@ module "rds" {
   multi_az               = var.environment == "production"
   master_db_instance_arn = var.rds_master_db_instance_arn
   is_read_replica        = var.rds_is_read_replica
+  regional               = var.regional
+  name                   = var.rds_name
 }

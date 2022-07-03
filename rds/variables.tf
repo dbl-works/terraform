@@ -52,3 +52,15 @@ variable "is_read_replica" {
   type    = bool
   default = false
 }
+
+variable "regional" {
+  default = false
+  type    = bool
+}
+
+# A custom name overrides the default {project}-{environment} convention
+variable "name" {
+  type        = string
+  description = "Custom name for resources. Must be unique per account if deploying to multiple regions."
+  default     = null
+}

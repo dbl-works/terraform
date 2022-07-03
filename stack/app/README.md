@@ -87,6 +87,7 @@ module "stack" {
   rds_master_db_region       = null
   rds_master_db_vpc_id       = null
   rds_master_db_kms_key_arn  = null
+  rds_name                   = null # unique name, shouldn't be necessary if "regional" is set to true
 
   # ECS
   allow_internal_traffic_to_ports = []
