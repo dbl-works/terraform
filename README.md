@@ -12,6 +12,7 @@ We create modules here for re-use between projects.
 - [ecs](ecs/README.md) - Compute cluster for running docker containers.
 - [elasticache](elasticache/README.md) - elasticache cluster based on Redis.
 - [kms-key](kms-key/README.md) - Encryption keys for securing various AWS resources.
+- [kms-key-replica](kms-key-replica/README.md) - KMS Key replica for cross-regional access to encryption keys.
 - [nat](nat/README.md) - A reopsitory for setting up a network address translation (NAT).
 - [rds](rds/README.md) - Used for creating and configuring databases and their networking.
 - [s3-private](s3-private/README.md) - Private, encrypted S3 bucket with versioning.
