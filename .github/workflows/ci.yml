@@ -17,6 +17,7 @@ jobs:
           - iam/iam-for-humans
           - iam/iam-policy-for-taggable-resources
           - kms-key
+          - kms-key-replica
           - nat
           - rds
           - s3-private
