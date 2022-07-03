@@ -105,6 +105,10 @@ variable "rds_name" {
   type    = string
   default = null
 }
+variable "rds_cross_region_kms_keys_arns" {
+  type    = list(string)
+  default = []
+}
 variable "rds_is_read_replica" {
   type    = bool
   default = false

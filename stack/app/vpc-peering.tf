@@ -15,4 +15,6 @@ module "vpc-peering" {
 
   accepter_region = var.rds_master_db_region
   accepter_vpc_id = var.rds_master_db_vpc_id
+
+  rds_cross_region_kms_keys_arns = var.rds_cross_region_kms_keys_arns
 }

@@ -82,12 +82,13 @@ module "stack" {
   ## Will create a VPC Peering Resource to allow connections to the master DB;
   ## This stack is the requester, the stack with the main DB is the accepter.
   ## The master-DB KMS key arn must be passed to allow decrypting the master DB.
-  rds_is_read_replica        = false
-  rds_master_db_instance_arn = null
-  rds_master_db_region       = null
-  rds_master_db_vpc_id       = null
-  rds_master_db_kms_key_arn  = null
-  rds_name                   = null # unique name, shouldn't be necessary if "regional" is set to true
+  rds_is_read_replica            = false
+  rds_master_db_instance_arn     = null
+  rds_master_db_region           = null
+  rds_master_db_vpc_id           = null
+  rds_master_db_kms_key_arn      = null
+  rds_name                       = null # unique name, shouldn't be necessary if "regional" is set to true
+  rds_cross_region_kms_keys_arns = [] # pass the RDS KMS key here to allow the replica to read the encrypted master
 
   # ECS
   allow_internal_traffic_to_ports = []
