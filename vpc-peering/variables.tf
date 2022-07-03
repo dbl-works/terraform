@@ -23,8 +23,3 @@ variable "accepter_region" {
 variable "accepter_vpc_id" {
   type = string
 }
-
-variable "cross_region_kms_keys_arns" {
-  type    = list(string)
-  default = []
-}

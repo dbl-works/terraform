@@ -55,6 +55,9 @@ module "stack-setup" {
   # KMS
   kms_deletion_window_in_days = 30
   eips_nat_count              = 1 # for production use, set this to the number of AZs
+
+  # In case this stack has a read-replica RDS in a different region
+  rds_cross_region_kms_key_arn = null
 }
 ```
 

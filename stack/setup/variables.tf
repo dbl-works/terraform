@@ -34,3 +34,10 @@ variable "kms_deletion_window_in_days" {
   type    = number
   default = 30
 }
+
+
+# in case this stack has a read-replica RDS, we need to access the master DB KMS key
+variable "rds_cross_region_kms_key_arn" {
+  type    = string
+  default = null
+}
