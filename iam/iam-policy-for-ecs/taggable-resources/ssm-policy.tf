@@ -19,9 +19,9 @@ data "aws_iam_policy_document" "ssm_policy" {
       # Using StringLike here because currently tag cannot take multivalue
       # We can only create a custom multivalue structure in the single value
       # https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html
-      test     = var.project_name ? "StringEquals" : "StringLike"
+      test     = var.project_name != null ? "StringEquals" : "StringLike"
       variable = "aws:ResourceTag/Project"
-      values   = var.project_name ? [var.project_name] : ["&{aws:PrincipalTag/${var.project_tag}}"]
+      values   = var.project_name != null ? [var.project_name] : ["&{aws:PrincipalTag/${var.project_tag}}"]
     }
   }
 
@@ -45,9 +45,9 @@ data "aws_iam_policy_document" "ssm_policy" {
       # Using StringLike here because currently tag cannot take multivalue
       # We can only create a custom multivalue structure in the single value
       # https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html
-      test     = var.project_name ? "StringEquals" : "StringLike"
+      test     = var.project_name != null ? "StringEquals" : "StringLike"
       variable = "aws:ResourceTag/Project"
-      values   = var.project_name ? [var.project_name] : ["&{aws:PrincipalTag/${var.project_tag}}"]
+      values   = var.project_name != null ? [var.project_name] : ["&{aws:PrincipalTag/${var.project_tag}}"]
     }
   }
 }
