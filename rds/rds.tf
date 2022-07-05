@@ -45,8 +45,7 @@ resource "aws_db_instance" "main" {
   lifecycle {
     ignore_changes = [
       engine_version, # AWS will auto-update minor version changes
-      latest_restorable_time,
-      db_name, # if you didn't use this before it would re-create your RDS instance
+      db_name,        # if you didn't use this before it would re-create your RDS instance
     ]
   }
 }

@@ -33,3 +33,13 @@ output "alb_target_group_ecs_arn" {
 output "nlb_target_group_ecs_arn" {
   value = module.ecs.nlb_target_group_ecs_arn
 }
+
+
+# VPC Peering
+output "accept_status-requester" {
+  value = var.rds_is_read_replica ? module.vpc-peering.accept_status-requester : "VPC peering not enabled."
+}
+
+output "accept_status-accepter" {
+  value = var.rds_is_read_replica ? module.vpc-peering.accept_status-accepter : "VPC peering not enabled."
+}
