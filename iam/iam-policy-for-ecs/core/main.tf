@@ -77,7 +77,7 @@ data "aws_iam_policy_document" "ecs_policy" {
       data.aws_iam_policy_document.ecs_iam.json,
       data.aws_iam_policy_document.ecs_ssm.json,
 
-      module.ecs_taggable_resources_policy.*.ecs_taggable_resources_policy,
+      module.iam_ecs_taggable_resources.*.ecs_taggable_resources_policy,
 
       data.aws_iam_policy_document.ecs_read.json,
       data.aws_iam_policy_document.ecs_full.json
