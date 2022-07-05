@@ -35,9 +35,9 @@ locals {
 # Taggable resources are only needed for admin full access
 # TODO: To avoid the policy exceed the characters count,
 # This should be moved to the taggable resources modules
-# TODO: MAke this a loop for all the availability region
+# TODO: Make this a loop for all the availability region
 module "iam_ecs_taggable_resources_in_staging" {
-  source = "../iam-policy-for-ecs-taggable-resources"
+  source = "../taggable-resources"
 
   region      = var.region
   environment = "staging"
@@ -45,7 +45,7 @@ module "iam_ecs_taggable_resources_in_staging" {
 }
 
 module "iam_ecs_taggable_resources_in_production" {
-  source = "../iam-policy-for-ecs-taggable-resources"
+  source = "../taggable-resources"
 
   region      = var.region
   environment = "production"
@@ -80,8 +80,11 @@ data "aws_iam_policy_document" "ecs_policy" {
     [
       # All user should have list access so they can see the index page
       data.aws_iam_policy_document.ecs_list.json,
-      module.iam_ecs_taggable_resources_in_staging.ecs_taggable_resources_policy,
-      module.iam_ecs_taggable_resources_in_production.ecs_taggable_resources_policy,
+      data.aws_iam_policy_document.ecs_iam,
+      data.aws_iam_policy_document.ecs_ssm,
+
+      # module.iam_ecs_taggable_resources_in_staging.ecs_taggable_resources_policy,
+      # module.iam_ecs_taggable_resources_in_production.ecs_taggable_resources_policy,
       # This might throw error
       module.iam_ecs_read_access.ecs_read_policy,
       module.iam_ecs_full_access.ecs_full_policy
@@ -100,4 +103,16 @@ resource "aws_iam_policy" "ecs" {
 resource "aws_iam_user_policy_attachment" "user" {
   user       = data.aws_iam_user.main.user_name
   policy_arn = aws_iam_policy.ecs.arn
+}
+
+output "ecs_read_policy" {
+  value = module.iam_ecs_read_access.ecs_read_policy
+}
+
+output "read_access_project_names" {
+  value = local.read_access_project_names
+}
+
+output "full_access_project_names" {
+  value = local.full_access_project_names
 }
