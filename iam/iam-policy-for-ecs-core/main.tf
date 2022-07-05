@@ -32,18 +32,6 @@ locals {
   )
 }
 
-module "iam_ecs_read_access" {
-  source = "../iam-policy-for-ecs-read"
-
-  project_names = local.read_access_project_names
-}
-
-module "iam_ecs_full_access" {
-  source = "../iam-policy-for-ecs-full"
-
-  project_names = local.full_access_project_names
-}
-
 # Taggable resources are only needed for admin full access
 # TODO: To avoid the policy exceed the characters count,
 # This should be moved to the taggable resources modules

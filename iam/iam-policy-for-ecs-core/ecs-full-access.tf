@@ -1,15 +1,13 @@
-data "aws_iam_policy_document" "ecs_read" {
+data "aws_iam_policy_document" "ecs_full" {
   statement {
-    sid = "AllowReadAccessToECS"
+    sid = "AllowFullAccessToECS"
     actions = [
-      "ecs:Describe*",
-      "ecs:Get*",
-      "ecs:List*"
+      "ecs:*",
     ]
     resources = flatten(concat(
       ["arn:aws:ecs:*:*:task-definition/*"],
       [
-        for project_name in var.project_names : [
+        for project_name in local.full_access_project_names : [
           "arn:aws:ecs:*:*:cluster/${project_name}",
           "arn:aws:ecs:*:*:container/${project_name}/*",
           "arn:aws:ecs:*:*:container-instance/${project_name}/*",
