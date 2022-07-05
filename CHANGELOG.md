@@ -8,6 +8,9 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## [unreleased]
 
+## VPN
+- `availability_zones` can now be explicitly passed into the module, [#98](https://github.com/dbl-works/terraform/pull/98)
+
 ## KMS Key Replica
 - new module that allows to create a replica of a KMS key in another region, [#97](https://github.com/dbl-works/
 

@@ -1,8 +1,8 @@
 module "vpc" {
-  source = "github.com/dbl-works/terraform//vpc?ref=v2021.07.30"
+  source = "../vpc"
 
   account_id         = var.account_id
-  availability_zones = ["${var.region}a", "${var.region}b", "${var.region}c"]
+  availability_zones = local.availability_zones
   environment        = var.environment
   project            = var.project
   region             = var.region
