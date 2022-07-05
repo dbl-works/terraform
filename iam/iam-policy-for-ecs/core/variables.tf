@@ -12,6 +12,5 @@ variable "projects" {
     name        = string
     environment = string
     region      = string
-    project_tag = string
   }))
 }

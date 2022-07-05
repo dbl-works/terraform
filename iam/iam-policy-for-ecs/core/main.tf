@@ -55,9 +55,9 @@ module "iam_ecs_taggable_resources" {
 
   for_each = { for project in var.projects : project.name => project }
 
-  region      = each.value.region
-  environment = each.value.environment
-  project_tag = each.value.project_tag
+  region       = each.value.region
+  environment  = each.value.environment
+  project_name = each.value.name
 }
 
 data "aws_iam_policy_document" "ecs_list" {

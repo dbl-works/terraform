@@ -7,5 +7,11 @@ variable "environment" {
 }
 
 variable "project_tag" {
-  type = string
+  default = null
+  type    = string
+}
+
+variable "project_name" {
+  default = null
+  type    = string
 }

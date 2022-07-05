@@ -51,13 +51,11 @@ module "iam_ecs_policies" {
       name        = "facebook",
       environment = "sandbox"
       region      = "eu-central-1"
-      project_tag = "sandbox-admin-access-projects"
     },
     {
       name        = "facebook",
       environment = "load-testing"
       region      = "eu-central-1"
-      project_tag = "sandbox-developer-access-projects"
     },
   ]
 
