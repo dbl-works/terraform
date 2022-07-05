@@ -45,5 +45,5 @@ output "accept_status-accepter" {
 }
 
 output "rds_kms_key_arn" {
-  value = var.rds_master_db_kms_key_arn == null ? module.rds-kms-key[0].arn : "KMS ARN only printed for the master DB to be passed to each replica."
+  value = var.rds_master_db_kms_key_arn == null ? join("", module.rds-kms-key.*.arn) : "KMS ARN only printed for the master DB to be passed to each replica."
 }
