@@ -77,8 +77,8 @@ data "aws_iam_policy_document" "ecs_policy" {
     [
       # All user should have list access so they can see the index page
       data.aws_iam_policy_document.ecs_list.json,
-      data.aws_iam_policy_document.ecs_iam,
-      data.aws_iam_policy_document.ecs_ssm,
+      data.aws_iam_policy_document.ecs_iam.json,
+      data.aws_iam_policy_document.ecs_ssm.json,
 
       module.iam_ecs_taggable_resources_in_staging.ecs_taggable_resources_policy,
       module.iam_ecs_taggable_resources_in_production.ecs_taggable_resources_policy,
