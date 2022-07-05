@@ -37,11 +37,11 @@ output "nlb_target_group_ecs_arn" {
 
 # When launching a stack with a read replica
 output "accept_status-requester" {
-  value = var.rds_is_read_replica ? module.vpc-peering.accept_status-requester : "VPC peering not enabled."
+  value = var.rds_is_read_replica ? join("", module.vpc-peering.*.accept_status-requester) : "VPC peering not enabled."
 }
 
 output "accept_status-accepter" {
-  value = var.rds_is_read_replica ? module.vpc-peering.accept_status-accepter : "VPC peering not enabled."
+  value = var.rds_is_read_replica ? join("", module.vpc-peering.*.accept_status-accepter) : "VPC peering not enabled."
 }
 
 output "rds_kms_key_arn" {
