@@ -83,8 +83,8 @@ data "aws_iam_policy_document" "ecs_policy" {
       module.iam_ecs_taggable_resources_in_staging.ecs_taggable_resources_policy,
       module.iam_ecs_taggable_resources_in_production.ecs_taggable_resources_policy,
 
-      module.iam_ecs_read_access.ecs_read_policy,
-      module.iam_ecs_full_access.ecs_full_policy
+      data.aws_iam_policy_document.ecs_read.json,
+      data.aws_iam_policy_document.ecs_full.json
     ]
   )
 }
