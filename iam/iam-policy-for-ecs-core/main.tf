@@ -33,13 +33,13 @@ locals {
 }
 
 module "iam_ecs_read_access" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs-read?ref=v2022.05.18"
+  source = "../iam-policy-for-ecs-read"
 
   project_names = local.read_access_project_names
 }
 
 module "iam_ecs_full_access" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs-full?ref=v2022.05.18"
+  source = "../iam-policy-for-ecs-full"
 
   project_names = local.full_access_project_names
 }
@@ -47,9 +47,9 @@ module "iam_ecs_full_access" {
 # Taggable resources are only needed for admin full access
 # TODO: To avoid the policy exceed the characters count,
 # This should be moved to the taggable resources modules
+# TODO: MAke this a loop for all the availability region
 module "iam_ecs_taggable_resources_in_staging" {
-  source   = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs-taggable-resources?ref=v2022.05.18"
-  username = var.username
+  source = "../iam-policy-for-ecs-taggable-resources"
 
   region      = var.region
   environment = "staging"
@@ -57,8 +57,7 @@ module "iam_ecs_taggable_resources_in_staging" {
 }
 
 module "iam_ecs_taggable_resources_in_production" {
-  source   = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs-taggable-resources?ref=v2022.05.18"
-  username = var.username
+  source = "../iam-policy-for-ecs-taggable-resources"
 
   region      = var.region
   environment = "production"
@@ -67,14 +66,14 @@ module "iam_ecs_taggable_resources_in_production" {
 
 # TODO: Add some other policies based on project and staging
 data "aws_iam_policy_document" "ecs_list" {
-  statement {
-    sid = "AllowListAccessToECS"
-    actions = [
-      "ecs:DescribeClusters",
-      "ecs:ListClusters"
-    ]
-    resources = ["*"]
-  }
+  # statement {
+  #   sid = "AllowListAccessToECS"
+  #   actions = [
+  #     "ecs:DescribeClusters",
+  #     "ecs:ListClusters"
+  #   ]
+  #   resources = ["*"]
+  # }
 
   statement {
     sid = "AllowListAccessToECSRelevantResources"

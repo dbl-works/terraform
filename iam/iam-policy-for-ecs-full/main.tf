@@ -1,6 +1,6 @@
 data "aws_iam_policy_document" "ecs_full" {
   statement {
-    sid = "AllowWriteAccessToECS"
+    sid = "AllowFullAccessToECS"
     actions = [
       "ecs:*",
     ]
