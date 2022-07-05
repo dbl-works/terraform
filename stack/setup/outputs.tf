@@ -19,3 +19,7 @@ output "eips-nat" {
     for eip in aws_eip.nat : eip.public_ip
   ]
 }
+
+output "kms-key-replica-rds-arn" {
+  value = var.rds_cross_region_kms_key_arn == null ? "Not applicable if 'rds_cross_region_kms_key_arn' is not set." : module.kms-key-replica-rds[0].arn
+}
