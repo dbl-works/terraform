@@ -41,7 +41,6 @@ module "iam_ecs_taggable_resources_in_staging" {
   project_tag = "staging-admin-access-projects"
 }
 
-# TODO: Allow user to add this policy by passing in environment, region, and project_tag as variables
 module "iam_ecs_taggable_resources_in_production" {
   source = "../taggable-resources"
 
