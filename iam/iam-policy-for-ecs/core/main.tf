@@ -33,26 +33,14 @@ locals {
 }
 
 # Taggable resources are only needed for admin full access
-module "iam_ecs_taggable_resources_in_staging" {
-  source = "../taggable-resources"
-
-  region      = var.region
-  environment = "staging"
-  project_tag = "staging-admin-access-projects"
-}
-
-module "iam_ecs_taggable_resources_in_production" {
-  source = "../taggable-resources"
-
-  region      = var.region
-  environment = "production"
-  project_tag = "production-admin-access-projects"
-}
-
 module "iam_ecs_taggable_resources" {
   source = "../taggable-resources"
 
-  for_each = { for project in var.projects : "${project.environment}-${project.name}" => project }
+  for_each = {
+    for project in local.projects :
+    "${project.environment}-${project.name != null ?
+    "${project.name}-${project.region}" : "${project.project_tag}-${project.region}"}" => project
+  }
 
   region       = each.value.region
   environment  = each.value.environment
@@ -82,15 +70,14 @@ data "aws_iam_policy_document" "ecs_list" {
 }
 
 data "aws_iam_policy_document" "ecs_policy" {
-  source_policy_documents = concat(
+  source_policy_documents = flatten(
     [
       # All user should have list access so they can see the index page
       data.aws_iam_policy_document.ecs_list.json,
       data.aws_iam_policy_document.ecs_iam.json,
       data.aws_iam_policy_document.ecs_ssm.json,
 
-      module.iam_ecs_taggable_resources_in_staging.ecs_taggable_resources_policy,
-      module.iam_ecs_taggable_resources_in_production.ecs_taggable_resources_policy,
+      module.ecs_taggable_resources_policy.*.ecs_taggable_resources_policy,
 
       data.aws_iam_policy_document.ecs_read.json,
       data.aws_iam_policy_document.ecs_full.json
