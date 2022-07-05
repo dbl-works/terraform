@@ -164,7 +164,6 @@ output "accept_status-accepter" {
 output "rds_kms_key_arn" {
   value = module.stack.rds_kms_key_arn
 }
-
 ```
 
 
