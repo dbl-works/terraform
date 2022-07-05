@@ -79,4 +79,9 @@ output "app_secrets-kms-key" {
 output "terraform_secrets-kms-key" {
   value = module.stack-setup.terraform_secrets-kms-key
 }
+
+output "kms-key-replica-rds-arn" {
+  value = module.stack-setup.kms-key-replica-rds-arn
+}
+
 ```

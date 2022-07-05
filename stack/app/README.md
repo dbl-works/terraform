@@ -151,6 +151,20 @@ output "nlb_target_group_ecs_arn" {
   value = module.stack.nlb_target_group_ecs_arn
 }
 
+
+# When launching a stack with a read replica
+output "accept_status-requester" {
+  value = module.stack.accept_status-requester
+}
+
+output "accept_status-accepter" {
+  value = module.stack.accept_status-accepter
+}
+
+output "rds_kms_key_arn" {
+  value = module.stack.rds_kms_key_arn
+}
+
 ```
 
 
