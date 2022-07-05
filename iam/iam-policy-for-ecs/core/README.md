@@ -41,7 +41,29 @@ resource "aws_iam_user" "user" {
 }
 
 module "iam_ecs_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs?ref=v2022.05.18"
+  source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs/core?ref=v2022.05.18"
+
   username = <iam-user-name>
+  region   = "eu-central-1"
+
+  projects = [
+    {
+      name        = "facebook",
+      environment = "sandbox"
+      region      = "eu-central-1"
+      project_tag = "staging-admin-access-projects"
+    },
+    {
+      name        = "facebook",
+      environment = "load-testing"
+      region      = "eu-central-1"
+      project_tag = "staging-developer-access-projects"
+    },
+  ]
+
+  # We need to get the latest state of the user before apply the policy
+  depends_on = [
+    aws_iam_user.user
+  ]
 }
 ```

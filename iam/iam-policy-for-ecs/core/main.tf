@@ -50,15 +50,23 @@ module "iam_ecs_taggable_resources_in_production" {
   project_tag = "production-admin-access-projects"
 }
 
+module "iam_ecs_taggable_resources" {
+  for_each = { for project in var.projects : project.name => project }
+
+  region      = each.value.region
+  environment = each.value.environment
+  project_tag = each.value.project_tag
+}
+
 data "aws_iam_policy_document" "ecs_list" {
-  # statement {
-  #   sid = "AllowListAccessToECS"
-  #   actions = [
-  #     "ecs:DescribeClusters",
-  #     "ecs:ListClusters"
-  #   ]
-  #   resources = ["*"]
-  # }
+  statement {
+    sid = "AllowListAccessToECS"
+    actions = [
+      "ecs:DescribeClusters",
+      "ecs:ListClusters"
+    ]
+    resources = ["*"]
+  }
 
   statement {
     sid = "AllowListAccessToECSRelevantResources"
