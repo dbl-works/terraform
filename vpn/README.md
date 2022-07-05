@@ -19,10 +19,13 @@ module "outline-vpn" {
   key_name    = "outline-server-ssh"
 
   # optional
-  region        = "eu-central-1"
-  instance_type = "t3.micro"
+  region             = "eu-central-1"
+  instance_type      = "t3.micro"
+  availability_zones = ["${var.region}a", "${var.region}b", "${var.region}c"] # see warning below
 }
 ```
+
+:warning: not all regions have 3 availability zones, e.g. `us-west-1` only has `a` and `b` (as of July 2022).
 
 
 
