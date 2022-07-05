@@ -53,7 +53,7 @@ module "iam_ecs_taggable_resources_in_production" {
 module "iam_ecs_taggable_resources" {
   source = "../taggable-resources"
 
-  for_each = { for project in var.projects : project.name => project }
+  for_each = { for project in var.projects : "${project.environment}-${project.name}" => project }
 
   region       = each.value.region
   environment  = each.value.environment
