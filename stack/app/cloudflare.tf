@@ -1,5 +1,6 @@
 module "cloudflare" {
   source = "../../cloudflare"
+  count  = var.skip_cloudflare ? 0 : 1
 
   depends_on = [
     module.ecs,

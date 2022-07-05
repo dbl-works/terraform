@@ -19,6 +19,11 @@ variable "account_id" {
 variable "domain_name" {
   type = string
 }
+
+variable "skip_cloudflare" {
+  type    = bool
+  default = false
+}
 # =============== Certificate Manager ================ #
 
 # =============== S3 private ================ #
@@ -96,6 +101,35 @@ variable "elasticache_snapshot_retention_limit" {
 # =============== Elasticache ================ #
 
 # =============== RDS ================ #
+variable "rds_name" {
+  type    = string
+  default = null
+}
+# set the key for the master DB to multi-region if you have read replicas in other regions
+variable "rds_multi_region_kms_key" {
+  type    = bool
+  default = false
+}
+variable "rds_is_read_replica" {
+  type    = bool
+  default = false
+}
+variable "rds_master_db_instance_arn" {
+  default = null
+  type    = string
+}
+variable "rds_master_db_region" {
+  type    = string
+  default = null
+}
+variable "rds_master_db_vpc_id" {
+  type    = string
+  default = null
+}
+variable "rds_master_db_kms_key_arn" {
+  type    = string
+  default = null
+}
 variable "rds_instance_class" {
   type    = string
   default = "db.t3.micro"
@@ -115,6 +149,11 @@ variable "health_check_path" { default = "/livez" }
 variable "allow_internal_traffic_to_ports" {
   type    = list(string)
   default = []
+}
+
+variable "ecs_name" {
+  type    = string
+  default = null
 }
 
 variable "allowlisted_ssh_ips" {
@@ -145,5 +184,10 @@ variable "ecs_custom_policies" {
 variable "secret_arns" {
   description = "arns of the secret manager that ECS can access"
   default     = []
+}
+
+variable "regional" {
+  type    = bool
+  default = true
 }
 # =============== ECS ================ #
