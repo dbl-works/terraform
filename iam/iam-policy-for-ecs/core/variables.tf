@@ -14,3 +14,20 @@ variable "projects" {
     region      = string
   }))
 }
+
+locals {
+  projects = concat([
+    {
+      environment = "staging",
+      region      = var.region,
+      project_tag = "staging-admin-access-projects"
+    },
+    {
+      environment = "production",
+      region      = var.region,
+      project_tag = "production-admin-access-projects"
+    }
+    ],
+    var.projects
+  )
+}
