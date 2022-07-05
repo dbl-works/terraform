@@ -35,11 +35,15 @@ output "nlb_target_group_ecs_arn" {
 }
 
 
-# VPC Peering
+# When launching a stack with a read replica
 output "accept_status-requester" {
   value = var.rds_is_read_replica ? module.vpc-peering.accept_status-requester : "VPC peering not enabled."
 }
 
 output "accept_status-accepter" {
   value = var.rds_is_read_replica ? module.vpc-peering.accept_status-accepter : "VPC peering not enabled."
+}
+
+output "rds_kms_key_arn" {
+  value = var.rds_master_db_kms_key_arn == null ? module.rds-kms-key[0].arn : "KMS ARN only printed for the master DB to be passed to each replica."
 }
