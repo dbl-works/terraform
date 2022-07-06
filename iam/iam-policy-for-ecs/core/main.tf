@@ -45,7 +45,7 @@ module "iam_ecs_taggable_resources" {
   region       = each.value.region
   environment  = each.value.environment
   project_name = each.value.name
-  project_tag  = each.value.project_tag
+  project_tag  = lookup(each.value, "project_tag", null)
 }
 
 data "aws_iam_policy_document" "ecs_list" {
