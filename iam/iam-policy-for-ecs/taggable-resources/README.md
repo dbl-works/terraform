@@ -4,7 +4,7 @@ List of ECS related policy that is consist of taggable resources.
 Either project_name and project_tag needs to be present.
 
 - When `project_name` is present, access will be given to the resources with `Project` tags equals to the `project_name` value
-- When `project_tag` is present, access will be given to the resources with `Project` tags similar to that principal tag
+- When `project_tag` is present, access will be given to the resources with `Project` tags similar to that principal project tag
 
 ## Usage
 
