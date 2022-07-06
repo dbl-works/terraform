@@ -8,11 +8,7 @@ variable "region" {
 
 variable "projects" {
   default = []
-  type = set(object({
-    name        = string
-    environment = string
-    region      = string
-  }))
+  type    = set(object())
 }
 
 locals {
