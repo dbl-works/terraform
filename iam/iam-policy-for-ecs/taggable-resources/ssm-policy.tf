@@ -1,6 +1,9 @@
+locals {
+  sid_name = var.project_name != null ? "${title(var.environment)}-${title(var.project_name)}" : var.environment
+}
 data "aws_iam_policy_document" "ssm_policy" {
   statement {
-    sid = "AllowSsmStartSession"
+    sid = "AllowSsmStartSession${local.sid_name}"
     actions = [
       "ssm:StartSession"
     ]
@@ -26,7 +29,7 @@ data "aws_iam_policy_document" "ssm_policy" {
   }
 
   statement {
-    sid = "AllowSsmControlSession"
+    sid = "AllowSsmControlSession${local.sid_name}"
     actions = [
       "ssm:TerminateSession",
       "ssm:ResumeSession"
