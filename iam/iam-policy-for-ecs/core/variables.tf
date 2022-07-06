@@ -16,7 +16,7 @@ variable "projects" {
 }
 
 locals {
-  projects = concat([
+  projects = setunion([
     {
       environment = "staging",
       region      = var.region,
