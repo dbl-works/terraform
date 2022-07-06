@@ -71,13 +71,19 @@ data "aws_iam_policy_document" "ecs_list" {
 }
 
 data "aws_iam_policy_document" "ecs_policy" {
-  source_policy_documents = flatten(concat([
-    # All user should have list access so they can see the index page
-    data.aws_iam_policy_document.ecs_list.json,
-    data.aws_iam_policy_document.ecs_iam.json,
-    data.aws_iam_policy_document.ecs_ssm.json,
-    data.aws_iam_policy_document.ecs_read.json,
-    data.aws_iam_policy_document.ecs_full.json
+  source_policy_documents = flatten(concat(
+    [
+      # All user should have list access so they can see the index page
+      data.aws_iam_policy_document.ecs_list.json,
+      length(local.read_access_project_names) > 0 ? [
+        data.aws_iam_policy_document.ecs_read.json
+      ] : [],
+
+      length(local.full_access_project_names) > 0 ? [
+        data.aws_iam_policy_document.ecs_iam.json,
+        data.aws_iam_policy_document.ecs_ssm.json,
+        data.aws_iam_policy_document.ecs_full.json
+      ] : []
     ],
     [values(module.iam_ecs_taggable_resources)[*].ssm_policy]
   ))
