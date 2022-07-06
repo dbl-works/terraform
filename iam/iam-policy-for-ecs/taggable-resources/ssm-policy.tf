@@ -1,6 +1,7 @@
 locals {
-  sid_name = var.project_name != null ? "${title(var.environment)}-${title(var.project_name)}" : var.environment
+  sid_name = var.project_name != null ? "${title(var.environment)}-${title(var.project_name)}" : title(var.environment)
 }
+
 data "aws_iam_policy_document" "ssm_policy" {
   statement {
     sid = "AllowSsmStartSession${local.sid_name}"
