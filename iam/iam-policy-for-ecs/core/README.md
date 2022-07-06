@@ -1,4 +1,4 @@
-# Terraform Module: IAM - S3
+# Terraform Module: IAM Policy for ECS - Core
 
 User based ECS policy
 

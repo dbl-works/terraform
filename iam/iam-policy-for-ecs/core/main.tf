@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "ecs_policy" {
         data.aws_iam_policy_document.ecs_full.json
       ] : []
     ],
-    [values(module.iam_ecs_taggable_resources)[*].ssm_policy]
+    [values(module.iam_ecs_taggable_resources)[*].policy_json]
   ))
 }
 
