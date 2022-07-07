@@ -16,12 +16,12 @@ variable "instance_type" {
   default = "t3.micro"
 }
 
-variable "availability_zones" {
-  type    = list(any)
+variable "availability_zone" {
+  type    = string
   default = null
 }
 
 # can't use variables inside other variables, so we need to define a local variable
 locals {
-  availability_zones = var.availability_zones == null ? ["${var.region}a", "${var.region}b", "${var.region}c"] : var.availability_zones
+  availability_zone = var.availability_zone == null ? "${var.region}a" : var.availability_zone
 }
