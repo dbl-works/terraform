@@ -21,7 +21,7 @@ module "outline-vpn" {
   # optional
   region             = "eu-central-1"
   instance_type      = "t3.micro"
-  availability_zones = ["${var.region}a", "${var.region}b", "${var.region}c"] # see warning below
+  availability_zone  = "${var.region}a" # see warning below
 }
 ```
 
