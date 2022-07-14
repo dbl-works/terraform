@@ -1,5 +1,5 @@
 resource "aws_security_group" "main" {
-  name   = "${var.project}-${var.environment}-elasticache"
+  name   = local.name
   vpc_id = var.vpc_id
 
   tags = {

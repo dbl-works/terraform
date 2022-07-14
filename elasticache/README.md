@@ -22,6 +22,7 @@ module "elasticache" {
   node_count = 1
 
   # optional
+  name                 = "${var.project}-${var.environment}-elasticache" # pass a different name if you run multiple Redis clusters
   node_type            = "cache.t3.micro"
   engine_version       = "6.x"
   cluster_mode         = true

@@ -54,3 +54,12 @@ variable "data_tiering_enabled" {
   type    = bool
   default = false
 }
+
+variable "name" {
+  type    = string
+  default = null
+}
+
+locals {
+  name = var.name == null ? "${var.project}-${var.environment}-elasticache" : var.name
+}
