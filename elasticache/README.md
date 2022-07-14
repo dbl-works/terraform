@@ -21,9 +21,10 @@ module "elasticache" {
   node_count = 1
 
   # optional
-  node_type  = "cache.t3.micro"
-  engine_version = "6.x"
-  cluster_mode = true
+  node_type            = "cache.t3.micro"
+  engine_version       = "6.x"
+  cluster_mode         = true
+  data_tiering_enabled = false # only available for "r6gd" node types
 
   # To enable cluster mode, use a parameter group that has cluster mode enabled.
   # The default parameter groups provided by AWS end with ".cluster.on", for example default.redis6.x.cluster.on.

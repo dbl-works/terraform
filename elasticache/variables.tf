@@ -49,3 +49,8 @@ variable "cluster_mode" {
   type    = bool
   default = true
 }
+
+variable "data_tiering_enabled" {
+  type    = bool
+  default = false
+}
