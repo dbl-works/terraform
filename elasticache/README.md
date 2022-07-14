@@ -15,6 +15,7 @@ module "elasticache" {
   vpc_id             = module.vpc.id
   vpc_cidr           = local.cidr_block
   subnet_ids         = module.vpc.subnet_private_ids
+  kms_key_arn        = var.kms_key_arn # "kms_app_arn" if you use the "stack" module, i.e. the key used for the application
 
   # required only for non cluster mode
   availability_zones = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
