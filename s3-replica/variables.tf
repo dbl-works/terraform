@@ -12,5 +12,6 @@ variable "versioning" {
 }
 
 variable "kms_key_arn" {
-  type = string
+  default = null
+  type    = string
 }

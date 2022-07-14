@@ -28,8 +28,8 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
   bucket = data.aws_s3_bucket.source.id
 
   rule {
-    id     = "replica-rules"
-    status = "Enabled"
+    id     = "replica-rules-for-private-bucket"
+    status = var.kms_key_arn == null ? "Disabled" : "Enabled"
 
     source_selection_criteria {
       # By default, Amazon S3 doesn't replicate objects that are stored at rest using server-side encryption
@@ -51,6 +51,23 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
         replica_kms_key_id = var.kms_key_arn
       }
 
+      # S3 Replication Time Control (S3 RTC) helps you meet compliance or business requirements for data replication and
+      # provides visibility into Amazon S3 replication times.
+      # S3 RTC replicates most objects that you upload to Amazon S3 in seconds,
+      # and 99.99 percent of those objects within 15 minutes.
+      replication_time = {
+        status  = "Enabled"
+        minutes = 15
+      }
+    }
+  }
+
+  rule {
+    id     = "replica-rules-for-public-bucket"
+    status = var.kms_key_arn == null ? "Enabled" : "Disabled"
+
+    destination {
+      bucket = aws_s3_bucket.replica.arn
       # S3 Replication Time Control (S3 RTC) helps you meet compliance or business requirements for data replication and
       # provides visibility into Amazon S3 replication times.
       # S3 RTC replicates most objects that you upload to Amazon S3 in seconds,
