@@ -11,8 +11,7 @@ data "aws_s3_bucket" "source" {
 resource "aws_s3_bucket" "replica" {
   provider = aws.replica
 
-  # todo: think about the replica name, should name after region
-  bucket = "${var.source_bucket_name}-replica-${var.replica_region}"
+  bucket = "${var.source_bucket_name}-replica-${var.region}"
 }
 
 resource "aws_s3_bucket_versioning" "replica" {

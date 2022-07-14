@@ -4,7 +4,6 @@ module "kms-key-s3-replica" {
 
   source = "../kms-key"
 
-  # TODO: replica bucket name
   alias                   = "s3-${var.bucket_name}-replica-${each.key}"
   project                 = var.project
   environment             = var.environment

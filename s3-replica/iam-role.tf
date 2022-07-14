@@ -1,6 +1,5 @@
 resource "aws_iam_role" "replication" {
-  # TODO: role for the bucket name
-  name = "s3-replication-role"
+  name = "s3-replication-role-for-${var.source_bucket_name}-${var.region}"
 
   assume_role_policy = <<POLICY
 {
