@@ -15,3 +15,8 @@ variable "primary_storage_class_retention" {
   type        = number
   description = "Number of days before objects stay in the primary storage class"
 }
+
+variable "replica_regions" {
+  type    = list(string)
+  default = []
+}
