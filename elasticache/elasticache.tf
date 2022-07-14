@@ -58,6 +58,7 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
   apply_immediately          = true
   multi_az_enabled           = true
   automatic_failover_enabled = true
+  data_tiering_enabled       = var.data_tiering_enabled
 
   security_group_ids = [
     "${aws_security_group.main.id}",
