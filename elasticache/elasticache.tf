@@ -1,6 +1,6 @@
 resource "aws_elasticache_replication_group" "non_cluster_mode" {
   count                       = var.cluster_mode ? 0 : 1
-  replication_group_id        = "${var.project}-${var.environment}"
+  replication_group_id        = local.cluster_name
   description                 = "Collection of Redis (cluster mode disabled) for ${var.project}-${var.environment}"
   engine                      = "redis"
   node_type                   = var.node_type
@@ -44,7 +44,7 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
 
 resource "aws_elasticache_replication_group" "cluster_mode" {
   count                      = var.cluster_mode ? 1 : 0
-  replication_group_id       = "${var.project}-${var.environment}"
+  replication_group_id       = local.cluster_name
   description                = "Collection of Redis (clusters mode) for ${var.project}-${var.environment}"
   engine                     = "redis"
   node_type                  = var.node_type

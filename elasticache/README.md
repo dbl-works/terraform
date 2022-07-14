@@ -22,7 +22,7 @@ module "elasticache" {
   node_count = 1
 
   # optional
-  name                 = "${var.project}-${var.environment}-elasticache" # pass a different name if you run multiple Redis clusters
+  name                 = null # pass e.g. "sidekiq" to append this to all names when you launch a 2nd Redis cluster for Sidekiq (see below)
   node_type            = "cache.t3.micro"
   engine_version       = "6.x"
   cluster_mode         = true
@@ -42,6 +42,11 @@ module "elasticache" {
   replicas_per_node_group = 1
 }
 ```
+
+
+Sidekiq does not work with cluster mode. The recommended setup is to have:
+* one Redis cluster (cluster-mode on) for caching
+* one Redis cluster (cluster-mode off) for Sidekiq
 
 
 

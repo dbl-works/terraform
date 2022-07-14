@@ -61,5 +61,6 @@ variable "name" {
 }
 
 locals {
-  name = var.name == null ? "${var.project}-${var.environment}-elasticache" : var.name
+  elasticache_name = var.name == null ? "${var.project}-${var.environment}-elasticache" : "${var.project}-${var.environment}-${var.name}-elasticache"
+  cluster_name     = var.name == null ? "${var.project}-${var.environment}" : "${var.project}-${var.environment}-${var.name}"
 }
