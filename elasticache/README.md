@@ -26,7 +26,7 @@ module "elasticache" {
   node_type            = "cache.t3.micro"
   engine_version       = "6.x"
   cluster_mode         = true
-  data_tiering_enabled = false # only available for "r6gd" node types
+  data_tiering_enabled = false # only available for "r6gd" node types (see warning below)
 
   # To enable cluster mode, use a parameter group that has cluster mode enabled.
   # The default parameter groups provided by AWS end with ".cluster.on", for example default.redis6.x.cluster.on.
@@ -47,6 +47,18 @@ module "elasticache" {
 Sidekiq does not work with cluster mode. The recommended setup is to have:
 * one Redis cluster (cluster-mode on) for caching
 * one Redis cluster (cluster-mode off) for Sidekiq
+
+:warning: If the node type is from the `r6gd` family, be aware that availability is limited to the following regions:
+* us-east-2, us-east-1
+* us-west-2, us-west-1, eu-west-1
+* eu-central-1
+* ap-northeast-1
+* ap-southeast-1, ap-southeast-2
+* ap-south-1
+* ca-central-1
+* sa-east-1
+
+As of July 2022. Also, you **must** use Reds `6.2` or later.
 
 
 
