@@ -1,5 +1,7 @@
 resource "aws_s3_bucket_replication_configuration" "replication_for_private_bucket" {
   count  = var.enable_encryption ? 1 : 0
+  provider = "aws.source"
+
   role   = aws_iam_role.replication.arn
   bucket = var.source_bucket_arn
 
