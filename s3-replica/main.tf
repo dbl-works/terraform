@@ -1,7 +1,5 @@
-provider "aws" {
-  alias = "replica"
-
-  region = var.region
+locals {
+  replica_bucket_name = "${var.source_bucket_name}-replica-${var.region}"
 }
 
 data "aws_s3_bucket" "source" {
@@ -9,14 +7,17 @@ data "aws_s3_bucket" "source" {
 }
 
 resource "aws_s3_bucket" "replica" {
-  provider = aws.replica
+  bucket = local.replica_bucket_name
 
-  bucket = "${var.source_bucket_name}-replica-${var.region}"
+  tags = {
+    Name        = local.replica_bucket_name
+    Project     = var.project
+    Environment = var.environment
+  }
 }
 
 resource "aws_s3_bucket_versioning" "replica" {
-  provider = aws.replica
-  bucket   = aws_s3_bucket.replica.id
+  bucket = aws_s3_bucket.replica.id
 
   versioning_configuration {
     status = var.versioning ? "Enabled" : "Disabled"

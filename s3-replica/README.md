@@ -13,7 +13,9 @@ resource "aws_s3_bucket_versioning" "main-bucket-versioning" {
   }
 }
 
-module "s3-replica" {
+
+# For private bucket
+module "s3-replica-for-private-bucket" {
   source = "../s3-replica"
 
   region             = var.region
@@ -31,4 +33,18 @@ module "s3-replica" {
     aws_s3_bucket_versioning.main-bucket-versioning
   ]
 }
+
+# For public bucket
+module "s3-replica-for-public-bucket" {
+  source = "../s3-replica"
+
+  region             = var.region
+  source_bucket_name = var.bucket_name
+  versioning         = var.versioning
+
+  depends_on = [
+    aws_s3_bucket_versioning.main-bucket-versioning
+  ]
+}
+
 ```

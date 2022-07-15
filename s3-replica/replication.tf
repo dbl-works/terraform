@@ -1,11 +1,12 @@
 resource "aws_s3_bucket_replication_configuration" "replication_for_private_bucket" {
-  count  = var.kms_key_arn == null ? 0 : 1
+  count  = var.enable_encryption ? 1 : 0
   role   = aws_iam_role.replication.arn
   bucket = data.aws_s3_bucket.source.id
 
   rule {
     id     = "replica-rules-for-private-bucket"
     status = "Enabled"
+
     source_selection_criteria {
       # By default, Amazon S3 doesn't replicate objects that are stored at rest using server-side encryption
       # with customer managed keys stored in AWS KMS.
@@ -23,7 +24,7 @@ resource "aws_s3_bucket_replication_configuration" "replication_for_private_buck
       # of the key.
       encryption_configuration {
         # The KMS key must have been created in the same AWS Region as the destination buckets.
-        replica_kms_key_id = var.kms_key_arn
+        replica_kms_key_id = module.kms_key.arn
       }
 
       # S3 Replication Time Control (S3 RTC) helps you meet compliance or business requirements for data replication and
@@ -39,14 +40,14 @@ resource "aws_s3_bucket_replication_configuration" "replication_for_private_buck
 }
 
 resource "aws_s3_bucket_replication_configuration" "replication_for_public_bucket" {
-  count = var.kms_key_arn == null ? 1 : 0
+  count = var.enable_encryption ? 0 : 1
 
   role   = aws_iam_role.replication.arn
   bucket = data.aws_s3_bucket.source.id
 
   rule {
     id     = "replica-rules-for-public-bucket"
-    status = var.kms_key_arn == null ? "Enabled" : "Disabled"
+    status = "Enabled"
 
     destination {
       bucket = aws_s3_bucket.replica.arn
