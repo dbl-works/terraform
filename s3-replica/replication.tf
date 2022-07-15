@@ -1,7 +1,7 @@
 resource "aws_s3_bucket_replication_configuration" "replication_for_private_bucket" {
   count  = var.enable_encryption ? 1 : 0
   role   = aws_iam_role.replication.arn
-  bucket = data.aws_s3_bucket.source.id
+  bucket = var.source_bucket_arn
 
   rule {
     id     = "replica-rules-for-private-bucket"
@@ -39,11 +39,13 @@ resource "aws_s3_bucket_replication_configuration" "replication_for_private_buck
   }
 }
 
+# Does this need to be in the specified region
 resource "aws_s3_bucket_replication_configuration" "replication_for_public_bucket" {
-  count = var.enable_encryption ? 0 : 1
+  count    = var.enable_encryption ? 0 : 1
+  provider = "aws.source"
 
   role   = aws_iam_role.replication.arn
-  bucket = data.aws_s3_bucket.source.id
+  bucket = var.source_bucket_arn
 
   rule {
     id     = "replica-rules-for-public-bucket"

@@ -1,8 +1,19 @@
+variable "project" {
+  type = string
+}
+
+variable "environment" {
+  type = string
+}
 variable "region" {
   type = string
 }
 
 variable "source_bucket_name" {
+  type = string
+}
+
+variable "source_bucket_arn" {
   type = string
 }
 
@@ -24,12 +35,4 @@ variable "kms_deletion_window_in_days" {
 variable "kms_key_arn" {
   default = null
   type    = string
-}
-
-variable "project" {
-  type = string
-}
-
-variable "environment" {
-  type = string
 }

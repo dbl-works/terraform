@@ -2,10 +2,6 @@ locals {
   replica_bucket_name = "${var.source_bucket_name}-replica-${var.region}"
 }
 
-data "aws_s3_bucket" "source" {
-  bucket = var.source_bucket_name
-}
-
 resource "aws_s3_bucket" "replica" {
   bucket = local.replica_bucket_name
 
