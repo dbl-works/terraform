@@ -1,11 +1,11 @@
-resource "aws_s3_bucket_replication_configuration" "replication" {
+resource "aws_s3_bucket_replication_configuration" "replication_for_private_bucket" {
+  count  = var.kms_key_arn == null ? 0 : 1
   role   = aws_iam_role.replication.arn
   bucket = data.aws_s3_bucket.source.id
 
   rule {
     id     = "replica-rules-for-private-bucket"
-    status = var.kms_key_arn == null ? "Disabled" : "Enabled"
-
+    status = "Enabled"
     source_selection_criteria {
       # By default, Amazon S3 doesn't replicate objects that are stored at rest using server-side encryption
       # with customer managed keys stored in AWS KMS.
@@ -36,6 +36,13 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
       }
     }
   }
+}
+
+resource "aws_s3_bucket_replication_configuration" "replication_for_public_bucket" {
+  count = var.kms_key_arn == null ? 1 : 0
+
+  role   = aws_iam_role.replication.arn
+  bucket = data.aws_s3_bucket.source.id
 
   rule {
     id     = "replica-rules-for-public-bucket"
