@@ -22,6 +22,7 @@ jobs:
           - rds
           - s3-private
           - s3-public
+          - s3-replica
           - secrets
           - stack/app
           - stack/setup
