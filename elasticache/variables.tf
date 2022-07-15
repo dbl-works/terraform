@@ -49,3 +49,18 @@ variable "cluster_mode" {
   type    = bool
   default = true
 }
+
+variable "data_tiering_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "name" {
+  type    = string
+  default = null
+}
+
+locals {
+  elasticache_name = var.name == null ? "${var.project}-${var.environment}-elasticache" : "${var.project}-${var.environment}-${var.name}-elasticache"
+  cluster_name     = var.name == null ? "${var.project}-${var.environment}" : "${var.project}-${var.environment}-${var.name}"
+}
