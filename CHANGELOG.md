@@ -10,7 +10,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## ElastiCache
 - added `data_tiering_enabled` to the available options, defaulting to `false`
-
+- added `name` as optional parameter in case multiple Redis-Clusters need to be launched for the same project/environment
 
 ## [v2022.07.08]
 
