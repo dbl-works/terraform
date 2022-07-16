@@ -47,4 +47,15 @@ module "s3-replica-for-public-bucket" {
   ]
 }
 
+module "s3_replica" {
+  source = "../s3-replica"
+  count = length(var.replica_regions)
+
+  region             = var.replica_regions[count.index]
+  source_bucket_name = var.bucket_name
+  versioning         = var.versioning
+
+  kms_deletion_window_in_days = var.kms_deletion_window_in_days
+}
+
 ```

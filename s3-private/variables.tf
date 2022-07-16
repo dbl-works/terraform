@@ -20,3 +20,11 @@ variable "primary_storage_class_retention" {
   type        = number
   description = "Number of days before objects stay in the primary storage class"
 }
+
+variable "s3_replicas" {
+  default = []
+  type        = set(object({
+    bucket_arn = string
+    kms_arn = string
+  }))
+}
