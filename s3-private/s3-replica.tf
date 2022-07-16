@@ -65,22 +65,21 @@ POLICY
 resource "aws_iam_role_policy_attachment" "replication" {
   count = length(var.s3_replicas) > 0 ? 1: 0
 
-  role       = aws_iam_role.replication.name
-  policy_arn = aws_iam_policy.replication.arn
+  role       = aws_iam_role.replication[0].name
+  policy_arn = aws_iam_policy.replication[0].arn
 }
 
-# Does this need to be in the specified region
-resource "aws_s3_bucket_replication_configuration" "replication_for_public_bucket" {
+resource "aws_s3_bucket_replication_configuration" "replication" {
   count = length(var.s3_replicas) > 0 ? 1: 0
 
-  role   = aws_iam_role.replication.arn
+  role   = aws_iam_role.replication[0].arn
   bucket = aws_s3_bucket.main.arn
 
-  dynamic "replica" {
+  dynamic "rule" {
     for_each = var.s3_replicas
 
-    rule {
-      id     = "replica-rules-for-private-bucket-${replica.key}"
+    content {
+      id     = "replica-rules-for-private-bucket-${rule.key}"
       status = "Enabled"
 
       source_selection_criteria {
@@ -93,23 +92,25 @@ resource "aws_s3_bucket_replication_configuration" "replication_for_public_bucke
         }
       }
       destination {
-        bucket = replica.value.bucket_arn
+        bucket = rule.value.bucket_arn
         # You can use multi-Region AWS KMS keys in Amazon S3.
         # However, Amazon S3 currently treats multi-Region keys as though
         # they were single-Region keys, and does not use the multi-Region features
         # of the key.
         encryption_configuration {
           # The KMS key must have been created in the same AWS Region as the destination buckets.
-          replica_kms_key_id = replica.value.kms_arn
+          replica_kms_key_id = rule.value.kms_arn
         }
 
         # S3 Replication Time Control (S3 RTC) helps you meet compliance or business requirements for data replication and
         # provides visibility into Amazon S3 replication times.
         # S3 RTC replicates most objects that you upload to Amazon S3 in seconds,
         # and 99.99 percent of those objects within 15 minutes.
-        replication_time = {
+        replication_time {
           status  = "Enabled"
-          minutes = 15
+          time {
+            minutes = 15
+          }
         }
       }
     }
