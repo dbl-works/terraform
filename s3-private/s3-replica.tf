@@ -1,6 +1,6 @@
 resource "aws_iam_role" "replication" {
   count = length(var.s3_replicas) > 0 ? 1: 0
-  name = "s3-replication-role-for-${var.source_bucket_name}-${var.region}"
+  name = "s3-replication-role-for-${var.bucket_name}-replica"
 
   assume_role_policy = <<POLICY
 {
@@ -74,13 +74,13 @@ resource "aws_s3_bucket_replication_configuration" "replication_for_public_bucke
   count = length(var.s3_replicas) > 0 ? 1: 0
 
   role   = aws_iam_role.replication.arn
-  bucket = var.source_bucket_arn
+  bucket = aws_s3_bucket.main.arn
 
   dynamic "replica" {
     for_each = var.s3_replicas
 
     rule {
-      id     = "replica-rules-for-private-bucket-${replica_region.value.replica_bucket}"
+      id     = "replica-rules-for-private-bucket-${replica.key}"
       status = "Enabled"
 
       source_selection_criteria {

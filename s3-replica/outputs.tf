@@ -2,7 +2,7 @@ output "arn" {
   value = aws_s3_bucket.replica.arn
 }
 
-output "replica_bucket" {
+output "bucket_name" {
   value = aws_s3_bucket.replica.bucket
 }
 

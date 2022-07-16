@@ -5,33 +5,27 @@ A repository for setting up an S3 bucket replica
 ## Usage
 
 ```terraform
-# Source bucket versioning need to be setup before the replica
-resource "aws_s3_bucket_versioning" "main-bucket-versioning" {
-  bucket = aws_s3_bucket.main.id
-  versioning_configuration {
-    status = var.versioning ? "Enabled" : "Disabled"
-  }
+provider "aws" {
+  alias  = "replica"
+  region = 'ap-southeast-1'
 }
-
 
 # For private bucket
 module "s3-replica-for-private-bucket" {
-  source = "../s3-replica"
+  source = "github.com/dbl-works/terraform//s3-replica?ref=v2021.07.05"
+  providers = {
+    aws.replica = "aws.replica"
+  }
 
-  region             = var.region
-  source_bucket_name = var.bucket_name
-  versioning         = var.versioning
+  region             = 'ap-southeast-1'
+  environment        = "staging"
+  project            = "someproject"
+  source_bucket_name = "someproject-staging-storage"
 
   # Optional
-
-  # Amazon S3 currently treats multi-Region keys as though
-  # they were single-Region keys, and does not use the multi-Region features
-  # Therefore, if the replica also need to be encrypted, a kms key in the destination bucket region needs to be provided
-  kms_key_arn        = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
-
-  depends_on = [
-    aws_s3_bucket_versioning.main-bucket-versioning
-  ]
+  versioning                  = var.versioning
+  kms_deletion_window_in_days = 30
+  enable_encryption           = true
 }
 
 # For public bucket
