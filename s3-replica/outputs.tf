@@ -7,5 +7,5 @@ output "replica_bucket" {
 }
 
 output "kms_arn" {
-  value = module.kms_key.arn
+  value = module.kms_key.*.arn[0]
 }
