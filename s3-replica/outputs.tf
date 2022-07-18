@@ -7,5 +7,5 @@ output "bucket_name" {
 }
 
 output "kms_arn" {
-  value = module.kms_key.*.arn[0]
+  value = length(module.kms_key) > 0 ? module.kms_key[0].arn : null
 }
