@@ -5,7 +5,8 @@ A repository for setting up an S3 bucket replica
 ## Usage
 
 ```terraform
-module "s3-storage" {
+# For private bucket
+module "s3-private" {
   source = "github.com/dbl-works/terraform//s3-private?ref=v2021.11.13"
 
   # Required
@@ -32,7 +33,7 @@ provider "aws" {
   region = 'ap-southeast-1'
 }
 
-# For private bucket
+
 module "s3-replica-for-private-bucket" {
   source = "github.com/dbl-works/terraform//s3-replica?ref=v2021.07.05"
   providers = {
@@ -51,27 +52,33 @@ module "s3-replica-for-private-bucket" {
 }
 
 # For public bucket
+module "s3-public" {
+  source = "github.com/dbl-works/terraform//s3-public?ref=v2021.11.13"
+
+  # Required
+  environment = "staging"
+  project     = "someproject"
+  bucket_name = "someproject-staging-frontend"
+
+  # Optional
+  versioning                      = false
+  primary_storage_class_retention = 0
+}
+
 module "s3-replica-for-public-bucket" {
-  source = "../s3-replica"
+  source = "github.com/dbl-works/terraform//s3-replica?ref=v2021.07.05"
+  providers = {
+    aws.replica = "aws.replica"
+  }
 
-  region             = var.region
-  source_bucket_name = var.bucket_name
-  versioning         = var.versioning
+  region             = 'ap-southeast-1'
+  environment        = "staging"
+  project            = "someproject"
+  # Change this to bucket name
+  source_bucket_name = "someproject-staging-frontend"
 
-  depends_on = [
-    aws_s3_bucket_versioning.main-bucket-versioning
-  ]
+  # Optional
+  versioning                  = var.versioning
+  enable_encryption           = false
 }
-
-module "s3_replica" {
-  source = "../s3-replica"
-  count = length(var.replica_regions)
-
-  region             = var.replica_regions[count.index]
-  source_bucket_name = var.bucket_name
-  versioning         = var.versioning
-
-  kms_deletion_window_in_days = var.kms_deletion_window_in_days
-}
-
 ```
