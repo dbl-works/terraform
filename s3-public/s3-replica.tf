@@ -74,8 +74,6 @@ resource "aws_iam_role_policy_attachment" "replication" {
 resource "aws_s3_bucket_replication_configuration" "replication" {
   count = length(var.s3_replicas) > 0 ? 1: 0
 
-  depends_on = [aws_s3_bucket_versioning.main-bucket-versioning]
-
   role   = aws_iam_role.replication[0].arn
   bucket = aws_s3_bucket.main.id
 
@@ -97,26 +95,8 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
         status = "Enabled"
       }
 
-      source_selection_criteria {
-        # By default, Amazon S3 doesn't replicate objects that are stored at rest using server-side encryption
-        # with customer managed keys stored in AWS KMS.
-        # This setup will required a source kms key for the replication source bucket.
-
-        sse_kms_encrypted_objects {
-          status = "Enabled"
-        }
-      }
       destination {
         bucket = rule.value.bucket_arn
-        # You can use multi-Region AWS KMS keys in Amazon S3.
-        # However, Amazon S3 currently treats multi-Region keys as though
-        # they were single-Region keys, and does not use the multi-Region features
-        # of the key.
-        encryption_configuration {
-          # The KMS key must have been created in the same AWS Region as the destination buckets.
-          replica_kms_key_id = rule.value.kms_arn
-        }
-
         metrics {
           event_threshold {
             minutes = 15

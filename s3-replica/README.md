@@ -67,6 +67,16 @@ module "s3-public" {
   # Optional
   versioning                      = false
   primary_storage_class_retention = 0
+  s3_replicas                     = {
+    "${module.s3-replica-for-public-bucket.bucket_name}" = {
+      # "arn:aws:s3:::staging-storage-ap-southeast-1"
+      bucket_arn = module.s3-replica-for-public-bucket.arn
+    }
+  }
+
+  depends_on = [
+    module.s3-replica-for-public-bucket
+  ]
 }
 
 module "s3-replica-for-public-bucket" {
