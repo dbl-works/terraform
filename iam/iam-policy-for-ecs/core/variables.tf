@@ -3,7 +3,7 @@ variable "username" {
 }
 
 variable "project_access" {
-  type = map
+  type = map(any)
 }
 
 variable "region" {

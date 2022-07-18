@@ -46,8 +46,8 @@ module "iam_ecs_taggable_resources" {
     "${project.name}" = project
   }]
 
-  region       = var.region
-  environment  = each.value.environment
+  region      = var.region
+  environment = each.value.environment
   # If we already have the project_name, we can skip the project_tag
   project_name = each.value.name
 }
