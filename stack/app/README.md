@@ -41,7 +41,8 @@ module "stack" {
   ]
 
   # Optional
-  region     = "eu-central-1"
+  region          = "eu-central-1"
+  skip_cloudflare = false
 
   # S3 Private
   private_buckets_list = [
@@ -75,22 +76,41 @@ module "stack" {
   rds_engine_version     = "13"
   rds_allocated_storage  = 100
 
+  ## set these, if you want to create a read-replica instead of a master DB
+  ## the master-instance-arn MUST be the ARN of the DB, if the master DB is in
+  ## another region. Otherwise, the instance-identifier may be used.
+  ## Will create a VPC Peering Resource to allow connections to the master DB;
+  ## This stack is the requester, the stack with the main DB is the accepter.
+  ## The master-DB KMS key arn must be passed to allow decrypting the master DB.
+  rds_is_read_replica        = false
+  rds_master_db_instance_arn = null
+  rds_master_db_region       = null
+  rds_master_db_vpc_id       = null
+  rds_master_db_kms_key_arn  = null
+  rds_name                   = null # unique name, shouldn't be necessary if "regional" is set to true
+  rds_multi_region_kms_key   = false # set to true for the MASTER stack, so that replicas can create a replica of the key
+
   # ECS
   allow_internal_traffic_to_ports = []
-  allowlisted_ssh_ips = []
-  grant_read_access_to_s3_arns = []
-  grant_write_access_to_s3_arns = []
-  grant_read_access_to_sqs_arns  = []
-  grant_write_access_to_sqs_arns = []
-  ecs_custom_policies = []
+  allowlisted_ssh_ips             = []
+  grant_read_access_to_s3_arns    = []
+  grant_write_access_to_s3_arns   = []
+  grant_read_access_to_sqs_arns   = []
+  grant_write_access_to_sqs_arns  = []
+  ecs_custom_policies             = []
   # This is only needed when we want to add additional secrets to the ECS
   secret_arns = []
+  # appends region to the name (usually ${project}-${environment}) for globally unique names
+  regional = true
+
+  ecs_name = null # custom name when convention exceeds 32 chars
 
   # Elasticache
   elasticache_node_type                     = "cache.t3.micro"
   elasticache_replicas_per_node_group       = 1
   elasticache_shards_per_replication_group  = 1
   elasticache_snapshot_retention_limit      = 0
+  elasticache_data_tiering_enabled          = false # see the README in the Elasticache Module
 
   # vpc
   vpc_cidr_block = "10.0.0.0/16"
@@ -132,6 +152,19 @@ output "nlb_target_group_ecs_arn" {
   value = module.stack.nlb_target_group_ecs_arn
 }
 
+
+# When launching a stack with a read replica
+output "accept_status-requester" {
+  value = module.stack.accept_status-requester
+}
+
+output "accept_status-accepter" {
+  value = module.stack.accept_status-accepter
+}
+
+output "rds_kms_key_arn" {
+  value = module.stack.rds_kms_key_arn
+}
 ```
 
 

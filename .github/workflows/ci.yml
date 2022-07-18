@@ -20,6 +20,7 @@ jobs:
           - iam/iam-policy-for-s3
           - iam/iam-policy-for-taggable-resources
           - kms-key
+          - kms-key-replica
           - nat
           - rds
           - s3-private
@@ -28,7 +29,8 @@ jobs:
           - stack/app
           - stack/setup
           - vpc
-          # - vpn # TODO: Figure out private module access
+          - vpc-peering
+          - vpn
       fail-fast: false
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
@@ -43,6 +45,10 @@ jobs:
       - name: validate
         run: |
           cd ${{ matrix.module }}
+          # the stack/app module must have a provider block because the sub-module "vpc-peering" requires a non-standard "provider
+          # see: https://github.com/hashicorp/terraform/issues/28490
+          if [[ "${{ matrix.module }}" == "stack/app" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> vpc-peering.tf; fi
+          if [[ "${{ matrix.module }}" == "vpc-peering" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> main.tf; fi
           terraform validate
 
       - name: fmt -check

@@ -12,6 +12,7 @@ We create modules here for re-use between projects.
 - [ecs](ecs/README.md) - Compute cluster for running docker containers.
 - [elasticache](elasticache/README.md) - elasticache cluster based on Redis.
 - [kms-key](kms-key/README.md) - Encryption keys for securing various AWS resources.
+- [kms-key-replica](kms-key-replica/README.md) - KMS Key replica for cross-regional access to encryption keys.
 - [nat](nat/README.md) - A reopsitory for setting up a network address translation (NAT).
 - [rds](rds/README.md) - Used for creating and configuring databases and their networking.
 - [s3-private](s3-private/README.md) - Private, encrypted S3 bucket with versioning.
@@ -19,6 +20,7 @@ We create modules here for re-use between projects.
 - [secrets](secrets/README.md) - Used for creating a new secret.
 - [stack](stack/README.md) - Creates all resources required to launch and entire application
 - [vpc](vpc/README.md) - Creates a VPC in AWS account. Also generates a group fo public and private submodules.
+- [vpc-peering](vpc-peering/README.md) - Creates a VPC Peering Resource.
 - [vpn](vpn/README.md) - Launches an isolated Outline VPN inside a new VPC.
 
 

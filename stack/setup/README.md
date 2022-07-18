@@ -48,12 +48,16 @@ module "stack-setup" {
   domain             = "example.com"
 
   # Optional
-  add_wildcard_subdomains = true
-  alternative_domains         = []
+  add_wildcard_subdomains        = true
+  alternative_domains            = []
+  is_read_replica_on_same_domain = false # skips cloudflare
 
   # KMS
   kms_deletion_window_in_days = 30
   eips_nat_count              = 1 # for production use, set this to the number of AZs
+
+  # In case this stack has a read-replica RDS in a different region
+  rds_cross_region_kms_key_arn = null
 }
 ```
 
@@ -75,4 +79,9 @@ output "app_secrets-kms-key" {
 output "terraform_secrets-kms-key" {
   value = module.stack-setup.terraform_secrets-kms-key
 }
+
+output "kms-key-replica-rds-arn" {
+  value = module.stack-setup.kms-key-replica-rds-arn
+}
+
 ```

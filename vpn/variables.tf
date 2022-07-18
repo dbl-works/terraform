@@ -6,5 +6,22 @@ variable "ami_id" {}
 variable "cidr_block" {}
 variable "key_name" {}
 
-variable "region" { default = "eu-central-1" }
-variable "instance_type" { default = "t3.micro" }
+variable "region" {
+  type    = string
+  default = "eu-central-1"
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t3.micro"
+}
+
+variable "availability_zone" {
+  type    = string
+  default = null
+}
+
+# can't use variables inside other variables, so we need to define a local variable
+locals {
+  availability_zone = var.availability_zone == null ? "${var.region}a" : var.availability_zone
+}

@@ -40,3 +40,27 @@ variable "allow_from_security_groups" {
   description = "Security groups which RDS allow traffics from"
   default     = []
 }
+
+
+## Read replica mode
+variable "master_db_instance_arn" {
+  default = null
+  type    = string
+}
+
+variable "is_read_replica" {
+  type    = bool
+  default = false
+}
+
+variable "regional" {
+  default = false
+  type    = bool
+}
+
+# A custom name overrides the default {project}-{environment} convention
+variable "name" {
+  type        = string
+  description = "Custom name for resources. Must be unique per account if deploying to multiple regions."
+  default     = null
+}

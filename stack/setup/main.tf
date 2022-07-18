@@ -9,6 +9,16 @@ locals {
   }
 }
 
+module "kms-key-replica-rds" {
+  source = "../../kms-key-replica"
+  count  = var.rds_cross_region_kms_key_arn == null ? 0 : 1
+
+  master_kms_key_arn = var.rds_cross_region_kms_key_arn
+  environment        = var.environment
+  project            = var.project
+  alias              = "rds"
+}
+
 module "secrets" {
   source = "../../secrets"
 

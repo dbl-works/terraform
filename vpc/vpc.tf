@@ -36,7 +36,7 @@ resource "aws_route" "all" {
 # DEPRECATED: This is the existing public network that allows internet access
 # range 10.0.0.0 - 10.0.2.255
 resource "aws_subnet" "public" {
-  count                   = 3
+  count                   = length(var.availability_zones)
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = cidrsubnet(var.cidr_block, 8, count.index + 1)
   map_public_ip_on_launch = true
@@ -58,7 +58,7 @@ resource "aws_route_table_association" "public" {
 # All outgoing traffic must go via NAT gateway
 # range 10.0.100.0 - 10.0.102.255
 resource "aws_subnet" "private" {
-  count                   = 3
+  count                   = length(var.availability_zones)
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = cidrsubnet(var.cidr_block, 8, count.index + 100)
   map_public_ip_on_launch = false
