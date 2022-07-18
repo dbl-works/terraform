@@ -54,8 +54,9 @@ resource "aws_iam_user" "user" {
 module "iam_ecs_policies" {
   source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs/core?ref=v2022.05.18"
 
-  user     = local.users["gh-user"]
-  region   = "eu-central-1"
+  username       = local.users["gh-user"]["iam"]
+  project_access = local.users["gh-user"]["project_access"]
+  region         = "eu-central-1"
 
   # We need to get the latest state of the user before apply the policy
   depends_on = [

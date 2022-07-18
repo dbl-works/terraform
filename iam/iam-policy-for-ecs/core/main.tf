@@ -20,7 +20,7 @@ locals {
   #   },
   # ]
   developer_access_projects = flatten([
-    for env, project_names in try(var.user["project_access"]["developer"], {}) : [
+    for env, project_names in try(var.project_access["developer"], {}) : [
       for project_name in project_names : {
         "name"        = "${project_name}-${env}"
         "environment" = env
@@ -29,15 +29,13 @@ locals {
   ])
 
   admin_access_projects = flatten([
-    for env, project_names in try(var.user["project_access"]["admin"], {}) : [
+    for env, project_names in try(var.project_access["admin"], {}) : [
       for project_name in project_names : {
         "name"        = "${project_name}-${env}"
         "environment" = env
       }
     ]
   ])
-
-  username = var.user["iam"]
 }
 
 # Taggable resources are only needed for admin full access
@@ -96,14 +94,14 @@ data "aws_iam_policy_document" "ecs_policy" {
 }
 
 resource "aws_iam_policy" "ecs" {
-  name        = "ECSAccessIn${var.region}For${title(local.username)}"
+  name        = "ECSAccessIn${var.region}For${title(var.username)}"
   path        = "/"
-  description = "Allow access to ECS resources in ${var.region} for ${local.username}"
+  description = "Allow access to ECS resources in ${var.region} for ${var.username}"
 
   policy = data.aws_iam_policy_document.ecs_policy.json
 }
 
 resource "aws_iam_user_policy_attachment" "user" {
-  user       = local.username
+  user       = var.username
   policy_arn = aws_iam_policy.ecs.arn
 }
