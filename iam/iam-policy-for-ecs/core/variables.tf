@@ -1,5 +1,5 @@
-variable "username" {
-  type = string
+variable "user" {
+  type = map(object)
 }
 
 variable "region" {

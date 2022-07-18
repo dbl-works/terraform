@@ -23,8 +23,7 @@ locals {
     for env, project_names in try(var.user["project_access"]["developer"], {}) : [
       for project_name in project_names : {
         "name"        = "${project_name}-${env}"
-        "environment" = env,
-        "project_tag" = "${env}-developer-access-projects"
+        "environment" = env
       }
     ]
   ])
@@ -33,26 +32,26 @@ locals {
     for env, project_names in try(var.user["project_access"]["admin"], {}) : [
       for project_name in project_names : {
         "name"        = "${project_name}-${env}"
-        "environment" = env,
-        "project_tag" = "${env}-admin-access-projects"
+        "environment" = env
       }
     ]
   ])
-}
 
+  username = var.user["iam"]
+}
 
 # Taggable resources are only needed for admin full access
 module "iam_ecs_taggable_resources" {
   source = "../taggable-resources"
 
   for_each = [for project in concat(local.developer_access_projects, local.admin_access_projects) : {
-    project["name"] = project
+    "${project.name}" = project
   }]
 
   region       = var.region
   environment  = each.value.environment
+  # If we already have the project_name, we can skip the project_tag
   project_name = each.value.name
-  project_tag  = lookup(each.value, "project_tag", null)
 }
 
 data "aws_iam_policy_document" "ecs_list" {
@@ -97,14 +96,14 @@ data "aws_iam_policy_document" "ecs_policy" {
 }
 
 resource "aws_iam_policy" "ecs" {
-  name        = "ECSAccessIn${var.region}For${title(var.username)}"
+  name        = "ECSAccessIn${var.region}For${title(local.username)}"
   path        = "/"
-  description = "Allow access to ECS resources in ${var.region} for ${var.username}"
+  description = "Allow access to ECS resources in ${var.region} for ${local.username}"
 
   policy = data.aws_iam_policy_document.ecs_policy.json
 }
 
 resource "aws_iam_user_policy_attachment" "user" {
-  user       = data.aws_iam_user.main.user_name
+  user       = local.username
   policy_arn = aws_iam_policy.ecs.arn
 }
