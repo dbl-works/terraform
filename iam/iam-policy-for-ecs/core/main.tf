@@ -20,7 +20,7 @@ locals {
   #   },
   # ]
   developer_access_projects = flatten([
-    for env, project_names in var.user["project_access"]["developer"] : [
+    for env, project_names in try(var.user["project_access"]["developer"], {}) : [
       for project_name in project_names : {
         "name"        = "${project_name}-${env}"
         "environment" = env,
@@ -30,7 +30,7 @@ locals {
   ])
 
   admin_access_projects = flatten([
-    for env, project_names in var.user["project_access"]["admin"] : [
+    for env, project_names in try(var.user["project_access"]["admin"], {}) : [
       for project_name in project_names : {
         "name"        = "${project_name}-${env}"
         "environment" = env,
