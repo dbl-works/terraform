@@ -1,52 +1,55 @@
-# var.user
-# var.user["project_access"]
-
 locals {
-  read_access_environments  = keys(var.user["project_access"]["developer"])                      # ["staging", "production"]
-  read_access_project_names = distinct(flatten(values(var.user["project_access"]["developer"]))) # ["facebook-staging", "metaverse-staging", "facebook-production"]
+  # [
+  #   {
+  #       "name"        = "facebook-production"
+  #       "env"         = "production"
+  #       "project_tag" = "production-developer-access-projects"
+  #     }
+  #   },
+  #   {
+  #       "name"        = "facebook-staging"
+  #       "env"         = "staging"
+  #       "project_tag" = "staging-developer-access-projects"
+  #     }
+  #   },
+  #   {
+  #       "name"        = "metaverse-staging"
+  #       "env"         = "staging"
+  #       "project_tag" = "staging-developer-access-projects"
+  #     }
+  #   },
+  # ]
+  developer_access_projects = flatten([
+    for env, project_names in var.user["project_access"]["developer"] : [
+      for project_name in project_names : {
+        "name"        = "${project_name}-${env}"
+        "environment" = env,
+        "project_tag" = "${env}-developer-access-projects"
+      }
+    ]
+  ])
+
+  admin_access_projects = flatten([
+    for env, project_names in var.user["project_access"]["admin"] : [
+      for project_name in project_names : {
+        "name"        = "${project_name}-${env}"
+        "environment" = env,
+        "project_tag" = "${env}-admin-access-projects"
+      }
+    ]
+  ])
 }
 
-locals {
-  staging_developer_access_projects    = try(data.aws_iam_user.main.tags.staging-developer-access-projects, "")
-  staging_admin_access_projects        = try(data.aws_iam_user.main.tags.staging-admin-access-projects, "")
-  production_developer_access_projects = try(data.aws_iam_user.main.tags.production-developer-access-projects, "")
-  production_admin_access_projects     = try(data.aws_iam_user.main.tags.production-admin-access-projects, "")
-
-  staging_read_access_project_list    = distinct(compact(split(":", local.staging_developer_access_projects)))
-  production_read_access_project_list = distinct(compact(split(":", local.production_admin_access_projects)))
-  staging_full_access_project_list    = distinct(compact(split(":", local.staging_admin_access_projects)))
-  production_full_access_project_list = distinct(compact(split(":", local.production_admin_access_projects)))
-
-  read_access_project_names = concat(
-    [
-      for name in local.staging_read_access_project_list : "${name}-staging" # ["facebook-staging"]
-    ],
-    [
-      for name in local.production_read_access_project_list : "${name}-production"
-    ]
-  )
-
-  full_access_project_names = concat(
-    [
-      for name in local.staging_full_access_project_list : "${name}-staging"
-    ],
-    [
-      for name in local.production_full_access_project_list : "${name}-production"
-    ]
-  )
-}
 
 # Taggable resources are only needed for admin full access
 module "iam_ecs_taggable_resources" {
   source = "../taggable-resources"
 
-  for_each = {
-    for project in local.projects :
-    "${project.environment}-${project.name != null ?
-    "${project.name}" : "${project.project_tag}"}-${project.region}" => project
-  }
+  for_each = [for project in concat(local.developer_access_projects, local.admin_access_projects) : {
+    project["name"] = project
+  }]
 
-  region       = each.value.region
+  region       = var.region
   environment  = each.value.environment
   project_name = each.value.name
   project_tag  = lookup(each.value, "project_tag", null)
@@ -79,11 +82,11 @@ data "aws_iam_policy_document" "ecs_policy" {
     [
       # All user should have list access so they can see the index page
       data.aws_iam_policy_document.ecs_list.json,
-      length(local.read_access_project_names) > 0 ? [
+      length(local.developer_access_projects) > 0 ? [
         data.aws_iam_policy_document.ecs_read.json
       ] : [],
 
-      length(local.full_access_project_names) > 0 ? [
+      length(local.admin_access_projects) > 0 ? [
         data.aws_iam_policy_document.ecs_iam.json,
         data.aws_iam_policy_document.ecs_ssm.json,
         data.aws_iam_policy_document.ecs_full.json
@@ -94,9 +97,9 @@ data "aws_iam_policy_document" "ecs_policy" {
 }
 
 resource "aws_iam_policy" "ecs" {
-  name        = "ECSAccessFor${title(var.username)}"
+  name        = "ECSAccessIn${var.region}For${title(var.username)}"
   path        = "/"
-  description = "Allow access to ECS resources for ${var.username}"
+  description = "Allow access to ECS resources in ${var.region} for ${var.username}"
 
   policy = data.aws_iam_policy_document.ecs_policy.json
 }

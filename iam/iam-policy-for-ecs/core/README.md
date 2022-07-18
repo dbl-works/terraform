@@ -19,14 +19,16 @@ locals {
       github = "user"
       name   = "Mary Lamb"
       groups = ["engineer"]
-      developer_access = {
-        staging        = ["facebook", "metaverse"]
-        production     = ["facebook"]
-        sandbox        = ["facebook", "metaverse"]
-        loadtesting    = ["facebook", "metaverse"]
-      }
-      admin_access = {
-        sandbox = ["facebook"]
+      project_access = {
+        developer = {
+          staging        = ["facebook", "metaverse"]
+          production     = ["facebook"]
+          sandbox        = ["facebook", "metaverse"]
+          loadtesting    = ["facebook", "metaverse"]
+        }
+        admin = {
+          sandbox = ["facebook"]
+        }
       }
 
 
@@ -41,6 +43,13 @@ locals {
 resource "aws_iam_user" "user" {
   for_each = local.users
   name     = each.value["iam"]
+
+  dynamic "tags" {
+    for_each = local.project_access
+    content {
+      "${tags.staging}" =
+     }
+  }
   tags = {
     name                                 = each.value["name"]
     github                               = each.value["github"]
@@ -58,21 +67,8 @@ resource "aws_iam_user" "user" {
 module "iam_ecs_policies" {
   source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs/core?ref=v2022.05.18"
 
-  username = <iam-user-name>
+  user     = local.users["gh-user"]
   region   = "eu-central-1"
-
-  projects = [
-    {
-      name        = "facebook",
-      environment = "sandbox"
-      region      = "eu-central-1"
-    },
-    {
-      name        = "facebook",
-      environment = "load-testing"
-      region      = "eu-central-1"
-    },
-  ]
 
   # We need to get the latest state of the user before apply the policy
   depends_on = [
