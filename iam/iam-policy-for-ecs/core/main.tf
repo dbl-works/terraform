@@ -1,5 +1,9 @@
-data "aws_iam_user" "main" {
-  user_name = var.username
+# var.user
+# var.user["project_access"]
+
+locals {
+  read_access_environments  = keys(var.user["project_access"]["developer"])                      # ["staging", "production"]
+  read_access_project_names = distinct(flatten(values(var.user["project_access"]["developer"]))) # ["facebook-staging", "metaverse-staging", "facebook-production"]
 }
 
 locals {
@@ -15,7 +19,7 @@ locals {
 
   read_access_project_names = concat(
     [
-      for name in local.staging_read_access_project_list : "${name}-staging"
+      for name in local.staging_read_access_project_list : "${name}-staging" # ["facebook-staging"]
     ],
     [
       for name in local.production_read_access_project_list : "${name}-production"
@@ -39,7 +43,7 @@ module "iam_ecs_taggable_resources" {
   for_each = {
     for project in local.projects :
     "${project.environment}-${project.name != null ?
-    "${project.name}-${project.region}" : "${project.project_tag}-${project.region}"}" => project
+    "${project.name}" : "${project.project_tag}"}-${project.region}" => project
   }
 
   region       = each.value.region
