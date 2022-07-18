@@ -30,12 +30,6 @@ locals {
           sandbox = ["facebook"]
         }
       }
-
-
-      # staging-developer-access-projects    = "metaverse:messenger"
-      # staging-admin-access-projects        = "metaverse"
-      # production-developer-access-projects = "metaverse:facebook"
-      # production-admin-access-projects     = ""
     }
   }
 }
@@ -44,23 +38,16 @@ resource "aws_iam_user" "user" {
   for_each = local.users
   name     = each.value["iam"]
 
-  dynamic "tags" {
-    for_each = local.project_access
-    content {
-      "${tags.staging}" =
-     }
-  }
   tags = {
     name                                 = each.value["name"]
     github                               = each.value["github"]
-    # staging-developer-access-projects    = try(each.value["staging-developer-access-projects"], "")
-    # staging-admin-access-projects        = try(each.value["staging-admin-access-projects"], "")
-    # production-developer-access-projects = try(each.value["production-developer-access-projects"], "")
-    # production-admin-access-projects     = try(each.value["production-admin-access-projects"], "")
 
+    staging-developer-access-projects    = join(":", try(each.value["developer"]["staging"], []))
+    staging-admin-access-projects        = join(":", try(each.value["admin"]["staging"], []))
+    production-developer-access-projects = join(":", try(each.value["developer"]["production"], []))
+    production-admin-access-projects     = join(":", try(each.value["admin"]["production"], []))
 
-    admin-sandbox-access-projects        = join(":", try(each.value["admin_access"]["sandbox"], []))
-    admin-staging-access-projects        = join(":", try(each.value["admin_access"]["staging"], []))
+    sandbox-admin-access-projects        = join(":", try(each.value["admin"]["sandbox"], []))
   }
 }
 
