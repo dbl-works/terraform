@@ -26,13 +26,16 @@ module "s3-private" {
       kms_arn = module.s3-replica-for-private-bucket.kms_arn
     }
   }
+
+  depends_on = [
+    module.s3-replica-for-private-bucket
+  ]
 }
 
 provider "aws" {
   alias  = "replica"
   region = "ap-southeast-1"
 }
-
 
 module "s3-replica-for-private-bucket" {
   source = "github.com/dbl-works/terraform//s3-replica?ref=v2021.07.05"
