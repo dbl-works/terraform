@@ -19,23 +19,16 @@ resource "aws_iam_role" "replication" {
 POLICY
 }
 
-resource "aws_iam_policy" "replication" {
-  count = length(var.s3_replicas) > 0 ? 1: 0
-  name = "tf-iam-role-policy-replication"
-
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
+locals {
+  replication-policy = [
     {
       "Action": [
-        "s3:GetReplicationConfiguration",
-        "s3:ListBucket"
+        "s3:ReplicateObject",
+        "s3:ReplicateDelete",
+        "s3:ReplicateTags"
       ],
       "Effect": "Allow",
-      "Resource": [
-        "${aws_s3_bucket.main.arn}"
-      ]
+      "Resource": [for replica in var.s3_replicas : "${replica.bucket_arn}/*"]
     },
     {
       "Action": [
@@ -50,16 +43,25 @@ resource "aws_iam_policy" "replication" {
     },
     {
       "Action": [
-        "s3:ReplicateObject",
-        "s3:ReplicateDelete",
-        "s3:ReplicateTags"
+        "s3:GetReplicationConfiguration",
+        "s3:ListBucket"
       ],
       "Effect": "Allow",
-      "Resource": "${[for replica in var.s3_replicas : "${replica.bucket_arn}/*"]}"
-    }
+      "Resource": [
+        "${aws_s3_bucket.main.arn}"
+      ]
+    },
   ]
 }
-POLICY
+
+resource "aws_iam_policy" "replication" {
+  count = length(var.s3_replicas) > 0 ? 1: 0
+  name = "tf-iam-role-policy-replication"
+
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": local.replication-policy
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "replication" {

@@ -30,19 +30,20 @@ module "s3-private" {
 
 provider "aws" {
   alias  = "replica"
-  region = 'ap-southeast-1'
+  region = "ap-southeast-1"
 }
 
 
 module "s3-replica-for-private-bucket" {
   source = "github.com/dbl-works/terraform//s3-replica?ref=v2021.07.05"
   providers = {
-    aws.replica = "aws.replica"
+    aws = "aws.replica"
   }
 
-  region             = 'ap-southeast-1'
+  region             = "ap-southeast-1"
   environment        = "staging"
   project            = "someproject"
+  # Change this to bucket name
   source_bucket_name = "someproject-staging-storage"
 
   # Optional
@@ -68,7 +69,7 @@ module "s3-public" {
 module "s3-replica-for-public-bucket" {
   source = "github.com/dbl-works/terraform//s3-replica?ref=v2021.07.05"
   providers = {
-    aws.replica = "aws.replica"
+    aws = "aws.replica"
   }
 
   region             = 'ap-southeast-1'
