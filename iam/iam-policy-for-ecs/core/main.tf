@@ -94,7 +94,8 @@ data "aws_iam_policy_document" "ecs_policy" {
 }
 
 resource "aws_iam_policy" "ecs" {
-  name        = "ECSAccessIn${var.region}For${title(var.username)}"
+  # the name must be alphanumeric, i.e. [^0-9A-Za-z]*
+  name        = replace("ECSAccessIn${var.region}For${title(var.username)}", "/[^0-9A-Za-z]/", "")
   path        = "/"
   description = "Allow access to ECS resources in ${var.region} for ${var.username}"
 
