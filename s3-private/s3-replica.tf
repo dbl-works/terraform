@@ -99,7 +99,11 @@ resource "aws_iam_policy" "replication" {
 
   policy = jsonencode({
     "Version" : "2012-10-17",
-    "Statement" : local.replication-policy
+    "Statement" : concat(
+      local.replication-policy,
+      local.decrypt-policy,
+      local.encrypt-policy
+     )
   })
 }
 
