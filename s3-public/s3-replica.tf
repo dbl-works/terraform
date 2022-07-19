@@ -25,31 +25,34 @@ locals {
       "Action" : [
         "s3:ReplicateObject",
         "s3:ReplicateDelete",
-        "s3:ReplicateTags"
+        "s3:ReplicateTags",
+        "s3:ObjectOwnerOverrideToBucketOwner"
       ],
       "Effect" : "Allow",
-      "Resource" : [for replica in var.s3_replicas : "${replica.bucket_arn}/*"]
+      "Resource" : concat([
+        for replica in var.s3_replicas :
+          "${replica.bucket_arn}/*"
+      ], ["${aws_s3_bucket.main.arn}/*"])
     },
     {
       "Action" : [
+        "s3:ListBucket",
+        "s3:GetReplicationConfiguration",
         "s3:GetObjectVersionForReplication",
         "s3:GetObjectVersionAcl",
-        "s3:GetObjectVersionTagging"
+        "s3:GetObjectVersionTagging",
+        "s3:GetObjectRetention",
+        "s3:GetObjectLegalHold"
       ],
       "Effect" : "Allow",
-      "Resource" : [
+      "Resource" : flatten(concat([
+        aws_s3_bucket.main.arn,
         "${aws_s3_bucket.main.arn}/*"
-      ]
-    },
-    {
-      "Action" : [
-        "s3:GetReplicationConfiguration",
-        "s3:ListBucket"
       ],
-      "Effect" : "Allow",
-      "Resource" : [
-        "${aws_s3_bucket.main.arn}"
-      ]
+      [
+        for replica in var.s3_replicas :
+          ["${replica.bucket_arn}/*", replica.bucket_arn]
+      ]))
     },
   ]
 }
