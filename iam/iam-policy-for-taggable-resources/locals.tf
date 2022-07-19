@@ -1,6 +1,7 @@
 locals {
   resources = [
     "acm",
+    "application-autoscaling",
     "cloudwatch",
     "cognito-identity",
     "cognito-idp",
@@ -11,7 +12,7 @@ locals {
     "elasticache",
     "kms",
     "secretsmanager",
-    "rds",
+    "rds"
   ]
 }
 

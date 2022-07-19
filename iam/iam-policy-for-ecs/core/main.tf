@@ -69,8 +69,6 @@ data "aws_iam_policy_document" "ecs_list" {
       "logs:Describe*",
       "logs:Get*",
       "logs:FilterLogEvents",
-      "application-autoscaling:DescribeScalableTargets",
-      "elasticloadbalancing:DescribeTargetGroups"
     ]
     resources = ["*"]
   }
