@@ -19,10 +19,17 @@ locals {
       github = "user"
       name   = "Mary Lamb"
       groups = ["engineer"]
-      staging-developer-access-projects    = "metaverse:messenger"
-      staging-admin-access-projects        = "metaverse"
-      production-developer-access-projects = "metaverse:facebook"
-      production-admin-access-projects     = ""
+      project_access = {
+        developer = {
+          staging        = ["facebook", "metaverse"]
+          production     = ["facebook"]
+          sandbox        = ["facebook", "metaverse"]
+          loadtesting    = ["facebook", "metaverse"]
+        }
+        admin = {
+          sandbox = ["facebook"]
+        }
+      }
     }
   }
 }
@@ -30,34 +37,27 @@ locals {
 resource "aws_iam_user" "user" {
   for_each = local.users
   name     = each.value["iam"]
+
   tags = {
     name                                 = each.value["name"]
     github                               = each.value["github"]
-    staging-developer-access-projects    = try(each.value["staging-developer-access-projects"], "")
-    staging-admin-access-projects        = try(each.value["staging-admin-access-projects"], "")
-    production-developer-access-projects = try(each.value["production-developer-access-projects"], "")
-    production-admin-access-projects     = try(each.value["production-admin-access-projects"], "")
+
+    staging-developer-access-projects    = join(":", try(each.value["developer"]["staging"], []))
+    staging-admin-access-projects        = join(":", try(each.value["admin"]["staging"], []))
+    production-developer-access-projects = join(":", try(each.value["developer"]["production"], []))
+    production-admin-access-projects     = join(":", try(each.value["admin"]["production"], []))
+    sandbox-admin-access-projects        = join(":", try(each.value["admin"]["sandbox"], []))
   }
 }
 
 module "iam_ecs_policies" {
   source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs/core?ref=v2022.05.18"
 
-  username = <iam-user-name>
-  region   = "eu-central-1"
+  for_each = local.users
 
-  projects = [
-    {
-      name        = "facebook",
-      environment = "sandbox"
-      region      = "eu-central-1"
-    },
-    {
-      name        = "facebook",
-      environment = "load-testing"
-      region      = "eu-central-1"
-    },
-  ]
+  username       = each.value["gh-user"]["iam"]
+  project_access = each.value["gh-user"]["project_access"]
+  region         = "eu-central-1"
 
   # We need to get the latest state of the user before apply the policy
   depends_on = [
