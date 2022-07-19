@@ -57,7 +57,7 @@ data "aws_iam_policy_document" "ecs_list" {
     sid = "AllowListAccessToECS"
     actions = [
       "ecs:DescribeClusters",
-      "ecs:ListClusters"
+      "ecs:List*",
     ]
     resources = ["*"]
   }
