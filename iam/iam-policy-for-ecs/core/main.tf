@@ -40,7 +40,11 @@ module "iam_ecs_taggable_resources" {
   source = "../taggable-resources"
 
   # define project.name as the key for tracking resources within Terraform
-  for_each = { for project in concat(local.developer_access_projects, local.admin_access_projects) : project.name => project }
+  for_each = {
+    # we only need to create the policy once per environment (SSM) regardless of admin/developer access-right
+    for project in distinct(concat(local.developer_access_projects, local.admin_access_projects)) :
+    project.name => project
+  }
 
   region      = var.region
   environment = each.value.environment
