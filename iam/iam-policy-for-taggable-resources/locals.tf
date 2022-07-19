@@ -12,7 +12,8 @@ locals {
     "elasticache",
     "kms",
     "secretsmanager",
-    "rds"
+    "rds",
+    "s3"
   ]
 }
 
