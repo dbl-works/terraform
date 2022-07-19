@@ -39,9 +39,8 @@ locals {
 module "iam_ecs_taggable_resources" {
   source = "../taggable-resources"
 
-  for_each = [for project in merge(local.developer_access_projects, local.admin_access_projects) : {
-    "${project.name}" = project
-  }]
+  # define project.name as the key for tracking resources within Terraform
+  for_each = { for project in merge(local.developer_access_projects, local.admin_access_projects) : project.name => project }
 
   region      = var.region
   environment = each.value.environment
