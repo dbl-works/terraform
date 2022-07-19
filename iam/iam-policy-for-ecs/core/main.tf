@@ -3,19 +3,16 @@ locals {
   #   {
   #       "name"        = "facebook-production"
   #       "env"         = "production"
-  #       "project_tag" = "production-developer-access-projects"
   #     }
   #   },
   #   {
   #       "name"        = "facebook-staging"
   #       "env"         = "staging"
-  #       "project_tag" = "staging-developer-access-projects"
   #     }
   #   },
   #   {
   #       "name"        = "metaverse-staging"
   #       "env"         = "staging"
-  #       "project_tag" = "staging-developer-access-projects"
   #     }
   #   },
   # ]
