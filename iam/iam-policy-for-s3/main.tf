@@ -1,36 +1,38 @@
-data "aws_iam_user" "main" {
-  user_name = var.username
-}
-
 locals {
-  staging_developer_access_projects    = try(data.aws_iam_user.main.tags.staging-developer-access-projects, "")
-  staging_admin_access_projects        = try(data.aws_iam_user.main.tags.staging-admin-access-projects, "")
-  production_developer_access_projects = try(data.aws_iam_user.main.tags.production-developer-access-projects, "")
-  production_admin_access_projects     = try(data.aws_iam_user.main.tags.production-admin-access-projects, "")
+  # [
+  #   {
+  #       "name"        = "facebook-production"
+  #       "env"         = "production"
+  #     }
+  #   },
+  #   {
+  #       "name"        = "facebook-staging"
+  #       "env"         = "staging"
+  #     }
+  #   },
+  #   {
+  #       "name"        = "metaverse-staging"
+  #       "env"         = "staging"
+  #     }
+  #   },
+  # ]
+  developer_access_projects = flatten([
+    for env, project_names in try(var.project_access["developer"], {}) : [
+      for project_name in project_names : {
+        "name"        = "${project_name}-${env}"
+        "environment" = env
+      }
+    ]
+  ])
 
-  staging_read_access_projects = distinct(compact(concat(
-    split(":", local.staging_developer_access_projects),
-    split(":", local.staging_admin_access_projects),
-  )))
-
-  production_read_access_projects = distinct(compact(concat(
-    split(":", local.production_admin_access_projects),
-    split(":", local.production_developer_access_projects),
-  )))
-
-  staging_write_access_projects = distinct(compact(split(":", local.staging_admin_access_projects)))
-
-  production_write_access_projects = distinct(compact(split(":", local.production_admin_access_projects)))
-
-  read_access_projects = concat(
-    local.staging_read_access_projects,
-    local.production_read_access_projects
-  )
-
-  write_access_projects = concat(
-    local.staging_write_access_projects,
-    local.production_write_access_projects
-  )
+  admin_access_projects = flatten([
+    for env, project_names in try(var.project_access["admin"], {}) : [
+      for project_name in project_names : {
+        "name"        = "${project_name}-${env}"
+        "environment" = env
+      }
+    ]
+  ])
 }
 
 data "aws_iam_policy_document" "s3_list" {
@@ -51,17 +53,19 @@ data "aws_iam_policy_document" "s3_read" {
       "s3:Get*",
       "s3:List*"
     ]
-    resources = concat(
-      [for project in local.staging_read_access_projects : "arn:aws:s3:::${project}-staging-storage"],
-      [for project in local.production_read_access_projects : "arn:aws:s3:::${project}-production-storage"]
-    )
+    resources = [
+      for project in distinct(concat(local.developer_access_projects, local.admin_access_projects)) :
+        "arn:aws:s3:::${project.name}-storage"
+    ]
   }
 }
 
-data "aws_iam_policy_document" "s3_write" {
+data "aws_iam_policy_document" "s3_full" {
   statement {
     sid = "AllowWriteAccessToS3"
     actions = [
+      "s3:Get*",
+      "s3:List*",
       "s3:PutObject",
       "s3:PutObjectAcl",
       "s3:PutObjectVersion",
@@ -69,23 +73,24 @@ data "aws_iam_policy_document" "s3_write" {
       "s3:DeleteObject",
       "s3:DeleteObjectVersion",
     ]
-    resources = flatten(concat(
-      [for project in local.staging_write_access_projects : ["arn:aws:s3:::${project}-staging-storage", "arn:aws:s3:::${project}-staging-storage/*"]],
-      [for project in local.production_write_access_projects : ["arn:aws:s3:::${project}-production-storage", "arn:aws:s3:::${project}-production-storage/*"]]
-    ))
+
+    resources = flatten([
+      for project in distinct(concat(local.developer_access_projects, local.admin_access_projects)) :
+        ["arn:aws:s3:::${project.name}-storage", "arn:aws:s3:::${project.name}-storage/*"]
+    ])
   }
 }
 
 data "aws_iam_policy_document" "s3_policy" {
   source_policy_documents = concat(
     [data.aws_iam_policy_document.s3_list.json],
-    (length(local.read_access_projects) == 0 ? [] : [data.aws_iam_policy_document.s3_read.json]),
-    (length(local.write_access_projects) == 0 ? [] : [data.aws_iam_policy_document.s3_write.json])
+    (length(local.developer_access_projects) == 0 ? [] : [data.aws_iam_policy_document.s3_read.json]),
+    (length(local.admin_access_projects) == 0 ? [] : [data.aws_iam_policy_document.s3_full.json])
   )
 }
 
 resource "aws_iam_policy" "s3" {
-  name        = "S3AccessFor${title(var.username)}"
+  name        = replace("S3AccessFor${title(var.username)}", "/[^0-9A-Za-z]/", "")
   path        = "/"
   description = "Allow access to s3 resources for ${var.username}"
 
@@ -93,6 +98,6 @@ resource "aws_iam_policy" "s3" {
 }
 
 resource "aws_iam_user_policy_attachment" "user" {
-  user       = data.aws_iam_user.main.user_name
+  user       = var.username
   policy_arn = aws_iam_policy.s3.arn
 }
