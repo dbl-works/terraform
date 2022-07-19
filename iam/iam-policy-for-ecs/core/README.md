@@ -46,7 +46,6 @@ resource "aws_iam_user" "user" {
     staging-admin-access-projects        = join(":", try(each.value["admin"]["staging"], []))
     production-developer-access-projects = join(":", try(each.value["developer"]["production"], []))
     production-admin-access-projects     = join(":", try(each.value["admin"]["production"], []))
-
     sandbox-admin-access-projects        = join(":", try(each.value["admin"]["sandbox"], []))
   }
 }
