@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "s3_read" {
     ]
     resources = [
       for project in distinct(concat(local.developer_access_projects, local.admin_access_projects)) :
-        "arn:aws:s3:::${project.name}-storage"
+      "arn:aws:s3:::${project.name}-storage"
     ]
   }
 }
@@ -76,7 +76,7 @@ data "aws_iam_policy_document" "s3_full" {
 
     resources = flatten([
       for project in distinct(concat(local.developer_access_projects, local.admin_access_projects)) :
-        ["arn:aws:s3:::${project.name}-storage", "arn:aws:s3:::${project.name}-storage/*"]
+      ["arn:aws:s3:::${project.name}-storage", "arn:aws:s3:::${project.name}-storage/*"]
     ])
   }
 }
