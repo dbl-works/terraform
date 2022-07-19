@@ -63,7 +63,7 @@ locals {
       ],
       "Condition": {
           "StringLike": {
-              "kms:ViaService": "s3.${var.region}.amazonaws.com",
+              "kms:ViaService": "s3.${aws_s3_bucket.main.region}.amazonaws.com",
               "kms:EncryptionContext:aws:s3:arn": [
                   "${aws_s3_bucket.main.arn}/*"
               ]
