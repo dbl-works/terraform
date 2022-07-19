@@ -1,5 +1,10 @@
 locals {
-  sid_name = var.project_name != null ? "${title(var.environment)}-${title(var.project_name)}" : title(var.environment)
+  # must be alpha-numeric
+  sid_name = replace(
+    title(var.project_name != null ? "${title(var.environment)}-${title(var.project_name)}" : title(var.environment)),
+    "/[^0-9A-Za-z]/",
+    ""
+  )
 }
 
 data "aws_iam_policy_document" "ssm_policy" {
