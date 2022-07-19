@@ -29,8 +29,8 @@ variable "s3_replicas" {
   #   }
   # }
   default = {}
-  type    = map(object({
+  type = map(object({
     bucket_arn = string,
-    kms_arn = string
+    kms_arn    = string
   }))
 }

@@ -1,6 +1,6 @@
 resource "aws_iam_role" "replication" {
-  count = length(var.s3_replicas) > 0 ? 1: 0
-  name = "s3-replication-role-for-${var.bucket_name}-replica"
+  count = length(var.s3_replicas) > 0 ? 1 : 0
+  name  = "s3-replication-role-for-${var.bucket_name}-replica"
 
   assume_role_policy = <<POLICY
 {
@@ -22,32 +22,32 @@ POLICY
 locals {
   replication-policy = [
     {
-      "Action": [
+      "Action" : [
         "s3:ReplicateObject",
         "s3:ReplicateDelete",
         "s3:ReplicateTags"
       ],
-      "Effect": "Allow",
-      "Resource": [for replica in var.s3_replicas : "${replica.bucket_arn}/*"]
+      "Effect" : "Allow",
+      "Resource" : [for replica in var.s3_replicas : "${replica.bucket_arn}/*"]
     },
     {
-      "Action": [
+      "Action" : [
         "s3:GetObjectVersionForReplication",
         "s3:GetObjectVersionAcl",
         "s3:GetObjectVersionTagging"
       ],
-      "Effect": "Allow",
-      "Resource": [
+      "Effect" : "Allow",
+      "Resource" : [
         "${aws_s3_bucket.main.arn}/*"
       ]
     },
     {
-      "Action": [
+      "Action" : [
         "s3:GetReplicationConfiguration",
         "s3:ListBucket"
       ],
-      "Effect": "Allow",
-      "Resource": [
+      "Effect" : "Allow",
+      "Resource" : [
         "${aws_s3_bucket.main.arn}"
       ]
     },
@@ -55,24 +55,24 @@ locals {
 }
 
 resource "aws_iam_policy" "replication" {
-  count = length(var.s3_replicas) > 0 ? 1: 0
-  name = "tf-iam-role-policy-replication-for-${var.bucket_name}"
+  count = length(var.s3_replicas) > 0 ? 1 : 0
+  name  = "tf-iam-role-policy-replication-for-${var.bucket_name}"
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": local.replication-policy
+    "Version" : "2012-10-17",
+    "Statement" : local.replication-policy
   })
 }
 
 resource "aws_iam_role_policy_attachment" "replication" {
-  count = length(var.s3_replicas) > 0 ? 1: 0
+  count = length(var.s3_replicas) > 0 ? 1 : 0
 
   role       = aws_iam_role.replication[0].name
   policy_arn = aws_iam_policy.replication[0].arn
 }
 
 resource "aws_s3_bucket_replication_configuration" "replication" {
-  count = length(var.s3_replicas) > 0 ? 1: 0
+  count = length(var.s3_replicas) > 0 ? 1 : 0
 
   role   = aws_iam_role.replication[0].arn
   bucket = aws_s3_bucket.main.id
@@ -109,7 +109,7 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
         # S3 RTC replicates most objects that you upload to Amazon S3 in seconds,
         # and 99.99 percent of those objects within 15 minutes.
         replication_time {
-          status  = "Enabled"
+          status = "Enabled"
           time {
             minutes = 15
           }
