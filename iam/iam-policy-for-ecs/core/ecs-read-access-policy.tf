@@ -19,4 +19,12 @@ data "aws_iam_policy_document" "ecs_read" {
       ],
     ))
   }
+
+  statement {
+    sid = "AllowListAccessToECS"
+    actions = [
+      "ecs:List*"
+    ]
+    resources = ["*"]
+  }
 }
