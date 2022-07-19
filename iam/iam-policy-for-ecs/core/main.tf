@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "ecs_list" {
   statement {
     sid = "AllowListAccessToECS"
     actions = [
-      "ecs:DescribeClusters",
+      "ecs:Describe*",
       "ecs:List*",
     ]
     resources = ["*"]
@@ -68,7 +68,9 @@ data "aws_iam_policy_document" "ecs_list" {
       "cloudwatch:*",
       "logs:Describe*",
       "logs:Get*",
-      "logs:FilterLogEvents"
+      "logs:FilterLogEvents",
+      "application-autoscaling:DescribeScalableTargets",
+      "elasticloadbalancing:DescribeTargetGroups"
     ]
     resources = ["*"]
   }
