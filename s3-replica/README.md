@@ -26,10 +26,6 @@ module "s3-private" {
       kms_arn = module.s3-replica-for-private-bucket.kms_arn
     }
   }
-
-  depends_on = [
-    module.s3-replica-for-private-bucket
-  ]
 }
 
 provider "aws" {
@@ -73,10 +69,6 @@ module "s3-public" {
       bucket_arn = module.s3-replica-for-public-bucket.arn
     }
   }
-
-  depends_on = [
-    module.s3-replica-for-public-bucket
-  ]
 }
 
 module "s3-replica-for-public-bucket" {
