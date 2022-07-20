@@ -84,7 +84,7 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
     for_each = var.s3_replicas
 
     content {
-      id     = "replica-rules-for-private-bucket-${rule.key}"
+      id     = "replica-rules-for-public-bucket-${rule.key}"
       status = "Enabled"
 
       filter {}
