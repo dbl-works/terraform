@@ -20,6 +20,12 @@ module "s3-storage" {
   kms_deletion_window_in_days     = 30
   versioning                      = true
   primary_storage_class_retention = 0
+  s3_replicas                     = {
+    staging-storage-us-east-1 = {
+      bucket_arn = "arn:aws:s3:::staging-storage-us-east-1"
+      kms_arn = "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+    }
+  }
 }
 ```
 

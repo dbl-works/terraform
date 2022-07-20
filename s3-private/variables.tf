@@ -20,3 +20,19 @@ variable "primary_storage_class_retention" {
   type        = number
   description = "Number of days before objects stay in the primary storage class"
 }
+
+variable "s3_replicas" {
+  # eg. {
+  #   bucket-1 = {
+  #     bucket_arn = "arn-1"
+  #     kms_arn = "kms-1"
+  #     region = "ap-southeast-1"
+  #   }
+  # }
+  default = {}
+  type = map(object({
+    bucket_arn = string,
+    kms_arn    = string
+    region     = string
+  }))
+}

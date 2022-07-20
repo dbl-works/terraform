@@ -44,7 +44,7 @@ resource "aws_iam_policy" "usage" {
         "kms:GenerateDataKey"
       ],
       "Resource": [
-        "${module.kms-key-s3.arn}"
+        "${module.s3.kms_arn}"
       ]
     }
   ]

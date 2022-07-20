@@ -1,27 +1,21 @@
-resource "aws_s3_bucket" "main" {
-  bucket = var.bucket_name
-  tags = {
-    Name        = var.bucket_name
-    Project     = var.project
-    Environment = var.environment
-  }
-}
+module "s3" {
+  source = "../s3"
 
-resource "aws_s3_bucket_versioning" "main-bucket-versioning" {
-  bucket = aws_s3_bucket.main.id
-  versioning_configuration {
-    status = var.versioning ? "Enabled" : "Disabled"
-  }
+  environment       = var.environment
+  project           = var.project
+  bucket_name       = var.bucket_name
+  versioning        = var.versioning
+  enable_encryption = false
 }
 
 resource "aws_s3_bucket_acl" "main-bucket-data-acl" {
-  bucket = aws_s3_bucket.main.id
+  bucket = module.s3.id
   acl    = "public-read"
 }
 
 # Move data to a cheaper storage class after a period of time
 resource "aws_s3_bucket_lifecycle_configuration" "main-bucket-lifecycle-rule" {
-  bucket = aws_s3_bucket.main.id
+  bucket = module.s3.id
 
   rule {
     id     = "primary-storage-class-retention"
