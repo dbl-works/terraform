@@ -64,9 +64,7 @@ locals {
       "Condition": {
           "StringLike": {
               "kms:ViaService": "s3.${aws_s3_bucket.main.region}.amazonaws.com",
-              "kms:EncryptionContext:aws:s3:arn": [
-                  "${aws_s3_bucket.main.arn}/*"
-              ]
+              "kms:EncryptionContext:aws:s3:arn": ["${aws_s3_bucket.main.arn}/*"]
           }
       },
       "Resource": [
@@ -83,9 +81,7 @@ locals {
       "Condition": {
           "StringLike": {
               "kms:ViaService": "s3.${replica.region}.amazonaws.com",
-              "kms:EncryptionContext:aws:s3:arn": [
-                  ["${replica.bucket_arn}/*"]
-              ]
+              "kms:EncryptionContext:aws:s3:arn": ["${replica.bucket_arn}/*"]
           }
       },
       "Resource": [replica.kms_arn]
@@ -99,11 +95,11 @@ resource "aws_iam_policy" "replication" {
 
   policy = jsonencode({
     "Version" : "2012-10-17",
-    "Statement" : concat(
+    "Statement" : flatten(concat(
       local.replication-policy,
       local.decrypt-policy,
       local.encrypt-policy
-     )
+     ))
   })
 }
 
