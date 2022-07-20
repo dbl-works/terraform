@@ -1,6 +1,6 @@
-# Terraform Module: S3 Replica
+# Terraform Module: S3
 
-A repository for setting up an S3 bucket replica
+A repository for setting up an S3 bucket
 
 ## Usage
 
@@ -34,7 +34,7 @@ provider "aws" {
 }
 
 module "s3-replica-for-private-bucket" {
-  source = "github.com/dbl-works/terraform//s3-replica?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//s3?ref=v2021.07.05"
   providers = {
     aws = "aws.replica"
   }
@@ -42,8 +42,7 @@ module "s3-replica-for-private-bucket" {
   region             = "ap-southeast-1"
   environment        = "staging"
   project            = "someproject"
-  # Change this to bucket name
-  source_bucket_name = "someproject-staging-storage"
+  bucket_name        = "someproject-staging-storage-replica-ap-southeast-1"
 
   # Optional
   versioning                  = var.versioning
@@ -72,7 +71,7 @@ module "s3-public" {
 }
 
 module "s3-replica-for-public-bucket" {
-  source = "github.com/dbl-works/terraform//s3-replica?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//s3?ref=v2021.07.05"
   providers = {
     aws = "aws.replica"
   }
@@ -80,8 +79,7 @@ module "s3-replica-for-public-bucket" {
   region             = 'ap-southeast-1'
   environment        = "staging"
   project            = "someproject"
-  # Change this to bucket name
-  source_bucket_name = "someproject-staging-frontend"
+  bucket_name        = "someproject-staging-frontend-replica-ap-southeast-1"
 
   # Optional
   versioning                  = var.versioning

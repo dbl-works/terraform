@@ -9,7 +9,7 @@ variable "region" {
   type = string
 }
 
-variable "source_bucket_name" {
+variable "bucket_name" {
   type = string
 }
 

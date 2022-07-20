@@ -5,7 +5,7 @@ module "kms_key" {
   count  = var.enable_encryption ? 1 : 0
   source = "../kms-key"
 
-  alias                   = "s3-${local.replica_bucket_name}"
+  alias                   = "s3-${var.bucket_name}"
   project                 = var.project
   environment             = var.environment
   description             = "Used for encrypting files in a private bucket replica"
