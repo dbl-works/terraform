@@ -3,7 +3,7 @@
 A repository for setting up an S3 bucket
 
 ## Usage
-
+### How to create S3 replica for private and public bucket
 ```terraform
 # For private bucket
 module "s3-private" {
