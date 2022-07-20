@@ -31,7 +31,7 @@ locals {
       "Effect" : "Allow",
       "Resource" : concat([
         for replica in var.s3_replicas :
-          "${replica.bucket_arn}/*"
+        "${replica.bucket_arn}/*"
       ], ["${module.s3.arn}/*"])
     },
     {
@@ -48,9 +48,9 @@ locals {
       "Resource" : flatten(concat([
         module.s3.arn,
         "${module.s3.arn}/*"
-      ],
-      [
-        for replica in var.s3_replicas :
+        ],
+        [
+          for replica in var.s3_replicas :
           ["${replica.bucket_arn}/*", replica.bucket_arn]
       ]))
     },

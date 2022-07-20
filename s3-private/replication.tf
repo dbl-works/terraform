@@ -31,8 +31,8 @@ locals {
       "Effect" : "Allow",
       "Resource" : concat([
         for replica in var.s3_replicas :
-          "${replica.bucket_arn}/*"
-      ], ["${aws_s3_bucket.main.arn}/*"])
+        "${replica.bucket_arn}/*"
+      ], ["${module.s3.arn}/*"])
     },
     {
       "Action" : [
@@ -46,11 +46,11 @@ locals {
       ],
       "Effect" : "Allow",
       "Resource" : flatten(concat([
-        aws_s3_bucket.main.arn,
-        "${aws_s3_bucket.main.arn}/*"
-      ],
-      [
-        for replica in var.s3_replicas :
+        module.s3.arn,
+        "${module.s3.arn}/*"
+        ],
+        [
+          for replica in var.s3_replicas :
           ["${replica.bucket_arn}/*", replica.bucket_arn]
       ]))
     }
@@ -58,33 +58,33 @@ locals {
   decrypt-policy = [
     {
       "Effect" : "Allow",
-      "Action": [
-          "kms:Decrypt"
+      "Action" : [
+        "kms:Decrypt"
       ],
-      "Condition": {
-          "StringLike": {
-              "kms:ViaService": "s3.${aws_s3_bucket.main.region}.amazonaws.com",
-              "kms:EncryptionContext:aws:s3:arn": ["${aws_s3_bucket.main.arn}/*"]
-          }
+      "Condition" : {
+        "StringLike" : {
+          "kms:ViaService" : "s3.${module.s3.bucket_region}.amazonaws.com",
+          "kms:EncryptionContext:aws:s3:arn" : ["${module.s3.arn}/*"]
+        }
       },
-      "Resource": [
-        module.kms-key-s3.arn
+      "Resource" : [
+        module.s3.kms_arn
       ]
     },
   ]
   encrypt-policy = [
     for replica in var.s3_replicas : {
       "Effect" : "Allow",
-      "Action": [
+      "Action" : [
         "kms:Encrypt"
       ],
-      "Condition": {
-          "StringLike": {
-              "kms:ViaService": "s3.${replica.region}.amazonaws.com",
-              "kms:EncryptionContext:aws:s3:arn": ["${replica.bucket_arn}/*"]
-          }
+      "Condition" : {
+        "StringLike" : {
+          "kms:ViaService" : "s3.${replica.region}.amazonaws.com",
+          "kms:EncryptionContext:aws:s3:arn" : ["${replica.bucket_arn}/*"]
+        }
       },
-      "Resource": [replica.kms_arn]
+      "Resource" : [replica.kms_arn]
     }
   ]
 }
@@ -99,7 +99,7 @@ resource "aws_iam_policy" "replication" {
       local.replication-policy,
       local.decrypt-policy,
       local.encrypt-policy
-     ))
+    ))
   })
 }
 
@@ -110,13 +110,12 @@ resource "aws_iam_role_policy_attachment" "replication" {
   policy_arn = aws_iam_policy.replication[0].arn
 }
 
+# Must run after aws s3 bucket versioning which is created in the s3 module
 resource "aws_s3_bucket_replication_configuration" "replication" {
   count = length(var.s3_replicas) > 0 ? 1 : 0
 
-  depends_on = [aws_s3_bucket_versioning.main-bucket-versioning]
-
   role   = aws_iam_role.replication[0].arn
-  bucket = aws_s3_bucket.main.id
+  bucket = module.s3.id
 
   dynamic "rule" {
     for_each = var.s3_replicas

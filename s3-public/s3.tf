@@ -1,11 +1,11 @@
 module "s3" {
   source = "../s3"
 
-  environment        = var.environment
-  project            = var.project
-  bucket_name        = var.bucket_name
-  versioning         = var.versioning
-  enable_encryption  = false
+  environment       = var.environment
+  project           = var.project
+  bucket_name       = var.bucket_name
+  versioning        = var.versioning
+  enable_encryption = false
 }
 
 resource "aws_s3_bucket_acl" "main-bucket-data-acl" {
