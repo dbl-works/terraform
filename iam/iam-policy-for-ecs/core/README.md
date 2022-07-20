@@ -1,11 +1,13 @@
-# Terraform Module: IAM - S3
+# Terraform Module: IAM Policy for ECS - Core
 
-User based S3 policy
+User based ECS policy
 
 This policy assumes the user have the following tags
 
-- 'developer' grant read access, 'admin' grant write access to the following S3 buckets:
-  - `<project>-<environment>-storage`
+- staging-developer-access-projects
+- staging-admin-access-projects
+- production-developer-access-projects
+- production-admin-access-projects
 
 ## Usage
 
@@ -17,7 +19,6 @@ locals {
       github = "user"
       name   = "Mary Lamb"
       groups = ["engineer"]
-
       project_access = {
         developer = {
           staging        = ["facebook", "metaverse"]
@@ -36,6 +37,7 @@ locals {
 resource "aws_iam_user" "user" {
   for_each = local.users
   name     = each.value["iam"]
+
   tags = {
     name                                 = each.value["name"]
     github                               = each.value["github"]
@@ -48,13 +50,13 @@ resource "aws_iam_user" "user" {
   }
 }
 
-module "iam_policies" {
-  username = <iam-user-name>
-}
-module "iam_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-s3?ref=v2022.05.18"
+module "iam_ecs_policies" {
+  source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs/core?ref=v2022.05.18"
 
-  project_access = local.users["gh-user"]["project_access"]
-  username       = local.users["gh-user"]["iam"]
+  for_each = local.users
+
+  username       = each.value["iam"]
+  project_access = each.value["project_access"]
+  region         = "eu-central-1"
 }
 ```

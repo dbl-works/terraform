@@ -15,6 +15,9 @@ jobs:
           - elasticache
           - iam/iam-for-deploy-bot
           - iam/iam-for-humans
+          - iam/iam-policy-for-ecs/core
+          - iam/iam-policy-for-ecs/taggable-resources
+          - iam/iam-policy-for-s3
           - iam/iam-policy-for-taggable-resources
           - kms-key
           - kms-key-replica
