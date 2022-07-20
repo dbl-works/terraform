@@ -4,11 +4,6 @@ User based S3 policy
 
 This policy assumes the user have the following tags
 
-- staging-developer-access-projects
-- staging-admin-access-projects
-- production-developer-access-projects
-- production-admin-access-projects
-
 - 'developer' grant read access, 'admin' grant write access to the following S3 buckets:
   - `<project>-<environment>-storage`
 
@@ -22,10 +17,18 @@ locals {
       github = "user"
       name   = "Mary Lamb"
       groups = ["engineer"]
-      staging-developer-access-projects    = "metaverse:messenger"
-      staging-admin-access-projects        = "metaverse"
-      production-developer-access-projects = "metaverse:facebook"
-      production-admin-access-projects     = ""
+
+      project_access = {
+        developer = {
+          staging        = ["facebook", "metaverse"]
+          production     = ["facebook"]
+          sandbox        = ["facebook", "metaverse"]
+          loadtesting    = ["facebook", "metaverse"]
+        }
+        admin = {
+          sandbox = ["facebook"]
+        }
+      }
     }
   }
 }
@@ -36,15 +39,22 @@ resource "aws_iam_user" "user" {
   tags = {
     name                                 = each.value["name"]
     github                               = each.value["github"]
-    staging-developer-access-projects    = try(each.value["staging-developer-access-projects"], "")
-    staging-admin-access-projects        = try(each.value["staging-admin-access-projects"], "")
-    production-developer-access-projects = try(each.value["production-developer-access-projects"], "")
-    production-admin-access-projects     = try(each.value["production-admin-access-projects"], "")
+
+    staging-developer-access-projects    = join(":", try(each.value["developer"]["staging"], []))
+    staging-admin-access-projects        = join(":", try(each.value["admin"]["staging"], []))
+    production-developer-access-projects = join(":", try(each.value["developer"]["production"], []))
+    production-admin-access-projects     = join(":", try(each.value["admin"]["production"], []))
+    sandbox-admin-access-projects        = join(":", try(each.value["admin"]["sandbox"], []))
   }
 }
 
 module "iam_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-s3?ref=v2022.05.18"
   username = <iam-user-name>
+}
+module "iam_policies" {
+  source = "github.com/dbl-works/terraform//iam/iam-policy-for-s3?ref=v2022.05.18"
+
+  project_access = local.users["gh-user"]["project_access"]
+  username       = local.users["gh-user"]["iam"]
 }
 ```

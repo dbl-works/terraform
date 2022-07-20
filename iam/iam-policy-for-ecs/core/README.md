@@ -55,13 +55,8 @@ module "iam_ecs_policies" {
 
   for_each = local.users
 
-  username       = each.value["gh-user"]["iam"]
-  project_access = each.value["gh-user"]["project_access"]
+  username       = each.value["iam"]
+  project_access = each.value["project_access"]
   region         = "eu-central-1"
-
-  # We need to get the latest state of the user before apply the policy
-  depends_on = [
-    aws_iam_user.user
-  ]
 }
 ```
