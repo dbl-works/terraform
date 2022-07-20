@@ -32,7 +32,7 @@ locals {
       "Resource" : concat([
         for replica in var.s3_replicas :
           "${replica.bucket_arn}/*"
-      ], ["${aws_s3_bucket.main.arn}/*"])
+      ], ["${module.s3.arn}/*"])
     },
     {
       "Action" : [
@@ -46,8 +46,8 @@ locals {
       ],
       "Effect" : "Allow",
       "Resource" : flatten(concat([
-        aws_s3_bucket.main.arn,
-        "${aws_s3_bucket.main.arn}/*"
+        module.s3.arn,
+        "${module.s3.arn}/*"
       ],
       [
         for replica in var.s3_replicas :
@@ -78,7 +78,7 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
   count = length(var.s3_replicas) > 0 ? 1 : 0
 
   role   = aws_iam_role.replication[0].arn
-  bucket = aws_s3_bucket.main.id
+  bucket = module.s3.id
 
   dynamic "rule" {
     for_each = var.s3_replicas

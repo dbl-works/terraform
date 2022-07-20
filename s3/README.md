@@ -39,7 +39,6 @@ module "s3-replica-for-private-bucket" {
     aws = "aws.replica"
   }
 
-  region             = "ap-southeast-1"
   environment        = "staging"
   project            = "someproject"
   bucket_name        = "someproject-staging-storage-replica-ap-southeast-1"
@@ -76,13 +75,13 @@ module "s3-replica-for-public-bucket" {
     aws = "aws.replica"
   }
 
-  region             = 'ap-southeast-1'
   environment        = "staging"
   project            = "someproject"
   bucket_name        = "someproject-staging-frontend-replica-ap-southeast-1"
 
   # Optional
   versioning                  = var.versioning
+  kms_deletion_window_in_days = 30
   enable_encryption           = false
 }
 ```
