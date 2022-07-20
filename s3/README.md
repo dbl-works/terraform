@@ -24,6 +24,7 @@ module "s3-private" {
       bucket_arn = module.s3-replica-for-private-bucket.arn
       # "arn:aws:kms:ap-southeast-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
       kms_arn = module.s3-replica-for-private-bucket.kms_arn
+      region  = "ap-southeast-1"
     }
   }
 }
