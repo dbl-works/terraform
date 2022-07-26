@@ -10,6 +10,10 @@ output "redis_url" {
   value = module.elasticache.endpoint
 }
 
+output "vpc_id" {
+  value = module.vpc.id
+}
+
 # Security groups, for linking with other resources
 output "alb_security_group_id" {
   value = module.ecs.alb_security_group_id
