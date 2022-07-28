@@ -1,9 +1,9 @@
 resource "aws_iam_group" "usage" {
-  name = "${var.project}-${var.environment}-s3-usage"
+  name = "${var.bucket_name}-s3-usage"
 }
 
 resource "aws_iam_policy" "usage" {
-  name        = "${var.project}-${var.environment}-s3-usage"
+  name        = "${var.bucket_name}-s3-usage"
   description = "For uploading/downloading encrypted files on S3"
 
   policy = <<EOF
