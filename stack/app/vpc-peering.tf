@@ -1,6 +1,10 @@
+locals {
+  enable_vpc_peering = var.vpc_peering || var.rds_is_read_replica
+}
+
 module "vpc-peering" {
   source = "../../vpc-peering"
-  count  = var.rds_is_read_replica ? 1 : 0
+  count  = local.enable_vpc_peering ? 1 : 0
 
   providers = {
     aws      = aws

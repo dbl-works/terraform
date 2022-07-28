@@ -114,6 +114,7 @@ module "stack" {
 
   # vpc
   vpc_cidr_block = "10.0.0.0/16"
+  vpc_peering    = false # automatically set to "true" if "rds_is_read_replica" is "true".
 }
 ```
 

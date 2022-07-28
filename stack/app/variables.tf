@@ -73,6 +73,11 @@ variable "vpc_availability_zones" {
 variable "vpc_cidr_block" {
   type = string
 }
+
+variable "vpc_peering" {
+  type    = bool
+  default = false
+}
 # =============== VPC ================ #
 
 

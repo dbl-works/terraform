@@ -20,6 +20,11 @@ variable "multi_az" {
   default = false
 }
 
+variable "snapshot_identifier" {
+  type    = string
+  default = null
+}
+
 # Credentials for the root RDS user
 # Only to be used in initial setup, never by applications
 variable "username" {
