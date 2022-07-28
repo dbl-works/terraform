@@ -19,7 +19,12 @@ variable "regional" {
 }
 
 variable "region" {
-  default = ""
+  default = null
+  type    = string
+}
+
+variable "name" {
+  default = null
   type    = string
 }
 
