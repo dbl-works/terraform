@@ -5,3 +5,7 @@ variable "username" {
 variable "project_access" {
   type = map(any)
 }
+
+variable "region" {
+  type = string
+}

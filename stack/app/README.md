@@ -110,6 +110,7 @@ module "stack" {
   elasticache_replicas_per_node_group       = 1
   elasticache_shards_per_replication_group  = 1
   elasticache_snapshot_retention_limit      = 0
+  elasticache_data_tiering_enabled          = false # see the README in the Elasticache Module
 
   # vpc
   vpc_cidr_block = "10.0.0.0/16"
