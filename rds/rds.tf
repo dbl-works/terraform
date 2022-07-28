@@ -26,6 +26,8 @@ resource "aws_db_instance" "main" {
   monitoring_role_arn             = aws_iam_role.rds-enhanced-monitoring.arn
   performance_insights_enabled    = true
   performance_insights_kms_key_id = var.kms_key_arn
+  snapshot_identifier             = var.snapshot_identifier
+
   enabled_cloudwatch_logs_exports = [
     "postgresql",
     "upgrade",
@@ -46,6 +48,7 @@ resource "aws_db_instance" "main" {
     ignore_changes = [
       engine_version, # AWS will auto-update minor version changes
       db_name,        # if you didn't use this before it would re-create your RDS instance
+      snapshot_identifier,
     ]
   }
 }
