@@ -13,6 +13,16 @@ variable "versioning" {
   type    = bool
 }
 
+variable "regional" {
+  default = false
+  type    = bool
+}
+
+variable "region" {
+  default = ""
+  type    = string
+}
+
 # How many days objects should remain in the primary storage class before being transitions
 # Setting to 0 will disable class transition and all data will stay in the primary storage class
 variable "primary_storage_class_retention" {

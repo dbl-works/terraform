@@ -1,9 +1,13 @@
+locals {
+  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+}
+
 resource "aws_iam_group" "usage" {
-  name = "${var.bucket_name}-s3-usage"
+  name = "${local.name}-s3-usage"
 }
 
 resource "aws_iam_policy" "usage" {
-  name        = "${var.bucket_name}-s3-usage"
+  name        = "${local.name}-s3-usage"
   description = "For uploading/downloading encrypted files on S3"
 
   policy = <<EOF

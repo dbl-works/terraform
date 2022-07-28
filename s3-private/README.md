@@ -19,6 +19,9 @@ module "s3-storage" {
   # Optional
   kms_deletion_window_in_days     = 30
   versioning                      = true
+  regional                        = true
+  region                          = ""   # IAM Policy Names must be unique across regions
+  name                            = ""   # used for policies, if null "project-environment-region" is used
   primary_storage_class_retention = 0
   s3_replicas                     = {
     staging-storage-us-east-1 = {
