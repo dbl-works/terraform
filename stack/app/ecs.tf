@@ -28,10 +28,10 @@ module "ecs" {
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
 
-  allowlisted_ssh_ips = flatten(concat([
+  allowlisted_ssh_ips = distinct(flatten(concat([
     var.allowlisted_ssh_ips,
     var.vpc_cidr_block
-  ]))
+  ])))
 
   grant_read_access_to_s3_arns = var.grant_read_access_to_s3_arns
   grant_write_access_to_s3_arns = flatten(concat([
