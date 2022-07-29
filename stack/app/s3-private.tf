@@ -14,4 +14,6 @@ module "s3-storage" {
   kms_deletion_window_in_days     = var.kms_deletion_window_in_days
   versioning                      = each.value.versioning
   primary_storage_class_retention = each.value.primary_storage_class_retention
+  region                          = var.region
+  regional                        = true
 }
