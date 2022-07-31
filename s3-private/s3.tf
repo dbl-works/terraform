@@ -4,6 +4,7 @@ module "s3" {
   environment                 = var.environment
   project                     = var.project
   bucket_name                 = var.bucket_name
+
   versioning                  = var.versioning
   kms_deletion_window_in_days = var.kms_deletion_window_in_days
   enable_encryption           = true
