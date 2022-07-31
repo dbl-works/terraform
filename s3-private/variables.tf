@@ -37,15 +37,15 @@ variable "primary_storage_class_retention" {
 }
 
 variable "s3_replicas" {
-  # eg. {
-  #   bucket-1 = {
+  # eg. [
+  #   {
   #     bucket_arn = "arn-1"
   #     kms_arn = "kms-1"
   #     region = "ap-southeast-1"
   #   }
-  # }
-  default = {}
-  type = map(object({
+  # ]
+  default = []
+  type = list(object({
     bucket_arn = string
     kms_arn    = string
     region     = string

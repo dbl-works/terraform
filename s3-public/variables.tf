@@ -17,13 +17,11 @@ variable "primary_storage_class_retention" {
 }
 
 variable "s3_replicas" {
-  # eg. {
-  #   bucket-1 = {
-  #     bucket_arn = "arn-1"
-  #   }
-  # }
-  default = {}
-  type = map(object({
+  # eg. [
+  #  bucket_arn = "arn-1"
+  # ]
+  default = []
+  type = list(object({
     bucket_arn = string,
   }))
 }
