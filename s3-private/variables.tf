@@ -46,7 +46,7 @@ variable "s3_replicas" {
   # }
   default = {}
   type = map(object({
-    bucket_arn = string,
+    bucket_arn = string
     kms_arn    = string
     region     = string
   }))

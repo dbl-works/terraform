@@ -154,24 +154,6 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
           # The KMS key must have been created in the same AWS Region as the destination buckets.
           replica_kms_key_id = rule.value.kms_arn
         }
-
-        metrics {
-          event_threshold {
-            minutes = 15
-          }
-          status = "Enabled"
-        }
-
-        # S3 Replication Time Control (S3 RTC) helps you meet compliance or business requirements for data replication and
-        # provides visibility into Amazon S3 replication times.
-        # S3 RTC replicates most objects that you upload to Amazon S3 in seconds,
-        # and 99.99 percent of those objects within 15 minutes.
-        replication_time {
-          status = "Enabled"
-          time {
-            minutes = 15
-          }
-        }
       }
     }
   }
