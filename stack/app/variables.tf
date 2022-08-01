@@ -160,6 +160,10 @@ variable "rds_master_db_kms_key_arn" {
   type    = string
   default = null
 }
+variable "rds_master_vpc_private_subnet_ids" {
+  type    = list(string)
+  default = []
+}
 variable "rds_instance_class" {
   type    = string
   default = "db.t3.micro"

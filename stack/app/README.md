@@ -91,16 +91,17 @@ module "stack" {
   ## Will create a VPC Peering Resource to allow connections to the master DB;
   ## This stack is the requester, the stack with the main DB is the accepter.
   ## The master-DB KMS key arn must be passed to allow decrypting the master DB.
-  rds_is_read_replica            = false
-  rds_master_db_instance_arn     = null
-  rds_master_db_region           = null
-  rds_master_db_vpc_id           = null
-  rds_master_db_vpc_cidr_block   = null
-  rds_master_db_kms_key_arn      = null
-  rds_name                       = null # unique name, shouldn't be necessary if "regional" is set to true
-  rds_multi_region_kms_key       = false # set to true for the MASTER stack, so that replicas can create a replica of the key
-  rds_allow_from_cidr_blocks     = [] # non-master regions must be granted access to RDS by passing their CIDR block ( vpc-peering enabled! )
-  rds_allow_from_security_groups = [] # non-master regions must be granted access to RDS by passing their CIDR block ( vpc-peering enabled! )
+  rds_is_read_replica               = false
+  rds_master_db_instance_arn        = null
+  rds_master_db_region              = null
+  rds_master_db_vpc_id              = null
+  rds_master_db_vpc_cidr_block      = null
+  rds_master_db_kms_key_arn         = null
+  rds_name                          = null # unique name, shouldn't be necessary if "regional" is set to true
+  rds_multi_region_kms_key          = false # set to true for the MASTER stack, so that replicas can create a replica of the key
+  rds_allow_from_cidr_blocks        = [] # non-master regions must be granted access to RDS by passing their CIDR block ( vpc-peering enabled! )
+  rds_allow_from_security_groups    = [] # non-master regions must be granted access to RDS by passing their CIDR block ( vpc-peering enabled! )
+  rds_master_vpc_private_subnet_ids = [] # for the peering connection
 
   # ECS
   allow_internal_traffic_to_ports = []
