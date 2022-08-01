@@ -20,7 +20,7 @@ resource "aws_route_table_association" "requester_association" {
   for_each = toset(var.requester_private_subnet_ids)
 
   subnet_id      = each.key
-  route_table_id = aws_route.requester_route.id
+  route_table_id = aws_route_table.requester_table.id
 }
 
 
@@ -49,5 +49,5 @@ resource "aws_route_table_association" "accepter_association" {
   for_each = toset(var.accepter_private_subnet_ids)
 
   subnet_id      = each.key
-  route_table_id = aws_route.accepter_route.id
+  route_table_id = aws_route_table.accepter_table.id
 }
