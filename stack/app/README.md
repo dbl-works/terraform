@@ -98,6 +98,7 @@ module "stack" {
   rds_master_db_kms_key_arn  = null
   rds_name                   = null # unique name, shouldn't be necessary if "regional" is set to true
   rds_multi_region_kms_key   = false # set to true for the MASTER stack, so that replicas can create a replica of the key
+  rds_allow_from_cidr_blocks = [] # non-master regions must be granted access to RDS by passing their CIDR block ( vpc-peering enabled! )
 
   # ECS
   allow_internal_traffic_to_ports = []

@@ -36,4 +36,5 @@ module "rds" {
   is_read_replica        = var.rds_is_read_replica
   regional               = var.regional
   name                   = var.rds_name
+  allow_from_cidr_blocks = var.rds_allow_from_cidr_blocks
 }

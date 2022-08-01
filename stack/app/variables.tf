@@ -168,6 +168,10 @@ variable "rds_allocated_storage" {
   type    = number
   default = 100
 }
+variable "rds_allow_from_cidr_blocks" {
+  type    = list(string)
+  default = []
+}
 # =============== RDS ================ #
 
 # =============== ECS ================ #
