@@ -44,10 +44,10 @@ resource "aws_route" "accepter_route" {
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
 }
 
-resource "aws_route_table_association" "requester_association" {
+resource "aws_route_table_association" "accepter_association" {
   provider = aws.peer
   for_each = var.accepter_private_subnet_ids
 
   subnet_id      = each.key
-  route_table_id = aws_route.requester_route.id
+  route_table_id = aws_route.accepter_route.id
 }
