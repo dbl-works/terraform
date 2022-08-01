@@ -17,7 +17,7 @@ resource "aws_route" "requester_route" {
 }
 
 resource "aws_route_table_association" "requester_association" {
-  for_each = var.requester_private_subnet_ids
+  for_each = toset(var.requester_private_subnet_ids)
 
   subnet_id      = each.key
   route_table_id = aws_route.requester_route.id
@@ -46,7 +46,7 @@ resource "aws_route" "accepter_route" {
 
 resource "aws_route_table_association" "accepter_association" {
   provider = aws.peer
-  for_each = var.accepter_private_subnet_ids
+  for_each = toset(var.accepter_private_subnet_ids)
 
   subnet_id      = each.key
   route_table_id = aws_route.accepter_route.id
