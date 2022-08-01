@@ -87,6 +87,11 @@ variable "elasticache_node_type" {
   default = "cache.t3.micro"
 }
 
+variable "elasticache_parameter_group_name" {
+  type    = string
+  default = "default.redis6.x.cluster.on"
+}
+
 variable "elasticache_replicas_per_node_group" {
   type    = number
   default = 1

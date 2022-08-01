@@ -110,6 +110,7 @@ module "stack" {
   elasticache_replicas_per_node_group       = 1
   elasticache_shards_per_replication_group  = 1
   elasticache_snapshot_retention_limit      = 0
+  elasticache_parameter_group_name          = "default.redis6.x.cluster.on" # "default.redis6.x" for non-cluster mode
   elasticache_data_tiering_enabled          = false # see the README in the Elasticache Module
 
   # vpc
