@@ -139,6 +139,21 @@ module "s3-replica-for-private-bucket-us-east-1" {
 }
 ```
 
+### Replica Diagram
+```mermaid
+sequenceDiagram
+  participant eu
+  participant us
+  participant ap
+
+  eu->>us: Replicate to US
+  eu->>ap: Replicate to AP
+  ap->>us: Replicate to US
+  ap->>eu: Replicate to EU
+  us->>eu: Replicate to EU
+  us->>ap: Replicate to AP
+```
+
 ## Outputs
 
 - `arn`: you probably want to pass this arn to ECS `grant_write_access_to_s3_arns`
