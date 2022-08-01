@@ -84,8 +84,8 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
     for_each = var.s3_replicas
 
     content {
-      id     = "replica-rules-for-public-bucket-${rule.value.bucket_arn}"
-      status = "Enabled"
+      id       = "replica-rules-for-public-bucket-${rule.value.bucket_arn}"
+      status   = "Enabled"
       priority = rule.key + 1
 
       filter {}
