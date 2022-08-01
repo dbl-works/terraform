@@ -144,6 +144,10 @@ variable "rds_master_db_instance_arn" {
   default = null
   type    = string
 }
+variable "rds_master_db_vpc_cidr_block" {
+  default = null
+  type    = string
+}
 variable "rds_master_db_region" {
   type    = string
   default = null

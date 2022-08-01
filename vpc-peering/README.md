@@ -48,13 +48,12 @@ module "vpc-peering" {
   project     = "project-name"
   environment = "production"
 
-  requester_region = "eu-central-1"
-  requester_vpc_id = "module.vpc-eu.id"
+  requester_region     = "eu-central-1"
+  requester_vpc_id     = "module.vpc-eu.id"
+  requester_cidr_block = "10.1.0.0/16"
 
-  accepter_region = "us-east-1"
-  accepter_vpc_id = "module.vpc-us.id"
-
-  # optional
-  cross_region_kms_keys_arns = [] # to allow using the same key across regions, e.g. for RDS read replicas
+  accepter_region     = "us-east-1"
+  accepter_vpc_id     = "module.vpc-us.id"
+  accepter_cidr_block = "10.2.0.0/16"
 }
 ```

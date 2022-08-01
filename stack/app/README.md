@@ -95,6 +95,7 @@ module "stack" {
   rds_master_db_instance_arn     = null
   rds_master_db_region           = null
   rds_master_db_vpc_id           = null
+  rds_master_db_vpc_cidr_block   = null
   rds_master_db_kms_key_arn      = null
   rds_name                       = null # unique name, shouldn't be necessary if "regional" is set to true
   rds_multi_region_kms_key       = false # set to true for the MASTER stack, so that replicas can create a replica of the key

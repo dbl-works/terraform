@@ -14,9 +14,11 @@ module "vpc-peering" {
   project     = var.project
   environment = var.environment
 
-  requester_region = var.region
-  requester_vpc_id = module.vpc.id
+  requester_region     = var.region
+  requester_vpc_id     = module.vpc.id
+  requester_cidr_block = var.vpc_cidr_block
 
-  accepter_region = var.rds_master_db_region
-  accepter_vpc_id = var.rds_master_db_vpc_id
+  accepter_region     = var.rds_master_db_region
+  accepter_vpc_id     = var.rds_master_db_vpc_id
+  accepter_cidr_block = var.rds_master_db_vpc_cidr_block
 }
