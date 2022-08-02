@@ -1,9 +1,20 @@
 variable "project" {}
 variable "environment" {}
 variable "vpc_id" {}
-variable "vpc_cidr" {}
 variable "kms_key_arn" {}
 variable "subnet_ids" { type = list(string) }
+
+variable "allow_from_cidr_blocks" {
+  type    = list(string)
+  default = []
+}
+
+# deprecated
+variable "vpc_cidr" {
+  type    = string
+  default = ""
+}
+
 variable "availability_zones" {
   type        = list(string)
   default     = []
