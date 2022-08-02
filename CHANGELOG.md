@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## [unreleased]
 ## Global Accelerator
-- added a new module to launch an AWS Global Accelerator, [#102](https://github.com/dbl-works/terraform/pull/102)
+- added a new module to launch an AWS Global Accelerator, [#104](https://github.com/dbl-works/terraform/pull/104)
 
 ## ElastiCache
 - added `data_tiering_enabled` to the available options, defaulting to `false`
