@@ -13,7 +13,7 @@ resource "aws_globalaccelerator_accelerator" "main-accelerator" {
 # listener for SSL encrypted traffic
 resource "aws_globalaccelerator_listener" "main-listener-443" {
   accelerator_arn = aws_globalaccelerator_accelerator.main-accelerator.id
-  client_affinity = "SOURCE_IP"
+  client_affinity = var.client_affinity
   protocol        = "TCP"
 
   port_range {
