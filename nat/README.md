@@ -28,4 +28,4 @@ module "nat" {
 
 
 ## Outputs
-_none_
+* `aws_route_table_ids` for VPC-Peering
