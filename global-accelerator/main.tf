@@ -23,7 +23,7 @@ resource "aws_globalaccelerator_listener" "main-listener-443" {
 }
 
 # endpoints for each region for SSL encrypted traffic
-resource "aws_globalaccelerator_endpoint_group" "endpoint_group-443-eu-central" {
+resource "aws_globalaccelerator_endpoint_group" "endpoint-group-443" {
   for_each = { for lb in var.load_balancers : lb.region => lb }
 
   listener_arn          = aws_globalaccelerator_listener.main-listener-443.id
