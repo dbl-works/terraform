@@ -10,7 +10,7 @@ If you are using Cloudflare, set the DNS target for your API endpoint to the Glo
 
 ```terraform
 module "global-accelerator" {
-  source = "github.com/dbl-works/terraform//nat?ref=v2021.07.12"
+  source = "github.com/dbl-works/terraform//global-accelerator?ref=v2021.07.12"
 
   project            = "my-project"
   environment        = "production"
