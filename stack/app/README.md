@@ -127,8 +127,9 @@ module "stack" {
   elasticache_data_tiering_enabled          = false # see the README in the Elasticache Module
 
   # vpc
-  vpc_cidr_block = "10.0.0.0/16"
-  vpc_peering    = false # automatically set to "true" if "rds_is_read_replica" is "true".
+  vpc_cidr_block     = "10.0.0.0/16"
+  vpc_peering        = false # automatically set to "true" if "rds_is_read_replica" is "true".
+  remote_cidr_blocks = [] # for peering connections
 }
 ```
 

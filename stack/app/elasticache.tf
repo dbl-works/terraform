@@ -6,8 +6,12 @@ module "elasticache" {
   environment = var.environment
   vpc_id      = module.vpc.id
   subnet_ids  = module.vpc.subnet_private_ids
-  vpc_cidr    = var.vpc_cidr_block
   kms_key_arn = var.kms_app_arn
+
+  allow_from_cidr_blocks = distinct(compact(flatten([
+    var.vpc_cidr_block,
+    var.remote_cidr_blocks,
+  ])))
 
   # optional
   node_type                = var.elasticache_node_type
