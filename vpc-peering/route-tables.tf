@@ -1,4 +1,6 @@
-# Requester's side of the connection.
+#
+# Requester's side of the connection
+#
 resource "aws_route_table" "requester_table" {
   vpc_id = var.requester_vpc_id
 
@@ -14,17 +16,25 @@ resource "aws_route" "requester_route" {
   route_table_id            = aws_route_table.requester_table.id
   destination_cidr_block    = var.accepter_cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+
+  depends_on = [
+    aws_route_table.requester_table,
+    aws_vpc_peering_connection.peer,
+  ]
 }
 
-resource "aws_route_table_association" "requester_association" {
-  for_each = toset(var.requester_private_subnet_ids)
-
-  subnet_id      = each.key
-  route_table_id = aws_route_table.requester_table.id
+resource "aws_route" "requester_route_nats" {
+  count                     = length(var.requester_nat_route_table_ids)
+  route_table_id            = var.requester_nat_route_table_ids[count.index]
+  destination_cidr_block    = var.accepter_cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
 }
 
 
-# Accepter's side of the connection.
+
+#
+# Accepter's side of the connection
+#
 resource "aws_route_table" "accepter_table" {
   provider = aws.peer
   vpc_id   = var.accepter_vpc_id
@@ -41,13 +51,18 @@ resource "aws_route" "accepter_route" {
   provider                  = aws.peer
   route_table_id            = aws_route_table.accepter_table.id
   destination_cidr_block    = var.requester_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
+  vpc_peering_connection_id = aws_vpc_peering_connection_accepter.peer.id
+
+  depends_on = [
+    aws_route_table.accepter_table,
+    aws_vpc_peering_connection_accepter.peer,
+  ]
 }
 
-resource "aws_route_table_association" "accepter_association" {
-  provider = aws.peer
-  for_each = toset(var.accepter_private_subnet_ids)
-
-  subnet_id      = each.key
-  route_table_id = aws_route_table.accepter_table.id
+resource "aws_route" "accepter_route_nats" {
+  provider                  = aws.peer
+  count                     = length(var.accepter_nat_route_table_ids)
+  route_table_id            = var.accepter_nat_route_table_ids[count.index]
+  destination_cidr_block    = var.requester_cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection_accepter.peer.id
 }

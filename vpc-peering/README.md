@@ -48,12 +48,20 @@ module "vpc-peering" {
   project     = "project-name"
   environment = "production"
 
-  requester_region     = "eu-central-1"
-  requester_vpc_id     = "module.vpc-eu.id"
-  requester_cidr_block = "10.1.0.0/16"
+  requester_region              = "eu-central-1"
+  requester_vpc_id              = "module.vpc-eu.id"
+  requester_cidr_block          = "10.1.0.0/16"
+  requester_nat_route_table_ids = [
+    "rtb-123..",
+    "rtb-456..",
+  ]
 
-  accepter_region     = "us-east-1"
-  accepter_vpc_id     = "module.vpc-us.id"
-  accepter_cidr_block = "10.2.0.0/16"
+  accepter_region              = "us-east-1"
+  accepter_vpc_id              = "module.vpc-us.id"
+  accepter_cidr_block          = "10.2.0.0/16"
+  accepter_nat_route_table_ids = [
+    "rtb-987..",
+    "rtb-654..",
+  ]
 }
 ```

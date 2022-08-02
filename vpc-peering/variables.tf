@@ -6,7 +6,10 @@ variable "environment" {
   type = string
 }
 
+
+#
 # requester
+#
 variable "requester_region" {
   type = string
 }
@@ -19,11 +22,15 @@ variable "requester_cidr_block" {
   type = string
 }
 
-variable "requester_private_subnet_ids" {
-  type = list(string)
+variable "requester_nat_route_table_ids" {
+  type    = list(string)
+  default = []
 }
 
+
+#
 # accepter
+#
 variable "accepter_region" {
   type = string
 }
@@ -36,6 +43,7 @@ variable "accepter_cidr_block" {
   type = string
 }
 
-variable "accepter_private_subnet_ids" {
-  type = list(string)
+variable "accepter_nat_route_table_ids" {
+  type    = list(string)
+  default = []
 }
