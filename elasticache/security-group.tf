@@ -22,11 +22,14 @@ locals {
 resource "aws_security_group_rule" "main" {
   count = length(local.vpc_cidr_blocks) # avoid creating any, if no CIDR blocks are passed
 
+  description       = "From CIDR Block: ${local.vpc_cidr_blocks[count.index]}"
   type              = "ingress"
   from_port         = 6379
   to_port           = 6379
   protocol          = "tcp"
   security_group_id = aws_security_group.main.id
 
-  cidr_blocks = local.vpc_cidr_blocks
+  cidr_blocks = [
+    local.vpc_cidr_blocks[count.index],
+  ]
 }
