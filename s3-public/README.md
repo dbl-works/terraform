@@ -20,10 +20,101 @@ module "s3-frontend" {
   # Optional
   versioning                      = false
   primary_storage_class_retention = 0
+  s3_replicas                     = []
 }
 ```
 
+### With replica
+```terraform
+module "s3-public" {
+  source = "github.com/dbl-works/terraform//s3-public?ref=v2021.11.13"
 
+  # Required
+  environment = "staging"
+  project     = "someproject"
+  bucket_name = "${var.bucket_name}-public"
+
+  # Optional
+  versioning                      = true
+  primary_storage_class_retention = 0
+  s3_replicas                     = [
+    {
+      bucket_arn = module.s3-public-eu-central-1.arn
+    },
+    {
+      bucket_arn = module.s3-public-us-east-1.arn
+    }
+   ]
+}
+
+provider "aws" {
+  alias  = "eu"
+  region = "eu-central-1"
+}
+
+module "s3-public-eu-central-1" {
+  source = "github.com/dbl-works/terraform//s3-public?ref=v2021.11.13"
+  providers = {
+    aws = aws.eu
+  }
+
+  environment        = "staging"
+  project            = "someproject"
+  bucket_name = "${var.bucket_name}-public-eu-central-1"
+  s3_replicas = [
+    {
+      bucket_arn = module.s3-public.arn
+    },
+    {
+      bucket_arn = module.s3-public-us-east-1.arn
+    }
+  ]
+
+  # Optional
+  versioning                  = true
+}
+
+provider "aws" {
+  alias  = "us"
+  region = "us-east-1"
+}
+
+module "s3-public-us-east-1" {
+  source = "github.com/dbl-works/terraform//s3-public?ref=v2021.11.13"
+
+  # Required
+  environment = "staging"
+  project     = "someproject"
+  bucket_name = "${var.bucket_name}-public-us-east-1"
+
+  # Optional
+  versioning                      = true
+  primary_storage_class_retention = 0
+  s3_replicas = [
+    {
+      bucket_arn = module.s3-public.arn
+    },
+    {
+      bucket_arn = module.s3-public-eu-central-1.arn
+    },
+   ]
+}
+```
+
+### Replica Diagram
+```mermaid
+sequenceDiagram
+  participant eu
+  participant us
+  participant ap
+
+  eu->>us: Replicate to US
+  eu->>ap: Replicate to AP
+  ap->>us: Replicate to US
+  ap->>eu: Replicate to EU
+  us->>eu: Replicate to EU
+  us->>ap: Replicate to AP
+```
 
 ## Outputs
 

@@ -1,9 +1,17 @@
+output "id" {
+  value = module.s3.id
+}
+
+output "bucket_name" {
+  value = module.s3.bucket_name
+}
+
 output "arn" {
-  value = aws_s3_bucket.main.arn
+  value = module.s3.arn
 }
 
 output "kms-key-arn" {
-  value = module.kms-key-s3.arn
+  value = module.s3.kms_arn
 }
 
 output "group-usage-name" {

@@ -33,8 +33,14 @@ variable "private_buckets_list" {
     bucket_name                     = string
     versioning                      = bool
     primary_storage_class_retention = number
+    replicas = list(object({
+      bucket_arn = string
+      kms_arn    = string
+      region     = string
+    }))
   }))
 }
+
 # =============== S3 private ================ #
 
 # =============== S3 public ================ #
@@ -44,6 +50,11 @@ variable "public_buckets_list" {
     bucket_name                     = string
     versioning                      = bool
     primary_storage_class_retention = number
+    replicas = list(object({
+      bucket_arn = string
+      kms_arn    = string
+      region     = string
+    }))
   }))
 }
 # =============== S3 public ================ #
@@ -87,6 +98,11 @@ variable "elasticache_node_type" {
   default = "cache.t3.micro"
 }
 
+variable "elasticache_parameter_group_name" {
+  type    = string
+  default = "default.redis6.x.cluster.on"
+}
+
 variable "elasticache_replicas_per_node_group" {
   type    = number
   default = 1
@@ -128,6 +144,10 @@ variable "rds_master_db_instance_arn" {
   default = null
   type    = string
 }
+variable "rds_master_db_vpc_cidr_block" {
+  default = null
+  type    = string
+}
 variable "rds_master_db_region" {
   type    = string
   default = null
@@ -140,6 +160,10 @@ variable "rds_master_db_kms_key_arn" {
   type    = string
   default = null
 }
+variable "rds_master_nat_route_table_ids" {
+  type    = list(string)
+  default = []
+}
 variable "rds_instance_class" {
   type    = string
   default = "db.t3.micro"
@@ -151,6 +175,14 @@ variable "rds_engine_version" {
 variable "rds_allocated_storage" {
   type    = number
   default = 100
+}
+variable "rds_allow_from_cidr_blocks" {
+  type    = list(string)
+  default = []
+}
+variable "rds_allow_from_security_groups" {
+  type    = list(string)
+  default = []
 }
 # =============== RDS ================ #
 

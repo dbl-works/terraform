@@ -23,6 +23,7 @@ jobs:
           - kms-key-replica
           - nat
           - rds
+          - s3
           - s3-private
           - s3-public
           - secrets

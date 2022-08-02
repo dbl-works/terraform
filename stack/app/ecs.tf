@@ -33,11 +33,15 @@ module "ecs" {
     var.vpc_cidr_block
   ])))
 
-  grant_read_access_to_s3_arns = var.grant_read_access_to_s3_arns
-  grant_write_access_to_s3_arns = flatten(concat([
+  grant_read_access_to_s3_arns = distinct(flatten(concat([
+    [for arn in values(module.s3-storage)[*].arn : "${arn}/*"],
+    var.grant_read_access_to_s3_arns
+  ])))
+
+  grant_write_access_to_s3_arns = distinct(flatten(concat([
     [for arn in values(module.s3-storage)[*].arn : "${arn}/*"],
     var.grant_write_access_to_s3_arns
-  ]))
+  ])))
 
   grant_read_access_to_sqs_arns  = var.grant_read_access_to_sqs_arns
   grant_write_access_to_sqs_arns = var.grant_write_access_to_sqs_arns

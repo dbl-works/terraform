@@ -13,10 +13,41 @@ variable "versioning" {
   type    = bool
 }
 
+variable "regional" {
+  default = false
+  type    = bool
+}
+
+variable "region" {
+  default = null
+  type    = string
+}
+
+variable "name" {
+  default = null
+  type    = string
+}
+
 # How many days objects should remain in the primary storage class before being transitions
 # Setting to 0 will disable class transition and all data will stay in the primary storage class
 variable "primary_storage_class_retention" {
   default     = 0
   type        = number
   description = "Number of days before objects stay in the primary storage class"
+}
+
+variable "s3_replicas" {
+  # eg. [
+  #   {
+  #     bucket_arn = "arn-1"
+  #     kms_arn = "kms-1"
+  #     region = "ap-southeast-1"
+  #   }
+  # ]
+  default = []
+  type = list(object({
+    bucket_arn = string
+    kms_arn    = string
+    region     = string
+  }))
 }
