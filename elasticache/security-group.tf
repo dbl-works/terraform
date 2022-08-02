@@ -20,7 +20,7 @@ locals {
 }
 
 resource "aws_security_group_rule" "main" {
-  count = length(local.vpc_cidr_blocks)
+  count = length(local.vpc_cidr_blocks) # avoid creating any, if no CIDR blocks are passed
 
   type              = "ingress"
   from_port         = 6379
@@ -28,7 +28,5 @@ resource "aws_security_group_rule" "main" {
   protocol          = "tcp"
   security_group_id = aws_security_group.main.id
 
-  cidr_blocks = [
-    local.vpc_cidr_blocks[count.index],
-  ]
+  cidr_blocks = local.vpc_cidr_blocks
 }
