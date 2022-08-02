@@ -160,7 +160,7 @@ variable "rds_master_db_kms_key_arn" {
   type    = string
   default = null
 }
-variable "rds_master_vpc_private_subnet_ids" {
+variable "rds_master_nat_route_table_ids" {
   type    = list(string)
   default = []
 }
