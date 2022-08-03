@@ -13,6 +13,7 @@ jobs:
           - ecr
           - ecs
           - elasticache
+          - global-accelerator
           - iam/iam-for-deploy-bot
           - iam/iam-for-humans
           - iam/iam-policy-for-ecs/core
