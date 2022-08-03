@@ -124,6 +124,11 @@ variable "elasticache_data_tiering_enabled" {
   default = false
 }
 
+variable "elasticache_multi_az_enabled" {
+  type    = bool
+  default = true
+}
+
 # Number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them
 # If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.
 variable "elasticache_snapshot_retention_limit" {
