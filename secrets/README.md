@@ -12,9 +12,11 @@ module "secrets" {
 
   project     = "someproject"
   environment = "staging"
+  kms_key_id  = "abc-123"
 
   # Optional
   application = "app"
+  description = "Secrets that are not to be stored inside ${var.application}."
 }
 ```
 

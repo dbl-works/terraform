@@ -1,11 +1,16 @@
 variable "project" {}
 variable "environment" {}
-variable "application" { default = "app" }
 
 variable "kms_key_id" {
   type = string
 }
 
+variable "application" {
+  type    = string
+  default = "app"
+}
+
 variable "description" {
-  type = string
+  type    = string
+  default = null
 }
