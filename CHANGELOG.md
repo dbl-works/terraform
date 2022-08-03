@@ -15,9 +15,11 @@ This project does not follow SemVer, since modules are independent of each other
 - added `data_tiering_enabled` to the available options, defaulting to `false`, [#100](https://github.com/dbl-works/terraform/pull/100)
 - added `name` as optional parameter in case multiple Redis-Clusters need to be launched for the same project/environment, [#100](https://github.com/dbl-works/terraform/pull/100)
 
-## ECS iam management
-- added multiple new modules under `./iam` for sane access controll, [#95](https://github.com/dbl-works/terraform/pull/95)
-- fixed an issue where too many ports where opened up in some cases, [#103](https://github.com/dbl-works/terraform/pull/103)
+## IAM Management
+- added multiple new modules under `./iam` for sane access control, [#95](https://github.com/dbl-works/terraform/pull/95)
+
+## ECS
+- fixed an issue where too many ports are opened up in some cases, [#103](https://github.com/dbl-works/terraform/pull/103)
 
 ## RDS & Stack
 - allow launching a stack with VPC peering without an RDS read replica, [#103](https://github.com/dbl-works/terraform/pull/103)
