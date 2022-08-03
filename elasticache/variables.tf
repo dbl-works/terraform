@@ -61,6 +61,11 @@ variable "cluster_mode" {
   default = true
 }
 
+variable "multi_az_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "data_tiering_enabled" {
   type    = bool
   default = false

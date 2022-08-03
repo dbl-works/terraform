@@ -20,7 +20,7 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
   # Set apply_immediately flag to true to instruct the service to apply the change immediately
   # but will result in a brief downtime as servers reboots.
   apply_immediately          = true
-  multi_az_enabled           = true
+  multi_az_enabled           = var.multi_az_enabled
   automatic_failover_enabled = true
   data_tiering_enabled       = var.data_tiering_enabled
 
@@ -56,7 +56,7 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
   kms_key_id                 = var.kms_key_arn
   snapshot_retention_limit   = var.snapshot_retention_limit
   apply_immediately          = true
-  multi_az_enabled           = true
+  multi_az_enabled           = var.multi_az_enabled
   automatic_failover_enabled = true
   data_tiering_enabled       = var.data_tiering_enabled
 
