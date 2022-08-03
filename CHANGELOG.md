@@ -6,13 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
-## [unreleased]
+## [v2022.08.03]
+
 ## Global Accelerator
 - added a new module to launch an AWS Global Accelerator, [#104](https://github.com/dbl-works/terraform/pull/104)
 
 ## ElastiCache
-- added `data_tiering_enabled` to the available options, defaulting to `false`
-- added `name` as optional parameter in case multiple Redis-Clusters need to be launched for the same project/environment
+- added `data_tiering_enabled` to the available options, defaulting to `false`, [#100](https://github.com/dbl-works/terraform/pull/100)
+- added `name` as optional parameter in case multiple Redis-Clusters need to be launched for the same project/environment, [#100](https://github.com/dbl-works/terraform/pull/100)
+
+## ECS iam management
+- added multiple new modules under `./iam` for sane access controll, [#95](https://github.com/dbl-works/terraform/pull/95)
+- fixed an issue where too many ports where opened up in some cases, [#103](https://github.com/dbl-works/terraform/pull/103)
+
+## RDS & Stack
+- allow launching a stack with VPC peering without an RDS read replica, [#103](https://github.com/dbl-works/terraform/pull/103)
+
+## S3
+- Add Cross Region Replication for S3 :warning: to upgrade, you might need to remove/import the S3 buckets from your terraform state due internal changes in the module ( find detailed instructions in the PR description ), [#101](https://github.com/dbl-works/terraform/pull/101)
+
+## Elasticache
+- allow passing multiple CIDR blocks to the security group for access from multiple VPCs, [#105](https://github.com/dbl-works/terraform/pull/105)
+
+
 
 ## [v2022.07.08]
 
@@ -32,6 +48,7 @@ This project does not follow SemVer, since modules are independent of each other
 ## Stack & Cloudflare
 - fixed issues when setting up a bastion, [#93](https://github.com/dbl-works/terraform/pull/93)
 - added the option to launch a stack with a RDS read-replica, [#97](https://github.com/dbl-works/terraform/pull/97)
+
 
 
 ## [v2022.06.23]
