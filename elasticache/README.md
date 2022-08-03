@@ -10,12 +10,13 @@ A reopsitory for setting up an elasticache cluster.
 module "elasticache" {
   source = "github.com/dbl-works/terraform//elasticache?ref=v2021.08.24"
 
-  project            = local.project
-  environment        = local.environment
-  vpc_id             = module.vpc.id
-  vpc_cidr           = local.cidr_block
-  subnet_ids         = module.vpc.subnet_private_ids
-  kms_key_arn        = var.kms_key_arn # "kms_app_arn" if you use the "stack" module, i.e. the key used for the application
+  project                = local.project
+  environment            = local.environment
+  vpc_id                 = module.vpc.id
+  allow_from_cidr_blocks = [local.cidr_block] # add more if you need access e.g. through a peering from another VPC
+  vpc_cidr               = local.cidr_block # deprecated in favor of `vpc_cidr_blocks`
+  subnet_ids             = module.vpc.subnet_private_ids
+  kms_key_arn            = var.kms_key_arn # "kms_app_arn" if you use the "stack" module, i.e. the key used for the application
 
   # required only for non cluster mode
   availability_zones = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]

@@ -89,6 +89,12 @@ variable "vpc_peering" {
   type    = bool
   default = false
 }
+
+# CIDR blocks from all regions that are not this region
+variable "remote_cidr_blocks" {
+  type    = list(string)
+  default = []
+}
 # =============== VPC ================ #
 
 

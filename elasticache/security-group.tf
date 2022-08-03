@@ -7,22 +7,29 @@ resource "aws_security_group" "main" {
     Project     = var.project
     Environment = var.environment
   }
+}
 
-  # egress {
-  #   from_port = 0
-  #   to_port = 0
-  #   protocol = -1
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
+# to avoid breaking changes for switching from "vpc_cidr" ( string ) to "allow_from_cidr_blocks" ( list )
+locals {
+  vpc_cidr_blocks = distinct(compact(flatten(
+    [
+      var.allow_from_cidr_blocks,
+      var.vpc_cidr,
+    ]
+  )))
 }
 
 resource "aws_security_group_rule" "main" {
+  count = length(local.vpc_cidr_blocks) # avoid creating any, if no CIDR blocks are passed
+
+  description       = "From CIDR Block: ${local.vpc_cidr_blocks[count.index]}"
   type              = "ingress"
   from_port         = 6379
   to_port           = 6379
   protocol          = "tcp"
   security_group_id = aws_security_group.main.id
+
   cidr_blocks = [
-    var.vpc_cidr,
+    local.vpc_cidr_blocks[count.index],
   ]
 }
