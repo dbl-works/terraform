@@ -100,7 +100,6 @@ module "stack" {
   rds_name                          = null # unique name, shouldn't be necessary if "regional" is set to true
   rds_multi_region_kms_key          = false # set to true for the MASTER stack, so that replicas can create a replica of the key
   rds_allow_from_cidr_blocks        = [] # non-master regions must be granted access to RDS by passing their CIDR block ( vpc-peering enabled! )
-  rds_allow_from_security_groups    = [] # non-master regions must be granted access to RDS by passing their CIDR block ( vpc-peering enabled! )
   rds_master_nat_route_table_ids    = [] # for the peering connection
 
   # ECS

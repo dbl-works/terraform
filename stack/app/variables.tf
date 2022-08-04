@@ -191,10 +191,6 @@ variable "rds_allow_from_cidr_blocks" {
   type    = list(string)
   default = []
 }
-variable "rds_allow_from_security_groups" {
-  type    = list(string)
-  default = []
-}
 # =============== RDS ================ #
 
 # =============== ECS ================ #
