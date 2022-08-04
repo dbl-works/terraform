@@ -16,6 +16,10 @@ module "rds-kms-key" {
 module "rds" {
   source = "../../rds"
 
+  depends_on = [
+    module.ecs
+  ]
+
   project     = var.project
   environment = var.environment
   account_id  = var.account_id
