@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
+## [v2022.08.05]
+## Elasticache
+- `multi_az_enabled` can now optionally be turned off
+
+## Secrets
+- Improved documentation
+- allow `description` to be optional
+
+## Stack
+- pass `multi_az_enabled` through to Elasticache
+- fix `allow_from_security_groups` to have a predictable length for terraform
+
 ## [v2022.08.03]
 
 ## Global Accelerator
