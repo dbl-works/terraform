@@ -52,8 +52,6 @@ variable "public_buckets_list" {
     primary_storage_class_retention = number
     replicas = list(object({
       bucket_arn = string
-      kms_arn    = string
-      region     = string
     }))
   }))
 }
