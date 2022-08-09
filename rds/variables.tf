@@ -7,7 +7,10 @@ variable "project" {}
 variable "environment" {}
 
 variable "instance_class" { default = "db.t3.micro" }
-variable "engine_version" { default = "13" }
+variable "engine_version" {
+  default = "14"
+  type    = string
+}
 variable "allocated_storage" { default = 100 }
 
 variable "publicly_accessible" {
