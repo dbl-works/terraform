@@ -11,7 +11,7 @@ resource "aws_db_instance" "main" {
   username                            = var.is_read_replica ? null : var.username # credentials of the master DB are used
   password                            = var.is_read_replica ? null : var.password # credentials of the master DB are used
   iam_database_authentication_enabled = true
-  parameter_group_name                = var.engine_version == 14 ? aws_db_parameter_group.postgres14.name : aws_db_parameter_group.postgres13.name
+  parameter_group_name                = var.engine_version == "14" ? aws_db_parameter_group.postgres14.name : aws_db_parameter_group.postgres13.name
   apply_immediately                   = true
   multi_az                            = var.multi_az
   publicly_accessible                 = var.publicly_accessible
