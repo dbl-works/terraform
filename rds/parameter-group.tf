@@ -14,3 +14,20 @@ resource "aws_db_parameter_group" "postgres13" {
     value = 1
   }
 }
+
+resource "aws_db_parameter_group" "postgres14" {
+  name   = "${var.project}-${var.environment}-postgres14"
+  family = "postgres14"
+  parameter {
+    name  = "log_statement"
+    value = "all"
+  }
+  parameter {
+    name  = "log_min_duration_statement"
+    value = "0"
+  }
+  parameter {
+    name  = "rds.force_ssl"
+    value = 1
+  }
+}
