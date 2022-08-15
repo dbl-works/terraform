@@ -66,6 +66,11 @@ variable "multi_az_enabled" {
   default = true
 }
 
+variable "automatic_failover_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "data_tiering_enabled" {
   type    = bool
   default = false

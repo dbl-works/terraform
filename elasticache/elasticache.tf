@@ -21,7 +21,7 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
   # but will result in a brief downtime as servers reboots.
   apply_immediately          = true
   multi_az_enabled           = var.multi_az_enabled
-  automatic_failover_enabled = true
+  automatic_failover_enabled = var.automatic_failover_enabled
   data_tiering_enabled       = var.data_tiering_enabled
 
   security_group_ids = [
