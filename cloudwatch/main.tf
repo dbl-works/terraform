@@ -111,8 +111,6 @@ locals {
   database_metrics = [
     {
       "type" : "text",
-      "y" : 13,
-      "x" : 0,
       "width" : 18,
       "height" : 1,
       "properties" : {
@@ -233,8 +231,6 @@ locals {
   elasticache_metrics = [
     {
       "type" : "text",
-      "y" : 38,
-      "x" : 0,
       "width" : 18,
       "height" : 1,
       "properties" : {
