@@ -29,6 +29,7 @@ module "elasticache" {
   cluster_mode         = true
   data_tiering_enabled = false # only available for "r6gd" node types (see warning below)
   multi_az_enabled     = true # requires at least 1 replica
+  maxmemory_policy     = "noeviction" # Allowed values: volatile-lru,allkeys-lru,volatile-lfu,allkeys-lfu,volatile-random,allkeys-random,volatile-ttl,noeviction
 
   # To enable cluster mode, use a parameter group that has cluster mode enabled.
   # The default parameter groups provided by AWS end with ".cluster.on", for example default.redis6.x.cluster.on.

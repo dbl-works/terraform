@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
+## [unreleased]
+## Elasticache
+- added `maxmemory_policy` as the optional options. Default value is `volatile-lru`
+
 ## [v2022.08.05]
 ## Elasticache
 - `multi_az_enabled` can now optionally be turned off
