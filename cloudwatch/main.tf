@@ -30,6 +30,21 @@ locals {
       }
     },
     {
+      "height" : 5,
+      "width" : 5,
+      "type" : "metric",
+      "properties" : {
+        "title" : "Request Count (1d)",
+        "view" : "singleValue",
+        "sparkline" : true,
+        "stat" : "Sum",
+        "metrics" : [
+          [{ "expression" : "SELECT SUM(RequestCount) FROM SCHEMA(\"AWS/ApplicationELB\", LoadBalancer) WHERE LoadBalancer = '${var.alb_arn_suffix}'", "label" : "Request Count", "region" : var.region, "period" : 86400 }]
+        ],
+        "region" : var.region
+      }
+    },
+    {
       "height" : 10,
       "width" : 10,
       "type" : "metric",
@@ -58,6 +73,21 @@ locals {
         "stat" : "Average",
         "region" : var.region,
         "period" : var.period
+      }
+    },
+    {
+      "type": "metric",
+      "width": 14,
+      "height": 10,
+      "properties": {
+          "metrics": [
+              [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}", { "label": "RequestCount per day" } ]
+          ],
+          "view": "timeSeries",
+          "stacked": false,
+          "region": var.region,
+          "stat": "Sum",
+          "period": 86400,
       }
     }
   ]
