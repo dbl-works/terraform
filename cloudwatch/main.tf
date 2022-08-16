@@ -43,7 +43,7 @@ locals {
         "region" : var.region,
         "period" : var.period
       }
-    }
+    },
     {
       "height" : 10,
       "width" : 10,
