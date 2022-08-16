@@ -7,7 +7,7 @@ locals {
       "width" : 18,
       "height" : 1,
       "properties" : {
-        "markdown" : "# Cluster & Load Balancer - ${var.region}"
+        "markdown" : "# Cluster & Load Balancer"
       }
     },
     {
@@ -205,7 +205,7 @@ locals {
       "x" : 0,
       "type" : "metric",
       "properties" : {
-        "title" : "DB Read/Write Latency - ${var.region}",
+        "title" : "DB Read/Write Latency",
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
@@ -272,7 +272,7 @@ locals {
       "width" : 9,
       "height" : 6,
       "properties" : {
-        "title" : "Redis CPU Utilization (%)",
+        "title" : "Redis CPU Utilization",
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
@@ -289,7 +289,7 @@ locals {
       "width" : 9,
       "height" : 6,
       "properties" : {
-        "title" : "Redis Available Memory (%)",
+        "title" : "Redis Available Memory",
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
@@ -303,7 +303,7 @@ locals {
 }
 
 resource "aws_cloudwatch_dashboard" "main" {
-  dashboard_name = var.dashboard_name
+  dashboard_name = "${var.dashboard_name} (${var.region})"
 
   dashboard_body = jsonencode({
     "widgets" : concat(local.cluster_metrics, local.database_metrics, local.elasticache_metrics)
