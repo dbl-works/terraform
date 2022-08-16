@@ -46,7 +46,6 @@ locals {
         "region" : var.region
       }
     },
-
     {
       "height" : 4,
       "width" : 4,
@@ -58,6 +57,21 @@ locals {
         "stat" : "Sum",
         "metrics" : [
           ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}"],
+        ],
+        "region" : var.region
+      }
+    },
+    {
+      "height" : 4,
+      "width" : 4,
+      "type" : "metric",
+      "properties" : {
+        "title" : "DB Write IOPS (Count/s)",
+        "view" : "singleValue",
+        "sparkline" : true,
+        "stat" : "Sum",
+        "metrics" : [
+          ["AWS/RDS", "WriteIOPS", "DBInstanceIdentifier", "${var.database_name}"],
         ],
         "region" : var.region
       }
