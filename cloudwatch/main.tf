@@ -2,19 +2,15 @@ locals {
   cluster_metrics = [
     {
       "type" : "text",
-      "x" : 0,
-      "y" : 0,
       "width" : 18,
       "height" : 1,
       "properties" : {
-        "markdown" : "# Cluster & Load Balancer"
+        "markdown" : "# Cluster"
       }
     },
     {
       "height" : 6,
       "width" : 9,
-      "y" : 1,
-      "x" : 0,
       "type" : "metric",
       "properties" : {
         "metrics" : [
@@ -41,8 +37,6 @@ locals {
     {
       "height" : 6,
       "width" : 9,
-      "y" : 7,
-      "x" : 9,
       "type" : "metric",
       "properties" : {
         "metrics" : [
@@ -68,8 +62,6 @@ locals {
     {
       "height" : 6,
       "width" : 9,
-      "y" : 7,
-      "x" : 0,
       "type" : "metric",
       "properties" : {
         "metrics" : [
@@ -92,8 +84,6 @@ locals {
     {
       "height" : 6,
       "width" : 9,
-      "y" : 1,
-      "x" : 9,
       "type" : "metric",
       "properties" : {
         "metrics" : [
@@ -132,8 +122,6 @@ locals {
     {
       "height" : 6,
       "width" : 9,
-      "y" : 14,
-      "x" : 0,
       "type" : "metric",
       "properties" : {
         "title" : "DB Freeable Memory",
@@ -150,8 +138,6 @@ locals {
     {
       "height" : 6,
       "width" : 9,
-      "y" : 14,
-      "x" : 9,
       "type" : "metric",
       "properties" : {
         "title" : "DB Connections",
@@ -167,8 +153,6 @@ locals {
     {
       "height" : 6,
       "width" : 9,
-      "y" : 20,
-      "x" : 0,
       "type" : "metric",
       "properties" : {
         "title" : "DB CPU Utilization",
@@ -184,8 +168,6 @@ locals {
     {
       "height" : 6,
       "width" : 9,
-      "y" : 20,
-      "x" : 9,
       "type" : "metric",
       "properties" : {
         "title" : "DB Free Storage Space",
@@ -201,8 +183,6 @@ locals {
     {
       "height" : 6,
       "width" : 9,
-      "y" : 26,
-      "x" : 0,
       "type" : "metric",
       "properties" : {
         "title" : "DB Read/Write Latency",
@@ -218,8 +198,6 @@ locals {
     },
     {
       "type" : "metric",
-      "y" : 26,
-      "x" : 9,
       "width" : 9,
       "height" : 6,
       "properties" : {
@@ -236,8 +214,6 @@ locals {
     },
     {
       "type" : "metric",
-      "y" : 32,
-      "x" : 0,
       "width" : 9,
       "height" : 6,
       "properties" : {
@@ -267,8 +243,6 @@ locals {
     },
     {
       "type" : "metric",
-      "y" : 39,
-      "x" : 0,
       "width" : 9,
       "height" : 6,
       "properties" : {
@@ -284,8 +258,6 @@ locals {
     },
     {
       "type" : "metric",
-      "y" : 39,
-      "x" : 9,
       "width" : 9,
       "height" : 6,
       "properties" : {
