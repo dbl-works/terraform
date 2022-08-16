@@ -45,8 +45,8 @@ locals {
       }
     },
     {
-      "height" : 10,
-      "width" : 10,
+      "height" : 6,
+      "width" : 6,
       "type" : "metric",
       "properties" : {
         "title" : "CPU Utilization",
@@ -60,8 +60,8 @@ locals {
       }
     },
     {
-      "height" : 10,
-      "width" : 10,
+      "height" : 6,
+      "width" : 6,
       "type" : "metric",
       "properties" : {
         "title" : "Memory Utilization",
@@ -75,18 +75,18 @@ locals {
       }
     },
     {
-      "type": "metric",
-      "width": 14,
-      "height": 10,
-      "properties": {
-          "metrics": [
-              [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}", { "label": "RequestCount per day" } ]
-          ],
-          "view": "timeSeries",
-          "stacked": false,
-          "region": var.region,
-          "stat": "Sum",
-          "period": 86400,
+      "type" : "metric",
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "metrics" : [
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}", { "label" : "RequestCount per day" }]
+        ],
+        "view" : "timeSeries",
+        "stacked" : false,
+        "region" : var.region,
+        "stat" : "Sum",
+        "period" : 86400,
       }
     }
   ]
