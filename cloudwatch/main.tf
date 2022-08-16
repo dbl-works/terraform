@@ -1,4 +1,36 @@
 locals {
+  performance_metrics = [
+    {
+      "height" : 5,
+      "width" : 5,
+      "type" : "metric",
+      "properties" : {
+        "title" : "Average Response Time",
+        "view" : "singleValue",
+        "sparkline" : false,
+        "metrics" : [
+          ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", var.alb_arn_suffix]
+        ],
+        "region" : var.region
+      }
+    },
+    {
+      "height" : 5,
+      "width" : 5,
+      "type" : "metric",
+      "properties" : {
+        "title" : "Request Count (1 day)",
+        "view" : "singleValue",
+        "sparkline" : false,
+        "stat" : "Sum",
+        "metrics" : [
+          [{ "expression" : "SELECT SUM(RequestCount) FROM SCHEMA(\"AWS/ApplicationELB\", LoadBalancer) WHERE LoadBalancer = '${var.alb_arn_suffix}'", "label" : "Request Count", "region" : var.region, "period" : 86400 }]
+        ],
+        "region" : var.region
+      }
+    }
+  ]
+
   cluster_metrics = [
     {
       "type" : "text",
@@ -274,6 +306,6 @@ resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = "${var.dashboard_name}-${var.region}"
 
   dashboard_body = jsonencode({
-    "widgets" : concat(local.cluster_metrics, local.database_metrics, local.elasticache_metrics)
+    "widgets" : concat(local.performance_metrics, local.cluster_metrics, local.database_metrics, local.elasticache_metrics)
   })
 }
