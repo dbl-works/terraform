@@ -45,6 +45,21 @@ locals {
       }
     },
     {
+      "height" : 5,
+      "width" : 5,
+      "type" : "metric",
+      "properties" : {
+        "title" : "DB Read IOPS (Count/s)",
+        "view" : "singleValue",
+        "sparkline" : true,
+        "stat" : "Sum",
+        "metrics" : [
+          ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}"],
+        ],
+        "region" : var.region
+      }
+    },
+    {
       "height" : 6,
       "width" : 6,
       "type" : "metric",
