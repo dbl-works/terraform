@@ -275,7 +275,7 @@ locals {
 }
 
 resource "aws_cloudwatch_dashboard" "main" {
-  dashboard_name = "${var.dashboard_name} - ${var.region}"
+  dashboard_name = "${var.dashboard_name}-${var.region}"
 
   dashboard_body = jsonencode({
     "widgets" : concat(local.cluster_metrics, local.database_metrics, local.elasticache_metrics)
