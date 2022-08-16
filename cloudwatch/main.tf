@@ -23,8 +23,9 @@ locals {
         "view" : "singleValue",
         "sparkline" : true,
         "stat" : "Sum",
+        "period" : 60,
         "metrics" : [
-          [{ "expression" : "SELECT SUM(RequestCount) FROM SCHEMA(\"AWS/ApplicationELB\", LoadBalancer) WHERE LoadBalancer = '${var.alb_arn_suffix}'", "label" : "Request Count", "region" : var.region, "period" : 60 }]
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}"]
         ],
         "region" : var.region
       }
@@ -38,12 +39,14 @@ locals {
         "view" : "singleValue",
         "sparkline" : true,
         "stat" : "Sum",
+        "period" : 86400,
         "metrics" : [
-          [{ "expression" : "SELECT SUM(RequestCount) FROM SCHEMA(\"AWS/ApplicationELB\", LoadBalancer) WHERE LoadBalancer = '${var.alb_arn_suffix}'", "label" : "Request Count", "region" : var.region, "period" : 86400 }]
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}"]
         ],
         "region" : var.region
       }
     },
+
     {
       "height" : 5,
       "width" : 5,
@@ -55,6 +58,21 @@ locals {
         "stat" : "Sum",
         "metrics" : [
           ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}"],
+        ],
+        "region" : var.region
+      }
+    },
+    {
+      "height" : 5,
+      "width" : 5,
+      "type" : "metric",
+      "properties" : {
+        "title" : "Redis Memory Usage",
+        "view" : "singleValue",
+        "sparkline" : true,
+        "period" : var.period,
+        "metrics" : [
+          ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}"]
         ],
         "region" : var.region
       }
@@ -94,8 +112,9 @@ locals {
       "width" : 12,
       "height" : 6,
       "properties" : {
+        "title" : "RequestCount per day",
         "metrics" : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}", { "label" : "RequestCount per day" }]
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}"]
         ],
         "view" : "timeSeries",
         "stacked" : false,
@@ -364,10 +383,11 @@ locals {
       "width" : 9,
       "height" : 6,
       "properties" : {
-        "title" : "Redis Available Memory",
+        "title" : "Redis Memory Usage",
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
+          # Percentage of the memory for the cluster that is in use, excluding memory used for overhead and COB.
           ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}"]
         ],
         "region" : "${var.region}",

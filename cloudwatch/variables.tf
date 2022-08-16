@@ -26,3 +26,13 @@ variable "period" {
   type    = number
   default = 60
 }
+
+variable "alarm_period" {
+  type    = number
+  default = 300
+}
+
+variable "alarm_evaluation_periods" {
+  type    = number
+  default = 1
+}
