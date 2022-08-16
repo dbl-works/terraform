@@ -161,7 +161,7 @@ output "subnet_private_ids" {
 }
 
 output "nat_route_table_ids" {
-  value = module.nat.aws_route_table_ids
+  value = module.stack.nat_route_table_ids
 }
 
 # Target groups, for use in deployments
