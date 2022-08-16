@@ -1,8 +1,8 @@
 locals {
   performance_metrics = [
     {
-      "height" : 5,
-      "width" : 5,
+      "height" : 4,
+      "width" : 4,
       "type" : "metric",
       "properties" : {
         "title" : "Average Response Time",
@@ -15,8 +15,8 @@ locals {
       }
     },
     {
-      "height" : 5,
-      "width" : 5,
+      "height" : 4,
+      "width" : 4,
       "type" : "metric",
       "properties" : {
         "title" : "Request Count (1m)",
@@ -31,8 +31,8 @@ locals {
       }
     },
     {
-      "height" : 5,
-      "width" : 5,
+      "height" : 4,
+      "width" : 4,
       "type" : "metric",
       "properties" : {
         "title" : "Request Count (1d)",
@@ -48,8 +48,8 @@ locals {
     },
 
     {
-      "height" : 5,
-      "width" : 5,
+      "height" : 4,
+      "width" : 4,
       "type" : "metric",
       "properties" : {
         "title" : "DB Read IOPS (Count/s)",
@@ -63,8 +63,8 @@ locals {
       }
     },
     {
-      "height" : 5,
-      "width" : 5,
+      "height" : 4,
+      "width" : 4,
       "type" : "metric",
       "properties" : {
         "title" : "Redis Memory Usage",
