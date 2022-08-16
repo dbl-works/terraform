@@ -52,7 +52,6 @@ locals {
         "title" : "CPU Utilization",
         "metrics" : [
           [{ "expression" : "SELECT AVG(CPUUtilization) FROM SCHEMA(\"AWS/ECS\", ClusterName,ServiceName) WHERE ServiceName = 'web' GROUP BY ClusterName, ServiceName" }]
-    ],
         ],
         "view" : "bar",
         "stat" : "Average",
