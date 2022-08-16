@@ -6,7 +6,7 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
   node_type                   = var.node_type
   num_cache_clusters          = var.node_count
   preferred_cache_cluster_azs = var.availability_zones
-  parameter_group_name        = var.parameter_group_name
+  parameter_group_name        = var.maxmemory_policy == null ? var.parameter_group_name : aws_elasticache_parameter_group.main[0].id
   engine_version              = var.engine_version
   port                        = 6379
   subnet_group_name           = aws_elasticache_subnet_group.main.name
@@ -48,7 +48,7 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
   description                = "Collection of Redis (clusters mode) for ${var.project}-${var.environment}"
   engine                     = "redis"
   node_type                  = var.node_type
-  parameter_group_name       = var.parameter_group_name
+  parameter_group_name       = var.maxmemory_policy == null ? var.parameter_group_name : aws_elasticache_parameter_group.main[0].id
   engine_version             = var.engine_version
   port                       = 6379
   subnet_group_name          = aws_elasticache_subnet_group.main.name
@@ -78,5 +78,23 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
     ignore_changes = [
       engine_version,
     ]
+  }
+}
+
+resource "aws_elasticache_parameter_group" "main" {
+  count = var.maxmemory_policy == null ? 0 : 1
+
+  name = local.cluster_name
+  # Family need to be specified so that we can copy keys n values from the existing parameter group
+  family = regex("[A-Za-z]+\\.([A-Za-z0-9]+\\.[A-Za-z0-9]+)", var.parameter_group_name)[0]
+
+  parameter {
+    name  = "maxmemory-policy"
+    value = var.maxmemory_policy
+  }
+
+  parameter {
+    name  = "cluster-enabled"
+    value = var.cluster_mode ? "yes" : "no"
   }
 }
