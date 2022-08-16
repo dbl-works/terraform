@@ -82,7 +82,7 @@ locals {
       "width" : 6,
       "type" : "metric",
       "properties" : {
-        "title" : "CPU Utilization",
+        "title" : "Cluster CPU Utilization",
         "metrics" : [
           [{ "expression" : "SELECT AVG(CPUUtilization) FROM SCHEMA(\"AWS/ECS\", ClusterName,ServiceName) WHERE ServiceName = 'web' GROUP BY ClusterName, ServiceName" }]
         ],
@@ -97,7 +97,7 @@ locals {
       "width" : 6,
       "type" : "metric",
       "properties" : {
-        "title" : "Memory Utilization",
+        "title" : "Cluster Memory Utilization",
         "metrics" : [
           [{ "expression" : "SELECT AVG(MemoryUtilization) FROM SCHEMA(\"AWS/ECS\", ClusterName,ServiceName) WHERE ServiceName = 'web' GROUP BY ClusterName,ServiceName" }]
         ],
