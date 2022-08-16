@@ -7,7 +7,7 @@ locals {
       "properties" : {
         "title" : "Average Response Time",
         "view" : "singleValue",
-        "sparkline" : false,
+        "sparkline" : true,
         "metrics" : [
           ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", var.alb_arn_suffix]
         ],
@@ -19,14 +19,44 @@ locals {
       "width" : 5,
       "type" : "metric",
       "properties" : {
-        "title" : "Request Count (1 day)",
+        "title" : "Request Count (1m)",
         "view" : "singleValue",
-        "sparkline" : false,
+        "sparkline" : true,
         "stat" : "Sum",
         "metrics" : [
-          [{ "expression" : "SELECT SUM(RequestCount) FROM SCHEMA(\"AWS/ApplicationELB\", LoadBalancer) WHERE LoadBalancer = '${var.alb_arn_suffix}'", "label" : "Request Count", "region" : var.region, "period" : 86400 }]
+          [{ "expression" : "SELECT SUM(RequestCount) FROM SCHEMA(\"AWS/ApplicationELB\", LoadBalancer) WHERE LoadBalancer = '${var.alb_arn_suffix}'", "label" : "Request Count", "region" : var.region, "period" : 60 }]
         ],
         "region" : var.region
+      }
+    },
+    {
+      "height" : 10,
+      "width" : 10,
+      "type" : "metric",
+      "properties" : {
+        "title" : "CPU Utilization",
+        "metrics" : [
+          [{ "expression" : "SELECT AVG(CPUUtilization) FROM SCHEMA(\"AWS/ECS\", ClusterName,ServiceName) WHERE ServiceName = 'web' GROUP BY Clustername,ServiceName" }]
+        ],
+        "view" : "bar",
+        "stat" : "Average",
+        "region" : var.region,
+        "period" : var.period
+      }
+    }
+    {
+      "height" : 10,
+      "width" : 10,
+      "type" : "metric",
+      "properties" : {
+        "title" : "Memory Utilization",
+        "metrics" : [
+          [{ "expression" : "SELECT AVG(MemoryUtilization) FROM SCHEMA(\"AWS/ECS\", ClusterName,ServiceName) WHERE ServiceName = 'web' GROUP BY Clustername,ServiceName" }]
+        ],
+        "view" : "bar",
+        "stat" : "Average",
+        "region" : var.region,
+        "period" : var.period
       }
     }
   ]
@@ -72,7 +102,7 @@ locals {
       "type" : "metric",
       "properties" : {
         "metrics" : [
-          ["ECS/ContainerInsights", "CpuUtilized", "ServiceName", "web", "ClusterName", "${var.cluster_name}"]
+          ["AWS/ECS", "CPUUtilization", "ServiceName", "web", "ClusterName", "${var.cluster_name}"]
         ],
         "view" : "timeSeries",
         "stacked" : false,
@@ -104,7 +134,7 @@ locals {
         "region" : "${var.region}",
         "stat" : "Sum",
         "period" : var.period,
-        "title" : "Throughput",
+        "title" : "Throughput/min",
         "yAxis" : {
           "left" : {
             "showUnits" : false,
