@@ -35,22 +35,6 @@ locals {
       "width" : 4,
       "type" : "metric",
       "properties" : {
-        "title" : "Request Count (1d)",
-        "view" : "singleValue",
-        "sparkline" : true,
-        "stat" : "Sum",
-        "period" : 86400,
-        "metrics" : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}"]
-        ],
-        "region" : var.region
-      }
-    },
-    {
-      "height" : 4,
-      "width" : 4,
-      "type" : "metric",
-      "properties" : {
         "title" : "DB Read IOPS (Count/s)",
         "view" : "singleValue",
         "sparkline" : true,
@@ -89,36 +73,6 @@ locals {
           ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}"]
         ],
         "region" : var.region
-      }
-    },
-    {
-      "height" : 6,
-      "width" : 6,
-      "type" : "metric",
-      "properties" : {
-        "title" : "Cluster CPU Utilization",
-        "metrics" : [
-          [{ "expression" : "SELECT AVG(CPUUtilization) FROM SCHEMA(\"AWS/ECS\", ClusterName,ServiceName) WHERE ServiceName = 'web' GROUP BY ClusterName, ServiceName" }]
-        ],
-        "view" : "bar",
-        "stat" : "Average",
-        "region" : var.region,
-        "period" : var.period
-      }
-    },
-    {
-      "height" : 6,
-      "width" : 6,
-      "type" : "metric",
-      "properties" : {
-        "title" : "Cluster Memory Utilization",
-        "metrics" : [
-          [{ "expression" : "SELECT AVG(MemoryUtilization) FROM SCHEMA(\"AWS/ECS\", ClusterName,ServiceName) WHERE ServiceName = 'web' GROUP BY ClusterName,ServiceName" }]
-        ],
-        "view" : "bar",
-        "stat" : "Average",
-        "region" : var.region,
-        "period" : var.period
       }
     },
     {
