@@ -46,6 +46,10 @@ variable "slack_workspace_id" {
   type    = string
 }
 
+variable "account_id" {
+  type    = string
+}
+
 locals {
   name = "${var.dashboard_name}-${var.region}"
 }
