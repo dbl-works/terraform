@@ -86,6 +86,9 @@ resource "aws_elasticache_parameter_group" "main" {
 
   name = local.cluster_name
   # Family need to be specified so that we can copy keys n values from the existing parameter group
+  # The regexp will extract the family name from the parameter group name, eg:
+  # default.redis6.x => redis6.x
+  # default.redis6.x.cluster.on => redis6.x
   family = regex("[A-Za-z]+\\.([A-Za-z0-9]+\\.[A-Za-z0-9]+)", var.parameter_group_name)[0]
 
   parameter {
