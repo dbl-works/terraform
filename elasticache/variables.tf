@@ -81,6 +81,11 @@ variable "name" {
   default = null
 }
 
+variable "maxmemory_policy" {
+  type    = string
+  default = null
+}
+
 locals {
   elasticache_name = var.name == null ? "${var.project}-${var.environment}-elasticache" : "${var.project}-${var.environment}-${var.name}-elasticache"
   cluster_name     = var.name == null ? "${var.project}-${var.environment}" : "${var.project}-${var.environment}-${var.name}"
