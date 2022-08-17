@@ -151,8 +151,7 @@ resource "aws_cloudwatch_composite_alarm" "db_network" {
   alarm_actions = []
 
   alarm_rule = <<EOF
-ALARM(${aws_cloudwatch_metric_alarm.db_network_receive.alarm_name}) AND
-ALARM(${aws_cloudwatch_metric_alarm.db_network_transmit.alarm_name})
+ALARM(${aws_cloudwatch_metric_alarm.db_network_receive.alarm_name}) AND ALARM(${aws_cloudwatch_metric_alarm.db_network_transmit.alarm_name})
 EOF
 }
 
