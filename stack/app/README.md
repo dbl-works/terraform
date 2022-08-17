@@ -144,7 +144,7 @@ output "redis_url" {
   value = module.stack.redis_url
 }
 
-# Security groups, for linking with other resources
+# Security groups and route tables, for linking with other resources
 output "alb_security_group_id" {
   value = module.stack.alb_security_group_id
 }
@@ -158,6 +158,10 @@ output "subnet_public_ids" {
 
 output "subnet_private_ids" {
   value = module.stack.subnet_private_ids
+}
+
+output "nat_route_table_ids" {
+  value = module.stack.nat_route_table_ids
 }
 
 # Target groups, for use in deployments

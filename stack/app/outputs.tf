@@ -14,7 +14,7 @@ output "vpc_id" {
   value = module.vpc.id
 }
 
-# Security groups, for linking with other resources
+# Security groups and route tables, for linking with other resources
 output "alb_security_group_id" {
   value = module.ecs.alb_security_group_id
 }
@@ -28,6 +28,10 @@ output "subnet_public_ids" {
 
 output "subnet_private_ids" {
   value = module.vpc.subnet_private_ids
+}
+
+output "nat_route_table_ids" {
+  value = module.nat.aws_route_table_ids
 }
 
 # Target groups, for use in deployments
