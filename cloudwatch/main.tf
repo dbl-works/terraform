@@ -181,7 +181,7 @@ locals {
         "region" : "${var.region}",
         "stat" : "Sum",
         "period" : var.period,
-        "title" : "Throughput/min",
+        "title" : "Throughput",
         "yAxis" : {
           "left" : {
             "showUnits" : false,
@@ -330,6 +330,22 @@ locals {
         "metrics" : [
           ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}"],
           [".", "WriteIOPS", ".", "."]
+        ],
+        "region" : "${var.region}",
+        "period" : var.period
+      }
+    },
+    {
+      "type" : "metric",
+      "width" : 9,
+      "height" : 6,
+      "properties" : {
+        "title" : "DB Read/Write IOPS",
+        "view" : "timeSeries",
+        "stacked" : false,
+        "metrics" : [
+          ["AWS/RDS", "ReadThroughput", "DBInstanceIdentifier", "${var.database_name}"],
+          [".", "WriteThroughput", ".", "."]
         ],
         "region" : "${var.region}",
         "period" : var.period
