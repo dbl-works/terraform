@@ -10,6 +10,10 @@ resource "aws_sns_topic_policy" "cloudwatch_slack" {
 
 data "aws_caller_identity" "current" {}
 
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}
+
 data "aws_iam_policy_document" "sns_topic_policy" {
   policy_id = "__default_policy_ID"
 
@@ -32,9 +36,7 @@ data "aws_iam_policy_document" "sns_topic_policy" {
       test     = "StringEquals"
       variable = "AWS:SourceOwner"
 
-      values = [
-        data.aws_caller_identity.current.account_id
-      ]
+      values = [local.account_id]
     }
 
     principals {
