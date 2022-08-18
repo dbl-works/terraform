@@ -261,7 +261,14 @@ locals {
           ["AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }]
         ],
         "region" : "${var.region}",
-        "period" : var.period
+        "period" : var.period,
+        "yAxis" : {
+          "left" : {
+            "min" : 0,
+            "max" : 100,
+            "showUnits" : true
+          }
+        },
       }
     },
     {
