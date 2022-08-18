@@ -15,6 +15,23 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "memory" {
+  alarm_name          = "${var.dashboard_name} Memory Utilization"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  period              = var.alarm_period
+  evaluation_periods  = var.alarm_evaluation_periods
+  metric_name         = "MemoryUtilization"
+  namespace           = "AWS/ECS"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "Monitors ECS Memory utilization"
+  alarm_actions       = [aws_sns_topic.cloudwatch_slack.arn]
+  dimensions = {
+    ClusterName = var.cluster_name
+    ServiceName = "web"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "db_memory" {
   alarm_name          = "${var.dashboard_name}-rds-memory"
   comparison_operator = "LessThanOrEqualToThreshold"
