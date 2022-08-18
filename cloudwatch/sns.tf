@@ -8,6 +8,8 @@ resource "aws_sns_topic_policy" "cloudwatch_slack" {
   policy = data.aws_iam_policy_document.sns_topic_policy.json
 }
 
+data "aws_caller_identity" "current" {}
+
 data "aws_iam_policy_document" "sns_topic_policy" {
   policy_id = "__default_policy_ID"
 
@@ -31,7 +33,7 @@ data "aws_iam_policy_document" "sns_topic_policy" {
       variable = "AWS:SourceOwner"
 
       values = [
-        var.account_id,
+        data.aws_caller_identity.current.account_id
       ]
     }
 
