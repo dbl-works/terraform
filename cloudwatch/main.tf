@@ -9,7 +9,7 @@ locals {
         "view" : "singleValue",
         "sparkline" : true,
         "metrics" : [
-          ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", var.alb_arn_suffix]
+          ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", var.alb_arn_suffix, { "label" : var.alb_arn_suffix }]
         ],
         "region" : var.region
       }
@@ -25,7 +25,7 @@ locals {
         "stat" : "Sum",
         "period" : 60,
         "metrics" : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}"]
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}", { "label" : var.alb_arn_suffix }]
         ],
         "region" : var.region
       }
@@ -40,7 +40,7 @@ locals {
         "sparkline" : true,
         "stat" : "Sum",
         "metrics" : [
-          ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}"],
+          ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }],
         ],
         "region" : var.region
       }
@@ -55,7 +55,7 @@ locals {
         "sparkline" : true,
         "stat" : "Sum",
         "metrics" : [
-          ["AWS/RDS", "WriteIOPS", "DBInstanceIdentifier", "${var.database_name}"],
+          ["AWS/RDS", "WriteIOPS", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }],
         ],
         "region" : var.region
       }
@@ -70,7 +70,7 @@ locals {
         "sparkline" : true,
         "period" : var.period,
         "metrics" : [
-          ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}"]
+          ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.alb_arn_suffix }]
         ],
         "region" : var.region
       }
@@ -82,7 +82,7 @@ locals {
       "properties" : {
         "title" : "RequestCount per day",
         "metrics" : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}"]
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}", { "label" : var.alb_arn_suffix }]
         ],
         "view" : "timeSeries",
         "stacked" : false,
@@ -108,7 +108,7 @@ locals {
       "type" : "metric",
       "properties" : {
         "metrics" : [
-          ["AWS/ECS", "MemoryUtilization", "ServiceName", "web", "ClusterName", var.cluster_name, { "label" : var.cluster_name } ]
+          ["AWS/ECS", "MemoryUtilization", "ServiceName", "web", "ClusterName", var.cluster_name, { "label" : var.cluster_name }]
         ],
         "view" : "timeSeries",
         "stacked" : true,
@@ -132,7 +132,7 @@ locals {
       "type" : "metric",
       "properties" : {
         "metrics" : [
-          ["AWS/ECS", "CPUUtilization", "ServiceName", "web", "ClusterName", var.cluster_name, { "label" : var.cluster_name } ]
+          ["AWS/ECS", "CPUUtilization", "ServiceName", "web", "ClusterName", var.cluster_name, { "label" : var.cluster_name }]
         ],
         "view" : "timeSeries",
         "stacked" : false,
@@ -157,7 +157,7 @@ locals {
       "type" : "metric",
       "properties" : {
         "metrics" : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}"]
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${var.alb_arn_suffix}", { "label" : var.alb_arn_suffix }]
         ],
         "view" : "timeSeries",
         "stacked" : true,
@@ -218,7 +218,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "FreeableMemory", "DBInstanceIdentifier", "${var.database_name}"]
+          ["AWS/RDS", "FreeableMemory", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }]
         ],
         "region" : "${var.region}",
         "period" : var.period,
@@ -234,7 +234,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", "${var.database_name}"]
+          ["AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }]
         ],
         "region" : "${var.region}",
         "period" : var.period
@@ -249,7 +249,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "${var.database_name}"]
+          ["AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }]
         ],
         "region" : "${var.region}",
         "period" : var.period
@@ -264,7 +264,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "FreeStorageSpace", "DBInstanceIdentifier", "${var.database_name}"]
+          ["AWS/RDS", "FreeStorageSpace", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }]
         ],
         "region" : "${var.region}",
         "period" : var.period
@@ -279,7 +279,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "ReadLatency", "DBInstanceIdentifier", "${var.database_name}"],
+          ["AWS/RDS", "ReadLatency", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }],
           [".", "WriteLatency", ".", "."]
         ],
         "region" : "${var.region}",
@@ -295,7 +295,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "NetworkReceiveThroughput", "DBInstanceIdentifier", "${var.database_name}"],
+          ["AWS/RDS", "NetworkReceiveThroughput", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }],
           [".", "NetworkTransmitThroughput", ".", "."]
         ],
         "region" : "${var.region}",
@@ -311,7 +311,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}"],
+          ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }],
           [".", "WriteIOPS", ".", "."]
         ],
         "region" : "${var.region}",
@@ -338,7 +338,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/ElastiCache", "EngineCPUUtilization", "ReplicationGroupId", "${var.elasticache_cluster_name}"]
+          ["AWS/ElastiCache", "EngineCPUUtilization", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.elasticache_cluster_name }]
         ],
         "region" : "${var.region}",
         "period" : var.period
@@ -354,7 +354,7 @@ locals {
         "stacked" : false,
         "metrics" : [
           # Percentage of the memory for the cluster that is in use, excluding memory used for overhead and COB.
-          ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}"]
+          ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.elasticache_cluster_name }]
         ],
         "region" : "${var.region}",
         "period" : var.period
