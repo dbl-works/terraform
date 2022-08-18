@@ -1,4 +1,4 @@
-resource "aws_cloudwatch_metric_alarm" "cpu" {
+resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
   alarm_name          = "${var.cluster_name}-cluster-cpu-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
@@ -15,24 +15,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "memory" {
-  alarm_name          = "${var.cluster_name}-cluster-memory-utilization"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  period              = var.alarm_period
-  evaluation_periods  = var.alarm_evaluation_periods
-  metric_name         = "MemoryUtilization"
-  namespace           = "AWS/ECS"
-  statistic           = "Average"
-  threshold           = "80"
-  alarm_description   = "Monitors ECS Memory utilization"
-  alarm_actions       = [aws_sns_topic.cloudwatch_slack.arn]
-  dimensions = {
-    ClusterName = var.cluster_name
-    ServiceName = "web"
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "memory" {
+resource "aws_cloudwatch_metric_alarm" "cluster_memory" {
   alarm_name          = "${var.cluster_name}-cluster-memory-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
@@ -68,7 +51,7 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
 # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.MaxConnections
 # LEAST({DBInstanceClassMemory/9531392}, 5000)
 resource "aws_cloudwatch_metric_alarm" "db_connection" {
-  alarm_name          = "${var.database_name}-db-databaseconnections"
+  alarm_name          = "${var.database_name}-db-database-connections"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -84,7 +67,7 @@ resource "aws_cloudwatch_metric_alarm" "db_connection" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_cpu" {
-  alarm_name          = "${var.database_name}-db-cpuutilization"
+  alarm_name          = "${var.database_name}-db-cpu-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -100,7 +83,7 @@ resource "aws_cloudwatch_metric_alarm" "db_cpu" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_storage" {
-  alarm_name          = "${var.database_name}-db-freestorage"
+  alarm_name          = "${var.database_name}-db-free-storage"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -148,7 +131,7 @@ resource "aws_cloudwatch_metric_alarm" "db_write" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_network_receive" {
-  alarm_name          = "${var.database_name}-db-networkreceivethroughput"
+  alarm_name          = "${var.database_name}-db-network-receive-throughput"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -163,7 +146,7 @@ resource "aws_cloudwatch_metric_alarm" "db_network_receive" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_network_transmit" {
-  alarm_name          = "${var.database_name}-db-networktransmitthroughput"
+  alarm_name          = "${var.database_name}-db-network-transmit-throughput"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
