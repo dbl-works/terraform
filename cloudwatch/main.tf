@@ -90,6 +90,23 @@ locals {
         "stat" : "Sum",
         "period" : 86400,
       }
+    },
+    {
+      "type" : "metric",
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "title" : "Response Status",
+        "metrics" : [
+          ["AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "LoadBalancer", var.alb_arn_suffix, { "label" : "5xx Count" }],
+          [".", "HTTPCode_Target_4XX_Count", ".", ".", { "label" : "4xx Count" }],
+          [".", "HTTPCode_Target_2XX_Count", ".", ".", { "label" : "2xx Count" }]
+        ],
+        "view" : "bar",
+        "region" : var.region,
+        "stat" : "Sum",
+        "period" : 86400
+      }
     }
   ]
 
