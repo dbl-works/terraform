@@ -32,8 +32,25 @@ resource "aws_cloudwatch_metric_alarm" "memory" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "memory" {
+  alarm_name          = "${var.cluster_name}-cluster-memory-utilization"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  period              = var.alarm_period
+  evaluation_periods  = var.alarm_evaluation_periods
+  metric_name         = "MemoryUtilization"
+  namespace           = "AWS/ECS"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "Monitors ECS Memory utilization"
+  alarm_actions       = [aws_sns_topic.cloudwatch_slack.arn]
+  dimensions = {
+    ClusterName = var.cluster_name
+    ServiceName = "web"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "db_memory" {
-  alarm_name          = "${var.database_name}-freeableMemory"
+  alarm_name          = "${var.database_name}-db-freeableMemory"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -51,7 +68,7 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
 # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.MaxConnections
 # LEAST({DBInstanceClassMemory/9531392}, 5000)
 resource "aws_cloudwatch_metric_alarm" "db_connection" {
-  alarm_name          = "${var.database_name}-databaseconnections"
+  alarm_name          = "${var.database_name}-db-databaseconnections"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -231,5 +248,52 @@ resource "aws_cloudwatch_metric_alarm" "redis_memory" {
   alarm_actions       = [aws_sns_topic.cloudwatch_slack.arn]
   dimensions = {
     ReplicationGroupId = var.elasticache_cluster_name
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "error_rate" {
+  alarm_name                = "${var.alb_arn_suffix}-error-rate"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  threshold                 = "10"
+  alarm_description         = "Request error rate has exceeded 10%"
+
+  metric_query {
+    id          = "e1"
+    expression  = "m2/m1*100"
+    label       = "Error Rate"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "m1"
+
+    metric {
+      metric_name = "RequestCount"
+      namespace   = "AWS/ApplicationELB"
+      period      = "120"
+      stat        = "Sum"
+      unit        = "Count"
+
+      dimensions = {
+        LoadBalancer = var.alb_arn_suffix
+      }
+    }
+  }
+
+  metric_query {
+    id = "m2"
+
+    metric {
+      metric_name = "HTTPCode_ELB_5XX_Count"
+      namespace   = "AWS/ApplicationELB"
+      period      = "120"
+      stat        = "Sum"
+      unit        = "Count"
+
+      dimensions = {
+        LoadBalancer = var.alb_arn_suffix
+      }
+    }
   }
 }
