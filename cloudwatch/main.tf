@@ -108,9 +108,7 @@ locals {
       "type" : "metric",
       "properties" : {
         "metrics" : [
-          [{ "expression" : "100*(m1/m2)", "label" : "MemoryUsage", "id" : "e1", "region" : "${var.region}", "yAxis" : "left" }],
-          ["ECS/ContainerInsights", "MemoryUtilized", "ServiceName", "web", "ClusterName", "${var.cluster_name}", { "id" : "m1", "visible" : false }],
-          [".", "MemoryReserved", ".", ".", ".", ".", { "id" : "m2", "visible" : false }]
+          ["AWS/ECS", "MemoryUtilization", "ServiceName", "web", "ClusterName", var.cluster_name, { "label" : var.cluster_name } ]
         ],
         "view" : "timeSeries",
         "stacked" : true,
@@ -134,7 +132,7 @@ locals {
       "type" : "metric",
       "properties" : {
         "metrics" : [
-          ["AWS/ECS", "CPUUtilization", "ServiceName", "web", "ClusterName", "${var.cluster_name}"]
+          ["AWS/ECS", "CPUUtilization", "ServiceName", "web", "ClusterName", var.cluster_name, { "label" : var.cluster_name } ]
         ],
         "view" : "timeSeries",
         "stacked" : false,
