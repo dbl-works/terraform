@@ -12,15 +12,15 @@ resource "aws_iam_role" "chatbot" {
   name = "aws_chatbot_role"
 
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "management.chatbot.amazonaws.com"
-            },
-            "Action": "sts:AssumeRole"
-        }
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "management.chatbot.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
     ]
   })
 }
@@ -31,33 +31,33 @@ resource "aws_iam_role_policy_attachment" "chatbot" {
 }
 
 resource "aws_iam_policy" "chatbot_policy" {
-    name = "chatbot_policy"
+  name = "chatbot_policy"
 
-    policy = jsonencode({
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Action": [
-                    "sns:ListSubscriptionsByTopic",
-                    "sns:ListTopics",
-                    "sns:Unsubscribe",
-                    "sns:Subscribe",
-                    "sns:ListSubscriptions"
-                ],
-                "Effect": "Allow",
-                "Resource": "*"
-            },
-            {
-                "Effect": "Allow",
-                "Action": [
-                    "logs:PutLogEvents",
-                    "logs:CreateLogStream",
-                    "logs:DescribeLogStreams",
-                    "logs:CreateLogGroup",
-                    "logs:DescribeLogGroups"
-                ],
-                "Resource": "arn:aws:logs:*:*:log-group:/aws/chatbot/*"
-            }
-        ]
-    })
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : [
+          "sns:ListSubscriptionsByTopic",
+          "sns:ListTopics",
+          "sns:Unsubscribe",
+          "sns:Subscribe",
+          "sns:ListSubscriptions"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:PutLogEvents",
+          "logs:CreateLogStream",
+          "logs:DescribeLogStreams",
+          "logs:CreateLogGroup",
+          "logs:DescribeLogGroups"
+        ],
+        "Resource" : "arn:aws:logs:*:*:log-group:/aws/chatbot/*"
+      }
+    ]
+  })
 }

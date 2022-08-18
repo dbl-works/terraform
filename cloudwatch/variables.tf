@@ -38,12 +38,12 @@ variable "alarm_evaluation_periods" {
 }
 
 variable "slack_channel_id" {
-  type    = string
+  type = string
 }
 
 
 variable "slack_workspace_id" {
-  type    = string
+  type = string
 }
 
 locals {
