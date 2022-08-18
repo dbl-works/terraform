@@ -237,9 +237,10 @@ resource "aws_cloudwatch_metric_alarm" "redis_memory" {
 resource "aws_cloudwatch_metric_alarm" "error_rate" {
   alarm_name                = "${var.alb_arn_suffix}-error-rate"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "2"
+  evaluation_periods        = "1"
   threshold                 = "10"
   alarm_description         = "Request error rate has exceeded 10%"
+  alarm_actions             = [aws_sns_topic.cloudwatch_slack.arn]
 
   metric_query {
     id          = "e1"
