@@ -10,7 +10,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
   alarm_description   = "Monitors ECS CPU utilization"
   alarm_actions       = [aws_sns_topic.cloudwatch_slack.arn]
   dimensions = {
-    LoadBalancer = var.alb_arn_suffix
+    ClusterName = var.cluster_name
   }
 }
 
