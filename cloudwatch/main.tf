@@ -137,7 +137,7 @@ locals {
           "left" : {
             "min" : 0,
             "max" : 100,
-            "showUnits" : false
+            "showUnits" : true
           }
         },
         "setPeriodToTimeRange" : true
@@ -160,12 +160,10 @@ locals {
         "yAxis" : {
           "left" : {
             "min" : 0,
-            "showUnits" : false
-          },
-          "right" : {
+            "max" : 100,
             "showUnits" : true
           }
-        }
+        },
       }
     },
     {
@@ -182,12 +180,6 @@ locals {
         "stat" : "Sum",
         "period" : var.period,
         "title" : "Throughput",
-        "yAxis" : {
-          "left" : {
-            "showUnits" : false,
-            "min" : 0
-          }
-        }
       }
     },
     {
@@ -374,7 +366,14 @@ locals {
           ["AWS/ElastiCache", "EngineCPUUtilization", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.elasticache_cluster_name }]
         ],
         "region" : "${var.region}",
-        "period" : var.period
+        "period" : var.period,
+        "yAxis" : {
+          "left" : {
+            "min" : 0,
+            "max" : 100,
+            "showUnits" : true
+          }
+        },
       }
     },
     {
@@ -390,7 +389,14 @@ locals {
           ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.elasticache_cluster_name }]
         ],
         "region" : "${var.region}",
-        "period" : var.period
+        "period" : var.period,
+        "yAxis" : {
+          "left" : {
+            "min" : 0,
+            "max" : 100,
+            "showUnits" : true
+          }
+        },
       }
     }
   ]
