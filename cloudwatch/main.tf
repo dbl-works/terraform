@@ -96,7 +96,7 @@ locals {
       "width" : 12,
       "height" : 6,
       "properties" : {
-        "title" : "Response Status",
+        "title" : "Response Status Count (1 day)",
         "metrics" : [
           ["AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "LoadBalancer", var.alb_arn_suffix, { "label" : "5xx Count" }],
           [".", "HTTPCode_Target_4XX_Count", ".", ".", { "label" : "4xx Count" }],
@@ -296,7 +296,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "ReadLatency", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }],
+          ["AWS/RDS", "ReadLatency", "DBInstanceIdentifier", "${var.database_name}"],
           [".", "WriteLatency", ".", "."]
         ],
         "region" : "${var.region}",
@@ -312,7 +312,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "NetworkReceiveThroughput", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }],
+          ["AWS/RDS", "NetworkReceiveThroughput", "DBInstanceIdentifier", "${var.database_name}"],
           [".", "NetworkTransmitThroughput", ".", "."]
         ],
         "region" : "${var.region}",
@@ -328,7 +328,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }],
+          ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${var.database_name}"],
           [".", "WriteIOPS", ".", "."]
         ],
         "region" : "${var.region}",
