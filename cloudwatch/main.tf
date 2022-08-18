@@ -339,7 +339,7 @@ locals {
       "width" : 9,
       "height" : 6,
       "properties" : {
-        "title" : "DB Read/Write IOPS",
+        "title" : "DB Read/Write Throughput",
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
