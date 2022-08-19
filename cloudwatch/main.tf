@@ -68,7 +68,7 @@ locals {
         "title" : "Redis Memory Usage",
         "view" : "singleValue",
         "sparkline" : true,
-        "period" : var.period,
+        "period" : var.metric_period,
         "metrics" : [
           ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.alb_arn_suffix }]
         ],
@@ -131,7 +131,7 @@ locals {
         "stacked" : true,
         "region" : "${var.region}",
         "title" : "Memory Usage",
-        "period" : var.period,
+        "period" : var.metric_period,
         "stat" : "Maximum",
         "yAxis" : {
           "left" : {
@@ -155,7 +155,7 @@ locals {
         "stacked" : false,
         "region" : "${var.region}",
         "title" : "CPU Usage",
-        "period" : var.period,
+        "period" : var.metric_period,
         "stat" : "Maximum",
         "yAxis" : {
           "left" : {
@@ -178,7 +178,7 @@ locals {
         "stacked" : true,
         "region" : "${var.region}",
         "stat" : "Sum",
-        "period" : var.period,
+        "period" : var.metric_period,
         "title" : "Throughput",
       }
     },
@@ -196,7 +196,7 @@ locals {
         "stacked" : false,
         "region" : "${var.region}",
         "stat" : "p95",
-        "period" : var.period,
+        "period" : var.metric_period,
         "title" : "Response Time",
         "yAxis" : {
           "left" : {
@@ -230,7 +230,7 @@ locals {
           ["AWS/RDS", "FreeableMemory", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }]
         ],
         "region" : "${var.region}",
-        "period" : var.period,
+        "period" : var.metric_period,
         "setPeriodToTimeRange" : true
       }
     },
@@ -246,7 +246,7 @@ locals {
           ["AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }]
         ],
         "region" : "${var.region}",
-        "period" : var.period
+        "period" : var.metric_period
       }
     },
     {
@@ -261,7 +261,7 @@ locals {
           ["AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }]
         ],
         "region" : "${var.region}",
-        "period" : var.period,
+        "period" : var.metric_period,
         "yAxis" : {
           "left" : {
             "min" : 0,
@@ -283,7 +283,7 @@ locals {
           ["AWS/RDS", "FreeStorageSpace", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }]
         ],
         "region" : "${var.region}",
-        "period" : var.period
+        "period" : var.metric_period
       }
     },
     {
@@ -299,7 +299,7 @@ locals {
           [".", "WriteLatency", ".", "."]
         ],
         "region" : "${var.region}",
-        "period" : var.period
+        "period" : var.metric_period
       }
     },
     {
@@ -315,7 +315,7 @@ locals {
           [".", "NetworkTransmitThroughput", ".", "."]
         ],
         "region" : "${var.region}",
-        "period" : var.period
+        "period" : var.metric_period
       }
     },
     {
@@ -331,7 +331,7 @@ locals {
           [".", "WriteIOPS", ".", "."]
         ],
         "region" : "${var.region}",
-        "period" : var.period
+        "period" : var.metric_period
       }
     },
     {
@@ -347,7 +347,7 @@ locals {
           [".", "WriteThroughput", ".", "."]
         ],
         "region" : "${var.region}",
-        "period" : var.period
+        "period" : var.metric_period
       }
     }
   ]
@@ -373,7 +373,7 @@ locals {
           ["AWS/ElastiCache", "EngineCPUUtilization", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.elasticache_cluster_name }]
         ],
         "region" : "${var.region}",
-        "period" : var.period,
+        "period" : var.metric_period,
         "yAxis" : {
           "left" : {
             "min" : 0,
@@ -396,7 +396,7 @@ locals {
           ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.elasticache_cluster_name }]
         ],
         "region" : "${var.region}",
-        "period" : var.period,
+        "period" : var.metric_period,
         "yAxis" : {
           "left" : {
             "min" : 0,
