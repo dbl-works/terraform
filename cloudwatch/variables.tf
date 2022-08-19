@@ -2,6 +2,14 @@ variable "region" {
   type = string
 }
 
+variable "project" {
+  type = string
+}
+
+variable "environment" {
+  type = string
+}
+
 variable "dashboard_name" {
   type = string
 }

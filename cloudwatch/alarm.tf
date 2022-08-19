@@ -235,7 +235,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_memory" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "error_rate" {
-  alarm_name                = "${var.alb_arn_suffix}-error-rate"
+  alarm_name                = "${var.project}-${var.environment}-${var.region}-error-rate"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
   threshold                 = "10"
