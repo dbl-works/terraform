@@ -1,9 +1,9 @@
-resource "aws_sns_topic" "cloudwatch_slack" {
-  name = "${local.name}-cloudwatch-slack"
+resource "aws_sns_topic" "slack" {
+  name = var.sns_topic_name
 }
 
-resource "aws_sns_topic_policy" "cloudwatch_slack" {
-  arn = aws_sns_topic.cloudwatch_slack.arn
+resource "aws_sns_topic_policy" "slack" {
+  arn = aws_sns_topic.slack.arn
 
   policy = data.aws_iam_policy_document.sns_topic_policy.json
 }
@@ -44,6 +44,6 @@ data "aws_iam_policy_document" "sns_topic_policy" {
       identifiers = ["*"]
     }
 
-    resources = [aws_sns_topic.cloudwatch_slack.arn]
+    resources = [aws_sns_topic.slack.arn]
   }
 }
