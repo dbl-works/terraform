@@ -1,4 +1,5 @@
 resource "aws_cloudwatch_dashboard" "main" {
+  count          = var.enable_dashboard ? 1 : 0
   dashboard_name = "${local.name}-ecs"
 
   dashboard_body = <<EOF
