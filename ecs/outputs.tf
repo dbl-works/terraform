@@ -26,3 +26,8 @@ output "ecs_security_group_id" {
 output "https_alb_listener_arn" {
   value = aws_alb_listener.https.arn
 }
+
+# Need this for the usage of cloudwatch metrics
+output "alb_arn_suffix" {
+  value = aws_alb.alb.arn_suffix
+}

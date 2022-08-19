@@ -46,5 +46,27 @@ module "ecs" {
   grant_read_access_to_sqs_arns  = var.grant_read_access_to_sqs_arns
   grant_write_access_to_sqs_arns = var.grant_write_access_to_sqs_arns
 
-  custom_policies = var.ecs_custom_policies
+  custom_policies  = var.ecs_custom_policies
+  enable_dashboard = var.cloudwatch_dashboard_view == "simple"
+}
+
+module "cloudwatch" {
+  count  = var.cloudwatch_dashboard_view == "simple" ? 0 : 1
+  source = "../../cloudwatch"
+
+  # Required
+  region                   = var.region
+  project                  = var.project
+  environment              = var.environment
+  cluster_name             = local.name
+  database_name            = module.rds.database_name
+  alb_arn_suffix           = module.ecs.alb_arn_suffix
+  elasticache_cluster_name = module.elasticache.cluster_name
+
+  # optional
+  metric_period            = var.metric_period
+  alarm_period             = var.alarm_period
+  alarm_evaluation_periods = var.alarm_evaluation_periods
+  slack_channel_id         = var.slack_channel_id
+  slack_workspace_id       = var.slack_workspace_id
 }

@@ -1,7 +1,6 @@
 module "elasticache" {
   source = "../../elasticache"
 
-
   project     = var.project
   environment = var.environment
   vpc_id      = module.vpc.id

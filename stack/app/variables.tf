@@ -238,3 +238,37 @@ variable "regional" {
   default = true
 }
 # =============== ECS ================ #
+
+# =============== Cloudwatch ================ #
+variable "cloudwatch_dashboard_view" {
+  type = string
+  # simple, detailed
+  default = "simple"
+}
+
+variable "slack_channel_id" {
+  type    = string
+  default = null
+}
+
+variable "slack_workspace_id" {
+  type    = string
+  default = null
+}
+
+variable "metric_period" {
+  type    = number
+  default = 60
+}
+
+variable "alarm_period" {
+  type    = number
+  default = 300
+}
+
+variable "alarm_evaluation_periods" {
+  type        = number
+  default     = 1
+  description = " The number of periods over which data is compared to the specified threshold."
+}
+# =============== Cloudwatch ================ #
