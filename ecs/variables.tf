@@ -67,3 +67,8 @@ variable "grant_write_access_to_sqs_arns" {
 variable "custom_policies" {
   default = []
 }
+
+variable "enable_dashboard" {
+  type    = bool
+  default = true
+}
