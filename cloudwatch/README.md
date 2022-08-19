@@ -21,6 +21,22 @@ module "cloudwatch" {
   elasticache_cluster_name = "project-elasticache"
 
   # optional
+  custom_metrics           = [
+    {
+      "height" : 4,
+      "width" : 4,
+      "type" : "metric",
+      "properties" : {
+        "title" : "Average Response Time",
+        "view" : "singleValue",
+        "sparkline" : true,
+        "metrics" : [
+          ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", "app/project/123456789", { "label" : "app/project/123456789" }]
+        ],
+        "region" : "eu-central-1"
+      }
+    }
+  ]
   dashboard_name           = "facebook"
   metric_period            = 60
   alarm_period             = 120

@@ -57,6 +57,11 @@ variable "slack_workspace_id" {
   default = null
 }
 
+variable "custom_metrics" {
+  type    = list(any)
+  default = []
+}
+
 locals {
   name = var.dashboard_name == null ? var.dashboard_name : "${var.project}-${var.environment}-${var.region}"
 }
