@@ -111,9 +111,17 @@ module "stack" {
   grant_write_access_to_sqs_arns  = []
   ecs_custom_policies             = []
   # This is only needed when we want to add additional secrets to the ECS
-  secret_arns = []
+  secret_arns                     = []
   # appends region to the name (usually ${project}-${environment}) for globally unique names
-  regional = true
+  regional                        = true
+
+  # Cloudwatch
+  cloudwatch_dashboard_view       = "detailed" # default is simple
+  metric_period                   = 60
+  alarm_period                    = 120
+  alarm_evaluation_periods        = 1
+  slack_channel_id                = "CXXXXXXXXXX" # Required if user want to enable slack notification
+  slack_workspace_id              = "TXXXXXXXX" # Required if user want to enable slack notification
 
   ecs_name = null # custom name when convention exceeds 32 chars
 

@@ -6,3 +6,7 @@ output "database_url" {
 output "database_arn" {
   value = aws_db_instance.main.arn
 }
+
+output "database_name" {
+  value = aws_db_instance.main.db_name
+}
