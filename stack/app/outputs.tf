@@ -55,3 +55,7 @@ output "accept_status-accepter" {
 output "rds_kms_key_arn" {
   value = var.rds_master_db_kms_key_arn == null ? join("", module.rds-kms-key.*.arn) : "KMS ARN only printed for the master DB to be passed to each replica."
 }
+
+output "slack_sns_topic_arn" {
+  value = length(module.cloudwatch) > 0 ? module.cloudwatch[0].sns_topic_arn : null
+}
