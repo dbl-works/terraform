@@ -25,6 +25,7 @@ module "ecs" {
   certificate_arn   = data.aws_acm_certificate.default.arn
   regional          = var.regional
   name              = var.ecs_name # custom name when convention exceeds 32 chars
+  region            = var.region   # used for e.g CloudWatch metrics
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
 
