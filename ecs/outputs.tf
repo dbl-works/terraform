@@ -26,3 +26,8 @@ output "ecs_security_group_id" {
 output "https_alb_listener_arn" {
   value = aws_alb_listener.https.arn
 }
+
+output "ecs_role_name" {
+  value = aws_iam_role.ecs-task-execution.name
+  description = "ECS container instance IAM role. Attach policy for container instances to this role to add permissions for future features and enhancements as they are introduce."
+}
