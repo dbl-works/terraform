@@ -31,3 +31,7 @@ output "https_alb_listener_arn" {
 output "alb_arn_suffix" {
   value = aws_alb.alb.arn_suffix
 }
+
+output "ecs_cluster_name" {
+  value = aws_ecs_cluster.main.name
+}
