@@ -11,7 +11,8 @@ variable "slack_workspace_id" {
 }
 
 variable "sns_topic_name" {
-  type = string
+  type    = string
+  default = "slack-sns"
 }
 
 variable "guardrail_policies" {
