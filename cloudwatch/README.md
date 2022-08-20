@@ -41,7 +41,10 @@ module "cloudwatch" {
   metric_period            = 60
   alarm_period             = 120
   alarm_evaluation_periods = 1
-  slack_channel_id         = "CXXXXXXXXXX" # Required if user want to enable slack notification
-  slack_workspace_id       = "TXXXXXXXX" # Required if user want to enable slack notification
+
+  # Slack configuration only need to be setup once for each Slack workspaces
+  slack_channel_id         = "CXXXXXXXXXX" # Required if user want to enable slack notification + first time setup
+  slack_workspace_id       = "TXXXXXXXX" # Required if user want to enable slack notification + first time setup
+  sns_topic_arn            = "" # Required if user want to enable slack notification and has setup slack configuration once, sns_topic_arn can be retrieved from the output in the first time setup
 }
 ```

@@ -9,7 +9,7 @@ resource "awscc_chatbot_slack_channel_configuration" "chatbot" {
 }
 
 resource "aws_iam_role" "chatbot" {
-  name = "aws_chatbot_role"
+  name = "aws-chatbot-role"
 
   assume_role_policy = jsonencode({
     "version" : "2012-10-17",
@@ -31,18 +31,18 @@ resource "aws_iam_role_policy_attachment" "chatbot" {
 }
 
 resource "aws_iam_policy" "chatbot_policy" {
-  name = "chatbot_policy"
+  name = "chatbot-policy"
 
   policy = jsonencode({
     "version" : "2012-10-17",
     "statement" : [
       {
         "action" : [
-          "sns:listsubscriptionsbytopic",
-          "sns:listtopics",
-          "sns:unsubscribe",
-          "sns:subscribe",
-          "sns:listsubscriptions"
+          "SNS:ListSubscriptionsByTopic",
+          "SNS:ListTopics",
+          "SNS:Unsubscribe",
+          "SNS:Subscribe",
+          "SNS:ListSubscriptions"
         ],
         "effect" : "allow",
         "resource" : "*"
@@ -50,11 +50,11 @@ resource "aws_iam_policy" "chatbot_policy" {
       {
         "effect" : "allow",
         "action" : [
-          "logs:putlogevents",
-          "logs:createlogstream",
-          "logs:describelogstreams",
-          "logs:createloggroup",
-          "logs:describeloggroups"
+          "logs:PutLogEvents",
+          "logs:CreateLogStream",
+          "logs:DescribeLogStreams",
+          "logs:CreateLogGroup",
+          "logs:DescribeLogGroups"
         ],
         "resource" : "arn:aws:logs:*:*:log-group:/aws/chatbot/*"
       }

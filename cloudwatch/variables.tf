@@ -62,6 +62,11 @@ variable "custom_metrics" {
   default = []
 }
 
+variable "sns_topic_arn" {
+  type    = string
+  default = null
+}
+
 locals {
   name = var.dashboard_name == null ? "${var.project}-${var.environment}-${var.region}" : var.dashboard_name
 }

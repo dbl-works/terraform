@@ -1,5 +1,5 @@
 locals {
-  slack_sns = length(module.chatbot) > 0 ? [module.chatbot[0].sns_topic_arn] : []
+  slack_sns = length(module.chatbot) > 0 ? compact(distinct([module.chatbot[0].sns_topic_arn, var.sns_topic_arn])) : compact([var.sns_topic_arn])
 }
 
 resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
