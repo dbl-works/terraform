@@ -256,6 +256,11 @@ variable "slack_workspace_id" {
   default = null
 }
 
+variable "slack_sns_topic_arn" {
+  type    = string
+  default = null
+}
+
 variable "metric_period" {
   type    = number
   default = 60

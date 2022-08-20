@@ -70,4 +70,5 @@ module "cloudwatch" {
   alarm_evaluation_periods = var.alarm_evaluation_periods
   slack_channel_id         = var.slack_channel_id
   slack_workspace_id       = var.slack_workspace_id
+  sns_topic_arn            = var.slack_sns_topic_arn
 }
