@@ -17,7 +17,7 @@ resource "aws_iam_role" "chatbot" {
       {
         "Effect" : "Allow",
         "Principal" : {
-          "service" : "management.chatbot.amazonaws.com"
+          "Service" : "management.chatbot.amazonaws.com"
         },
         "Action" : "sts:AssumeRole"
       }
