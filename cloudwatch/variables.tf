@@ -63,5 +63,5 @@ variable "custom_metrics" {
 }
 
 locals {
-  name = var.dashboard_name == null ? var.dashboard_name : "${var.project}-${var.environment}-${var.region}"
+  name = var.dashboard_name == null ? "${var.project}-${var.environment}-${var.region}" : var.dashboard_name
 }
