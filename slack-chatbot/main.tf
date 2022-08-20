@@ -12,14 +12,14 @@ resource "aws_iam_role" "chatbot" {
   name = "aws-chatbot-role"
 
   assume_role_policy = jsonencode({
-    "version" : "2012-10-17",
-    "statement" : [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "effect" : "allow",
-        "principal" : {
+        "Effect" : "Allow",
+        "Principal" : {
           "service" : "management.chatbot.amazonaws.com"
         },
-        "action" : "sts:assumerole"
+        "Action" : "sts:AssumeRole"
       }
     ]
   })
@@ -34,29 +34,29 @@ resource "aws_iam_policy" "chatbot_policy" {
   name = "chatbot-policy"
 
   policy = jsonencode({
-    "version" : "2012-10-17",
-    "statement" : [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "action" : [
+        "Action" : [
           "SNS:ListSubscriptionsByTopic",
           "SNS:ListTopics",
           "SNS:Unsubscribe",
           "SNS:Subscribe",
           "SNS:ListSubscriptions"
         ],
-        "effect" : "allow",
-        "resource" : "*"
+        "Effect" : "Allow",
+        "Resource" : "*"
       },
       {
-        "effect" : "allow",
-        "action" : [
+        "Effect" : "Allow",
+        "Action" : [
           "logs:PutLogEvents",
           "logs:CreateLogStream",
           "logs:DescribeLogStreams",
           "logs:CreateLogGroup",
           "logs:DescribeLogGroups"
         ],
-        "resource" : "arn:aws:logs:*:*:log-group:/aws/chatbot/*"
+        "Resource" : "arn:aws:logs:*:*:log-group:/aws/chatbot/*"
       }
     ]
   })
