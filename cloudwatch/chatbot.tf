@@ -6,5 +6,5 @@ module "chatbot" {
   sns_topic_name     = "${local.name}-cloudwatch-slack"
   slack_channel_id   = var.slack_channel_id
   slack_workspace_id = var.slack_workspace_id
-  guardrail_policies = ["arn:aws:iam::aws:policy/cloudwatchreadonlyaccess"]
+  guardrail_policies = ["arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"]
 }

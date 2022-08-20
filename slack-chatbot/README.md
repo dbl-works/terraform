@@ -13,6 +13,6 @@ module "chatbot" {
   # Optional
   slack_channel_id         = "CXXXXXXXXXX"
   slack_workspace_id       = "TXXXXXXXX"
-  guardrail_policies       = ["arn:aws:iam::aws:policy/cloudwatchreadonlyaccess"]
+  guardrail_policies       = ["arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"]
 }
 ```
