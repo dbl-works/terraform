@@ -59,7 +59,7 @@ module "cloudwatch" {
   region                   = var.region
   project                  = var.project
   environment              = var.environment
-  cluster_name             = local.name
+  cluster_name             = module.ecs.ecs_cluster_name
   database_name            = module.rds.database_name
   alb_arn_suffix           = module.ecs.alb_arn_suffix
   elasticache_cluster_name = module.elasticache.cluster_name
