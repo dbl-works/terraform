@@ -69,5 +69,5 @@ module "cloudwatch" {
   alarm_period             = var.alarm_period
   alarm_evaluation_periods = var.alarm_evaluation_periods
   sns_topic_arns           = var.cloudwatch_sns_topic_arns
-  custom_metrics           = var.custom_metrics
+  custom_metrics           = var.cloudwatch_custom_metrics
 }
