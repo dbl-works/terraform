@@ -278,10 +278,10 @@ variable "cloudwatch_elasticache_names" {
   description = "Name of the elasticache cluster that needs to be monitored"
 }
 
-variable "cloudwatch_database_names" {
+variable "cloudwatch_database_identifiers" {
   type        = list(string)
   default     = []
-  description = "Name of the databases that needs to be monitored"
+  description = "Identifiers of the databases that needs to be monitored"
 }
 
 variable "cloudwatch_alb_arn_suffixes" {

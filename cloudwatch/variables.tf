@@ -20,7 +20,7 @@ variable "cluster_names" {
   default = []
 }
 
-variable "database_names" {
+variable "database_identifiers" {
   type    = list(string)
   default = []
 }

@@ -55,7 +55,7 @@ locals {
 
   database_performance_metrics = [
 
-    for name in var.database_names : [
+    for name in var.database_identifiers : [
       {
         "height" : 4,
         "width" : 4,
@@ -227,7 +227,7 @@ locals {
   ]
 
   database_metrics = [
-    for name in var.database_names : [
+    for name in var.database_identifiers : [
       {
         "type" : "text",
         "width" : 18,

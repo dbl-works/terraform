@@ -16,7 +16,7 @@ module "cloudwatch" {
   project                   = "facebook"
   environment               = "production"
   cluster_names             = ["project-cluster"]
-  database_names            = ["project-database"]
+  database_identifiers      = ["project-database"]
   alb_arn_suffixes          = ["app/project/123456789"]
   elasticache_cluster_names = ["project-elasticache"]
 

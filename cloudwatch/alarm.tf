@@ -35,8 +35,8 @@ resource "aws_cloudwatch_metric_alarm" "cluster_memory" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_memory" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-freeableMemory"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-freeableMemory"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -47,15 +47,15 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
   alarm_description   = "Monitors RDS Freeable Memory"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
 # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.MaxConnections
 # LEAST({DBInstanceClassMemory/9531392}, 5000)
 resource "aws_cloudwatch_metric_alarm" "db_connection" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-db-connections"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-db-connections"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -66,13 +66,13 @@ resource "aws_cloudwatch_metric_alarm" "db_connection" {
   alarm_description   = "Monitors DB Connection"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_cpu" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-cpu-utilization"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-cpu-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -83,13 +83,13 @@ resource "aws_cloudwatch_metric_alarm" "db_cpu" {
   alarm_description   = "Monitors DB CPU Usage"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_storage" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-free-storage"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-free-storage"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -100,13 +100,13 @@ resource "aws_cloudwatch_metric_alarm" "db_storage" {
   alarm_description   = "Monitors DB Free Storage"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_read" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-readlatency"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-readlatency"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -117,13 +117,13 @@ resource "aws_cloudwatch_metric_alarm" "db_read" {
   alarm_description   = "Monitors DB Read Latency"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_write" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-writelatency"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-writelatency"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -134,13 +134,13 @@ resource "aws_cloudwatch_metric_alarm" "db_write" {
   alarm_description   = "Monitors DB Write Latency"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_network_receive" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-network-receive-throughput"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-network-receive-throughput"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -150,13 +150,13 @@ resource "aws_cloudwatch_metric_alarm" "db_network_receive" {
   threshold           = 0
   alarm_description   = "Monitors DB NetworkReceiveThroughput"
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_network_transmit" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-network-transmit-throughput"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-network-transmit-throughput"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -166,13 +166,13 @@ resource "aws_cloudwatch_metric_alarm" "db_network_transmit" {
   threshold           = 0
   alarm_description   = "Monitors DB NetworkTransmitThroughput"
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
 resource "aws_cloudwatch_composite_alarm" "db_network" {
-  count               = length(var.database_names)
-  alarm_name        = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-network"
+  count               = length(var.database_identifiers)
+  alarm_name        = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-network"
   alarm_description = "Monitors DB Network"
 
   alarm_actions = var.sns_topic_arns
@@ -181,8 +181,8 @@ resource "aws_cloudwatch_composite_alarm" "db_network" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_read_iops" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-read-iops"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-read-iops"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -193,13 +193,13 @@ resource "aws_cloudwatch_metric_alarm" "db_read_iops" {
   alarm_description   = "Monitors DB Read IOPS"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_write_iops" {
-  count               = length(var.database_names)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_names[count.index]}-write-iops"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-write-iops"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -210,7 +210,7 @@ resource "aws_cloudwatch_metric_alarm" "db_write_iops" {
   alarm_description   = "Monitors DB Write IOPS"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    DBInstanceIdentifier = var.database_names[count.index]
+    DBInstanceIdentifier = var.database_identifiers[count.index]
   }
 }
 
