@@ -15,16 +15,19 @@ variable "dashboard_name" {
   default = null
 }
 
-variable "cluster_name" {
-  type = string
+variable "cluster_names" {
+  type = list(string)
+  default = []
 }
 
-variable "database_name" {
+variable "database_names" {
   type = string
+  default = []
 }
 
-variable "alb_arn_suffix" {
-  type = string
+variable "alb_arn_suffixes" {
+  type    = list(string)
+  default = []
 }
 
 variable "elasticache_cluster_names" {

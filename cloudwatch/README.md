@@ -15,9 +15,9 @@ module "cloudwatch" {
   region                    = "eu-central-1"
   project                   = "facebook"
   environment               = "production"
-  cluster_name              = "project-cluster"
-  database_name             = "project-database"
-  alb_arn_suffix            = "app/project/123456789"
+  cluster_names             = ["project-cluster"]
+  database_names            = ["project-database"]
+  alb_arn_suffixes          = ["app/project/123456789"]
   elasticache_cluster_names = ["project-elasticache"]
 
   # optional
