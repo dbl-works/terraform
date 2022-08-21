@@ -56,17 +56,18 @@ module "cloudwatch" {
   source = "../../cloudwatch"
 
   # Required
-  region                   = var.region
-  project                  = var.project
-  environment              = var.environment
-  cluster_name             = module.ecs.ecs_cluster_name
-  database_name            = module.rds.database_name
-  alb_arn_suffix           = module.ecs.alb_arn_suffix
-  elasticache_cluster_name = module.elasticache.cluster_name
+  region                    = var.region
+  project                   = var.project
+  environment               = var.environment
+  cluster_names             = [module.ecs.ecs_cluster_name]
+  database_names            = [module.rds.database_name]
+  alb_arn_suffixes          = [module.ecs.alb_arn_suffix]
+  elasticache_cluster_names = [module.elasticache.cluster_name]
 
   # optional
   metric_period            = var.metric_period
   alarm_period             = var.alarm_period
   alarm_evaluation_periods = var.alarm_evaluation_periods
   sns_topic_arns           = var.cloudwatch_sns_topic_arns
+  custom_metrics           = var.custom_metrics
 }

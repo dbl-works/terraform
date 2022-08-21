@@ -121,6 +121,7 @@ module "stack" {
   alarm_period                    = 120
   alarm_evaluation_periods        = 1
   cloudwatch_sns_topic_arns       = "arn:aws:sns:eu-central-1:1XXXXXXXXXXX:first-sns-topic" # Required if user want to enable slack notification and has setup slack configuration once, sns_topic_arn can be retrieved from the output in the first time setup
+  cloudwatch_custom_metrics       = []
 
   ecs_name = null # custom name when convention exceeds 32 chars
 

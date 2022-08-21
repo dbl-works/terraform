@@ -266,4 +266,8 @@ variable "alarm_evaluation_periods" {
   default     = 1
   description = " The number of periods over which data is compared to the specified threshold."
 }
+
+variable "cloudwatch_custom_metrics" {
+  type = list(object)
+}
 # =============== Cloudwatch ================ #
