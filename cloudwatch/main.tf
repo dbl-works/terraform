@@ -98,7 +98,7 @@ locals {
         "properties" : {
           "title" : "RequestCount per day",
           "metrics" : [
-            ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", name, name]
+            ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", name, { label: name }]
           ],
           "view" : "timeSeries",
           "stacked" : false,
