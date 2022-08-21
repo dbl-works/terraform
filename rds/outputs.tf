@@ -7,6 +7,6 @@ output "database_arn" {
   value = aws_db_instance.main.arn
 }
 
-output "database_name" {
-  value = aws_db_instance.main.db_name
+output "database_identifier" {
+  value = aws_db_instance.main.identifier
 }
