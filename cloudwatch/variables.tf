@@ -21,7 +21,7 @@ variable "cluster_names" {
 }
 
 variable "database_names" {
-  type = string
+  type    = list(string)
   default = []
 }
 
