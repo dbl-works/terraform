@@ -47,24 +47,14 @@ variable "alarm_evaluation_periods" {
   description = " The number of periods over which data is compared to the specified threshold."
 }
 
-variable "slack_channel_id" {
-  type    = string
-  default = null
-}
-
-variable "slack_workspace_id" {
-  type    = string
-  default = null
-}
-
 variable "custom_metrics" {
   type    = list(any)
   default = []
 }
 
-variable "sns_topic_arn" {
-  type    = string
-  default = null
+variable "sns_topic_arns" {
+  type    = list(string)
+  default = []
 }
 
 locals {

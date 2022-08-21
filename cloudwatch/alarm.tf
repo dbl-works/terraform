@@ -1,7 +1,3 @@
-locals {
-  slack_sns = length(module.chatbot) > 0 ? compact(distinct([module.chatbot[0].sns_topic_arn, var.sns_topic_arn])) : compact([var.sns_topic_arn])
-}
-
 resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
   alarm_name          = "${var.project}-${var.environment}-${var.region}-cluster-cpu-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -12,7 +8,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
   statistic           = "Average"
   threshold           = "80"
   alarm_description   = "Monitors ECS CPU utilization"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     ClusterName = var.cluster_name
     ServiceName = "web"
@@ -29,7 +25,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_memory" {
   statistic           = "Average"
   threshold           = "80"
   alarm_description   = "Monitors ECS Memory utilization"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     ClusterName = var.cluster_name
     ServiceName = "web"
@@ -46,7 +42,7 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
   statistic           = "Average"
   threshold           = 128 * 1024 * 1024
   alarm_description   = "Monitors RDS Freeable Memory"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_name
   }
@@ -64,7 +60,7 @@ resource "aws_cloudwatch_metric_alarm" "db_connection" {
   statistic           = "Average"
   threshold           = 1000
   alarm_description   = "Monitors DB Connection"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_name
   }
@@ -80,7 +76,7 @@ resource "aws_cloudwatch_metric_alarm" "db_cpu" {
   statistic           = "Average"
   threshold           = 95
   alarm_description   = "Monitors DB CPU Usage"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_name
   }
@@ -96,7 +92,7 @@ resource "aws_cloudwatch_metric_alarm" "db_storage" {
   statistic           = "Average"
   threshold           = 10 * 1000 * 1024 * 1024
   alarm_description   = "Monitors DB Free Storage"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_name
   }
@@ -112,7 +108,7 @@ resource "aws_cloudwatch_metric_alarm" "db_read" {
   statistic           = "Average"
   threshold           = 0.25
   alarm_description   = "Monitors DB Read Latency"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_name
   }
@@ -128,7 +124,7 @@ resource "aws_cloudwatch_metric_alarm" "db_write" {
   statistic           = "Average"
   threshold           = 0.25
   alarm_description   = "Monitors DB Write Latency"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_name
   }
@@ -168,7 +164,7 @@ resource "aws_cloudwatch_composite_alarm" "db_network" {
   alarm_name        = "${var.project}-${var.environment}-${var.region}-db-network"
   alarm_description = "Monitors DB Network"
 
-  alarm_actions = local.slack_sns
+  alarm_actions = var.sns_topic_arns
 
   alarm_rule = "ALARM(${aws_cloudwatch_metric_alarm.db_network_receive.alarm_name}) AND ALARM(${aws_cloudwatch_metric_alarm.db_network_transmit.alarm_name})"
 }
@@ -183,7 +179,7 @@ resource "aws_cloudwatch_metric_alarm" "db_read_iops" {
   statistic           = "Average"
   threshold           = 2500
   alarm_description   = "Monitors DB Read IOPS"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_name
   }
@@ -199,7 +195,7 @@ resource "aws_cloudwatch_metric_alarm" "db_write_iops" {
   statistic           = "Average"
   threshold           = 2500
   alarm_description   = "Monitors DB Write IOPS"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_name
   }
@@ -216,7 +212,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_cpu" {
   statistic           = "Average"
   threshold           = 80
   alarm_description   = "Monitors Redis CPU"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     ReplicationGroupId = var.elasticache_cluster_name
   }
@@ -232,7 +228,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_memory" {
   statistic           = "Average"
   threshold           = 80
   alarm_description   = "Monitors Redis Memory"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
   dimensions = {
     ReplicationGroupId = var.elasticache_cluster_name
   }
@@ -244,7 +240,7 @@ resource "aws_cloudwatch_metric_alarm" "error_rate" {
   evaluation_periods  = "1"
   threshold           = "10"
   alarm_description   = "Request error rate has exceeded 10%"
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
 
   metric_query {
     id          = "e1"
