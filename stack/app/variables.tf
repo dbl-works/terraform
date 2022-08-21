@@ -268,7 +268,7 @@ variable "alarm_evaluation_periods" {
 }
 
 variable "cloudwatch_custom_metrics" {
-  type    = list(object)
+  type    = list
   default = []
 }
 
