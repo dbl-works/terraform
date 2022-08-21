@@ -1,5 +1,5 @@
 locals {
-  performance_metrics = [
+  alb_performance_metrics = [
     {
       "height" : 4,
       "width" : 4,
@@ -30,6 +30,28 @@ locals {
         "region" : var.region
       }
     },
+  ]
+
+  elasticache_performance_metrics =  [
+    for name in var.elasticache_cluster_names :
+      {
+        "height" : 4,
+        "width" : 4,
+        "type" : "metric",
+        "properties" : {
+          "title" : "Redis Memory Usage",
+          "view" : "singleValue",
+          "sparkline" : true,
+          "period" : var.metric_period,
+          "metrics" : [
+            ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${name}", { "label" : name }]
+          ],
+          "region" : var.region
+        }
+      }
+  ]
+
+  performance_metrics = [
     {
       "height" : 4,
       "width" : 4,
@@ -56,21 +78,6 @@ locals {
         "stat" : "Sum",
         "metrics" : [
           ["AWS/RDS", "WriteIOPS", "DBInstanceIdentifier", "${var.database_name}", { "label" : var.database_name }],
-        ],
-        "region" : var.region
-      }
-    },
-    {
-      "height" : 4,
-      "width" : 4,
-      "type" : "metric",
-      "properties" : {
-        "title" : "Redis Memory Usage",
-        "view" : "singleValue",
-        "sparkline" : true,
-        "period" : var.metric_period,
-        "metrics" : [
-          ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.alb_arn_suffix }]
         ],
         "region" : var.region
       }
@@ -353,59 +360,61 @@ locals {
   ]
 
   elasticache_metrics = [
-    {
-      "type" : "text",
-      "width" : 18,
-      "height" : 1,
-      "properties" : {
-        "markdown" : "# Redis"
+    for name in var.elasticache_cluster_names : [
+      {
+        "type" : "text",
+        "width" : 18,
+        "height" : 1,
+        "properties" : {
+          "markdown" : "# Redis - ${name}"
+        }
+      },
+      {
+        "type" : "metric",
+        "width" : 9,
+        "height" : 6,
+        "properties" : {
+          "title" : "Redis CPU Utilization",
+          "view" : "timeSeries",
+          "stacked" : false,
+          "metrics" : [
+            ["AWS/ElastiCache", "EngineCPUUtilization", "ReplicationGroupId", "${name}", { "label" : name }]
+          ],
+          "region" : var.region,
+          "period" : var.metric_period,
+          "yAxis" : {
+            "left" : {
+              "min" : 0,
+              "max" : 100,
+              "showUnits" : true
+            }
+          },
+        }
+      },
+      {
+        "type" : "metric",
+        "width" : 9,
+        "height" : 6,
+        "properties" : {
+          "title" : "Redis Memory Usage",
+          "view" : "timeSeries",
+          "stacked" : false,
+          "metrics" : [
+            # Percentage of the memory for the cluster that is in use, excluding memory used for overhead and COB.
+            ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${name}", { "label" : name }]
+          ],
+          "region" : var.region,
+          "period" : var.metric_period,
+          "yAxis" : {
+            "left" : {
+              "min" : 0,
+              "max" : 100,
+              "showUnits" : true
+            }
+          },
+        }
       }
-    },
-    {
-      "type" : "metric",
-      "width" : 9,
-      "height" : 6,
-      "properties" : {
-        "title" : "Redis CPU Utilization",
-        "view" : "timeSeries",
-        "stacked" : false,
-        "metrics" : [
-          ["AWS/ElastiCache", "EngineCPUUtilization", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.elasticache_cluster_name }]
-        ],
-        "region" : "${var.region}",
-        "period" : var.metric_period,
-        "yAxis" : {
-          "left" : {
-            "min" : 0,
-            "max" : 100,
-            "showUnits" : true
-          }
-        },
-      }
-    },
-    {
-      "type" : "metric",
-      "width" : 9,
-      "height" : 6,
-      "properties" : {
-        "title" : "Redis Memory Usage",
-        "view" : "timeSeries",
-        "stacked" : false,
-        "metrics" : [
-          # Percentage of the memory for the cluster that is in use, excluding memory used for overhead and COB.
-          ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${var.elasticache_cluster_name}", { "label" : var.elasticache_cluster_name }]
-        ],
-        "region" : "${var.region}",
-        "period" : var.metric_period,
-        "yAxis" : {
-          "left" : {
-            "min" : 0,
-            "max" : 100,
-            "showUnits" : true
-          }
-        },
-      }
-    }
+    ]
   ]
 }
 
@@ -413,12 +422,14 @@ resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = local.name
 
   dashboard_body = jsonencode({
-    "widgets" : concat(
+    "widgets" : flatten(concat(
+      local.alb_performance_metrics,
+      local.elasticache_performance_metrics,
       local.performance_metrics,
       local.cluster_metrics,
       local.database_metrics,
       local.elasticache_metrics,
       var.custom_metrics
-    )
+    ))
   })
 }

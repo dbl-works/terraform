@@ -12,13 +12,13 @@ module "cloudwatch" {
   source = "github.com/dbl-works/terraform//cloudwatch?ref=v2021.07.05"
 
   # Required
-  region                   = "eu-central-1"
-  project                  = "facebook"
-  environment              = "production"
-  cluster_name             = "project-cluster"
-  database_name            = "project-database"
-  alb_arn_suffix           = "app/project/123456789"
-  elasticache_cluster_name = "project-elasticache"
+  region                    = "eu-central-1"
+  project                   = "facebook"
+  environment               = "production"
+  cluster_name              = "project-cluster"
+  database_name             = "project-database"
+  alb_arn_suffix            = "app/project/123456789"
+  elasticache_cluster_names = ["project-elasticache"]
 
   # optional
   custom_metrics           = [

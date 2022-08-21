@@ -27,8 +27,9 @@ variable "alb_arn_suffix" {
   type = string
 }
 
-variable "elasticache_cluster_name" {
-  type = string
+variable "elasticache_cluster_names" {
+  type    = list(string)
+  default = []
 }
 
 variable "metric_period" {
