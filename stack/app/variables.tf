@@ -246,16 +246,6 @@ variable "cloudwatch_dashboard_view" {
   default = "simple"
 }
 
-variable "slack_channel_id" {
-  type    = string
-  default = null
-}
-
-variable "slack_workspace_id" {
-  type    = string
-  default = null
-}
-
 variable "cloudwatch_sns_topic_arns" {
   type    = list(string)
   default = []

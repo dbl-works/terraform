@@ -68,7 +68,5 @@ module "cloudwatch" {
   metric_period            = var.metric_period
   alarm_period             = var.alarm_period
   alarm_evaluation_periods = var.alarm_evaluation_periods
-  slack_channel_id         = var.slack_channel_id
-  slack_workspace_id       = var.slack_workspace_id
   sns_topic_arns           = var.cloudwatch_sns_topic_arns
 }

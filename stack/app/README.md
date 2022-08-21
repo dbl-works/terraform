@@ -120,8 +120,6 @@ module "stack" {
   metric_period                   = 60
   alarm_period                    = 120
   alarm_evaluation_periods        = 1
-  slack_channel_id                = "CXXXXXXXXXX" # Required if user want to enable slack notification
-  slack_workspace_id              = "TXXXXXXXX" # Required if user want to enable slack notification
   cloudwatch_sns_topic_arns       = "arn:aws:sns:eu-central-1:1XXXXXXXXXXX:first-sns-topic" # Required if user want to enable slack notification and has setup slack configuration once, sns_topic_arn can be retrieved from the output in the first time setup
 
   ecs_name = null # custom name when convention exceeds 32 chars
