@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-cluster-cpu-utilization"
+  alarm_name          = "${var.project}-${var.environment}-cluster-cpu-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -16,7 +16,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cluster_memory" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-cluster-memory-utilization"
+  alarm_name          = "${var.project}-${var.environment}-cluster-memory-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -33,7 +33,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_memory" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_memory" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-freeableMemory"
+  alarm_name          = "${var.project}-${var.environment}-db-freeableMemory"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -51,7 +51,7 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
 # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.MaxConnections
 # LEAST({DBInstanceClassMemory/9531392}, 5000)
 resource "aws_cloudwatch_metric_alarm" "db_connection" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-database-connections"
+  alarm_name          = "${var.project}-${var.environment}-db-database-connections"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -67,7 +67,7 @@ resource "aws_cloudwatch_metric_alarm" "db_connection" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_cpu" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-cpu-utilization"
+  alarm_name          = "${var.project}-${var.environment}-db-cpu-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -83,7 +83,7 @@ resource "aws_cloudwatch_metric_alarm" "db_cpu" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_storage" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-free-storage"
+  alarm_name          = "${var.project}-${var.environment}-db-free-storage"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -99,7 +99,7 @@ resource "aws_cloudwatch_metric_alarm" "db_storage" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_read" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-readlatency"
+  alarm_name          = "${var.project}-${var.environment}-db-readlatency"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -115,7 +115,7 @@ resource "aws_cloudwatch_metric_alarm" "db_read" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_write" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-writelatency"
+  alarm_name          = "${var.project}-${var.environment}-db-writelatency"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -131,7 +131,7 @@ resource "aws_cloudwatch_metric_alarm" "db_write" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_network_receive" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-network-receive-throughput"
+  alarm_name          = "${var.project}-${var.environment}-db-network-receive-throughput"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -146,7 +146,7 @@ resource "aws_cloudwatch_metric_alarm" "db_network_receive" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_network_transmit" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-network-transmit-throughput"
+  alarm_name          = "${var.project}-${var.environment}-db-network-transmit-throughput"
   comparison_operator = "LessThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -161,7 +161,7 @@ resource "aws_cloudwatch_metric_alarm" "db_network_transmit" {
 }
 
 resource "aws_cloudwatch_composite_alarm" "db_network" {
-  alarm_name        = "${var.project}-${var.environment}-${var.region}-db-network"
+  alarm_name        = "${var.project}-${var.environment}-db-network"
   alarm_description = "Monitors DB Network"
 
   alarm_actions = var.sns_topic_arns
@@ -170,7 +170,7 @@ resource "aws_cloudwatch_composite_alarm" "db_network" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_read_iops" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-read-iops"
+  alarm_name          = "${var.project}-${var.environment}-db-read-iops"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -186,7 +186,7 @@ resource "aws_cloudwatch_metric_alarm" "db_read_iops" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "db_write_iops" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-db-write-iops"
+  alarm_name          = "${var.project}-${var.environment}-db-write-iops"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -203,7 +203,8 @@ resource "aws_cloudwatch_metric_alarm" "db_write_iops" {
 
 
 resource "aws_cloudwatch_metric_alarm" "redis_cpu" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-redis-cpu-utilization"
+  count               = length(var.elasticache_cluster_names)
+  alarm_name          = "${var.project}-${var.environment}-${var.elasticache_cluster_names[count.index]}-redis-cpu-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -214,12 +215,13 @@ resource "aws_cloudwatch_metric_alarm" "redis_cpu" {
   alarm_description   = "Monitors Redis CPU"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    ReplicationGroupId = var.elasticache_cluster_name
+    ReplicationGroupId = var.elasticache_cluster_names[count.index]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "redis_memory" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-redis-memory-usage"
+  count               = length(var.elasticache_cluster_names)
+  alarm_name          = "${var.project}-${var.environment}-${var.elasticache_cluster_names[count.index]}-redis-memory-usage"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
@@ -230,12 +232,12 @@ resource "aws_cloudwatch_metric_alarm" "redis_memory" {
   alarm_description   = "Monitors Redis Memory"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
-    ReplicationGroupId = var.elasticache_cluster_name
+    ReplicationGroupId = var.elasticache_cluster_names[count.index]
   }
 }
 
 resource "aws_cloudwatch_metric_alarm" "error_rate" {
-  alarm_name          = "${var.project}-${var.environment}-${var.region}-error-rate"
+  alarm_name          = "${var.project}-${var.environment}-error-rate"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
   threshold           = "10"
