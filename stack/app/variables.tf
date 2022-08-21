@@ -264,10 +264,35 @@ variable "alarm_period" {
 variable "alarm_evaluation_periods" {
   type        = number
   default     = 1
-  description = " The number of periods over which data is compared to the specified threshold."
+  description = "The number of periods over which data is compared to the specified threshold."
 }
 
 variable "cloudwatch_custom_metrics" {
-  type = list(object)
+  type    = list(object)
+  default = []
+}
+
+variable "cloudwatch_elasticache_names" {
+  type        = list(string)
+  default     = []
+  description = "Name of the elasticache cluster that needs to be monitored"
+}
+
+variable "cloudwatch_database_names" {
+  type        = list(string)
+  default     = []
+  description = "Name of the databases that needs to be monitored"
+}
+
+variable "cloudwatch_alb_arn_suffixes" {
+  type        = list(string)
+  default     = []
+  description = "Name of the load balancers that needs to be monitored"
+}
+
+variable "cloudwatch_cluster_names" {
+  type        = list(string)
+  default     = []
+  description = "Name of the ECS cluster that needs to be monitored"
 }
 # =============== Cloudwatch ================ #

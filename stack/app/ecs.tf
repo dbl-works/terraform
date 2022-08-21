@@ -59,10 +59,10 @@ module "cloudwatch" {
   region                    = var.region
   project                   = var.project
   environment               = var.environment
-  cluster_names             = [module.ecs.ecs_cluster_name]
-  database_names            = [module.rds.database_name]
-  alb_arn_suffixes          = [module.ecs.alb_arn_suffix]
-  elasticache_cluster_names = [module.elasticache.cluster_name]
+  cluster_names             = distinct(concat([module.ecs.ecs_cluster_name], var.cloudwatch_cluster_names))
+  database_names            = distinct(concat([module.rds.database_name], var.cloudwatch_database_names))
+  alb_arn_suffixes          = distinct(concat([module.ecs.alb_arn_suffix], var.cloudwatch_alb_arn_suffixes))
+  elasticache_cluster_names = distinct(concat([module.elasticache.cluster_name], var.cloudwatch_elasticache_names))
 
   # optional
   metric_period            = var.metric_period
