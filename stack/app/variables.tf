@@ -256,9 +256,9 @@ variable "slack_workspace_id" {
   default = null
 }
 
-variable "slack_sns_topic_arn" {
-  type    = string
-  default = null
+variable "cloudwatch_sns_topic_arns" {
+  type    = list(string)
+  default = []
 }
 
 variable "metric_period" {
