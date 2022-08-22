@@ -43,7 +43,7 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
   metric_name         = "FreeableMemory"
   namespace           = "AWS/RDS"
   statistic           = "Average"
-  threshold           = 128 * 1024 * 1024
+  threshold           = 128 * 1000 * 1024
   alarm_description   = "Monitors RDS Freeable Memory"
   alarm_actions       = var.sns_topic_arns
   dimensions = {

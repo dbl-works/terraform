@@ -245,7 +245,8 @@ locals {
           "view" : "timeSeries",
           "stacked" : false,
           "metrics" : [
-            ["AWS/RDS", "FreeableMemory", "DBInstanceIdentifier", "${name}", { "label" : name }]
+            ["AWS/RDS", "FreeableMemory", "DBInstanceIdentifier", name],
+            [ ".", "SwapUsage", ".", name]
           ],
           "region" : "${var.region}",
           "period" : var.metric_period,
