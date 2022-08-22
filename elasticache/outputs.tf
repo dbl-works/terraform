@@ -4,5 +4,5 @@ output "endpoint" {
 }
 
 output "cluster_name" {
-  value       = local.cluster_name
+  value = local.cluster_name
 }

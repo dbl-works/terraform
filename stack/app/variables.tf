@@ -268,7 +268,7 @@ variable "alarm_evaluation_periods" {
 }
 
 variable "cloudwatch_custom_metrics" {
-  type    = list
+  type    = list(any)
   default = []
 }
 
@@ -298,6 +298,6 @@ variable "cloudwatch_cluster_names" {
 
 # https://aws.amazon.com/rds/instance-types/
 variable "db_instance_class_memory_in_gb" {
-  type        = number
+  type = number
 }
 # =============== Cloudwatch ================ #
