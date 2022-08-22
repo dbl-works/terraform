@@ -61,6 +61,12 @@ variable "sns_topic_arns" {
   default = []
 }
 
+variable "db_instance_class_memory_in_gb" {
+  type    = number
+  default = 1
+}
+
 locals {
   name = var.dashboard_name == null ? "${var.project}-${var.environment}-${var.region}" : var.dashboard_name
+  db_instance_class_memory_in_bytes = var.db_instance_class_memory_in_gb * 1024 * 1024 * 1024
 }

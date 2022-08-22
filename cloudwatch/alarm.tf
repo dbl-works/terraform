@@ -43,7 +43,7 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
   metric_name         = "FreeableMemory"
   namespace           = "AWS/RDS"
   statistic           = "Average"
-  threshold           = 128 * 1000 * 1024
+  threshold           = 2 * 1024 * 1024 * 1024
   alarm_description   = "Monitors RDS Freeable Memory"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
@@ -52,7 +52,6 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
 }
 
 # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.MaxConnections
-# LEAST({DBInstanceClassMemory/9531392}, 5000)
 resource "aws_cloudwatch_metric_alarm" "db_connection" {
   count               = length(var.database_identifiers)
   alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-db-connections"
@@ -62,7 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "db_connection" {
   metric_name         = "DatabaseConnections"
   namespace           = "AWS/RDS"
   statistic           = "Average"
-  threshold           = 1000
+  threshold           = floor(local.db_instance_class_memory_in_bytes / 12582880)
   alarm_description   = "Monitors DB Connection"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
@@ -96,7 +95,7 @@ resource "aws_cloudwatch_metric_alarm" "db_storage" {
   metric_name         = "FreeStorageSpace"
   namespace           = "AWS/RDS"
   statistic           = "Average"
-  threshold           = 10 * 1000 * 1024 * 1024
+  threshold           = 10 * 1024 * 1024 * 1024
   alarm_description   = "Monitors DB Free Storage"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
