@@ -126,6 +126,8 @@ module "stack" {
   cloudwatch_database_identifiers = []
   cloudwatch_alb_arn_suffixes     = []
   cloudwatch_cluster_names        = []
+  # https://aws.amazon.com/rds/instance-types/
+  db_instance_class_memory_in_gb  = 1
 
   ecs_name = null # custom name when convention exceeds 32 chars
 

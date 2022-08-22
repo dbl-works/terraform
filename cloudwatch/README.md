@@ -12,13 +12,16 @@ module "cloudwatch" {
   source = "github.com/dbl-works/terraform//cloudwatch?ref=v2021.07.05"
 
   # Required
-  region                    = "eu-central-1"
-  project                   = "facebook"
-  environment               = "production"
-  cluster_names             = ["project-cluster"]
-  database_identifiers      = ["project-database"]
-  alb_arn_suffixes          = ["app/project/123456789"]
-  elasticache_cluster_names = ["project-elasticache"]
+  region                         = "eu-central-1"
+  project                        = "facebook"
+  environment                    = "production"
+  cluster_names                  = ["project-cluster"]
+  database_identifiers           = ["project-database"]
+  alb_arn_suffixes               = ["app/project/123456789"]
+  elasticache_cluster_names      = ["project-elasticache"]
+  # https://aws.amazon.com/rds/instance-types/
+  db_instance_class_memory_in_gb = 1
+  db_allocated_storage_in_gb     = 100
 
   # optional
   custom_metrics           = [

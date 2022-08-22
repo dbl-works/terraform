@@ -295,4 +295,9 @@ variable "cloudwatch_cluster_names" {
   default     = []
   description = "Name of the ECS cluster that needs to be monitored"
 }
+
+# https://aws.amazon.com/rds/instance-types/
+variable "db_instance_class_memory_in_gb" {
+  type        = number
+}
 # =============== Cloudwatch ================ #

@@ -65,9 +65,11 @@ module "cloudwatch" {
   elasticache_cluster_names = distinct(concat([module.elasticache.cluster_name], var.cloudwatch_elasticache_names))
 
   # optional
-  metric_period            = var.metric_period
-  alarm_period             = var.alarm_period
-  alarm_evaluation_periods = var.alarm_evaluation_periods
-  sns_topic_arns           = var.cloudwatch_sns_topic_arns
-  custom_metrics           = var.cloudwatch_custom_metrics
+  metric_period                  = var.metric_period
+  alarm_period                   = var.alarm_period
+  alarm_evaluation_periods       = var.alarm_evaluation_periods
+  sns_topic_arns                 = var.cloudwatch_sns_topic_arns
+  custom_metrics                 = var.cloudwatch_custom_metrics
+  db_instance_class_memory_in_gb = var.db_instance_class_memory_in_gb
+  db_allocated_storage_in_gb     = var.rds_allocated_storage
 }
