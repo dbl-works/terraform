@@ -61,12 +61,17 @@ variable "sns_topic_arns" {
   default = []
 }
 
+# https://aws.amazon.com/rds/instance-types/
 variable "db_instance_class_memory_in_gb" {
   type    = number
-  default = 1
+}
+
+variable "db_allocated_storage_in_gb" {
+  type    = number
 }
 
 locals {
   name = var.dashboard_name == null ? "${var.project}-${var.environment}-${var.region}" : var.dashboard_name
   db_instance_class_memory_in_bytes = var.db_instance_class_memory_in_gb * 1024 * 1024 * 1024
+  db_allocated_storage_in_bytes = var.db_allocated_storage_in_gb * 1024 * 1024 * 1024
 }

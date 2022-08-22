@@ -8,7 +8,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
   namespace           = "AWS/ECS"
   statistic           = "Average"
   threshold           = "80"
-  alarm_description   = "Monitors ECS CPU utilization"
+  alarm_description   = "Alert when ECS CPU utilization >= 80%"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     ClusterName = var.cluster_names[count.index]
@@ -26,7 +26,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_memory" {
   namespace           = "AWS/ECS"
   statistic           = "Average"
   threshold           = "80"
-  alarm_description   = "Monitors ECS Memory utilization"
+  alarm_description   = "Alert when ECS Memory utilization >= 80%"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     ClusterName = var.cluster_names[count.index]
@@ -43,8 +43,8 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
   metric_name         = "FreeableMemory"
   namespace           = "AWS/RDS"
   statistic           = "Average"
-  threshold           = 2 * 1024 * 1024 * 1024
-  alarm_description   = "Monitors RDS Freeable Memory"
+  threshold           = floor(local.db_instance_class_memory_in_bytes * 0.10)
+  alarm_description   = "Alert when DB Freeable Memory <= 10%"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -61,8 +61,8 @@ resource "aws_cloudwatch_metric_alarm" "db_connection" {
   metric_name         = "DatabaseConnections"
   namespace           = "AWS/RDS"
   statistic           = "Average"
-  threshold           = floor(local.db_instance_class_memory_in_bytes / 12582880)
-  alarm_description   = "Monitors DB Connection"
+  threshold           = floor(local.db_instance_class_memory_in_bytes / 12582880 * 0.80)
+  alarm_description   = "Alert when DB Connection >= 80% of the max connection"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -79,7 +79,7 @@ resource "aws_cloudwatch_metric_alarm" "db_cpu" {
   namespace           = "AWS/RDS"
   statistic           = "Average"
   threshold           = 95
-  alarm_description   = "Monitors DB CPU Usage"
+  alarm_description   = "Alert when DB CPU Usage >= 90%"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -95,8 +95,8 @@ resource "aws_cloudwatch_metric_alarm" "db_storage" {
   metric_name         = "FreeStorageSpace"
   namespace           = "AWS/RDS"
   statistic           = "Average"
-  threshold           = 10 * 1024 * 1024 * 1024
-  alarm_description   = "Monitors DB Free Storage"
+  threshold           = local.db_allocated_storage_in_bytes * 0.1
+  alarm_description   = "Alert when the DB free storage <== 10% of the overall storage"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -113,7 +113,7 @@ resource "aws_cloudwatch_metric_alarm" "db_read" {
   namespace           = "AWS/RDS"
   statistic           = "Average"
   threshold           = 0.25
-  alarm_description   = "Monitors DB Read Latency"
+  alarm_description   = "Alert when DB Read Latency >= 0.25"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -130,7 +130,7 @@ resource "aws_cloudwatch_metric_alarm" "db_write" {
   namespace           = "AWS/RDS"
   statistic           = "Average"
   threshold           = 0.25
-  alarm_description   = "Monitors DB Write Latency"
+  alarm_description   = "Alert when DB Write Latency >= 0.25"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -147,7 +147,7 @@ resource "aws_cloudwatch_metric_alarm" "db_network_receive" {
   namespace           = "AWS/RDS"
   statistic           = "Average"
   threshold           = 0
-  alarm_description   = "Monitors DB NetworkReceiveThroughput"
+  alarm_description   = "Alert when DB NetworkReceiveThroughput <= 0"
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
   }
@@ -163,7 +163,7 @@ resource "aws_cloudwatch_metric_alarm" "db_network_transmit" {
   namespace           = "AWS/RDS"
   statistic           = "Average"
   threshold           = 0
-  alarm_description   = "Monitors DB NetworkTransmitThroughput"
+  alarm_description   = "Alert when DB NetworkTransmitThroughput <= 0"
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
   }
@@ -172,7 +172,7 @@ resource "aws_cloudwatch_metric_alarm" "db_network_transmit" {
 resource "aws_cloudwatch_composite_alarm" "db_network" {
   count               = length(var.database_identifiers)
   alarm_name        = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-network"
-  alarm_description = "Monitors DB Network"
+  alarm_description = "Alert when there is no DB Network"
 
   alarm_actions = var.sns_topic_arns
 
@@ -189,7 +189,7 @@ resource "aws_cloudwatch_metric_alarm" "db_read_iops" {
   namespace           = "AWS/RDS"
   statistic           = "Average"
   threshold           = 2500
-  alarm_description   = "Monitors DB Read IOPS"
+  alarm_description   = "Alert when DB Read IOPS >= 2500"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -206,7 +206,7 @@ resource "aws_cloudwatch_metric_alarm" "db_write_iops" {
   namespace           = "AWS/RDS"
   statistic           = "Average"
   threshold           = 2500
-  alarm_description   = "Monitors DB Write IOPS"
+  alarm_description   = "Alert when DB Write IOPS >= 2500"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -224,7 +224,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_cpu" {
   namespace           = "AWS/ElastiCache"
   statistic           = "Average"
   threshold           = 80
-  alarm_description   = "Monitors Redis CPU"
+  alarm_description   = "Alert when Redis CPU >= 80%"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     ReplicationGroupId = var.elasticache_cluster_names[count.index]
@@ -241,7 +241,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_memory" {
   namespace           = "AWS/ElastiCache"
   statistic           = "Average"
   threshold           = 80
-  alarm_description   = "Monitors Redis Memory"
+  alarm_description   = "Alert when Redis Memory >= 80%"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     ReplicationGroupId = var.elasticache_cluster_names[count.index]
