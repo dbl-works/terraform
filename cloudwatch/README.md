@@ -44,7 +44,7 @@ module "cloudwatch" {
   metric_period            = 60
   alarm_period             = 120
   alarm_evaluation_periods = 1
-
+  db_is_read_replica       = true
   sns_topic_arns           = ["arn:aws:sns:eu-central-1:1XXXXXXXXXXX:first-sns-topic"] # Required if user want to publish message to the SNS when alarm is in alarm state
 }
 ```
