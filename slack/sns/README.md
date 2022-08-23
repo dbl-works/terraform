@@ -1,6 +1,6 @@
 # Terraform Module: Slack SNS
 
-SNS used for Slack chatbot. SNS need to sit in the same region with the resources it attach to.
+SNS used for Slack chatbot. SNS need to sit in the same region with the resources (e.g cloudwatch alarm) it attach to.
 
 ## Usage
 ```terraform
