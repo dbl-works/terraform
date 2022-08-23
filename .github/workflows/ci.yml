@@ -28,6 +28,8 @@ jobs:
           - s3-private
           - s3-public
           - secrets
+          - slack/chatbot
+          - slack/sns
           - stack/app
           - stack/setup
           - vpc
