@@ -436,6 +436,7 @@ locals {
           "stacked" : false,
           "metrics" : [
             # Percentage of the memory for the cluster that is in use, excluding memory used for overhead and COB.
+            # https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheMetrics.Redis.html
             ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${name}", { "label" : name }]
           ],
           "region" : var.region,
