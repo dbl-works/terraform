@@ -285,8 +285,8 @@ resource "aws_cloudwatch_metric_alarm" "db_iops" {
   alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-iops"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
-  threshold           = 0.9
-  alarm_description   = "Alert when IOPS >= 90%"
+  threshold           = 0.8
+  alarm_description   = "Alert when IOPS >= 80%"
   alarm_actions       = var.sns_topic_arns
 
   metric_query {
