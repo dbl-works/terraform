@@ -6,13 +6,15 @@ locals {
         "width" : 4,
         "type" : "metric",
         "properties" : {
-          "title" : "Average Response Time",
+          "title" : "Avg Response Time (ms)",
           "view" : "singleValue",
           "sparkline" : true,
           "metrics" : [
-            ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", name, { "label" : name }]
+            [ { "expression": "m1*1000", "id": "e1" } ],
+            ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", name, { "label": name, "id": "m1", "visible": false }]
           ],
-          "region" : var.region
+          "region" : var.region,
+          "unit": "Milliseconds"
         }
       },
       {
