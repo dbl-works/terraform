@@ -188,7 +188,7 @@ resource "aws_cloudwatch_metric_alarm" "db_replica_lag" {
   metric_name         = "ReplicaLag"
   namespace           = "AWS/RDS"
   statistic           = "Average"
-  threshold           = 2 * 60 # 2 minutes
+  threshold           = 10 * 60 # 10 minutes
   alarm_description   = "Alert when DB replica lag > 2 mins"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
