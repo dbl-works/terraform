@@ -72,4 +72,5 @@ module "cloudwatch" {
   custom_metrics                 = var.cloudwatch_custom_metrics
   db_instance_class_memory_in_gb = var.db_instance_class_memory_in_gb
   db_allocated_storage_in_gb     = var.rds_allocated_storage
+  db_is_read_replica             = var.db_is_read_replica
 }

@@ -300,4 +300,8 @@ variable "cloudwatch_cluster_names" {
 variable "db_instance_class_memory_in_gb" {
   type = number
 }
+
+variable "db_is_read_replica" {
+  type = bool
+}
 # =============== Cloudwatch ================ #
