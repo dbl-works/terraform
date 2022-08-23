@@ -16,7 +16,7 @@ variable "dashboard_name" {
 }
 
 variable "cluster_names" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
@@ -63,15 +63,20 @@ variable "sns_topic_arns" {
 
 # https://aws.amazon.com/rds/instance-types/
 variable "db_instance_class_memory_in_gb" {
-  type    = number
+  type = number
+}
+
+variable "db_is_read_replica" {
+  type    = bool
+  default = false
 }
 
 variable "db_allocated_storage_in_gb" {
-  type    = number
+  type = number
 }
 
 locals {
-  name = var.dashboard_name == null ? "${var.project}-${var.environment}-${var.region}" : var.dashboard_name
+  name                              = var.dashboard_name == null ? "${var.project}-${var.environment}-${var.region}" : var.dashboard_name
   db_instance_class_memory_in_bytes = var.db_instance_class_memory_in_gb * 1024 * 1024 * 1024
-  db_allocated_storage_in_bytes = var.db_allocated_storage_in_gb * 1024 * 1024 * 1024
+  db_allocated_storage_in_bytes     = var.db_allocated_storage_in_gb * 1024 * 1024 * 1024
 }

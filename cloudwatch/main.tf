@@ -34,23 +34,23 @@ locals {
     ]
   ]
 
-  elasticache_performance_metrics =  [
+  elasticache_performance_metrics = [
     for name in var.elasticache_cluster_names :
-      {
-        "height" : 4,
-        "width" : 4,
-        "type" : "metric",
-        "properties" : {
-          "title" : "Redis Memory Usage",
-          "view" : "singleValue",
-          "sparkline" : true,
-          "period" : var.metric_period,
-          "metrics" : [
-            ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${name}", { "label" : name }]
-          ],
-          "region" : var.region
-        }
+    {
+      "height" : 4,
+      "width" : 4,
+      "type" : "metric",
+      "properties" : {
+        "title" : "Redis Memory Usage",
+        "view" : "singleValue",
+        "sparkline" : true,
+        "period" : var.metric_period,
+        "metrics" : [
+          ["AWS/ElastiCache", "DatabaseMemoryUsageCountedForEvictPercentage", "ReplicationGroupId", "${name}", { "label" : name }]
+        ],
+        "region" : var.region
       }
+    }
   ]
 
   database_performance_metrics = [
@@ -98,7 +98,7 @@ locals {
         "properties" : {
           "title" : "RequestCount per day",
           "metrics" : [
-            ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", name, { label: name }]
+            ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", name, { label : name }]
           ],
           "view" : "timeSeries",
           "stacked" : false,
@@ -246,7 +246,7 @@ locals {
           "stacked" : false,
           "metrics" : [
             ["AWS/RDS", "FreeableMemory", "DBInstanceIdentifier", name],
-            [ ".", "SwapUsage", ".", name]
+            [".", "SwapUsage", ".", name]
           ],
           "region" : "${var.region}",
           "period" : var.metric_period,
@@ -346,9 +346,9 @@ locals {
           "view" : "timeSeries",
           "stacked" : false,
           "metrics" : [
-            [ { "expression": "m1+m2", "label": "Total IOPS", "id": "e1" } ],
-            ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", name, { "id": "m1" }],
-            [".", "WriteIOPS", ".", ".", { "id": "m2" }]
+            [{ "expression" : "m1+m2", "label" : "Total IOPS", "id" : "e1" }],
+            ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", name, { "id" : "m1" }],
+            [".", "WriteIOPS", ".", ".", { "id" : "m2" }]
           ],
           "region" : "${var.region}",
           "period" : var.metric_period
@@ -373,24 +373,24 @@ locals {
     ]
   ]
 
-  database_replica_metrics = [
+  database_replica_metrics = var.db_is_read_replica ? [
     for name in var.database_identifiers : [
       {
-        "type": "metric",
-        "width": 9,
-        "height": 6,
-        "properties": {
-          "title": "ReplicaLag"
-          "view": "timeSeries",
-          "stacked": false,
-          "metrics": [
-              [ "AWS/RDS", "ReplicaLag", "DBInstanceIdentifier", name ]
+        "type" : "metric",
+        "width" : 9,
+        "height" : 6,
+        "properties" : {
+          "title" : "ReplicaLag"
+          "view" : "timeSeries",
+          "stacked" : false,
+          "metrics" : [
+            ["AWS/RDS", "ReplicaLag", "DBInstanceIdentifier", name]
           ],
-          "region": var.region,
+          "region" : var.region,
         }
       }
     ]
-  ]
+  ] : []
 
   elasticache_metrics = [
     for name in var.elasticache_cluster_names : [

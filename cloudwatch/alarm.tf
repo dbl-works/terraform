@@ -170,7 +170,7 @@ resource "aws_cloudwatch_metric_alarm" "db_network_transmit" {
 }
 
 resource "aws_cloudwatch_composite_alarm" "db_network" {
-  count               = length(var.database_identifiers)
+  count             = length(var.database_identifiers)
   alarm_name        = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-network"
   alarm_description = "Alert when there is no DB Network"
 
@@ -207,6 +207,23 @@ resource "aws_cloudwatch_metric_alarm" "db_write_iops" {
   statistic           = "Average"
   threshold           = 2500
   alarm_description   = "Alert when DB Write IOPS >= 2500"
+  alarm_actions       = var.sns_topic_arns
+  dimensions = {
+    DBInstanceIdentifier = var.database_identifiers[count.index]
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "db_replica_lag" {
+  count               = var.db_is_read_replica ? length(var.database_identifiers) : 0
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-replica-lag"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  period              = var.alarm_period
+  evaluation_periods  = var.alarm_evaluation_periods
+  metric_name         = "ReplicaLag"
+  namespace           = "AWS/RDS"
+  statistic           = "Average"
+  threshold           = 2 * 60 # 2 minutes
+  alarm_description   = "Alert when DB replica lag > 2 mins"
   alarm_actions       = var.sns_topic_arns
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
