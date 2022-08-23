@@ -179,40 +179,6 @@ resource "aws_cloudwatch_composite_alarm" "db_network" {
   alarm_rule = "ALARM(${aws_cloudwatch_metric_alarm.db_network_receive[count.index].alarm_name}) AND ALARM(${aws_cloudwatch_metric_alarm.db_network_transmit[count.index].alarm_name})"
 }
 
-resource "aws_cloudwatch_metric_alarm" "db_read_iops" {
-  count               = length(var.database_identifiers)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-read-iops"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  period              = var.alarm_period
-  evaluation_periods  = var.alarm_evaluation_periods
-  metric_name         = "ReadIOPS"
-  namespace           = "AWS/RDS"
-  statistic           = "Average"
-  threshold           = 2500
-  alarm_description   = "Alert when DB Read IOPS >= 2500"
-  alarm_actions       = var.sns_topic_arns
-  dimensions = {
-    DBInstanceIdentifier = var.database_identifiers[count.index]
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "db_write_iops" {
-  count               = length(var.database_identifiers)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-write-iops"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  period              = var.alarm_period
-  evaluation_periods  = var.alarm_evaluation_periods
-  metric_name         = "WriteIOPS"
-  namespace           = "AWS/RDS"
-  statistic           = "Average"
-  threshold           = 2500
-  alarm_description   = "Alert when DB Write IOPS >= 2500"
-  alarm_actions       = var.sns_topic_arns
-  dimensions = {
-    DBInstanceIdentifier = var.database_identifiers[count.index]
-  }
-}
-
 resource "aws_cloudwatch_metric_alarm" "db_replica_lag" {
   count               = var.db_is_read_replica ? length(var.database_identifiers) : 0
   alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-replica-lag"
@@ -269,7 +235,7 @@ resource "aws_cloudwatch_metric_alarm" "error_rate" {
   count               = length(var.alb_arn_suffixes)
   alarm_name          = "${var.project}-${var.environment}-${var.alb_arn_suffixes[count.index]}-error-rate"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = var.alarm_evaluation_periods
   threshold           = 0.1
   alarm_description   = "Request error rate has exceeded 0.1%"
   alarm_actions       = var.sns_topic_arns
@@ -287,7 +253,7 @@ resource "aws_cloudwatch_metric_alarm" "error_rate" {
     metric {
       metric_name = "RequestCount"
       namespace   = "AWS/ApplicationELB"
-      period      = "120"
+      period      = var.alarm_period
       stat        = "Sum"
       unit        = "Count"
 
@@ -303,12 +269,59 @@ resource "aws_cloudwatch_metric_alarm" "error_rate" {
     metric {
       metric_name = "HTTPCode_ELB_5XX_Count"
       namespace   = "AWS/ApplicationELB"
-      period      = "120"
+      period      = var.alarm_period
       stat        = "Sum"
       unit        = "Count"
 
       dimensions = {
         LoadBalancer = var.alb_arn_suffixes[count.index]
+      }
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "db_iops" {
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-iops"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = var.alarm_evaluation_periods
+  threshold           = 0.9
+  alarm_description   = "Alert when IOPS >= 90%"
+  alarm_actions       = var.sns_topic_arns
+
+  metric_query {
+    id          = "e1"
+    expression  = "(m2+m1) / (${var.db_allocated_storage_in_gb * 3})"
+    label       = "IOPS"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "m1"
+
+    metric {
+      metric_name = "ReadIOPS"
+      namespace   = "AWS/RDS"
+      period      = var.alarm_period
+      stat        = "Sum"
+
+      dimensions = {
+        DBInstanceIdentifier = var.database_identifiers[count.index]
+      }
+    }
+  }
+
+  metric_query {
+    id = "m2"
+
+    metric {
+      metric_name = "WriteIOPS"
+      namespace   = "AWS/RDS"
+      period      = var.alarm_period
+      stat        = "Sum"
+
+      dimensions = {
+        DBInstanceIdentifier = var.database_identifiers[count.index]
       }
     }
   }
