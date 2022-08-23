@@ -252,9 +252,9 @@ resource "aws_cloudwatch_metric_alarm" "error_rate" {
   count               = length(var.alb_arn_suffixes)
   alarm_name          = "${var.project}-${var.environment}-${var.alb_arn_suffixes[count.index]}-error-rate"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  threshold           = "10"
-  alarm_description   = "Request error rate has exceeded 10%"
+  evaluation_periods  = 1
+  threshold           = 0.1
+  alarm_description   = "Request error rate has exceeded 0.1%"
   alarm_actions       = var.sns_topic_arns
 
   metric_query {

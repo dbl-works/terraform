@@ -346,8 +346,9 @@ locals {
           "view" : "timeSeries",
           "stacked" : false,
           "metrics" : [
-            ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${name}"],
-            [".", "WriteIOPS", ".", "."]
+            [ { "expression": "m1+m2", "label": "Total IOPS", "id": "e1" } ],
+            ["AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", name, { "id": "m1" }],
+            [".", "WriteIOPS", ".", ".", { "id": "m2" }]
           ],
           "region" : "${var.region}",
           "period" : var.metric_period
@@ -362,11 +363,30 @@ locals {
           "view" : "timeSeries",
           "stacked" : false,
           "metrics" : [
-            ["AWS/RDS", "ReadThroughput", "DBInstanceIdentifier", "${name}"],
+            ["AWS/RDS", "ReadThroughput", "DBInstanceIdentifier", name],
             [".", "WriteThroughput", ".", "."]
           ],
           "region" : "${var.region}",
           "period" : var.metric_period
+        }
+      }
+    ]
+  ]
+
+  database_replica_metrics = [
+    for name in var.database_identifiers : [
+      {
+        "type": "metric",
+        "width": 9,
+        "height": 6,
+        "properties": {
+          "title": "ReplicaLag"
+          "view": "timeSeries",
+          "stacked": false,
+          "metrics": [
+              [ "AWS/RDS", "ReplicaLag", "DBInstanceIdentifier", name ]
+          ],
+          "region": var.region,
         }
       }
     ]
@@ -453,6 +473,7 @@ resource "aws_cloudwatch_dashboard" "main" {
       local.cluster_metrics,
       local.alb_metrics,
       local.database_metrics,
+      local.database_replica_metrics,
       local.elasticache_metrics,
       var.custom_metrics
     ))
