@@ -22,7 +22,7 @@ locals {
         "width" : 4,
         "type" : "metric",
         "properties" : {
-          "title" : "Request Count (1m)",
+          "title" : "Request Count per min",
           "view" : "singleValue",
           "sparkline" : true,
           "stat" : "Sum",
