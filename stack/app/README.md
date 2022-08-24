@@ -120,6 +120,7 @@ module "stack" {
   metric_period                   = 60
   alarm_period                    = 120
   alarm_evaluation_periods        = 1
+  datapoints_to_alarm             = 2
   cloudwatch_sns_topic_arns       = "arn:aws:sns:eu-central-1:1XXXXXXXXXXX:first-sns-topic" # Required if user want to enable slack notification and has setup slack configuration once, sns_topic_arn can be retrieved from the output in the first time setup
   cloudwatch_custom_metrics       = []
   cloudwatch_elasticache_names    = []
@@ -185,7 +186,6 @@ output "alb_target_group_ecs_arn" {
 output "nlb_target_group_ecs_arn" {
   value = module.stack.nlb_target_group_ecs_arn
 }
-
 
 # When launching a stack with a read replica
 output "accept_status-requester" {
