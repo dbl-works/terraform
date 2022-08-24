@@ -137,48 +137,6 @@ resource "aws_cloudwatch_metric_alarm" "db_write" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "db_network_receive" {
-  count               = length(var.database_identifiers)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-network-receive-throughput"
-  comparison_operator = "LessThanOrEqualToThreshold"
-  period              = var.alarm_period
-  evaluation_periods  = var.alarm_evaluation_periods
-  metric_name         = "NetworkReceiveThroughput"
-  namespace           = "AWS/RDS"
-  statistic           = "Average"
-  threshold           = 0
-  alarm_description   = "Alert when DB NetworkReceiveThroughput <= 0"
-  dimensions = {
-    DBInstanceIdentifier = var.database_identifiers[count.index]
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "db_network_transmit" {
-  count               = length(var.database_identifiers)
-  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-network-transmit-throughput"
-  comparison_operator = "LessThanOrEqualToThreshold"
-  period              = var.alarm_period
-  evaluation_periods  = var.alarm_evaluation_periods
-  metric_name         = "NetworkTransmitThroughput"
-  namespace           = "AWS/RDS"
-  statistic           = "Average"
-  threshold           = 0
-  alarm_description   = "Alert when DB NetworkTransmitThroughput <= 0"
-  dimensions = {
-    DBInstanceIdentifier = var.database_identifiers[count.index]
-  }
-}
-
-resource "aws_cloudwatch_composite_alarm" "db_network" {
-  count             = length(var.database_identifiers)
-  alarm_name        = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-network"
-  alarm_description = "Alert when there is no DB Network"
-
-  alarm_actions = var.sns_topic_arns
-
-  alarm_rule = "ALARM(${aws_cloudwatch_metric_alarm.db_network_receive[count.index].alarm_name}) AND ALARM(${aws_cloudwatch_metric_alarm.db_network_transmit[count.index].alarm_name})"
-}
-
 resource "aws_cloudwatch_metric_alarm" "db_replica_lag" {
   count               = var.db_is_read_replica ? length(var.database_identifiers) : 0
   alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-replica-lag"
@@ -283,10 +241,10 @@ resource "aws_cloudwatch_metric_alarm" "error_rate" {
 resource "aws_cloudwatch_metric_alarm" "db_iops" {
   count               = length(var.database_identifiers)
   alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-iops"
+  alarm_description   = "Alert when IOPS >= 80%"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
   threshold           = 0.8
-  alarm_description   = "Alert when IOPS >= 80%"
   alarm_actions       = var.sns_topic_arns
 
   metric_query {
@@ -325,4 +283,51 @@ resource "aws_cloudwatch_metric_alarm" "db_iops" {
       }
     }
   }
+}
+
+resource "aws_cloudwatch_composite_alarm" "db_network" {
+  alarm_name          = "${var.database_name}-db-network"
+  alarm_description   = "Monitors DB Network"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = var.evaluation_periods
+  threshold           = 0
+  alarm_actions       = local.slack_sns
+
+  metric_query {
+    id          = "e1"
+    expression  = "m1+m2"
+    label       = "DB Network"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "m1"
+
+    metric {
+      metric_name = "NetworkTransmitThroughput"
+      namespace   = "AWS/RDS"
+      stat        = "Average"
+      period      = var.alarm_period
+
+      dimensions = {
+        DBInstanceIdentifier = var.database_name
+      }
+    }
+  }
+
+  metric_query {
+    id = "m2"
+
+    metric {
+      metric_name = "NetworkReceiveThroughput"
+      namespace   = "AWS/RDS"
+      stat        = "Average"
+      period      = var.alarm_period
+
+      dimensions = {
+        DBInstanceIdentifier = var.database_name
+      }
+    }
+  }
+
 }
