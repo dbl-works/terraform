@@ -57,8 +57,8 @@ variable "custom_metrics" {
 }
 
 variable "sns_topic_arns" {
-  type    = list(string)
-  default = []
+  type        = list(string)
+  default     = []
   description = "SNS Topics that Cloudwatch alarm will send message to when the alarm transit to ALARM or OK state"
 }
 

@@ -312,7 +312,8 @@ resource "aws_cloudwatch_metric_alarm" "db_iops" {
 }
 
 resource "aws_cloudwatch_composite_alarm" "db_network" {
-  alarm_name          = "${var.database_name}-db-network"
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-network"
   alarm_description   = "Monitors DB Network"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = var.evaluation_periods
@@ -338,7 +339,7 @@ resource "aws_cloudwatch_composite_alarm" "db_network" {
       period      = var.alarm_period
 
       dimensions = {
-        DBInstanceIdentifier = var.database_name
+        DBInstanceIdentifier = var.database_identifiers[count.index]
       }
     }
   }
