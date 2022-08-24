@@ -75,6 +75,13 @@ variable "db_allocated_storage_in_gb" {
   type = number
 }
 
+
+variable "datapoints_to_alarm" {
+  type        = number
+  default     = 1
+  description = "The number of datapoints that must be breaching to trigger the alarm."
+}
+
 locals {
   name                              = var.dashboard_name == null ? "${var.project}-${var.environment}-${var.region}" : var.dashboard_name
   db_instance_class_memory_in_bytes = var.db_instance_class_memory_in_gb * 1024 * 1024 * 1024

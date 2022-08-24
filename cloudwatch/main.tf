@@ -10,11 +10,11 @@ locals {
           "view" : "singleValue",
           "sparkline" : true,
           "metrics" : [
-            [ { "expression": "m1*1000", "id": "e1", "label": "ms" } ],
-            ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", name, { "id": "m1", "visible": false }]
+            [{ "expression" : "m1*1000", "id" : "e1", "label" : "ms" }],
+            ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", name, { "id" : "m1", "visible" : false }]
           ],
           "region" : var.region,
-          "unit": "Milliseconds"
+          "unit" : "Milliseconds"
         }
       },
       {
