@@ -85,8 +85,8 @@ variable "datapoints_to_alarm" {
 
 
 variable "treat_missing_data" {
-  type        = string
-  default     = "notBreaching"
+  type    = string
+  default = "notBreaching"
 }
 
 locals {
