@@ -48,7 +48,7 @@ variable "alarm_period" {
 variable "alarm_evaluation_periods" {
   type        = number
   default     = 1
-  description = " The number of periods over which data is compared to the specified threshold."
+  description = "The number of periods over which data is compared to the specified threshold."
 }
 
 variable "custom_metrics" {
@@ -59,6 +59,7 @@ variable "custom_metrics" {
 variable "sns_topic_arns" {
   type    = list(string)
   default = []
+  description = "SNS Topics that Cloudwatch alarm will send message to when the alarm transit to ALARM or OK state"
 }
 
 # https://aws.amazon.com/rds/instance-types/

@@ -10,6 +10,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
   threshold           = "80"
   alarm_description   = "Alert when ECS CPU utilization >= 80%"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     ClusterName = var.cluster_names[count.index]
@@ -29,6 +30,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_memory" {
   threshold           = "80"
   alarm_description   = "Alert when ECS Memory utilization >= 80%"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     ClusterName = var.cluster_names[count.index]
@@ -48,6 +50,7 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
   threshold           = floor(local.db_instance_class_memory_in_bytes * 0.10)
   alarm_description   = "Alert when DB Freeable Memory <= 10%"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -67,6 +70,7 @@ resource "aws_cloudwatch_metric_alarm" "db_connection" {
   threshold           = floor(local.db_instance_class_memory_in_bytes / 12582880 * 0.80)
   alarm_description   = "Alert when DB Connection >= 80% of the max connection"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -85,6 +89,7 @@ resource "aws_cloudwatch_metric_alarm" "db_cpu" {
   threshold           = 95
   alarm_description   = "Alert when DB CPU Usage >= 90%"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -103,6 +108,7 @@ resource "aws_cloudwatch_metric_alarm" "db_storage" {
   threshold           = local.db_allocated_storage_in_bytes * 0.1
   alarm_description   = "Alert when the DB free storage <== 10% of the overall storage"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -121,6 +127,7 @@ resource "aws_cloudwatch_metric_alarm" "db_read" {
   threshold           = 0.25
   alarm_description   = "Alert when DB Read Latency >= 0.25"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -139,6 +146,7 @@ resource "aws_cloudwatch_metric_alarm" "db_write" {
   threshold           = 0.25
   alarm_description   = "Alert when DB Write Latency >= 0.25"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -157,6 +165,7 @@ resource "aws_cloudwatch_metric_alarm" "db_replica_lag" {
   threshold           = 10 * 60 # 10 minutes
   alarm_description   = "Alert when DB replica lag > 2 mins"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     DBInstanceIdentifier = var.database_identifiers[count.index]
@@ -176,6 +185,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_cpu" {
   threshold           = 80
   alarm_description   = "Alert when Redis CPU >= 80%"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     ReplicationGroupId = var.elasticache_cluster_names[count.index]
@@ -194,6 +204,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_memory" {
   threshold           = 80
   alarm_description   = "Alert when Redis Memory >= 80%"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
   dimensions = {
     ReplicationGroupId = var.elasticache_cluster_names[count.index]
@@ -208,6 +219,7 @@ resource "aws_cloudwatch_metric_alarm" "error_rate" {
   threshold           = 0.1
   alarm_description   = "Request error rate has exceeded 0.1%"
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
 
   metric_query {
@@ -258,6 +270,7 @@ resource "aws_cloudwatch_metric_alarm" "db_iops" {
   evaluation_periods  = var.alarm_evaluation_periods
   threshold           = 0.8
   alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
 
   metric_query {
@@ -304,7 +317,8 @@ resource "aws_cloudwatch_composite_alarm" "db_network" {
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = var.evaluation_periods
   threshold           = 0
-  alarm_actions       = local.slack_sns
+  alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
 
   metric_query {
