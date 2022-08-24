@@ -9,6 +9,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
   statistic           = "Average"
   threshold           = "80"
   alarm_description   = "Alert when ECS CPU utilization >= 80%"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -29,6 +30,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_memory" {
   statistic           = "Average"
   threshold           = "80"
   alarm_description   = "Alert when ECS Memory utilization >= 80%"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -49,6 +51,7 @@ resource "aws_cloudwatch_metric_alarm" "db_memory" {
   statistic           = "Average"
   threshold           = floor(local.db_instance_class_memory_in_bytes * 0.10)
   alarm_description   = "Alert when DB Freeable Memory <= 10%"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -69,6 +72,7 @@ resource "aws_cloudwatch_metric_alarm" "db_connection" {
   statistic           = "Average"
   threshold           = floor(local.db_instance_class_memory_in_bytes / 12582880 * 0.80)
   alarm_description   = "Alert when DB Connection >= 80% of the max connection"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -88,6 +92,7 @@ resource "aws_cloudwatch_metric_alarm" "db_cpu" {
   statistic           = "Average"
   threshold           = 95
   alarm_description   = "Alert when DB CPU Usage >= 90%"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -107,6 +112,7 @@ resource "aws_cloudwatch_metric_alarm" "db_storage" {
   statistic           = "Average"
   threshold           = local.db_allocated_storage_in_bytes * 0.1
   alarm_description   = "Alert when the DB free storage <== 10% of the overall storage"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -126,6 +132,7 @@ resource "aws_cloudwatch_metric_alarm" "db_read" {
   statistic           = "Average"
   threshold           = 0.25
   alarm_description   = "Alert when DB Read Latency >= 0.25"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -145,6 +152,7 @@ resource "aws_cloudwatch_metric_alarm" "db_write" {
   statistic           = "Average"
   threshold           = 0.25
   alarm_description   = "Alert when DB Write Latency >= 0.25"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -164,6 +172,7 @@ resource "aws_cloudwatch_metric_alarm" "db_replica_lag" {
   statistic           = "Average"
   threshold           = 10 * 60 # 10 minutes
   alarm_description   = "Alert when DB replica lag > 2 mins"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -184,6 +193,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_cpu" {
   statistic           = "Average"
   threshold           = 80
   alarm_description   = "Alert when Redis CPU >= 80%"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -203,6 +213,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_memory" {
   statistic           = "Average"
   threshold           = 80
   alarm_description   = "Alert when Redis Memory >= 80%"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -218,6 +229,7 @@ resource "aws_cloudwatch_metric_alarm" "error_rate" {
   evaluation_periods  = var.alarm_evaluation_periods
   threshold           = 0.1
   alarm_description   = "Request error rate has exceeded 0.1%"
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -269,6 +281,7 @@ resource "aws_cloudwatch_metric_alarm" "db_iops" {
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
   threshold           = 0.8
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
@@ -318,6 +331,7 @@ resource "aws_cloudwatch_metric_alarm" "db_network" {
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
   threshold           = 0
+  treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
   datapoints_to_alarm = var.datapoints_to_alarm
