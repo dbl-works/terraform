@@ -300,4 +300,9 @@ variable "cloudwatch_cluster_names" {
 variable "db_instance_class_memory_in_gb" {
   type = number
 }
+
+variable "datapoints_to_alarm" {
+  type    = number
+  default = 1
+}
 # =============== Cloudwatch ================ #
