@@ -72,3 +72,8 @@ variable "enable_dashboard" {
   type    = bool
   default = true
 }
+
+variable "enable_xray" {
+  type    = bool
+  default = false
+}
