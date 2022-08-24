@@ -5,6 +5,8 @@ Create a cloudwatch dashboard that consist of the following resources' metrics:
 2. Database
 3. Elasticache
 
+It also create cloudwatch alarms that monitor on the above metrics and notify Slack when the alarm turn into ALARM or OK state
+
 ## Usage
 
 ```terraform
@@ -46,5 +48,6 @@ module "cloudwatch" {
   alarm_evaluation_periods = 1
   db_is_read_replica       = true
   sns_topic_arns           = ["arn:aws:sns:eu-central-1:1XXXXXXXXXXX:first-sns-topic"] # Required if user want to publish message to the SNS when alarm is in alarm state
+  datapoints_to_alarm      = 10
 }
 ```
