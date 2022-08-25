@@ -374,3 +374,54 @@ resource "aws_cloudwatch_metric_alarm" "db_network" {
   }
 
 }
+
+resource "aws_cloudwatch_metric_alarm" "extreme_slow_request" {
+  count               = length(var.alb_arn_suffixes)
+  alarm_name          = "${var.project}-${var.environment}-${var.alb_arn_suffixes[count.index]}-response-time"
+  alarm_description   = "Alert when there is request 2x slower than the 99.9% of the request"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = var.alarm_evaluation_periods
+  threshold           = 2
+  treat_missing_data  = var.treat_missing_data
+  alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
+  datapoints_to_alarm = var.datapoints_to_alarm
+
+  metric_query {
+    id          = "e1"
+    expression  = "m1/m2"
+    label       = "DB Network"
+    return_data = "true"
+  }
+
+  metric_query {
+    id = "m1"
+
+    metric {
+      metric_name = "TargetResponseTime"
+      namespace   = "AWS/ApplicationELB"
+      stat        = "Maximum"
+      period      = var.alarm_period
+
+      dimensions = {
+        LoadBalancer = var.alb_arn_suffixes[count.index]
+      }
+    }
+  }
+
+  metric_query {
+    id = "m2"
+
+    metric {
+      metric_name = "TargetResponseTime"
+      namespace   = "AWS/ApplicationELB"
+      stat        = "p99.9"
+      period      = var.alarm_period
+
+      dimensions = {
+        DBInstanceIdentifier = var.alb_arn_suffixes[count.index]
+      }
+    }
+  }
+
+}
