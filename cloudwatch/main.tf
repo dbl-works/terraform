@@ -206,19 +206,16 @@ locals {
         "type" : "metric",
         "properties" : {
           "metrics" : [
-            ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", name, { "label" : "Average", "id" : "m1", "stat" : "Average" }],
-            ["...", { "id" : "m2", "label" : "p95" }],
-            ["...", { "id" : "m3", "stat" : "p90", "label" : "p90" }]
+            ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", name, { "label" : "Maximum", "id" : "m1", "stat" : "Max" }],
+            ["...", { "id" : "m2", "label" : "p99", "stat": "p99.9" }],
           ],
           "view" : "timeSeries",
           "stacked" : false,
-          "region" : "${var.region}",
-          "stat" : "p95",
+          "region" : var.region,
           "period" : var.metric_period,
           "title" : "Response Time",
           "yAxis" : {
             "left" : {
-              "showUnits" : false,
               "min" : 0
             }
           },
