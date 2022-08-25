@@ -7,8 +7,9 @@ We create modules here for re-use between projects.
 ## Modules
 
 - [certificate](certificate/README.md) - Requests a certificate from the Amazon Certificate Manager.
+- [cloudwatch](cloudwatch/README.md) - Creates basic cloudwatch dashboard and cloudwatch alarm for monitoring and observability
 - [cognito](cognito/README.md) - Create user pools for use with authentication.
-- [ecr](ecr/README.md) - A reopsitory for storing built docker images.
+- [ecr](ecr/README.md) - A repository for storing built docker images.
 - [ecs](ecs/README.md) - Compute cluster for running docker containers.
 - [elasticache](elasticache/README.md) - elasticache cluster based on Redis.
 - [global-accelerator](global-accelerator/README.md) - Global Accelerator for load balancing across multiple regions.
