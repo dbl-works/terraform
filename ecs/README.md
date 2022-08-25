@@ -37,7 +37,7 @@ module "ecs" {
   grant_write_access_to_sqs_arns = []
 
   custom_policies = []
-  enabble_xray    = true
+  enable_xray     = true
 }
 ```
 
