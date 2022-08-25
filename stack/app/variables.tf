@@ -238,3 +238,71 @@ variable "regional" {
   default = true
 }
 # =============== ECS ================ #
+
+# =============== Cloudwatch ================ #
+variable "cloudwatch_dashboard_view" {
+  type = string
+  # simple, detailed
+  default = "simple"
+}
+
+variable "cloudwatch_sns_topic_arns" {
+  type    = list(string)
+  default = []
+}
+
+variable "metric_period" {
+  type    = number
+  default = 60
+}
+
+variable "alarm_period" {
+  type    = number
+  default = 300
+}
+
+variable "alarm_evaluation_periods" {
+  type        = number
+  default     = 1
+  description = "The number of periods over which data is compared to the specified threshold."
+}
+
+variable "cloudwatch_custom_metrics" {
+  type    = list(any)
+  default = []
+}
+
+variable "cloudwatch_elasticache_names" {
+  type        = list(string)
+  default     = []
+  description = "Name of the elasticache cluster that needs to be monitored"
+}
+
+variable "cloudwatch_database_identifiers" {
+  type        = list(string)
+  default     = []
+  description = "Identifiers of the databases that needs to be monitored"
+}
+
+variable "cloudwatch_alb_arn_suffixes" {
+  type        = list(string)
+  default     = []
+  description = "Name of the load balancers that needs to be monitored"
+}
+
+variable "cloudwatch_cluster_names" {
+  type        = list(string)
+  default     = []
+  description = "Name of the ECS cluster that needs to be monitored"
+}
+
+# https://aws.amazon.com/rds/instance-types/
+variable "db_instance_class_memory_in_gb" {
+  type = number
+}
+
+variable "datapoints_to_alarm" {
+  type    = number
+  default = 1
+}
+# =============== Cloudwatch ================ #

@@ -10,6 +10,12 @@ This project does not follow SemVer, since modules are independent of each other
 ## Elasticache
 - added `maxmemory_policy` as the optional options. Default value is `volatile-lru`
 
+## Slack
+- added a new module to launch Chatbot and SNS topic required for Slack message, [#116](https://github.com/dbl-works/terraform/pull/116)
+
+## Cloudwatch
+- added a new module to launch cloudwatch module [#116](https://github.com/dbl-works/terraform/pull/116)
+
 ## [v2022.08.05]
 ## Elasticache
 - `multi_az_enabled` can now optionally be turned off

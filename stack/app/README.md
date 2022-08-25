@@ -111,9 +111,24 @@ module "stack" {
   grant_write_access_to_sqs_arns  = []
   ecs_custom_policies             = []
   # This is only needed when we want to add additional secrets to the ECS
-  secret_arns = []
+  secret_arns                     = []
   # appends region to the name (usually ${project}-${environment}) for globally unique names
-  regional = true
+  regional                        = true
+
+  # Cloudwatch
+  cloudwatch_dashboard_view       = "detailed" # default is simple
+  metric_period                   = 60
+  alarm_period                    = 120
+  alarm_evaluation_periods        = 1
+  datapoints_to_alarm             = 2
+  cloudwatch_sns_topic_arns       = "arn:aws:sns:eu-central-1:1XXXXXXXXXXX:first-sns-topic" # Required if user want to enable slack notification and has setup slack configuration once, sns_topic_arn can be retrieved from the output in the first time setup
+  cloudwatch_custom_metrics       = []
+  cloudwatch_elasticache_names    = []
+  cloudwatch_database_identifiers = []
+  cloudwatch_alb_arn_suffixes     = []
+  cloudwatch_cluster_names        = []
+  # https://aws.amazon.com/rds/instance-types/
+  db_instance_class_memory_in_gb  = 1
 
   ecs_name = null # custom name when convention exceeds 32 chars
 
@@ -171,7 +186,6 @@ output "alb_target_group_ecs_arn" {
 output "nlb_target_group_ecs_arn" {
   value = module.stack.nlb_target_group_ecs_arn
 }
-
 
 # When launching a stack with a read replica
 output "accept_status-requester" {
