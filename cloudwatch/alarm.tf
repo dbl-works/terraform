@@ -390,7 +390,7 @@ resource "aws_cloudwatch_metric_alarm" "extreme_slow_request" {
   metric_query {
     id          = "e1"
     expression  = "m1/m2"
-    label       = "DB Network"
+    label       = "Slowness of the 0.1% request"
     return_data = "true"
   }
 
