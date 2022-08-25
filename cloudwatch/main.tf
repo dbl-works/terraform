@@ -207,7 +207,7 @@ locals {
         "properties" : {
           "metrics" : [
             ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", name, { "label" : "Max", "id" : "m1", "stat" : "Maximum" }],
-            ["...", { "id" : "m2", "label" : "p99", "stat": "p99.9" }],
+            ["...", { "id" : "m2", "label" : "p99", "stat" : "p99.9" }],
           ],
           "view" : "timeSeries",
           "stacked" : false,
