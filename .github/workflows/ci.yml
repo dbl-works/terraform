@@ -30,6 +30,7 @@ jobs:
           - s3-public
           - secrets
           - slack/chatbot
+          - snowflake/cloud
           - slack/sns
           - stack/app
           - stack/setup
