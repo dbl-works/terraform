@@ -1,4 +1,4 @@
-resource "snowflake_database" "db" {
+resource "snowflake_database" "main" {
   for_each = { for projects in var.projects : projects.name => projects }
 
   name                        = each.value.name
