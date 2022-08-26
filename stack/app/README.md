@@ -115,7 +115,7 @@ module "stack" {
   # appends region to the name (usually ${project}-${environment}) for globally unique names
   regional                        = true
   enable_xray                     = true
-  ecs_name = null # custom name when convention exceeds 32 chars
+  ecs_name                        = null # custom name when convention exceeds 32 chars
 
   # Cloudwatch
   cloudwatch_dashboard_view       = "detailed" # default is simple
