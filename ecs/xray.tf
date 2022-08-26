@@ -23,6 +23,17 @@ resource "aws_xray_group" "ecs_error" {
   }
 }
 
+resource "aws_xray_group" "error" {
+  count             = var.enable_xray ? 1 : 0
+  group_name        = "error"
+  filter_expression = "error = true OR fault = true"
+
+  insights_configuration {
+    insights_enabled      = true
+    notifications_enabled = true
+  }
+}
+
 resource "aws_xray_group" "slow_request" {
   count             = var.enable_xray ? 1 : 0
   group_name        = "${substr(var.project, 0, 2)}-${var.environment}-slow"
