@@ -25,8 +25,8 @@ variable "warehouse_cluster_count" {
 #
 # A retention period of 0 days for an object effectively disables Time Travel for the object.
 #
-variable "projects" {
-  description = "List of projects to create Snowflake Databases for."
+variable "databases" {
+  description = "List of databases to be created in Snowflake."
   type = list(object({
     name                   = string
     data_retention_in_days = number
