@@ -14,7 +14,7 @@ resource "aws_xray_group" "ecs_filter" {
 
 resource "aws_xray_group" "ecs_server_error" {
   count             = var.enable_xray ? 1 : 0
-  group_name        = "${local.name}-server-error"
+  group_name        = "server-error"
   filter_expression = "service(\"${local.name}\") { error }"
 
   insights_configuration {
@@ -25,7 +25,7 @@ resource "aws_xray_group" "ecs_server_error" {
 
 resource "aws_xray_group" "ecs_client_error" {
   count             = var.enable_xray ? 1 : 0
-  group_name        = "${local.name}-client-error"
+  group_name        = "client-error"
   filter_expression = "service(\"${local.name}\") { fault }"
 
   insights_configuration {
