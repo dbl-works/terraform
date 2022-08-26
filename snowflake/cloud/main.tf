@@ -1,9 +1,10 @@
 resource "snowflake_database" "main" {
-  for_each = { for projects in var.projects : projects.name => projects }
+  for_each = { for database in var.databases : database.name => database }
 
   name                        = each.value.name
   data_retention_time_in_days = each.value.data_retention_in_days
 }
+
 
 
 resource "snowflake_warehouse" "main" {
