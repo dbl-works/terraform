@@ -74,6 +74,7 @@ variable "enable_dashboard" {
 }
 
 variable "enable_xray" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Grant Xray permission to ECS"
 }
