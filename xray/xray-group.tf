@@ -20,7 +20,7 @@ resource "aws_xray_group" "slow_response_time" {
 
 resource "aws_xray_group" "long_duration" {
   group_name        = "long-duration"
-  filter_expression = "duration > ${var.response_time_threshold}"
+  filter_expression = "duration > ${var.duration_threshold}"
 
   insights_configuration {
     insights_enabled      = true
