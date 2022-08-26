@@ -16,4 +16,3 @@ resource "aws_xray_sampling_rule" "ecs" {
   resource_arn = "*"
   service_type = "AWS::ECS::Container"
 }
-"
