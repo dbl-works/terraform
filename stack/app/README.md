@@ -114,7 +114,7 @@ module "stack" {
   secret_arns                     = []
   # appends region to the name (usually ${project}-${environment}) for globally unique names
   regional                        = true
-  enable_xray                     = true
+  enable_xray                     = false
   ecs_name                        = null # custom name when convention exceeds 32 chars
 
   # Cloudwatch
