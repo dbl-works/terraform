@@ -114,6 +114,8 @@ module "stack" {
   secret_arns                     = []
   # appends region to the name (usually ${project}-${environment}) for globally unique names
   regional                        = true
+  enable_xray                     = false
+  ecs_name                        = null # custom name when convention exceeds 32 chars
 
   # Cloudwatch
   cloudwatch_dashboard_view       = "detailed" # default is simple
@@ -129,8 +131,6 @@ module "stack" {
   cloudwatch_cluster_names        = []
   # https://aws.amazon.com/rds/instance-types/
   db_instance_class_memory_in_gb  = 1
-
-  ecs_name = null # custom name when convention exceeds 32 chars
 
   # Elasticache
   elasticache_node_type                     = "cache.t3.micro"

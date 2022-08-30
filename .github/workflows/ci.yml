@@ -36,6 +36,7 @@ jobs:
           - vpc
           - vpc-peering
           - vpn
+          - xray
       fail-fast: false
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
