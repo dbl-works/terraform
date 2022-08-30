@@ -1,33 +1,5 @@
 resource "fivetran_group" "group" {
-  name = var.fivetran_group_name
-}
-
-resource "fivetran_connector" "rds" {
-  group_id          = fivetran_destination.main.group_id
-  service           = var.source_service
-  sync_frequency    = 60 # mins, supported values: 5, 15, 30, 60, 120, 180, 360, 480, 720, 1440.
-  paused            = false
-  pause_after_trial = false
-
-  destination_schema {
-    # Has to be unique within the group (destination)
-    name   = var.schema_name
-    prefix = var.db_config.schema_prefix
-  }
-
-  # https://fivetran.com/docs/rest-api/connectors/config#configparameters_112
-  config {
-    host        = var.db_config.host
-    port        = var.db_config.port
-    database    = var.db_config.database
-    user        = var.db_config.user
-    password    = var.db_config.password
-    tunnel_port = var.db_config.tunnel_port
-    tunnel_user = var.db_config.tunnel_user
-    # Supported values: WAL, XMIN, WAL_PGOUTPUT
-    update_method    = var.db_config.update_method
-    replication_slot = var.db_config.replication_slot
-  }
+  name = "${var.project}_${var.environment}_${var.region}"
 }
 
 # resource "fivetran_connector_schema_config" "schema" {
@@ -63,16 +35,17 @@ resource "fivetran_destination" "main" {
   region             = var.region # https://fivetran.com/docs/rest-api/destinations#payloadparameters
   trust_certificates = "true"
   trust_fingerprints = "true"
-  run_setup_tests    = "true"
+  run_setup_tests    = "true" # checks if we can reach the destination
 
+  # https://fivetran.com/docs/rest-api/destinations/config#snowflake
+  # https://fivetran.com/docs/rest-api/destinations/config#configparameters
   config {
-    # https://fivetran.com/docs/rest-api/destinations/config#snowflake
-    host     = "your-account.snowflakecomputing.com"
-    port     = 443
-    database = var.destination_database_name
-    user     = var.destination_user_name
-    password = var.destination_password
-    # https://fivetran.com/docs/rest-api/destinations/config#configparameters
-    connection_type = "SshTunnel" # Directly or SshTunnel
+    host            = var.destination_host
+    port            = var.destination_port
+    database        = var.destination_database_name
+    user            = var.destination_user_name
+    password        = var.destination_password
+    auth            = "PASSWORD"
+    connection_type = var.destination_connection_type
   }
 }
