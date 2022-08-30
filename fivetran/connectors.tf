@@ -19,10 +19,13 @@ resource "fivetran_connector" "rds" {
     database         = each.value.database
     user             = each.value.user
     password         = each.value.password
-    tunnel_port      = each.value.tunnel_port
-    tunnel_user      = each.value.tunnel_user
     update_method    = each.value.update_method
     replication_slot = each.value.replication_slot
+
+    # access to the DB should be restricted. We use a bastion jump host to access the DB.
+    tunnel_port = each.value.tunnel_port
+    tunnel_user = each.value.tunnel_user
+    tunnel_host = each.value.tunnel_host
   }
 }
 

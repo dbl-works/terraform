@@ -62,3 +62,18 @@ provider "fivetran" {
 export TF_VAR_fivetran_api_key=xxx
 export TF_VAR_fivetran_api_secret=xxx
 ```
+
+
+## Set Up
+
+For access to an AWS RDS we can connect Fivetran via a SSH jump host, e.g. Bastion.
+
+Read the docs: https://fivetran.com/docs/databases/connection-options#sshtunnel
+
+> Fivetran generates a unique public SSH key for each destination. We support multiple connectors on a single SSH tunnel depending on the data volume and network bandwidth
+
+The public key can be copied from the Fivetran dashboard -> Connectors -> RDS -> Settings: Public Key
+
+Store the public key on the SSH host.
+If you use the DBL Bastion convention you can upload that key to the Github org's bot account.
+This requires the Bot account to be allowlisted for Bastion. You also have to re-deploy bastion.

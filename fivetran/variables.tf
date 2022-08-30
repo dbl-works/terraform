@@ -79,6 +79,7 @@ variable "sources_rds" {
     password    = string
     tunnel_port = number
     tunnel_user = string
+    tunnel_host = string
     # Supported values: WAL, XMIN, WAL_PGOUTPUT
     update_method    = string
     replication_slot = string
