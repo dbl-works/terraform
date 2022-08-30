@@ -6,20 +6,20 @@
 module "snowflake_cloud" {
   source = "github.com/dbl-works/terraform//awesome-module?ref=v2022.08.05"
 
-  account_name = "dbl-works" # e.g. the project or company name.
+  warehouse_name = "WH_FIVETRAN" # Snowflake mostly uses upcase by their convention
 
   databases = [
     {
-      name                   = "project-A"
+      name                   = "DB_FIVETRAN"
       data_retention_in_days = 0 # 0 days effectively disables Time Travel.
+    },
+    {
+      name                   = "project-A"
+      data_retention_in_days = 5 # Enables Time Travel five days into the past.
     },
     {
       name                   = "AWS-datapipline"
       data_retention_in_days = 0 # 0 days effectively disables Time Travel.
-    },
-    {
-      name                   = "Fivetran"
-      data_retention_in_days = 5 # Enables Time Travel five days into the past.
     }
   ]
 
@@ -58,7 +58,7 @@ During the "initial set up" a bot account is created with less-than-root-level a
 
 
 ## Initial Set Up
-Create credentials for an admin user on Snowflake Cloud used to launch all infrastructure from this module.
+Create credentials for an **admin** user on Snowflake Cloud used to launch all infrastructure from this module.
 
 You should store the credentials in a secure place, e.g. AWS Secrets, 1Passsord, etc.
 
@@ -68,26 +68,7 @@ openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out snowflake_tf_snow_ke
 openssl rsa -in snowflake_tf_snow_key.p8 -pubout -out snowflake_tf_snow_key.pub
 ```
 
-Log into Snowflake, go to **worksheets** and create a new worksheet.
-You can save the new worksheet e.g. as `create ${project}-${environment}-bot`.
-
-Paste, adjust, and execute the following SQL:
-
-```sql
--- role & user for administrative purposes
-CREATE USER "${project}-${environment}-bot" RSA_PUBLIC_KEY='RSA_PUBLIC_KEY_HERE' DEFAULT_ROLE=PUBLIC MUST_CHANGE_PASSWORD=FALSE;
-
-GRANT ROLE SYSADMIN TO USER "${project}-${environment}-bot";
-GRANT ROLE SECURITYADMIN TO USER "${project}-${environment}-bot";
-
--- role & user for external tools with read-only access ( e.g. Tableau )
-CREATE USER "${project}-${environment}-readonly" PASSWORD='A_SECURE_PASSWORD_HERE' DEFAULT_ROLE=PUBLIC  MUST_CHANGE_PASSWORD=FALSE;
-
-GRAND USAGE ON WAREHOUSE "" TO ROLE
-
--- take note of the return value
-SELECT current_account() as SNOWFLAKE_ACCOUNT_LOCATOR, current_region() as SNOWFLAKE_REGION_ID;
-```
+Create a new **worksheet** "deploy-user" in Snowflake and adjust & paste the SQL from this file: `snowflake/cloud/deploy-user.sql` which will create a user with name `TERRAFORM_DEPLOY_BOT` used to manage Snowflake via Terraform.
 
 Create a `.env` file with the following content in your terraform directory:
 
@@ -100,6 +81,13 @@ export TF_VAR_snowflake_account="SNOWFLAKE_ACCOUNT_LOCATOR"
 export TF_VAR_snowflake_region="SNOWFLAKE_REGION_ID"
 ```
 
+
+## Post Set Up
+**After** you have created the warehouse and databases (i.e. applied this module), create a second user with limited access used for the ETL pipeline e.g. Fivetran.
+This user will use **password** authentication. Generate a secure password for that database user.
+Then log into Snowflake, go to **worksheets** and create a new worksheet "integration-user".
+
+Adjust and execute the SQL from this script: `snowflake/cloud/integration-user.sql`.
 
 
 ## ToDo
