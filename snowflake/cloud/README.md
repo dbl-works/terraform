@@ -53,7 +53,7 @@ A: No. Snowflake calculates charges while resources are running. However, you'll
 
 Sign up for a Snowflake account. Use a generic email address like `snowflake@my-company.com` to decouple the root access from a specific employee's account.
 
-During the "initial set up" a bot account is created with less-than-root-level access for managing the accout through terraform.
+During the "initial set up" a bot account is created with less-than-root-level access for managing the account through terraform.
 
 
 
