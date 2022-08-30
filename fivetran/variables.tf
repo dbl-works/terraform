@@ -3,7 +3,8 @@ variable "source_service" {
   description = "Name of the connector source: https://fivetran.com/docs/rest-api/connectors/config"
 }
 
-variable "destionation_service" { type        = string
+variable "destionation_service" {
+  type        = string
   description = "Name for the destination type: https://fivetran.com/docs/rest-api/destinations/config"
 }
 
