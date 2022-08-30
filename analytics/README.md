@@ -5,7 +5,7 @@ This combines multiple modules, namely:
 * [Snowflake](../snowflake/cloud/README.md)
 * [Fivetran](../fivetran/README.md)
 * [AWS Secrets](../secrets/README.md)
-* Tableau (TODO: can we terraform this?)
+* Tableau: as of now, the terraform provider is limited to creating users, but we want to auto provision via Google Workspace, so that is pointless for us. See the [docs](https://registry.terraform.io/providers/GtheSheep/tableau/latest/docs/resources/group)
 
 ## Usage
 

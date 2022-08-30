@@ -3,6 +3,7 @@
 ## Usage
 
 ```terraform
+# main.tf
 module "snowflake_cloud" {
   source = "github.com/dbl-works/terraform//awesome-module?ref=v2022.08.05"
 
@@ -27,6 +28,59 @@ module "snowflake_cloud" {
   suspend_compute_after_seconds = 57      # on AWS, the minimum charge is 60 seconds
   warehouse_size                = "large" # 8 credits/hour/cluster for "large"
   warehouse_cluster_count       = 1
+}
+```
+
+```terraform
+# versions.tf
+terraform {
+  required_providers {
+    snowflake = {
+      source                = "Snowflake-Labs/snowflake"
+      version               = "~> 0.42"
+      configuration_aliases = [snowflake.security_admin]
+    }
+  }
+}
+
+# these variables are set via `source .env` which sets environment variables.
+variable "snowflake_user" {
+  type = string
+}
+
+variable "snowflake_private_key_path" {
+  type = string
+}
+
+variable "snowflake_account" {
+  type = string
+}
+
+variable "snowflake_region" {
+  type = string
+}
+
+provider "snowflake" {
+  role = "SYSADMIN"
+
+  username = var.snowflake_user # $ export TF_VAR_snowflake_user=<username>
+  account  = var.snowflake_account
+  region   = var.snowflake_region
+
+  # For auth exactly one option must be set.
+  private_key_passphrase = var.snowflake_private_key_path
+}
+
+provider "snowflake" {
+  role  = "SECURITYADMIN"
+  alias = "security_admin"
+
+  username = var.snowflake_user # $ export TF_VAR_snowflake_user=<username>
+  account  = var.snowflake_account
+  region   = var.snowflake_region
+
+  # For auth exactly one option must be set.
+  private_key_passphrase = var.snowflake_private_key_path
 }
 ```
 
