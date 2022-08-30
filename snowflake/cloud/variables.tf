@@ -1,5 +1,5 @@
-variable "account_name" {
-  description = "Name of either the project of the company you want to set up a Snowflake Warehouse for."
+variable "warehouse_name" {
+  description = "All caps by convention of Snowflake."
   type        = string
 }
 

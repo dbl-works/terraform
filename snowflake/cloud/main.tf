@@ -8,7 +8,7 @@ resource "snowflake_database" "main" {
 
 
 resource "snowflake_warehouse" "main" {
-  name           = var.account_name
+  name           = var.warehouse_name
   warehouse_size = var.warehouse_size
 
   auto_suspend = var.suspend_compute_after_seconds
