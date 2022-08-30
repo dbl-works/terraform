@@ -2,10 +2,28 @@
 
 This combines multiple modules, namely:
 
-* Snowflake
-* Fivetran
-* AWS Secrets
+* [Snowflake](../snowflake/cloud/README.md)
+* [Fivetran](../fivetran/README.md)
+* [AWS Secrets](../secrets/README.md)
 * Tableau (TODO: can we terraform this?)
+
+## Usage
+
+Copy paste the `secrets.json` file into your terraform script folder and **gitignore** it.
+Then add all credentials that you want to have pre-populated. Later, you will have to edit secrets directly in the AWS Secrets Vault.
+
+
+```terraform
+module "awesome-module" {
+  source = "github.com/dbl-works/terraform//analytics?ref=v2021.07.05"
+
+  # Required
+  environment = "staging"
+  project     = "someproject"
+}
+```
+
+## Concepts
 
 
 The following Mermaid graph visualized the concept of why we need this module:
