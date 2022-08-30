@@ -1,10 +1,18 @@
 terraform {
   required_providers {
     fivetran = {
-      source  = "fivetran/terraform-provider-fivetran"
+      source  = "fivetran/fivetran"
       version = "~> 0.6.1"
     }
   }
+}
+
+variable "fivetran_api_key" {
+  type = string
+}
+
+variable "fivetran_api_secret" {
+  type = string
 }
 
 provider "fivetran" {
