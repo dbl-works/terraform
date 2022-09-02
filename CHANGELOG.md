@@ -16,6 +16,9 @@ This project does not follow SemVer, since modules are independent of each other
 ## Cloudwatch
 - added a new module to launch cloudwatch module [#116](https://github.com/dbl-works/terraform/pull/116)
 
+## RDS
+- add option to enable DB replication with new parameter `enable_replication` [#119](https://github.com/dbl-works/terraform/pull/119)
+
 ## [v2022.08.05]
 ## Elasticache
 - `multi_az_enabled` can now optionally be turned off
