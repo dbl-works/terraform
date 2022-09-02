@@ -13,6 +13,15 @@ resource "aws_db_parameter_group" "postgres13" {
     name  = "rds.force_ssl"
     value = 1
   }
+
+  parameter {
+    name  = "logical_replication"
+    value = var.enable_replication ? 1 : 0
+  }
+  parameter {
+    name  = "wal_sender_timeout"
+    value = var.enable_replication ? 0 : 60000 # default, 1 min
+  }
 }
 
 resource "aws_db_parameter_group" "postgres14" {
@@ -29,5 +38,14 @@ resource "aws_db_parameter_group" "postgres14" {
   parameter {
     name  = "rds.force_ssl"
     value = 1
+  }
+
+  parameter {
+    name  = "logical_replication"
+    value = var.enable_replication ? 1 : 0
+  }
+  parameter {
+    name  = "wal_sender_timeout"
+    value = var.enable_replication ? 0 : 60000 # default, 1 min
   }
 }

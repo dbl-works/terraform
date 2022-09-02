@@ -72,3 +72,9 @@ variable "name" {
   description = "Custom name for resources. Must be unique per account if deploying to multiple regions."
   default     = null
 }
+
+variable "enable_replication" {
+  type        = bool
+  description = "Enables logical replication of the database."
+  default     = false
+}
