@@ -38,6 +38,7 @@ module "db" {
   # when creating a read-replica
   master_db_instance_arn = null  # ARN of the master database
   is_read_replica        = false # if true, this will be a read-replica
+  enable_replication     = false # if true, logical replication will be enabled
 }
 ```
 
