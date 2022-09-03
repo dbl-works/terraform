@@ -43,11 +43,13 @@ resource "aws_db_parameter_group" "postgres14" {
   }
 
   parameter {
-    name  = "rds.logical_replication"
-    value = var.enable_replication ? 1 : 0
+    name         = "rds.logical_replication"
+    value        = var.enable_replication ? 1 : 0
+    apply_method = "pending-reboot"
   }
   parameter {
-    name  = "wal_sender_timeout"
-    value = var.enable_replication ? 0 : 60000 # default, 1 min
+    name         = "wal_sender_timeout"
+    value        = var.enable_replication ? 0 : 60000 # default, 1 min
+    apply_method = "pending-reboot"
   }
 }
