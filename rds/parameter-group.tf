@@ -15,7 +15,7 @@ resource "aws_db_parameter_group" "postgres13" {
   }
 
   parameter {
-    name  = "logical_replication"
+    name  = "rds.logical_replication"
     value = var.enable_replication ? 1 : 0
   }
   parameter {
@@ -41,7 +41,7 @@ resource "aws_db_parameter_group" "postgres14" {
   }
 
   parameter {
-    name  = "logical_replication"
+    name  = "rds.logical_replication"
     value = var.enable_replication ? 1 : 0
   }
   parameter {
