@@ -18,3 +18,15 @@ resource "snowflake_warehouse" "main" {
   min_cluster_count = 1         # if set to less than max count, auto-scaling is enabled
   scaling_policy    = "ECONOMY" # Conserves credits by favoring keeping running clusters fully-loaded
 }
+
+# https://docs.snowflake.com/en/user-guide/network-policies.html
+resource "snowflake_network_policy" "policy" {
+  # The identifier must start with an alphabetic character
+  # and cannot contain spaces or special characters unless the
+  # entire identifier string is enclosed in double quotes (e.g. "My object").
+  name    = "IpNetworkPolicy"
+  comment = "Network policy to allow or deny access to a single IP address or a list of addresses."
+
+  allowed_ip_list = var.allowed_ip_list
+  blocked_ip_list = var.blocked_ip_list
+}

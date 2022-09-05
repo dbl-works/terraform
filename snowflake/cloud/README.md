@@ -28,6 +28,10 @@ module "snowflake_cloud" {
   suspend_compute_after_seconds = 57      # on AWS, the minimum charge is 60 seconds
   warehouse_size                = "large" # 8 credits/hour/cluster for "large"
   warehouse_cluster_count       = 1
+  # Default value of this variable is the fivetrans IP address in the EU region + using GCP as cloud provider
+  # If you are using fivetrans, check the list of IP addresses here: https://fivetran.com/docs/getting-started/ips#euregions
+  allowed_ip_list               = ["35.235.32.144/29"]
+  blocked_ip_list               = []
 }
 ```
 
