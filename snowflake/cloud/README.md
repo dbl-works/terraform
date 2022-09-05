@@ -32,6 +32,7 @@ module "snowflake_cloud" {
   # If you are using fivetrans, check the list of IP addresses here: https://fivetran.com/docs/getting-started/ips#euregions
   allowed_ip_list               = ["35.235.32.144/29"]
   blocked_ip_list               = []
+  snowflake_users               = []
 }
 ```
 

@@ -37,6 +37,7 @@ variable "allowed_ip_list" {
   type = list(string)
   # If you are using fivetrans, check the list of IP addresses here: https://fivetran.com/docs/getting-started/ips#euregions
   # Default value is the fivetrans IP address in the EU region + using GCP as cloud provider
+  # Note: The Snowflake user running terraform apply must be on an IP address allowed by the network policy to set the policy globally on the Snowflake account.
   default     = ["35.235.32.144/29"]
   description = "Comma-separated list of one or more IPv4 addresses that are allowed access to your Snowflake account."
 }
@@ -44,4 +45,9 @@ variable "allowed_ip_list" {
 variable "blocked_ip_list" {
   type    = list(string)
   default = []
+}
+
+variable "snowflake_users" {
+  type        = list(string)
+  description = "The users of which the network policy should be attached to"
 }
