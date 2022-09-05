@@ -2,6 +2,8 @@
 
 ## Usage
 
+Note: Since this module consist of the snowflake network policy, the Snowflake user running `terraform apply` must be on an IP address allowed by the network policy to set the policy globally on the Snowflake account.
+
 ```terraform
 # main.tf
 module "snowflake_cloud" {
