@@ -18,6 +18,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## RDS
 - add option to enable DB replication with new parameter `enable_replication` [#119](https://github.com/dbl-works/terraform/pull/119)
+- if `enable_replication` is changed on a running DB, the DB will need to be restarted manually
 
 ## [v2022.08.05]
 ## Elasticache
