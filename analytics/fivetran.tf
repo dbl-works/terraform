@@ -24,5 +24,5 @@ module "fivetran" {
   destination_user_name = ""
   destination_password  = ""
 
-  fivetran_group_name   = "snowflake-analytics"
+  fivetran_group_name = "snowflake-analytics"
 }
