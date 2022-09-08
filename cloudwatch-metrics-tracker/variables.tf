@@ -22,7 +22,6 @@ variable "tracked_resources_data" {
   type = list(object({
     serviceName      = string
     clusterName      = string
-    metricName       = string
     projectName      = string
     loadBalancerName = string
   }))

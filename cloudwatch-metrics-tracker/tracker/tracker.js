@@ -31,7 +31,7 @@ function formatTransactionRows ({ dataPoints, params }) {
       start_time: params.StartTime.toISOString(),
       end_time: params.EndTime.toISOString(),
       stat: queryParam?.MetricStat?.Stat,
-      value: data.Values[0] || unit === 'Count' ? 0 : "Null",
+      value: data.Values[0] || (unit === 'Count' ? 0 : "Null"),
       unit,
       created_at: new Date().toISOString()
     }
@@ -76,7 +76,7 @@ function setupResponseTimesQueries ({ projectName, loadBalancerName }) {
         Namespace: 'AWS/ApplicationELB', /* required */
       },
       Period: PERIOD,
-      Stat: 'Maximum', /* required */
+      Stat: percentile, /* required */
       Unit: 'Seconds' // If we set it as Milliseconds, the value returned will be undefined
     },
     ReturnData: true
