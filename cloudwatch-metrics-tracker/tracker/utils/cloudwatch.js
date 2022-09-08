@@ -64,13 +64,6 @@ const responseTimesQueries = ({ projectName, loadBalancerName }) => {
   }))
 }
 
-const performanceMetricQueries = ({ serviceName, clusterName, projectName, loadBalancerName }) => {
-  return [
-    ...ecsMetricQueries({ serviceName, clusterName, projectName }),
-    ...responseTimesQueries({ projectName, loadBalancerName })
-  ]
-}
-
 function errorCountsQueries ({ projectName, loadBalancerName }) {
   return {
     Id: `errorCount_${projectName}`, // /^[a-z][a-zA-Z0-9_]*$./
@@ -93,6 +86,20 @@ function errorCountsQueries ({ projectName, loadBalancerName }) {
   }
 }
 
+const loadBalancerMetricQueries = ({ projectName, loadBalancerName }) => {
+  return [
+    ...responseTimesQueries({ projectName, loadBalancerName }),
+    errorCountsQueries({ projectName, loadBalancerName })
+  ]
+}
+
+const performanceMetricQueries = ({ serviceName, clusterName, projectName, loadBalancerName }) => {
+  return [
+    ...ecsMetricQueries({ serviceName, clusterName, projectName }),
+    ...loadBalancerMetricQueries({ projectName, loadBalancerName })
+  ]
+}
+
 const formatTransactionRows = ({ dataPoints, params }) => {
   return dataPoints.map(data => {
     const queryParam = params.MetricDataQueries.find((param) =>
@@ -102,21 +109,23 @@ const formatTransactionRows = ({ dataPoints, params }) => {
     const [_metric, projectName] = queryParam.Id.split("_")
     const unit = queryParam?.MetricStat.Unit
 
+    const metricStat = queryParam?.MetricStat
+
     return {
       project_name: projectName,
       region: constants.AWS_REGION,
-      metric_name: queryParam?.MetricStat?.Metric?.MetricName,
-      dimensions: queryParam?.MetricStat?.Metric?.Dimensions,
+      metric_name: metricStat?.Metric?.MetricName,
+      dimensions: metricStat?.Metric?.Dimensions,
       start_time: params.StartTime.toISOString(),
       end_time: params.EndTime.toISOString(),
-      stat: queryParam?.MetricStat?.Stat,
+      stat: metricStat?.Stat,
       value: data.Values[0] || (unit === 'Count' ? 0 : "Null"),
       unit,
       created_at: new Date().toISOString()
     }
   })
 }
-const getPerformanceMetrics = async () => {
+const getCloudwatchData = async () => {
   const resourcesData = JSON.parse(constants.RESOURCES_DATA)
   const metricDataQueries = resourcesData.flatMap((data) => performanceMetricQueries(data))
 
@@ -148,29 +157,6 @@ const getPerformanceMetrics = async () => {
   return formatTransactionRows({ dataPoints: ecsDataPoints, params })
 }
 
-async function getErrorCountMetrics () {
-  const resourcesData = JSON.parse(constants.RESOURCES_DATA)
-  const metricDataQueries = resourcesData.flatMap((data) => errorCountsQueries(data))
-
-  // NOTE: We just want to run this call once per day which is right after the midnight
-  if (previousHour().getHours() !== 0) {
-    return []
-  }
-
-  const startTime = dateUtil.startOfTheDay(dateUtil.previousDay(new Date))
-  const endTime = dateUtil.endOfTheDay(dateUtil.previousDay(new Date))
-
-  const params = {
-    MetricDataQueries: metricDataQueries,
-    StartTime: startTime,
-    EndTime: endTime
-  }
-  const { MetricDataResults: dataPoints } = await cloudwatch.getMetricData(params).promise()
-
-  return formatTransactionRows({ dataPoints, params })
-}
-
 module.exports = {
-  getPerformanceMetrics,
-  getErrorCountMetrics
+  getCloudwatchData
 }
