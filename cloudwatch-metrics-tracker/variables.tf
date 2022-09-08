@@ -9,8 +9,9 @@ variable "fivetran_aws_account_id" {
 }
 
 variable "aws_region_code" {
-  type    = string
-  default = "eu-central-1"
+  type        = string
+  default     = "eu-central-1"
+  description = "lambda's aws region"
 }
 
 variable "organisation" {
@@ -23,7 +24,6 @@ variable "tracked_resources_data" {
     clusterName      = string
     metricName       = string
     projectName      = string
-    region           = string
     loadBalancerName = string
   }))
 }

@@ -30,9 +30,9 @@ const PERCENTILES = [
   'p50'
 ]
 
-function setupResponseTimesQueries ({ loadBalancerName }) {
+function setupResponseTimesQueries ({ projectName, loadBalancerName }) {
   return PERCENTILES.map(percentile => ({
-    Id: percentile, /* required */
+    Id: `${percentile.toLowerCase()}_${projectName}`, // /^[a-z][a-zA-Z0-9_]*$./
     MetricStat: {
       Metric: {
         Dimensions: [
@@ -52,9 +52,9 @@ function setupResponseTimesQueries ({ loadBalancerName }) {
   }))
 }
 
-function setupECSMetricQueries ({ serviceName, clusterName }) {
+function setupECSMetricQueries ({ serviceName, clusterName, projectName }) {
   return ECS_METRICS.map(metric => ({
-    Id: metric.toLowerCase(), /* required */
+    Id: `${metric.toLowerCase()}_${projectName}`, /* required */
     MetricStat: {
       Metric: {
         Dimensions: [
@@ -78,14 +78,18 @@ function setupECSMetricQueries ({ serviceName, clusterName }) {
   }))
 }
 
-function setupMetricParams ({ serviceName, clusterName, loadBalancerName }) {
+function setupMetricQueries (data) {
+  return [
+    ...setupECSMetricQueries(data),
+    ...setupResponseTimesQueries(data)
+  ]
+}
+
+function setupMetricParams (metricDataQueries) {
   const prevHour = previousHour()
 
   return {
-    MetricDataQueries: [
-      ...setupECSMetricQueries({ serviceName, clusterName, loadBalancerName }),
-      ...setupResponseTimesQueries({ loadBalancerName })
-    ],
+    MetricDataQueries: metricDataQueries,
     StartTime: oneHourBefore(prevHour),
     EndTime: prevHour
   }
@@ -101,10 +105,10 @@ exports.handler = async (request, context, callback) => {
     // TODO: next if computed end time is after the prevCursor
     const resourcesData = JSON.parse(process.env.RESOURCES_DATA)
 
-    // TODO: Loop this
-    const metric = resourcesData[0]
-
-    const params = setupMetricParams(metric)
+    const metricDataQueries = resourcesData.flatMap((data) => setupMetricQueries(data))
+    const params = setupMetricParams(metricDataQueries)
+    // NOTE: A single GetMetricData call can include as many as 500 MetricDataQuery structures.
+    // NOTE: We can't retrieve data from region different than the lambda region
     const { MetricDataResults: dataPoints } = await cloudwatch.getMetricData(params).promise()
     // TODO: Have another call one for the sum of one day 500 error count, period = 1 day at the end of day
     // TODO: one day based on eu central time?
@@ -129,9 +133,11 @@ exports.handler = async (request, context, callback) => {
         param.Id === data.Id
       )
 
+      const [_metric, projectName] = queryParam.Id.split("_")
+
       return {
-        project_name: metric.projectName,
-        region: metric.region,
+        project_name: projectName,
+        region: process.env.AWS_REGION,
         metric_name: queryParam?.MetricStat?.Metric?.MetricName,
         dimensions: queryParam?.MetricStat?.Metric?.Dimensions,
         start_time: params.StartTime.toISOString(),
@@ -165,6 +171,7 @@ exports.handler = async (request, context, callback) => {
       hasMore: false
     }
   } catch (error) {
+    // TODO: Include Sentry here
     console.log('error', error)
   }
 }
