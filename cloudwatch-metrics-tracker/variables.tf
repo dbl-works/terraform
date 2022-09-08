@@ -24,6 +24,7 @@ variable "tracked_resources_data" {
     serviceName      = string
     clusterName      = string
     loadBalancerName = string
-    projectName      = string // Do not include any special characters
+    projectName      = string // Do not include any special characters. This value would be passed into the table
+    environment      = string // Do not include any special characters. This value would be passed into the table
   }))
 }

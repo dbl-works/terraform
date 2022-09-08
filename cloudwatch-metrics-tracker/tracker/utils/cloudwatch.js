@@ -18,9 +18,9 @@ const formatQueryId = (name) => {
   return name.replace(/-|\//g, '_')
 }
 
-const ecsMetricQueries = ({ serviceName, clusterName, projectName }) => {
+const ecsMetricQueries = ({ serviceName, clusterName, projectName, environment }) => {
   return ECS_METRICS.map(metric => ({
-    Id: `${metric.toLowerCase()}_${formatQueryId(clusterName)}_${projectName}`, /* /^[a-z][a-zA-Z0-9_]*$./ */
+    Id: `${metric.toLowerCase()}_${formatQueryId(clusterName)}_${projectName}_${environment}`, /* /^[a-z][a-zA-Z0-9_]*$./ */
     MetricStat: {
       Metric: {
         Dimensions: [
@@ -44,9 +44,9 @@ const ecsMetricQueries = ({ serviceName, clusterName, projectName }) => {
   }))
 }
 
-const responseTimesQueries = ({ projectName, loadBalancerName }) => {
+const responseTimesQueries = ({ projectName, loadBalancerName, environment }) => {
   return PERCENTILES.map(percentile => ({
-    Id: `${percentile}_${formatQueryId(loadBalancerName)}_${projectName}`, /* /^[a-z][a-zA-Z0-9_]*$./ */
+    Id: `${percentile}_${formatQueryId(loadBalancerName)}_${projectName}_${environment}`, /* /^[a-z][a-zA-Z0-9_]*$./ */
     MetricStat: {
       Metric: {
         Dimensions: [
@@ -66,9 +66,9 @@ const responseTimesQueries = ({ projectName, loadBalancerName }) => {
   }))
 }
 
-const errorCountsQueries = ({ projectName, loadBalancerName }) => {
+const errorCountsQueries = ({ projectName, loadBalancerName, environment }) => {
   return {
-    Id: `errorCount_${formatQueryId(loadBalancerName)}_${projectName}`, // /^[a-z][a-zA-Z0-9_]*$./
+    Id: `errorCount_${formatQueryId(loadBalancerName)}_${projectName}_${environment}`, // /^[a-z][a-zA-Z0-9_]*$./
     MetricStat: {
       Metric: {
         Dimensions: [
@@ -88,11 +88,11 @@ const errorCountsQueries = ({ projectName, loadBalancerName }) => {
   }
 }
 
-const performanceMetricQueries = ({ serviceName, clusterName, projectName, loadBalancerName }) => {
+const performanceMetricQueries = ({ serviceName, clusterName, projectName, loadBalancerName, environment }) => {
   return [
-    ...ecsMetricQueries({ serviceName, clusterName, projectName }),
-    ...responseTimesQueries({ projectName, loadBalancerName }),
-    errorCountsQueries({ projectName, loadBalancerName })
+    ...ecsMetricQueries({ serviceName, clusterName, projectName, environment }),
+    ...responseTimesQueries({ projectName, loadBalancerName, environment }),
+    errorCountsQueries({ projectName, loadBalancerName, environment })
   ]
 }
 
@@ -102,13 +102,14 @@ const recordRows = ({ dataPoints, params }) => {
       param.Id === data.Id
     )
 
-    const projectName = queryParam.Id.split("_").slice(-1)[0]
+    const [projectName, environment] = queryParam.Id.split("_").slice(-2)
     const unit = queryParam?.MetricStat.Unit
 
     const metricStat = queryParam?.MetricStat
 
     return {
       project_name: projectName,
+      environment: environment,
       region: constants.AWS_REGION,
       metric_name: metricStat?.Metric?.MetricName,
       dimensions: metricStat?.Metric?.Dimensions,
