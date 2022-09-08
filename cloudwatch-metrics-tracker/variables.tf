@@ -15,14 +15,15 @@ variable "aws_region_code" {
 }
 
 variable "organisation" {
-  type = string
+  type        = string
+  description = "connector name shown on Fivetran UI, i.e. cloudwatch_metrics_(organisation)"
 }
 
 variable "tracked_resources_data" {
   type = list(object({
     serviceName      = string
     clusterName      = string
-    projectName      = string
     loadBalancerName = string
+    projectName      = string // Do not include any special characters
   }))
 }

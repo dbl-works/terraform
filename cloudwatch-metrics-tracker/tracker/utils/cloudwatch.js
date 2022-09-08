@@ -14,10 +14,13 @@ const PERCENTILES = [
   'p50'
 ]
 
+const formatQueryId = (name) => {
+  return name.replace(/-|\//g, '_')
+}
+
 const ecsMetricQueries = ({ serviceName, clusterName, projectName }) => {
   return ECS_METRICS.map(metric => ({
-    // NEed to be more specific
-    Id: `${metric.toLowerCase()}_${projectName}`, /* required */
+    Id: `${metric.toLowerCase()}_${formatQueryId(clusterName)}_${projectName}`, /* /^[a-z][a-zA-Z0-9_]*$./ */
     MetricStat: {
       Metric: {
         Dimensions: [
@@ -43,8 +46,7 @@ const ecsMetricQueries = ({ serviceName, clusterName, projectName }) => {
 
 const responseTimesQueries = ({ projectName, loadBalancerName }) => {
   return PERCENTILES.map(percentile => ({
-    // TODO: Have to be more specific
-    Id: `${percentile.toLowerCase()}_${projectName}`, // /^[a-z][a-zA-Z0-9_]*$./
+    Id: `${percentile}_${formatQueryId(loadBalancerName)}_${projectName}`, /* /^[a-z][a-zA-Z0-9_]*$./ */
     MetricStat: {
       Metric: {
         Dimensions: [
@@ -64,9 +66,9 @@ const responseTimesQueries = ({ projectName, loadBalancerName }) => {
   }))
 }
 
-function errorCountsQueries ({ projectName, loadBalancerName }) {
+const errorCountsQueries = ({ projectName, loadBalancerName }) => {
   return {
-    Id: `errorCount_${projectName}`, // /^[a-z][a-zA-Z0-9_]*$./
+    Id: `errorCount_${formatQueryId(loadBalancerName)}_${projectName}`, // /^[a-z][a-zA-Z0-9_]*$./
     MetricStat: {
       Metric: {
         Dimensions: [
@@ -86,17 +88,11 @@ function errorCountsQueries ({ projectName, loadBalancerName }) {
   }
 }
 
-const loadBalancerMetricQueries = ({ projectName, loadBalancerName }) => {
-  return [
-    ...responseTimesQueries({ projectName, loadBalancerName }),
-    errorCountsQueries({ projectName, loadBalancerName })
-  ]
-}
-
 const performanceMetricQueries = ({ serviceName, clusterName, projectName, loadBalancerName }) => {
   return [
     ...ecsMetricQueries({ serviceName, clusterName, projectName }),
-    ...loadBalancerMetricQueries({ projectName, loadBalancerName })
+    ...responseTimesQueries({ projectName, loadBalancerName }),
+    errorCountsQueries({ projectName, loadBalancerName })
   ]
 }
 
@@ -106,7 +102,7 @@ const formatTransactionRows = ({ dataPoints, params }) => {
       param.Id === data.Id
     )
 
-    const [_metric, projectName] = queryParam.Id.split("_")
+    const projectName = queryParam.Id.split("_").slice(-1)[0]
     const unit = queryParam?.MetricStat.Unit
 
     const metricStat = queryParam?.MetricStat

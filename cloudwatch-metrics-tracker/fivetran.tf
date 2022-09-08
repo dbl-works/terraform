@@ -7,7 +7,7 @@ resource "fivetran_connector" "lambda" {
   run_setup_tests   = true
 
   destination_schema {
-    name = "cloudwatch_metrics_${var.organisation}" # name shown on Fivetran UI
+    name = "cloudwatch_metrics_${var.organisation}"
   }
 
   config {
