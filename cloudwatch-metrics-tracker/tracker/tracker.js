@@ -1,7 +1,8 @@
 const AWS = require('aws-sdk')
-const PERIOD = process.env.PERIOD
 const cloudwatch = new AWS.CloudWatch()
 const dateUtil = require('./utils/date');
+const fivetran = require('./utils/fivetran');
+const constants = require('./constants');
 
 const ECS_METRICS = [
   'CPUUtilization',
@@ -25,7 +26,7 @@ function formatTransactionRows ({ dataPoints, params }) {
 
     return {
       project_name: projectName,
-      region: process.env.AWS_REGION,
+      region: constants.AWS_REGION,
       metric_name: queryParam?.MetricStat?.Metric?.MetricName,
       dimensions: queryParam?.MetricStat?.Metric?.Dimensions,
       start_time: params.StartTime.toISOString(),
@@ -75,7 +76,7 @@ function setupResponseTimesQueries ({ projectName, loadBalancerName }) {
         MetricName: 'TargetResponseTime', /* required */
         Namespace: 'AWS/ApplicationELB', /* required */
       },
-      Period: PERIOD,
+      Period: constants.PERIOD,
       Stat: percentile, /* required */
       Unit: 'Seconds' // If we set it as Milliseconds, the value returned will be undefined
     },
@@ -101,7 +102,7 @@ function setupECSMetricQueries ({ serviceName, clusterName, projectName }) {
         MetricName: metric, /* required */
         Namespace: 'AWS/ECS', /* required */
       },
-      Period: PERIOD,
+      Period: constants.PERIOD,
       Stat: 'Maximum', /* required */
       Unit: 'Percent'
     },
@@ -130,7 +131,7 @@ function setupMetricParams (metricDataQueries) {
 // (last record endtime -> prevCursor) -> (new record endtime -> current Cursor)
 
 async function getPerformanceMetrics () {
-  const resourcesData = JSON.parse(process.env.RESOURCES_DATA)
+  const resourcesData = JSON.parse(constants.RESOURCES_DATA)
   const metricDataQueries = resourcesData.flatMap((data) => setupPerformanceMetricQueries(data))
   const params = setupMetricParams(metricDataQueries)
   // NOTE: A single GetMetricData call can include as many as 500 MetricDataQuery structures.
@@ -157,27 +158,12 @@ async function getPerformanceMetrics () {
   return formatTransactionRows({ dataPoints: ecsDataPoints, params })
 }
 
-function startOfTheDay (date) {
-  date.setUTCHours(0, 0, 0, 0)
-  return date
-}
-
-function endOfTheDay (date) {
-  date.setUTCHours(23, 59, 59, 999)
-  return date
-}
-
-function previousDay (date) {
-  date.setDate(date.getDate() - 1)
-  return date
-}
-
 async function getErrorCountMetrics () {
-  const resourcesData = JSON.parse(process.env.RESOURCES_DATA)
+  const resourcesData = JSON.parse(constants.RESOURCES_DATA)
   const metricDataQueries = resourcesData.flatMap((data) => setupErrorCountsQueries(data))
 
-  const startTime = startOfTheDay(previousDay(new Date))
-  const endTime = endOfTheDay(previousDay(new Date))
+  const startTime = dateUtil.startOfTheDay(dateUtil.previousDay(new Date))
+  const endTime = dateUtil.endOfTheDay(dateUtil.previousDay(new Date))
 
   const params = {
     MetricDataQueries: metricDataQueries,
@@ -197,27 +183,14 @@ exports.handler = async (request, context, callback) => {
     const performanceTransactionRows = await getPerformanceMetrics()
     // TODO: Only run this at the midnight
     const errorCountTransactionRows = await getErrorCountMetrics()
-    console.log('records!', [...performanceTransactionRows, ...errorCountTransactionRows])
+    const newTransactions = [...performanceTransactionRows, ...errorCountTransactionRows]
+    console.log('records!', newTransactions)
 
-    return {
-      state: {
-        cursor: new Date().toISOString(),
-      },
-      insert: {
-        transaction: [], // TODO: Pssing newRecords here
-      },
-      delete: {
-        transaction: [],
-      },
-      schema: {
-        transaction: {
-          // TODO: cannot use metric name because it is not specific for p99
-          // TODO: is this expensive to have multiple primary key
-          primary_key: ['end_time', 'project_name', 'metric_name', 'region']
-        },
-      },
-      hasMore: false
-    }
+    return fivetran.setupFivetranResponse({
+      state: request.state,
+      newTransactions: []
+    })
+
   } catch (error) {
     // TODO: Include Sentry here
     console.log('error', error)
