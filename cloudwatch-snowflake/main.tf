@@ -1,5 +1,5 @@
 data "archive_file" "zip" {
-  type = "zip"
+  type        = "zip"
   source_dir  = "${path.module}/tracker"
   output_path = "${path.module}/dist/tracker.zip"
 }
@@ -7,12 +7,12 @@ data "archive_file" "zip" {
 resource "aws_lambda_function" "cloudwatch_metrics_tracker" {
   function_name = "cloudwatch_metrics_tracker"
   description   = "Collect AWS Cloudwatch Metrics"
-  role          = aws_iam_role.lambda.arn
+  role          = var.lambda_role_arn == null ? aws_iam_role.lambda[0].arn : var.lambda_role_arn
 
   filename = data.archive_file.zip.output_path
   # Used to trigger updates
   source_code_hash = data.archive_file.zip.output_base64sha256
-  handler = "index.handler"
+  handler          = "index.handler"
   # List of available runtimes: https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime
   runtime = "nodejs16.x"
   timeout = 300
@@ -26,7 +26,8 @@ resource "aws_lambda_function" "cloudwatch_metrics_tracker" {
 }
 
 resource "aws_iam_role" "lambda" {
-  name = "fivetran_lambda"
+  count = var.lambda_role_arn == null ? 1 : 0
+  name  = "fivetran_lambda_${var.fivetran_group_id}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -71,6 +72,7 @@ resource "aws_iam_role" "lambda" {
 }
 
 resource "aws_iam_role_policy_attachment" "fivetran_policy_for_lambda" {
-  role       = aws_iam_role.lambda.name
+  count      = var.lambda_role_arn == null ? 1 : 0
+  role       = aws_iam_role.lambda[0].name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
 }

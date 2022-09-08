@@ -35,5 +35,6 @@ module "metrics" {
   # optional
   aws_region_code = "us-east-1"
   fivetran_aws_account_id = "834469178297"
+  lambda_role_arn  = "arn:aws:iam::123456789:role/fivetran_lambda"
 }
 ```

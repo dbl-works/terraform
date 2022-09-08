@@ -3,6 +3,11 @@ variable "fivetran_group_id" {
   description = "Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#creategroupusingtheui"
 }
 
+variable "lambda_role_arn" {
+  type    = string
+  default = null
+}
+
 variable "fivetran_aws_account_id" {
   type    = string
   default = "834469178297" # the default aws account_id for fivetrans
