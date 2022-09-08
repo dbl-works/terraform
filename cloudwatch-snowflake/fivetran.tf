@@ -7,7 +7,7 @@ resource "fivetran_connector" "lambda" {
   run_setup_tests   = true
 
   destination_schema {
-    name = "cloudwatch_metrics_${var.organisation}"
+    name = "cloudwatch_metrics_${var.organisation}_${var.aws_region_code}"
   }
 
   config {

@@ -31,5 +31,9 @@ module "metrics" {
       environment      = "staging"
     }
   ]
+
+  # optional
+  aws_region_code = "us-east-1"
+  fivetran_aws_account_id = "834469178297"
 }
 ```
