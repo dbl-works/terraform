@@ -1,7 +1,7 @@
 resource "fivetran_connector" "lambda" {
   group_id          = var.fivetran_group_id
   service           = "aws_lambda"
-  sync_frequency    = 5 // min
+  sync_frequency    = 60 // min
   paused            = false
   pause_after_trial = false
   run_setup_tests   = true
