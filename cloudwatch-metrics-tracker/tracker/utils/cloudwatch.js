@@ -64,11 +64,10 @@ const responseTimesQueries = ({ projectName, loadBalancerName }) => {
   }))
 }
 
-//TODO: specific the arguments here
-const performanceMetricQueries = (data) => {
+const performanceMetricQueries = ({ serviceName, clusterName, projectName, loadBalancerName }) => {
   return [
-    ...ecsMetricQueries(data),
-    ...responseTimesQueries(data)
+    ...ecsMetricQueries({ serviceName, clusterName, projectName }),
+    ...responseTimesQueries({ projectName, loadBalancerName })
   ]
 }
 
@@ -93,9 +92,6 @@ function errorCountsQueries ({ projectName, loadBalancerName }) {
     ReturnData: true
   }
 }
-
-// TODO: Think of how to make sure the lambda does not retrieve the same data twice
-// (last record endtime -> prevCursor) -> (new record endtime -> current Cursor)
 
 const formatTransactionRows = ({ dataPoints, params }) => {
   return dataPoints.map(data => {
