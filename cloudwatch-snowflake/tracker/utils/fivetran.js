@@ -13,11 +13,13 @@ const setupFivetranResponse = ({ state, newRecords = [], deletedRecords = [] }) 
     schema: {
       metric: {
         primary_key: [
+          'start_time',
           'end_time',
           'metric_name',
           'project_name',
           'region',
-          'stat'
+          'stat',
+          'environment'
         ]
       },
     },

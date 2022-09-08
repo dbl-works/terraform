@@ -28,6 +28,6 @@
 **/terraform.tfstate.backup
 
 **/.infracost/*
-cloudwatch-metrics-tracker/dist/tracker.zip
+cloudwatch-snowflake/dist/tracker.zip
 
 .env
