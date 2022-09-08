@@ -72,6 +72,28 @@ const performanceMetricQueries = (data) => {
   ]
 }
 
+function errorCountsQueries ({ projectName, loadBalancerName }) {
+  return {
+    Id: `errorCount_${projectName}`, // /^[a-z][a-zA-Z0-9_]*$./
+    MetricStat: {
+      Metric: {
+        Dimensions: [
+          {
+            Name: 'LoadBalancer',
+            Value: loadBalancerName
+          },
+        ],
+        MetricName: 'HTTPCode_Target_5XX_Count', /* required */
+        Namespace: 'AWS/ApplicationELB', /* required */
+      },
+      Period: 86400,
+      Stat: 'Sum', /* required */
+      Unit: 'Count'
+    },
+    ReturnData: true
+  }
+}
+
 // TODO: Think of how to make sure the lambda does not retrieve the same data twice
 // (last record endtime -> prevCursor) -> (new record endtime -> current Cursor)
 
@@ -130,8 +152,29 @@ const getPerformanceMetrics = async () => {
   return formatTransactionRows({ dataPoints: ecsDataPoints, params })
 }
 
+async function getErrorCountMetrics () {
+  const resourcesData = JSON.parse(constants.RESOURCES_DATA)
+  const metricDataQueries = resourcesData.flatMap((data) => errorCountsQueries(data))
 
+  // NOTE: We just want to run this call once per day which is right after the midnight
+  if (previousHour().getHours() !== 0) {
+    return []
+  }
+
+  const startTime = dateUtil.startOfTheDay(dateUtil.previousDay(new Date))
+  const endTime = dateUtil.endOfTheDay(dateUtil.previousDay(new Date))
+
+  const params = {
+    MetricDataQueries: metricDataQueries,
+    StartTime: startTime,
+    EndTime: endTime
+  }
+  const { MetricDataResults: dataPoints } = await cloudwatch.getMetricData(params).promise()
+
+  return formatTransactionRows({ dataPoints, params })
+}
 
 module.exports = {
   getPerformanceMetrics,
+  getErrorCountMetrics
 }

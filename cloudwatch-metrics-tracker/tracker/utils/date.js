@@ -1,31 +1,28 @@
 const previousHour = () => {
   const today = new Date()
-  const hour = today.getHours()
-  today.setHours(hour - 1)
-  today.setMinutes(0)
-  today.setSeconds(0)
-  today.setMilliseconds(0)
+  const lastHour = today.getHours() - 1
+  today.setUTCHours(lastHour, 0, 0, 0)
   return today
 }
 
-const oneHourBefore = (date) => {
-  const currentTime = date.getTime()
+const oneHourBefore = (time) => {
+  const currentTime = time.getTime()
   return new Date(currentTime - 1 * 60 * 60 * 1000)
 }
 
-function startOfTheDay (date) {
-  date.setUTCHours(0, 0, 0, 0)
-  return date
+function startOfTheDay (time) {
+  time.setUTCHours(0, 0, 0, 0)
+  return time
 }
 
-function endOfTheDay (date) {
-  date.setUTCHours(23, 59, 59, 999)
-  return date
+function endOfTheDay (time) {
+  time.setUTCHours(23, 59, 59, 999)
+  return time
 }
 
-function previousDay (date) {
-  date.setDate(date.getDate() - 1)
-  return date
+function previousDay (time) {
+  time.setDate(time.getDate() - 1)
+  return time
 }
 
 module.exports = {
