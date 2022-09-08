@@ -4,12 +4,11 @@ const cloudwatch = require('./utils/cloudwatch');
 exports.handler = async (request, context, callback) => {
   try {
     // TODO: next if computed end time is before the prevCursor
-    const newTransactions = await cloudwatch.getCloudwatchData()
-    console.log('records!', newTransactions)
+    const newRecords = await cloudwatch.getCloudwatchData()
 
     return fivetran.setupFivetranResponse({
       state: request.state,
-      newTransactions: []
+      newRecords
     })
 
   } catch (error) {

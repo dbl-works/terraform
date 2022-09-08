@@ -5,7 +5,6 @@ data "archive_file" "zip" {
   output_path = "${path.module}/dist/tracker.zip"
 }
 
-# TODO: Add x-ray tracing trigger + add xray roles to the lambda role?
 resource "aws_lambda_function" "cloudwatch_metrics_tracker" {
   function_name = "cloudwatch_metrics_tracker"
   description   = "Collect AWS Cloudwatch Metrics"

@@ -96,7 +96,7 @@ const performanceMetricQueries = ({ serviceName, clusterName, projectName, loadB
   ]
 }
 
-const formatTransactionRows = ({ dataPoints, params }) => {
+const recordRows = ({ dataPoints, params }) => {
   return dataPoints.map(data => {
     const queryParam = params.MetricDataQueries.find((param) =>
       param.Id === data.Id
@@ -134,7 +134,7 @@ const getCloudwatchData = async () => {
 
   // NOTE: A single GetMetricData call can include as many as 500 MetricDataQuery structures.
   // NOTE: We can't retrieve data from region different than the lambda region
-  const { MetricDataResults: ecsDataPoints } = await cloudwatch.getMetricData(params).promise()
+  const { MetricDataResults: dataPoints } = await cloudwatch.getMetricData(params).promise()
   // Sample API Response
   // {
   //   ResponseMetadata: { RequestId: 'fe077633-9093-47e7-8e64-d26c244494bb' },
@@ -150,7 +150,7 @@ const getCloudwatchData = async () => {
   //   ],
   //   Messages: []
   // }
-  return formatTransactionRows({ dataPoints: ecsDataPoints, params })
+  return recordRows({ dataPoints, params })
 }
 
 module.exports = {

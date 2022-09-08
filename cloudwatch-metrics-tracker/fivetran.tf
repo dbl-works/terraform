@@ -14,6 +14,5 @@ resource "fivetran_connector" "lambda" {
     function = aws_lambda_function.cloudwatch_metrics_tracker.function_name
     role_arn = aws_iam_role.lambda.arn
     region   = var.aws_region_code
-    # secrets      = "{'secret1':'xxxxxxx', 'secret2':'xxxxxxx'}"
   }
 }
