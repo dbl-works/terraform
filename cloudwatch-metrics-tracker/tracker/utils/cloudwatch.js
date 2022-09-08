@@ -80,7 +80,7 @@ const errorCountsQueries = ({ projectName, loadBalancerName }) => {
         MetricName: 'HTTPCode_Target_5XX_Count', /* required */
         Namespace: 'AWS/ApplicationELB', /* required */
       },
-      Period: 86400,
+      Period: constants.PERIOD,
       Stat: 'Sum', /* required */
       Unit: 'Count'
     },
