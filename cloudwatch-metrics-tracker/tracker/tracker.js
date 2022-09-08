@@ -1,21 +1,7 @@
 const AWS = require('aws-sdk')
 const PERIOD = process.env.PERIOD
 const cloudwatch = new AWS.CloudWatch()
-
-function previousHour () {
-  const today = new Date()
-  const hour = today.getHours()
-  today.setHours(hour - 1)
-  today.setMinutes(0)
-  today.setSeconds(0)
-  today.setMilliseconds(0)
-  return today
-}
-
-function oneHourBefore (date) {
-  const currentTime = date.getTime()
-  return new Date(currentTime - 1 * 60 * 60 * 1000)
-}
+const dateUtil = require('./utils/date');
 
 const ECS_METRICS = [
   'CPUUtilization',
@@ -131,11 +117,11 @@ function setupPerformanceMetricQueries (data) {
 }
 
 function setupMetricParams (metricDataQueries) {
-  const prevHour = previousHour()
+  const prevHour = dateUtil.previousHour()
 
   return {
     MetricDataQueries: metricDataQueries,
-    StartTime: oneHourBefore(prevHour),
+    StartTime: dateUtil.oneHourBefore(prevHour),
     EndTime: prevHour
   }
 }
