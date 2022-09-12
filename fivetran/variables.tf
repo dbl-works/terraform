@@ -22,8 +22,6 @@ variable "environment" {
   type = string
 }
 
-
-
 #
 # Destination is the data warehouse, e.g. Snowflake
 #
@@ -56,13 +54,11 @@ variable "destination_database_name" {
   type = string
 }
 
-variable "destionation_service" {
+variable "destination_service" {
   type        = string
   default     = "snowflake"
   description = "Name for the destination type: https://fivetran.com/docs/rest-api/destinations/config"
 }
-
-
 
 #
 # Sources to connect to, e.g. AWS RDS, Google Analytics, etc.

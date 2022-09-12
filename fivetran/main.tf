@@ -30,7 +30,7 @@ resource "fivetran_group" "group" {
 
 resource "fivetran_destination" "main" {
   group_id           = fivetran_group.group.id
-  service            = var.destionation_service
+  service            = var.destination_service
   time_zone_offset   = var.time_zone_offset
   region             = var.region # https://fivetran.com/docs/rest-api/destinations#payloadparameters
   trust_certificates = "true"

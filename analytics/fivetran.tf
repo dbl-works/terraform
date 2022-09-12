@@ -2,27 +2,23 @@ module "fivetran" {
   source = "../fivetran"
 
   # https://fivetran.com/docs/rest-api/connectors/config#postgres
-  source_service = "postgres_rds"
-  # postgres config
-  #  {
-  #         "schema_prefix": "test_postgres",
-  #         "host": "postgresinstance.mycompany.com",
-  #         "port": 5432,
-  #         "database": "postgres",
-  #         "user": "test_user",
-  #         "password": "test_password",
-  #         "tunnel_host": "XXX.XXX.XXX.XXX",
-  #         "tunnel_port": 22,
-  #         "tunnel_user": "fivetran",
-  #         "update_method": "WAL",
-  #         "replication_slot": "test_replication_slot"
-  #     }
-  db_config = var.db_config
+  sources_rds    = var.sources_rds
+  sources_github = var.sources_github
 
   # https://fivetran.com/docs/rest-api/destinations/config#snowflake
-  destionation_service  = "snowflake"
-  destination_user_name = ""
-  destination_password  = ""
+  destination_service         = "snowflake"
+  time_zone_offset            = var.time_zone_offset
+  region                      = var.region
+  destination_host            = var.destination_host
+  destination_port            = var.destination_port
+  destination_database_name   = var.destination_database_name
+  destination_user_name       = var.destination_user_name
+  destination_password        = var.destination_password
+  destination_connection_type = var.destination_connection_type
 
-  fivetran_group_name = "snowflake-analytics"
+  environment = local.environment
+  project     = local.project
+
+  fivetran_api_key    = var.fivetran_api_key
+  fivetran_api_secret = var.fivetran_api_secret
 }
