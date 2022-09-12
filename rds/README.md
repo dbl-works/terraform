@@ -117,3 +117,63 @@ function generate_rds_password () {
 }
 alias rdspw=generate_rds_password
 ```
+
+## Enable DB replication for BI
+
+Some projects connect RDS directly to Fivetran for BI. Here are instructions how to setup the DB in order to be able to connect from Fivetran connector:
+
+NOTE: All DB operations should first be tested on staging.
+
+First lets create a separate user with permissions to read required tables:
+
+```SQL
+DO $body$
+DECLARE
+  project varchar := '';
+  environment varchar := 'staging';
+  password varchar := '';
+  allowed_tables varchar[] := array[
+    'table1',
+  ];
+  database_name varchar := project || '_' || environment;
+
+  table_name varchar;
+BEGIN
+  EXECUTE format('CREATE ROLE %s_%s_fivetran NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT;', project, environment);
+  EXECUTE format('ALTER ROLE %s_%s_fivetran WITH LOGIN ENCRYPTED PASSWORD ''%s'';', project, environment, password);
+  EXECUTE format('GRANT CONNECT ON DATABASE %s TO %s_%s_fivetran;', database_name, project, environment);
+  EXECUTE format('GRANT USAGE ON SCHEMA public TO %s_%s_fivetran;', project, environment);
+
+  FOREACH table_name IN ARRAY allowed_tables
+  LOOP
+    EXECUTE format('GRANT SELECT ON TABLE %s TO %s_%s_fivetran;', table_name, project, environment);
+  END LOOP;
+END
+$body$
+```
+
+Now create a replication slot to enable usage of `test_decoding` plugin:
+
+1. Set enable_replication = true in RDS terraform
+```terraform
+module "rds" {
+  source = "github.com/dbl-works/terraform//rds?ref=x"
+  ...
+  enable_replication = true
+}
+```
+2. Apply with: `tf apply`
+3. Manually restart the DB via AWS console to apply static parameters. Please note that DB will be offline for some time (should be minutes), so this is best executed during low traffic.
+4. You can check state of replication with:
+```SQL
+SHOW rds.logical_replication;
+```
+5. Create replication slot by executing following SQL as user with supervisor privileges:
+```SQL
+SELECT pg_create_logical_replication_slot('fivetran_replication_slot', 'test_decoding');
+GRANT rds_replication TO <fivetran_db_username>;
+```
+6. Check if slot is available (it may take some time for entries to appear)
+```SQL
+SELECT count(*) FROM pg_logical_slot_peek_changes('fivetran_replication_slot', null, null);
+```
