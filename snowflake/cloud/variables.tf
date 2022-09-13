@@ -50,4 +50,5 @@ variable "blocked_ip_list" {
 variable "snowflake_users" {
   type        = list(string)
   description = "The users of which the network policy should be attached to"
+  default     = []
 }

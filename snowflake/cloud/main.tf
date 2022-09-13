@@ -41,6 +41,6 @@ resource "snowflake_network_policy_attachment" "attach" {
   # A Snowflake account can only have one network policy set globally at any given time.
   # This resource does not enforce one-policy-per-account, it is the user's responsibility to enforce this. If multiple network policy resources have set_for_account: true,
   # the final policy set on the account will be non-deterministic.
-  set_for_account = false
+  set_for_account = true
   users           = var.snowflake_users
 }
