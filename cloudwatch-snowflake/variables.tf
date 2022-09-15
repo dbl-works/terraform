@@ -1,6 +1,6 @@
 variable "fivetran_group_id" {
   type        = string
-  description = "Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#creategroupusingtheui"
+  description = "Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui"
 }
 
 variable "lambda_role_arn" {
