@@ -28,10 +28,10 @@ variable "organisation" {
 
 variable "tracked_resources_data" {
   type = list(object({
-    serviceName      = string
-    clusterName      = string
-    loadBalancerName = string
-    projectName      = string // Do not include any special characters. This value would be passed into the table
-    environment      = string // Do not include any special characters. This value would be passed into the table
+    serviceName      = string // ecs service name. eg. aws_ecs_service => name
+    clusterName      = string // ecs cluster name. eg. aws_ecs_cluster => name
+    loadBalancerName = string // load balancer name. eg. aws_lb => name
+    projectName      = string // Do not include any special characters. This value will be passed into the snowflake table under the project column
+    environment      = string // Do not include any special characters. This value will be passed into the snowflake table under the environment column
   }))
 }
