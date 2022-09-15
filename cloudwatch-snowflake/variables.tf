@@ -4,13 +4,15 @@ variable "fivetran_group_id" {
 }
 
 variable "lambda_role_arn" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created. Refer to the docs here: https://fivetran.com/docs/functions/aws-lambda/setup-guide#createiamrole"
 }
 
 variable "fivetran_aws_account_id" {
-  type    = string
-  default = "834469178297" # the default aws account_id for fivetrans
+  type        = string
+  default     = "834469178297" # the default aws account_id for fivetrans
+  description = "Fivetran AWS account ID. We need to allow this account to access our lambda function."
 }
 
 variable "aws_region_code" {
