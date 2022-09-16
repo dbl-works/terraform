@@ -179,7 +179,7 @@ BEGIN
     EXECUTE format('GRANT SELECT ON TABLE %s TO %s_%s_fivetran;', table_name, project, environment);
   END LOOP;
 
-  -- template for adding per column permissions, please note the xmin column at the end (neded whyn you use XMIN)
+  -- template for adding per column permissions, please note the XMIN column at the end (needed when you use XMIN)
   EXECUTE format('GRANT SELECT (id, ..., xmin) on <table_name> to %s_%s_fivetran;', project, environment);
 END
 $body$
