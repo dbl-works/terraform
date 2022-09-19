@@ -21,5 +21,6 @@ module "elasticache" {
   replicas_per_node_group = var.elasticache_replicas_per_node_group
   shard_count             = var.elasticache_shards_per_replication_group
   parameter_group_name    = var.elasticache_parameter_group_name
-  cluster_mode            = true
+  cluster_mode            = var.elasticache_cluster_mode
+  maxmemory_policy        = var.elasticache_maxmemory_policy == null ? (var.elasticache_cluster_mode == false ? "noeviction" : null) : var.elasticache_maxmemory_policy
 }

@@ -133,6 +133,16 @@ variable "elasticache_snapshot_retention_limit" {
   type    = number
   default = 0
 }
+
+variable "elasticache_cluster_mode" {
+  type    = bool
+  default = true
+}
+
+variable "elasticache_maxmemory_policy" {
+  type    = string
+  default = null
+}
 # =============== Elasticache ================ #
 
 # =============== RDS ================ #
