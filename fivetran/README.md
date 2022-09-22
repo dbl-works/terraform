@@ -56,6 +56,37 @@ provider "fivetran" {
 }
 ```
 
+By default **all** tables and columns are synced. The following script allows to alter this behavior:
+
+```terraform
+resource "fivetran_connector_schema_config" "schema" {
+  connector_id = module.fivetran.fivetran_connector.rds.id # the ID of the connector whose standard config is managed by the resource
+
+  # all schemas, tables and columns are ENABLED by default.
+  schema_change_handling = "ALLOW_ALL"
+
+  # explicitly specify DISABLED items or hashed tables
+  schema {
+    name = var.schema_name
+    table {
+      name = "table_name"
+      column {
+        name   = "hashed_column_name"
+        hashed = "true"
+      }
+      column {
+        name    = "blocked_column_name"
+        enabled = "false"
+      }
+    }
+    table {
+      name    = "blocked_table_name"
+      enabled = "false"
+    }
+  }
+}
+```
+
 ```shell
 # .env
 

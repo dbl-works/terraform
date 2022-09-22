@@ -2,32 +2,6 @@ resource "fivetran_group" "group" {
   name = "${var.project}_${var.environment}_${var.region}"
 }
 
-# resource "fivetran_connector_schema_config" "schema" {
-#   connector_id = fivetran_connector.rds.id # the ID of the connector whose standard config is managed by the resource
-#   # TODO: verify this
-#   schema_change_handling = "ALLOW_ALL"
-
-#   # TODO: verify this
-#   schema {
-#     name = var.schema_name
-#     table {
-#       name = "table_name"
-#       column {
-#         name   = "hashed_column_name"
-#         hashed = "true"
-#       }
-#       column {
-#         name    = "blocked_column_name"
-#         enabled = "false"
-#       }
-#     }
-#     table {
-#       name    = "blocked_table_name"
-#       enabled = "false"
-#     }
-#   }
-# }
-
 resource "fivetran_destination" "main" {
   group_id           = fivetran_group.group.id
   service            = var.destination_service
