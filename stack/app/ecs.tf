@@ -49,6 +49,7 @@ module "ecs" {
 
   custom_policies  = var.ecs_custom_policies
   enable_dashboard = var.cloudwatch_dashboard_view == "simple"
+  enable_xray      = var.enable_xray
 }
 
 module "cloudwatch" {

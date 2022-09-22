@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [unreleased]
+## RDS
+- set replacement of non-alphanumeric chars with underscore on RDS DBName value to avoid naming validation errors.
+
+## [v2022.09.07]
 ## Elasticache
 - added `maxmemory_policy` as the optional options. Default value is `volatile-lru`
 
@@ -15,6 +19,10 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Cloudwatch
 - added a new module to launch cloudwatch module [#116](https://github.com/dbl-works/terraform/pull/116)
+
+## RDS
+- add option to enable DB replication with new parameter `enable_replication` [#119](https://github.com/dbl-works/terraform/pull/119)
+- if `enable_replication` is changed on a running DB, the DB will need to be restarted manually
 
 ## [v2022.08.05]
 ## Elasticache
