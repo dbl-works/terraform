@@ -25,7 +25,7 @@ variable "node_type" { default = "cache.t3.micro" }
 
 variable "node_count" {
   type        = number
-  default     = 1
+  default     = 2
   description = "Only required when cluster mode is disabled"
 }
 
