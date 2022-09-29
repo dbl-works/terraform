@@ -18,6 +18,7 @@ resource "fivetran_destination" "main" {
     port            = var.destination_port
     database        = var.destination_database_name
     user            = var.destination_user_name
+    role_arn        = var.destination_role_arn
     password        = var.destination_password
     auth            = "PASSWORD"
     connection_type = var.destination_connection_type
