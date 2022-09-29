@@ -30,7 +30,13 @@ variable "time_zone_offset" {
 }
 
 variable "destination_user_name" {
-  type = string
+  type    = string
+  default = "FIVETRAN_USER"
+}
+
+variable "destination_role_arn" {
+  type    = string
+  default = "FIVETRAN_ROLE"
 }
 
 variable "destination_host" {
