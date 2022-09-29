@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [unreleased]
+## Elasticache
+- set `cluster_mode` and `maxmemory_policy` as variables instead of hardcore values.
+- increase default value for `node_count` to comply with default value of `failover`
+
 ## RDS
 - set replacement of non-alphanumeric chars with underscore on RDS DBName value to avoid naming validation errors.
 
