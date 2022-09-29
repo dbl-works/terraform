@@ -22,6 +22,13 @@ variable "warehouse_cluster_count" {
   default     = 1
 }
 
+# has to be enabled in the Snowflake account. Disabled by default.
+variable "multi_cluster_warehouses_enabled" {
+  description = "https://registry.terraform.io/providers/Snowflake-Labs/snowflake/latest/docs/resources/warehouse#max_cluster_count"
+  type        = bool
+  default     = false
+}
+
 #
 # A retention period of 0 days for an object effectively disables Time Travel for the object.
 #
