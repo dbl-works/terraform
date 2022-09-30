@@ -102,6 +102,11 @@ variable "elasticache_node_type" {
   default = "cache.t3.micro"
 }
 
+variable "elasticache_node_count" {
+  type    = number
+  default = 1
+}
+
 variable "elasticache_parameter_group_name" {
   type    = string
   default = "default.redis6.x.cluster.on"
@@ -132,6 +137,21 @@ variable "elasticache_multi_az_enabled" {
 variable "elasticache_snapshot_retention_limit" {
   type    = number
   default = 0
+}
+
+variable "elasticache_cluster_mode" {
+  type    = bool
+  default = true
+}
+
+variable "elasticache_maxmemory_policy" {
+  type    = string
+  default = null
+}
+
+variable "elasticache_automatic_failover_enabled" {
+  type    = bool
+  default = true
 }
 # =============== Elasticache ================ #
 
