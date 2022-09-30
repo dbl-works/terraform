@@ -8,8 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## [unreleased]
 ## Elasticache
-- set `cluster_mode` and `maxmemory_policy` as variables instead of hardcore values.
-- increase default value for `node_count` to comply with default value of `failover`
+- set `cluster_mode`, `maxmemory_policy`, `elasticache_node_count`, `elasticache_automatic_failover_enabled` as variables instead of hardcore values.
 
 ## RDS
 - set replacement of non-alphanumeric chars with underscore on RDS DBName value to avoid naming validation errors.
