@@ -29,6 +29,10 @@ variable "destination_user_name" {
   type = string
 }
 
+variable "destination_role_arn" {
+  type = string
+}
+
 variable "destination_host" {
   description = "e.g. 'your-account.snowflakecomputing.com'"
   type        = string

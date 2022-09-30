@@ -42,7 +42,7 @@ resource "fivetran_connector" "github" {
   run_setup_tests   = true
 
   destination_schema {
-    name = "github_${each.value.organisation}" # name shown on Fivetran UI
+    name = "github_${replace(each.value.organisation, "/[^0-9A-Za-z_]/", "_")}" # name shown on Fivetran UI
   }
 
   config {

@@ -7,7 +7,12 @@ Note: Since this module consist of the snowflake network policy, the Snowflake u
 ```terraform
 # main.tf
 module "snowflake_cloud" {
-  source = "github.com/dbl-works/terraform//awesome-module?ref=v2022.08.05"
+  source = "github.com/dbl-works/terraform//snowflake/cloud?ref=v2022.08.05"
+
+  providers = {
+    snowflake                = snowflake
+    snowflake.security_admin = snowflake.security_admin
+  }
 
   warehouse_name = "WH_FIVETRAN" # Snowflake mostly uses upcase by their convention
 
@@ -27,9 +32,11 @@ module "snowflake_cloud" {
   ]
 
   # optional
-  suspend_compute_after_seconds = 57      # on AWS, the minimum charge is 60 seconds
-  warehouse_size                = "large" # 8 credits/hour/cluster for "large"
-  warehouse_cluster_count       = 1
+  suspend_compute_after_seconds    = 57      # on AWS, the minimum charge is 60 seconds
+  warehouse_size                   = "large" # 8 credits/hour/cluster for "large"
+  warehouse_cluster_count          = 1
+  multi_cluster_warehouses_enabled = false # must be enabled in the Snowflake account (via UI)
+
   # Default value of this variable is the fivetrans IP address in the EU region + using GCP as cloud provider
   # If you are using fivetrans, check the list of IP addresses here: https://fivetran.com/docs/getting-started/ips#euregions
   allowed_ip_list               = ["35.235.32.144/29"]
@@ -75,7 +82,7 @@ provider "snowflake" {
   region   = var.snowflake_region
 
   # For auth exactly one option must be set.
-  private_key_passphrase = var.snowflake_private_key_path
+  private_key_path = var.snowflake_private_key_path
 }
 
 provider "snowflake" {
@@ -87,7 +94,7 @@ provider "snowflake" {
   region   = var.snowflake_region
 
   # For auth exactly one option must be set.
-  private_key_passphrase = var.snowflake_private_key_path
+  private_key_path = var.snowflake_private_key_path
 }
 ```
 

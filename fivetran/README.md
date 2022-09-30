@@ -22,7 +22,8 @@ module "fivetran" {
   project             = "my-project"
   environment         = "production"
 
-  destination_user_name        = "${project}-${environment}-bot"
+  destination_user_name        = "FIVETRAN_USER"
+  destination_role_arn         = "FIVETRAN_ROLE"
   destination_host             = "${SNOWFLAKE_ACCOUNT_LOCATOR}.eu-central-1.snowflakecomputing.com" # `eu-central-1` if you run on AWS in EU region
   destination_connection_type  = "Directly"
   destination_password         = "XXX"

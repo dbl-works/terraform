@@ -15,6 +15,7 @@ module "fivetran" {
   destination_user_name       = var.destination_user_name
   destination_password        = var.destination_password
   destination_connection_type = var.destination_connection_type
+  destination_role_arn        = var.destination_role_arn
 
   environment = local.environment
   project     = local.project
