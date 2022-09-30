@@ -72,3 +72,30 @@ module "metrics" {
   lambda_output_path      = "${path.module}/dist/tracker.zip"
 }
 ```
+
+### Multi Region Setup:
+For a multi-region deploy, omit the `lambda_role_arn` for one region, get the output for that role ARN, and re-use the same role ARN for all other regions.
+
+You can define multiple AWS regions to keep all connectors in one workspace:
+
+```terraform
+output { value = module.metrics.lambda_role_arn }
+
+local { lambda_role_arn = "arn:aws:iam::123:role/fivetran_lambda_xxx" }
+
+# add "aws.us_east" under `configuration_aliases` in the terraform/aws block
+provider "aws" {
+  alias   = "us_east"
+  profile = "squake-earth"
+  region  = "us-east-1"
+}
+
+module "metrics-us-east" {
+  source = "github.com/dbl-works/terraform//cloudwatch-snowflake"
+  providers = { aws = aws.us_east }
+
+  lambda_role_arn = local.lambda_role_arn
+}
+```
+
+You'll also have to adjust the lambda javascript files for now, see [Issue 134](https://github.com/dbl-works/terraform/issues/134).
