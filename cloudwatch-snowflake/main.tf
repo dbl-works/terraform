@@ -1,7 +1,7 @@
 data "archive_file" "zip" {
   type        = "zip"
-  source_dir  = "${path.module}/tracker"
-  output_path = "${path.module}/dist/tracker.zip"
+  source_dir  = var.lambda_source_dir == null ? "${path.module}/tracker" : var.lambda_source_dir
+  output_path = var.lambda_output_path == null ? "${path.module}/dist/tracker.zip" : var.lambda_output_path
 }
 
 resource "aws_lambda_function" "cloudwatch_metrics_tracker" {

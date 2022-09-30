@@ -14,8 +14,9 @@ const PERCENTILES = [
   'p50'
 ]
 
+// expected pattern: ^[a-z][a-zA-Z0-9_]*$
 const formatQueryId = (name) => {
-  return name.replace(/-|\//g, '_')
+  return name.replace(/-|\/|\./g, '_').toLowerCase()
 }
 
 const ecsMetricQueries = ({ serviceName, clusterName, projectName, environment }) => {
@@ -46,7 +47,7 @@ const ecsMetricQueries = ({ serviceName, clusterName, projectName, environment }
 
 const responseTimesQueries = ({ projectName, loadBalancerName, environment }) => {
   return PERCENTILES.map(percentile => ({
-    Id: `${percentile}_${formatQueryId(loadBalancerName)}_${projectName}_${environment}`, /* /^[a-z][a-zA-Z0-9_]*$./ */
+    Id: `${formatQueryId(percentile)}_${formatQueryId(loadBalancerName)}_${projectName}_${environment}`, /* /^[a-z][a-zA-Z0-9_]*$./ */
     MetricStat: {
       Metric: {
         Dimensions: [
