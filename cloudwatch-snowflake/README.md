@@ -7,6 +7,9 @@ Syncing the following Cloudwatch metrics to Snowflake table thru Fivetran:
 - TargetResponseTime (p50, p90, p99)
 - 5xx Error Count
 
+Lambda is used to send cloudwatch metrics to fivetran from AWS every 60 minutes.
+It is created automatically thru the script.
+
 ```
 module "metrics" {
   source = "github.com/dbl-works/terraform//cloudwatch-snowflake"
