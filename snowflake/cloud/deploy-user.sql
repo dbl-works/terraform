@@ -1,3 +1,5 @@
+-- creates user & role with wide-ranged administrative rights to be used e.g. for Terraform to create resources on Snowflake
+
 -- role & user for administrative purposes
 CREATE USER "TERRAFORM_DEPLOY_BOT" RSA_PUBLIC_KEY='YOUR-PUBLIC-KEY-HERE' DEFAULT_ROLE=PUBLIC MUST_CHANGE_PASSWORD=FALSE;
 
