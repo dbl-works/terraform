@@ -65,8 +65,10 @@ module "metrics" {
   ]
 
   # optional
-  aws_region_code = "us-east-1" # lambda's aws region
+  aws_region_code         = "us-east-1" # lambda's aws region
   fivetran_aws_account_id = "834469178297" # Fivetran AWS account ID. We need to allow this account to access our lambda function.
-  lambda_role_arn  = "arn:aws:iam::123456789:role/fivetran_lambda" # Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created.
+  lambda_role_arn         = "arn:aws:iam::123456789:role/fivetran_lambda" # Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created.
+  lambda_source_dir       = "${path.module}/tracker"
+  lambda_output_path      = "${path.module}/dist/tracker.zip"
 }
 ```

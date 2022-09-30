@@ -1,3 +1,15 @@
+variable "lambda_source_dir" {
+  type        = string
+  description = "Path to the directory containing the lambda function code"
+  default     = null
+}
+
+variable "lambda_output_path" {
+  type        = string
+  description = "Path to output the zipped lambda function code"
+  default     = null
+}
+
 variable "fivetran_group_id" {
   type        = string
   description = "Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui"
