@@ -16,7 +16,7 @@ const PERCENTILES = [
 
 // expected pattern: ^[a-z][a-zA-Z0-9_]*$
 const formatQueryId = (name) => {
-  return name.replace(/-|\/|\./g, '_')
+  return name.replace(/-|\/|\./g, '_').toLowerCase()
 }
 
 const ecsMetricQueries = ({ serviceName, clusterName, projectName, environment }) => {
