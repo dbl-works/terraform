@@ -5,7 +5,7 @@ data "archive_file" "zip" {
 }
 
 resource "aws_lambda_function" "cloudwatch_metrics_tracker" {
-  function_name = "cloudwatch_metrics_tracker"
+  function_name = "cloudwatch_metrics_tracker_${var.organisation}_${var.aws_region_code}"
   description   = "Collect AWS Cloudwatch Metrics"
   role          = var.lambda_role_arn == null ? aws_iam_role.lambda[0].arn : var.lambda_role_arn
 
