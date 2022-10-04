@@ -7,26 +7,31 @@ variable "ecs_cluster_name" {
 }
 
 variable "metric_name" {
-  type = string
+  type        = string
+  description = "Metric which used to decide whether or not to scale in/out"
 }
 
 variable "ecs_max_count" {
-  type = number
+  type        = number
+  description = "Max capacity of the scalable target"
 }
 
 variable "ecs_min_count" {
-  type    = number
-  default = 1
+  type        = number
+  default     = 1
+  description = "Min capacity of the scalable target"
 }
 
 variable "threshold_up" {
-  type    = number
-  default = 80
+  type        = number
+  default     = 80
+  description = "Threshold of which ECS should start to scale up"
 }
 
 variable "threshold_down" {
-  type    = number
-  default = 20
+  type        = number
+  default     = 20
+  description = "Threshold of which ECS should start to scale down"
 }
 
 variable "cooldown" {
@@ -47,8 +52,9 @@ variable "alarm_period" {
 }
 
 variable "statistic" {
-  type    = string
-  default = "Average"
+  type        = string
+  default     = "Average"
+  description = "The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum"
 }
 
 # Say the evaluation_periods is 5, and datapoints_to_alarm_up is 3,
@@ -73,8 +79,9 @@ variable "scale_up_adjustment" {
 }
 
 variable "scale_up_lower_bound" {
-  type    = number
-  default = 0
+  type        = number
+  default     = 0
+  description = "Lower bound for the difference between the alarm threshold and the CloudWatch metric. Without a value, AWS will treat this bound as negative infinity."
 }
 
 variable "scale_down_adjustment" {
@@ -84,17 +91,19 @@ variable "scale_down_adjustment" {
 }
 
 variable "scale_down_upper_bound" {
-  type    = number
-  default = 0
+  type        = number
+  default     = 0
+  description = "Upper bound for the difference between the alarm threshold and the CloudWatch metric. Without a value, AWS will treat this bound as infinity. The upper bound must be greater than the lower bound."
 }
 
 variable "sns_topic_arn" {
   type        = string
   description = "SNS Topics that will receive message when the threshold is hit"
+  default     = null
 }
 
 variable "ecs_autoscale_role_arn" {
   type        = string
-  description = "Optional. Role for ECS to autoscale and read cloudwatch alarm. If it is not provided, it will be created in this module."
   default     = null
+  description = "Optional. Role which allow the autoscaling policy to autoscale and read cloudwatch alarm. If it is not provided, the role will be created in this module."
 }

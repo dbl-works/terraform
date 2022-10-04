@@ -37,7 +37,6 @@ resource "aws_appautoscaling_policy" "scale_up_ecs" {
   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
 
-
   step_scaling_policy_configuration {
     adjustment_type         = "ChangeInCapacity" # Valid values are ChangeInCapacity, ExactCapacity, and PercentChangeInCapacity
     cooldown                = var.cooldown       # seconds
