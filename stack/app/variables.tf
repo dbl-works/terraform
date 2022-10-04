@@ -280,7 +280,7 @@ variable "autoscale_params" {
   #   ecs_autoscale_role_arn   = string
   #   sns_topic_arn            = string
   # })
-  type    = object(any)
+  type    = object
   default = {}
 }
 
