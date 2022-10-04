@@ -4,7 +4,7 @@ resource "aws_appautoscaling_target" "ecs_target" {
   resource_id        = "service/${var.ecs_cluster_name}/${var.ecs_service_name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs" # AWS service namespace of the scalable target
-  role_arn           = aws_iam_role.ecs-autoscale-role[0].arn
+  role_arn           = var.ecs_autoscale_role_arn == null ? aws_iam_role.ecs-autoscale-role[0].arn : var.ecs_autoscale_role_arn
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
