@@ -1,5 +1,5 @@
 module "ecs-autoscaling" {
-  for_each = { for metric in var.autoscale_metrics : "${metric.service_name}-${var.metric_name}" => metric }
+  for_each = { for metric in var.autoscale_metrics : "${metric.service_name}-${metric.metric_name}" => metric }
   source   = "../autoscaling/ecs"
 
   # Required
