@@ -1,7 +1,7 @@
 # Terraform Module: Autoscaling Policy for ECS
 
 Setup Application AutoScaling Policy for ECS.
-
+This module should allow the ECS to autoscale based on the metric threshold value + send notification to Slack when it scale in/out.
 
 ## Usage
 
