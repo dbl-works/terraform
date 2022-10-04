@@ -8,6 +8,7 @@ jobs:
       matrix:
         module:
           - analytics
+          - autoscaling/ecs
           - certificate
           - cloudwatch
           - cloudflare
