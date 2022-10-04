@@ -34,7 +34,8 @@ module "ecs-autoscaling-cpu" {
 }
 ```
 
-Required Variables
+## Variables
+### Required Variables
 | Variables        | Descriptions                                               |
 |------------------|------------------------------------------------------------|
 | ecs_service_name | ECS Service name                                           |
@@ -43,7 +44,7 @@ Required Variables
 | ecs_max_count    | Max capacity of the scalable target                        |
 
 
-Optional Variables
+### Optional Variables
 | Variables                | Descriptions                                                                                                                                                                                        | Default Value |
 |--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
 | ecs_min_count            | Min capacity of the scalable target                                                                                                                                                                 | 1             |
