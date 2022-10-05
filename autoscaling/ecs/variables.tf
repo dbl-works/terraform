@@ -87,10 +87,10 @@ variable "ecs_autoscale_role_arn" {
 
 variable "autoscale_metrics" {
   type = set(object({
-    metric_name    = string # Metric which used to decide whether or not to scale in/out
-    statistic      = string # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum
-    threshold_up   = number # Threshold of which ECS should start to scale up
-    threshold_down = number # Threshold of which ECS should start to scale down
+    metric_name    = string               # Metric which used to decide whether or not to scale in/out
+    statistic      = string               # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum
+    threshold_up   = optional(number, 80) # Threshold of which ECS should start to scale up
+    threshold_down = optional(number, 30) # Threshold of which ECS should start to scale down
   }))
   default = []
 }
