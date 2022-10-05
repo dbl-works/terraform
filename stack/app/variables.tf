@@ -278,6 +278,7 @@ variable "autoscale_params" {
   #   scale_down_adjustment    = number
   #   scale_down_upper_bound   = number
   #   ecs_autoscale_role_arn   = string
+  #   service_name             = string
   #   sns_topic_arn            = string
   # })
   type    = map(string)
@@ -287,7 +288,6 @@ variable "autoscale_params" {
 variable "autoscale_metrics" {
   type = set(object({
     metric_name    = string
-    service_name   = string
     statistic      = string
     threshold_up   = number
     threshold_down = number

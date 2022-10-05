@@ -41,7 +41,6 @@ module "ecs" {
   autoscale_metrics = [
     {
       metric_name    = "CPUUtilization"
-      service_name   = "web"
       statistic      = "Average"
       threshold_up   = 60
       threshold_down = 20
@@ -51,9 +50,9 @@ module "ecs" {
     ecs_min_count            = 1
     ecs_max_count            = 5
     alarm_evaluation_periods = 5
+    alarm_period             = 60  # seconds
     datapoints_to_alarm_up   = 3
     datapoints_to_alarm_down = 3
-    alarm_period             = 60  # seconds
     cooldown                 = 300 # seconds
     scale_up_adjustment      = 1
     scale_up_lower_bound     = 0
@@ -61,6 +60,7 @@ module "ecs" {
     scale_down_upper_bound   = 0
     ecs_autoscale_role_arn   = "arn:aws:iam::123456789:role/ecs-autoscale"
     sns_topic_arn            = "arn:aws:sns:us-east-1:175743622168:slack-sns"
+    service_name             = "web"
   }
 }
 ```
