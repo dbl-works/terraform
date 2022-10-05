@@ -7,34 +7,6 @@ resource "aws_appautoscaling_target" "ecs_target" {
   role_arn           = var.ecs_autoscale_role_arn == null ? aws_iam_role.ecs-autoscale-role[0].arn : var.ecs_autoscale_role_arn
 }
 
-resource "aws_cloudwatch_composite_alarm" "ecs-scale-up" {
-  alarm_description = "Scale Up Alarm for ${var.ecs_cluster_name}/${var.ecs_service_name}"
-  alarm_name        = "ScaleUp-${var.ecs_cluster_name}-${var.ecs_service_name}"
-
-  alarm_actions = compact([
-    aws_appautoscaling_policy.scale_up_ecs.arn,
-    var.sns_topic_arn
-  ])
-
-  alarm_rule = join(" OR ", [for alarm in aws_cloudwatch_metric_alarm.scale_up_alarm : "ALARM(${alarm.alarm_name})"])
-  #   alarm_rule = <<EOF
-  # ALARM(${aws_cloudwatch_metric_alarm.alpha.alarm_name}) OR
-  # ALARM(${aws_cloudwatch_metric_alarm.bravo.alarm_name})
-  # EOF
-}
-
-resource "aws_cloudwatch_composite_alarm" "ecs-scale-down" {
-  alarm_description = "Scale Down Alarm for ${var.ecs_cluster_name}/${var.ecs_service_name}"
-  alarm_name        = "ScaleDown-${var.ecs_cluster_name}-${var.ecs_service_name}"
-
-  alarm_actions = compact([
-    aws_appautoscaling_policy.scale_down_ecs.arn,
-    var.sns_topic_arn
-  ])
-
-  alarm_rule = join(" OR ", [for alarm in aws_cloudwatch_metric_alarm.scale_down_alarm : "ALARM(${alarm.alarm_name})"])
-}
-
 resource "aws_appautoscaling_policy" "scale_up_ecs" {
   name               = "${var.ecs_cluster_name}-${var.ecs_service_name}-scale-up"
   policy_type        = "StepScaling"
