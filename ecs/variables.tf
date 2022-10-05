@@ -103,12 +103,12 @@ variable "autoscale_params" {
   default = {}
 }
 
-variable "autoscale_metrics" {
-  type = set(object({
+variable "autoscale_metrics_map" {
+  type = map(set(object({
     metric_name    = string
     statistic      = string
     threshold_up   = number
     threshold_down = number
-  }))
-  default = []
+  })))
+  default = {}
 }

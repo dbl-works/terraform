@@ -1,11 +1,11 @@
 module "ecs-autoscaling" {
-  count  = length(var.autoscale_metrics) > 0 ? 1 : 0
-  source = "../autoscaling/ecs"
+  for_each = var.autoscale_metrics_map
+  source   = "../autoscaling/ecs"
 
   # Required
-  autoscale_metrics = var.autoscale_metrics
+  autoscale_metrics = each.value
   ecs_cluster_name  = local.name
-  ecs_service_name  = lookup(var.autoscale_params, "service_name", "web")
+  ecs_service_name  = each.key
   ecs_max_count     = lookup(var.autoscale_params, "ecs_max_count", 2)
 
   # Optional
