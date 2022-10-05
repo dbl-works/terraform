@@ -4,6 +4,7 @@ locals {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
+  count               = length(var.autoscale_metrics) > 0 ? 1 : 0
   alarm_name          = "ECS-${var.ecs_cluster_name}-${var.ecs_service_name}-ScaleUpAlarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
@@ -44,6 +45,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
+  count               = length(var.autoscale_metrics) > 0 ? 1 : 0
   alarm_name          = "ECS-${var.ecs_cluster_name}-${var.ecs_service_name}-ScaleDownAlarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
