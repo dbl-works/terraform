@@ -98,11 +98,12 @@ variable "threshold_down" {
 }
 
 variable "autoscale_metrics" {
-  type = set(object({
-    metric_name    = string           # Metric which used to decide whether or not to scale in/out
-    statistic      = string           # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum
-    threshold_up   = optional(number) # Threshold of which ECS should start to scale up
-    threshold_down = optional(number) # Threshold of which ECS should start to scale down
-  }))
+  type = set(any)
+  # type = set(object({
+  #   metric_name    = string           # Metric which used to decide whether or not to scale in/out
+  #   statistic      = string           # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum
+  #   threshold_up   = optional(number) # Threshold of which ECS should start to scale up
+  #   threshold_down = optional(number) # Threshold of which ECS should start to scale down
+  # }))
   default = []
 }
