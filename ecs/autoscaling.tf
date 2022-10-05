@@ -1,4 +1,5 @@
 module "ecs-autoscaling" {
+  count  = length(var.autoscale_metrics) > 0 ? 1 : 0
   source = "../autoscaling/ecs"
 
   # Required
