@@ -6,11 +6,6 @@ variable "ecs_cluster_name" {
   type = string
 }
 
-variable "metric_name" {
-  type        = string
-  description = "Metric which used to decide whether or not to scale in/out"
-}
-
 variable "ecs_max_count" {
   type        = number
   description = "Max capacity of the scalable target"
@@ -106,4 +101,14 @@ variable "ecs_autoscale_role_arn" {
   type        = string
   default     = null
   description = "Optional. Role which allow the autoscaling policy to autoscale and read cloudwatch alarm. If it is not provided, the role will be created in this module."
+}
+
+variable "autoscale_metrics" {
+  type = set(object({
+    metric_name    = string # Metric which used to decide whether or not to scale in/out
+    statistic      = string
+    threshold_up   = number
+    threshold_down = number
+  }))
+  default = []
 }

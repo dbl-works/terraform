@@ -7,31 +7,36 @@ resource "aws_appautoscaling_target" "ecs_target" {
   role_arn           = var.ecs_autoscale_role_arn == null ? aws_iam_role.ecs-autoscale-role[0].arn : var.ecs_autoscale_role_arn
 }
 
-resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
-  alarm_name          = "ECS-${var.ecs_cluster_name}-${var.ecs_service_name}-ScaleUpAlarm-${var.metric_name}"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = var.alarm_evaluation_periods
-  metric_name         = var.metric_name
-  namespace           = "AWS/ECS"
-  period              = var.alarm_period
-  statistic           = var.statistic
-  threshold           = var.threshold_up
-  datapoints_to_alarm = var.datapoints_to_alarm_up
+resource "aws_cloudwatch_composite_alarm" "ecs-scale-up" {
+  alarm_description = "Scale Up Alarm for ${var.ecs_cluster_name}/${var.ecs_service_name}"
+  alarm_name        = "ScaleUp-${var.ecs_cluster_name}-${var.ecs_service_name}"
 
-  dimensions = {
-    ClusterName = var.ecs_cluster_name
-    ServiceName = var.ecs_service_name
-  }
-
-  alarm_description = "Monitors when the ECS ${var.metric_name} hits the threshold to scale up"
   alarm_actions = compact([
     aws_appautoscaling_policy.scale_up_ecs.arn,
     var.sns_topic_arn
   ])
+
+  alarm_rule = join(" OR ", [for alarm in aws_cloudwatch_metric_alarm.scale_up_alarm : "ALARM(${alarm.alarm_name})"])
+  #   alarm_rule = <<EOF
+  # ALARM(${aws_cloudwatch_metric_alarm.alpha.alarm_name}) OR
+  # ALARM(${aws_cloudwatch_metric_alarm.bravo.alarm_name})
+  # EOF
+}
+
+resource "aws_cloudwatch_composite_alarm" "ecs-scale-down" {
+  alarm_description = "Scale Down Alarm for ${var.ecs_cluster_name}/${var.ecs_service_name}"
+  alarm_name        = "ScaleDown-${var.ecs_cluster_name}-${var.ecs_service_name}"
+
+  alarm_actions = compact([
+    aws_appautoscaling_policy.scale_down_ecs.arn,
+    var.sns_topic_arn
+  ])
+
+  alarm_rule = join(" OR ", [for alarm in aws_cloudwatch_metric_alarm.scale_down_alarm : "ALARM(${alarm.alarm_name})"])
 }
 
 resource "aws_appautoscaling_policy" "scale_up_ecs" {
-  name               = "${var.metric_name}-scale-up"
+  name               = "${var.ecs_cluster_name}-${var.ecs_service_name}-scale-up"
   policy_type        = "StepScaling"
   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
@@ -56,31 +61,8 @@ resource "aws_appautoscaling_policy" "scale_up_ecs" {
   ]
 }
 
-resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
-  alarm_name          = "ECS-${var.ecs_cluster_name}-${var.ecs_service_name}-ScaleDown-${var.metric_name}"
-  comparison_operator = "LessThanOrEqualToThreshold"
-  metric_name         = var.metric_name
-  namespace           = "AWS/ECS"
-  period              = var.alarm_period
-  statistic           = var.statistic
-  threshold           = var.threshold_down
-  evaluation_periods  = var.alarm_evaluation_periods
-  datapoints_to_alarm = var.datapoints_to_alarm_down
-
-  dimensions = {
-    ClusterName = var.ecs_cluster_name
-    ServiceName = var.ecs_service_name
-  }
-
-  alarm_description = "Monitors when the ECS ${var.metric_name} hits the threshold to scale up"
-  alarm_actions = compact([
-    aws_appautoscaling_policy.scale_down_ecs.arn,
-    var.sns_topic_arn
-  ])
-}
-
 resource "aws_appautoscaling_policy" "scale_down_ecs" {
-  name               = "${var.metric_name}-scale-down"
+  name               = "${var.ecs_cluster_name}-${var.ecs_service_name}-scale-down"
   policy_type        = "StepScaling"
   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
   scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
