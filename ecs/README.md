@@ -38,14 +38,20 @@ module "ecs" {
 
   custom_policies = []
   enable_xray     = true
-  autoscale_metrics = [
-    {
+  autoscale_metrics_map = {
+    web = [{
       metric_name    = "CPUUtilization"
       statistic      = "Average"
       threshold_up   = 60
       threshold_down = 20
-    }
-  ]
+    }]
+    sidekiq = [{
+      metric_name    = "CPUUtilization"
+      statistic      = "Average"
+      threshold_up   = 60
+      threshold_down = 20
+    }]
+   }
   autoscale_params = {
     ecs_min_count            = 1
     ecs_max_count            = 5
@@ -61,6 +67,8 @@ module "ecs" {
     ecs_autoscale_role_arn   = "arn:aws:iam::123456789:role/ecs-autoscale"
     sns_topic_arn            = "arn:aws:sns:us-east-1:175743622168:slack-sns"
     service_name             = "web"
+    threshold_up             = 60 # This value will be used as default if threshold_up is not provided in the autoscale_metrics
+    threshold_down           = 20 # This value will be used as default if threshold_down is not provided in the autoscale_metrics
   }
 }
 ```

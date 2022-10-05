@@ -41,6 +41,8 @@ module "ecs-autoscaling-cpu" {
   scale_down_upper_bound = 0
   sns_topic_arn = "arn:aws:sns:us-east-1:12345678:slack-sns" # If present, it will send notifications to the SNS topics when the alarm is triggered
   ecs_autoscale_role_arn = "arn:aws:iam::123456789:role/ecs-autoscale"
+  threshold_up             = 60 # This value will be used as default if threshold_up is not provided in the autoscale_metrics
+  threshold_down           = 20 # This value will be used as default if threshold_down is not provided in the autoscale_metrics
 }
 ```
 
@@ -70,3 +72,5 @@ module "ecs-autoscaling-cpu" {
 | scale_down_upper_bound   | Upper bound for the difference between the alarm threshold and the CloudWatch metric. Without a value, AWS will treat this bound as infinity. The upper bound must be greater than the lower bound. | 0             |
 | sns_topic_arn            | SNS Topics that will receive message when the threshold is hit                                                                                                                                      | null          |
 | ecs_autoscale_role_arn   | Optional. Role which allow the autoscaling policy to autoscale and read cloudwatch alarm. If it is not provided, the role will be created in this module.                                           | null          |
+| threshold_up             | Optional. Will be used as default value if threshold_up is not provided in the autoscale_metrics                                                                                                    | null          |
+| threshold_down           | Optional. Will be used as default value if threshold_down is not provided in the autoscale_metrics                                                                                                  | null          |
