@@ -104,7 +104,7 @@ variable "autoscale_params" {
 }
 
 variable "autoscale_metrics_map" {
-  type = map(set)
+  type = map(set(map(string)))
   # type = map(set(object({
   #   metric_name    = string
   #   statistic      = string
