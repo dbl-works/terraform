@@ -12,19 +12,29 @@ module "ecs-autoscaling-cpu" {
   # Required
   ecs_service_name = "web"
   ecs_cluster_name = "meta-loadtesting-us-east"
-  metric_name = "CPUUtilization"
   ecs_max_count = 4
+  autoscale_metrics = [
+    {
+      metric_name    = "CPUUtilization"
+      statistic      = "Average"
+      threshold_up   = 60
+      threshold_down = 50
+    },
+    {
+      metric_name    = "MemoryUtilization"
+      statistic      = "Average"
+      threshold_up   = 60
+      threshold_down = 50
+    }
+  ]
 
   # Optional
   ecs_min_count = 1
-  threshold_up = 70
-  threshold_down = 20
-  cooldown = 300 # Autoscale will wait for another 300s before spinning more task (if the threshold still exceed the value)
   alarm_evaluation_periods = 5
-  alarm_period = 60 # seconds
-  statistic = "Average"
   datapoints_to_alarm_up = 3
   datapoints_to_alarm_down = 3
+  alarm_period = 60 # seconds
+  cooldown = 300 # Autoscale will wait for another 300s before spinning more task (if the threshold still exceed the value)
   scale_up_adjustment = 1
   scale_up_lower_bound = 0
   scale_down_adjustment = -1
@@ -36,24 +46,29 @@ module "ecs-autoscaling-cpu" {
 
 ## Variables
 ### Required Variables
-| Variables        | Descriptions                                               |
-|------------------|------------------------------------------------------------|
-| ecs_service_name | ECS Service name                                           |
-| ecs_cluster_name | ECS Cluster name                                           |
-| metric_name      | Metric which used to decide whether or not to scale in/out |
-| ecs_max_count    | Max capacity of the scalable target                        |
+| Variables         | Descriptions                                               |
+|-------------------|------------------------------------------------------------|
+| ecs_service_name  | ECS Service name                                           |
+| ecs_cluster_name  | ECS Cluster name                                           |
+| metric_name       | Metric which used to decide whether or not to scale in/out |
+| ecs_max_count     | Max capacity of the scalable target                        |
+| autoscale_metrics |
+  {<br>
+    metric_name    = string # Metric which used to decide whether or not to scale in/out <br>
+    statistic      = string # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum <br>
+    threshold_up   = number # Threshold of which ECS should start to scale up <br>
+    threshold_down = number # Threshold of which ECS should start to scale down <br>
+  }
+|
 
 
 ### Optional Variables
 | Variables                | Descriptions                                                                                                                                                                                        | Default Value |
 |--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
 | ecs_min_count            | Min capacity of the scalable target                                                                                                                                                                 | 1             |
-| threshold_up             | Threshold of which ECS should start to scale up                                                                                                                                                     | 80            |
-| threshold_down           | Threshold of which ECS should start to scale down                                                                                                                                                   | 20            |
 | cooldown                 | Amount of time, in seconds, after a scaling activity completes before another scaling activity can start                                                                                            | 300           |
 | alarm_evaluation_periods | The number of periods over which data is compared to the specified threshold.                                                                                                                       | 5             |
 | alarm_period             | The period in seconds over which the specified statistic is applied.                                                                                                                                | 60            |
-| statistic                | The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum                                                                            | Average       |
 | datapoints_to_alarm_up   | The number of alarm data points that must breach the threshold during the evaluation period for the ecs to scale up                                                                                 | 3             |
 | datapoints_to_alarm_down | The number of alarm data points that must breach the threshold during the evaluation period for the ecs to scale down                                                                               | 3             |
 | scale_up_adjustment      | Number of members by which to scale, when the adjustment bounds are breached. Should be a positive number.                                                                                          | 1             |

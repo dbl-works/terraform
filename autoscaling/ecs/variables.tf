@@ -17,18 +17,6 @@ variable "ecs_min_count" {
   description = "Min capacity of the scalable target"
 }
 
-variable "threshold_up" {
-  type        = number
-  default     = 80
-  description = "Threshold of which ECS should start to scale up"
-}
-
-variable "threshold_down" {
-  type        = number
-  default     = 20
-  description = "Threshold of which ECS should start to scale down"
-}
-
 variable "cooldown" {
   type        = number
   default     = 300 # in seconds
@@ -44,12 +32,6 @@ variable "alarm_evaluation_periods" {
 variable "alarm_period" {
   type    = number
   default = 60
-}
-
-variable "statistic" {
-  type        = string
-  default     = "Average"
-  description = "The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum"
 }
 
 # Say the evaluation_periods is 5, and datapoints_to_alarm_up is 3,
@@ -106,9 +88,9 @@ variable "ecs_autoscale_role_arn" {
 variable "autoscale_metrics" {
   type = set(object({
     metric_name    = string # Metric which used to decide whether or not to scale in/out
-    statistic      = string
-    threshold_up   = number
-    threshold_down = number
+    statistic      = string # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum
+    threshold_up   = number # Threshold of which ECS should start to scale up
+    threshold_down = number # Threshold of which ECS should start to scale down
   }))
   default = []
 }
