@@ -79,7 +79,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
 
   alarm_description = "Monitors when the ECS hits the threshold to scale down"
   alarm_actions = compact([
-    aws_appautoscaling_policy.scale_up_ecs.arn,
+    aws_appautoscaling_policy.scale_down_ecs.arn,
     var.sns_topic_arn
   ])
 }
