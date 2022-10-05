@@ -52,14 +52,7 @@ module "ecs-autoscaling-cpu" {
 | ecs_cluster_name  | ECS Cluster name                                           |
 | metric_name       | Metric which used to decide whether or not to scale in/out |
 | ecs_max_count     | Max capacity of the scalable target                        |
-| autoscale_metrics |
-  {<br>
-    metric_name    = string # Metric which used to decide whether or not to scale in/out <br>
-    statistic      = string # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum <br>
-    threshold_up   = number # Threshold of which ECS should start to scale up <br>
-    threshold_down = number # Threshold of which ECS should start to scale down <br>
-  }
-|
+| autoscale_metrics | {<br>metric_name    = string # Metric which used to decide whether or not to scale in/out <br> statistic      = string # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum <br> threshold_up   = number # Threshold of which ECS should start to scale up <br> threshold_down = number # Threshold of which ECS should start to scale down <br> } |
 
 
 ### Optional Variables
