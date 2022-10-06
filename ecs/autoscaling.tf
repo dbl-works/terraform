@@ -6,10 +6,10 @@ module "ecs-autoscaling" {
   autoscale_metrics = each.value.metrics
   ecs_cluster_name  = local.name
   ecs_service_name  = each.key
-  ecs_max_count     = each.value.ecs_max_count
+  ecs_max_count     = try(each.value.ecs_max_count, 30)
 
   # Optional
-  ecs_min_count            = each.value.ecs_min_count
+  ecs_min_count            = try(each.value.ecs_min_count, 1)
   alarm_evaluation_periods = lookup(var.autoscale_params, "alarm_evaluation_periods", 5)
   alarm_period             = lookup(var.autoscale_params, "alarm_period", 60)
   cooldown                 = lookup(var.autoscale_params, "cooldown", 300)
