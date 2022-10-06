@@ -283,8 +283,8 @@ variable "autoscale_params" {
 
 variable "autoscale_metrics_map" {
   type = map(object({
-    ecs_min_count = optional(number)
-    ecs_max_count = optional(number)
+    ecs_min_count = optional(number, 1)
+    ecs_max_count = optional(number, 30)
     metrics = set(object({
       metric_name    = string
       statistic      = string
