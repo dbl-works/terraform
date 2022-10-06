@@ -1,9 +1,9 @@
 locals {
-  scale_up_expression = join(" || ", [
+  scale_up_expression = replace(join(" || ", [
     for metric in var.autoscale_metrics :
-    "${lower(metric.metric_name)} > ${lookup(metric, "threshold_up", "${var.threshold_up}")}"
+    "${lower(metric.metric_name)} > ${lookup(metric, "threshold_up", "DEFAULT")}"
     ]
-  )
+  ), "DEFAULT", var.threshold_up)
   scale_down_expression = join(" || ", [for metric in var.autoscale_metrics : "${lower(metric.metric_name)} < ${lookup(metric, "threshold_down", var.threshold_down)}"])
 }
 
