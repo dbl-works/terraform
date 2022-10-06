@@ -66,7 +66,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
     id = "e1"
     # Make sure all fo the expression is less than the threshold_up value
     # So we don't stop the autoscaling from spinning more resources
-    expression  = "IF ((${local.scale_down_expression} && ${local.less_than_threshold_up_expression}),1,0)"
+    expression  = "IF (((${local.scale_down_expression}) && ${local.less_than_threshold_up_expression}),1,0)"
     label       = "Exceed Scale Down Threshold"
     return_data = "true"
   }
