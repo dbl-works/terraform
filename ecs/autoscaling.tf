@@ -21,6 +21,4 @@ module "ecs-autoscaling" {
   scale_up_adjustment      = lookup(var.autoscale_params, "scale_up_adjustment", 1)
   scale_up_lower_bound     = lookup(var.autoscale_params, "scale_up_lower_bound", 0)
   sns_topic_arn            = lookup(var.autoscale_params, "sns_topic_arn", null)
-  threshold_down           = lookup(var.autoscale_params, "threshold_down", 30)
-  threshold_up             = lookup(var.autoscale_params, "threshold_up", 80)
 }
