@@ -4,7 +4,7 @@ locals {
     "${lower(metric.metric_name)} > ${try(metric.threshold_up, var.threshold_up)}"
     ]
   )
-  scale_down_expression = join(" || ", [for metric in var.autoscale_metrics : "${lower(metric.metric_name)} < ${lookup(metric, "threshold_down", var.threshold_down)}"])
+  scale_down_expression = join(" || ", [for metric in var.autoscale_metrics : "${lower(metric.metric_name)} < ${try(metric.threshold_down, var.threshold_down)}"])
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
