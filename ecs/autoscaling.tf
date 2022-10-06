@@ -6,7 +6,7 @@ module "ecs-autoscaling" {
   autoscale_metrics = each.value.metrics
   ecs_cluster_name  = local.name
   ecs_service_name  = each.key
-  ecs_max_count     = try(each.value.ecs_max_count, 30)
+  ecs_max_count     = each.value.ecs_max_count
 
   # Optional
   ecs_min_count            = each.value.ecs_min_count
