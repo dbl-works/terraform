@@ -1,3 +1,15 @@
+variable "lambda_source_dir" {
+  type        = string
+  description = "Path to the directory containing the lambda function code"
+  default     = null
+}
+
+variable "lambda_output_path" {
+  type        = string
+  description = "Path to output the zipped lambda function code"
+  default     = null
+}
+
 variable "fivetran_group_id" {
   type        = string
   description = "Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui"
@@ -39,18 +51,26 @@ variable "environment" {
   default     = null
 }
 
-variable "organisation" {
+variable "connector_name" {
   type        = string
-  description = "connector name shown on Fivetran UI, i.e. cloudwatch_metrics_(organisation)"
+  description = "connector name shown on Fivetran UI. If not specified, it will be the combination of (service_name)_(project)_(env)_(aws_region_code)"
   default     = null
 }
 
-variable "tracked_resources_data" {
-  type = list(object({
-    serviceName      = string // ecs service name. eg. aws_ecs_service => name
-    clusterName      = string // ecs cluster name. eg. aws_ecs_cluster => name
-    loadBalancerName = string // load balancer arn suffix. eg. aws_lb => arn_suffix
-    projectName      = string // Do not include any special characters. This value will be passed into the snowflake table under the project column
-    environment      = string // Do not include any special characters. This value will be passed into the snowflake table under the environment column
-  }))
+# variable "tracked_resources_data" {
+#   type = list(object({
+#     serviceName      = string // ecs service name. eg. aws_ecs_service => name
+#     clusterName      = string // ecs cluster name. eg. aws_ecs_cluster => name
+#     loadBalancerName = string // load balancer arn suffix. eg. aws_lb => arn_suffix
+#     projectName      = string // Do not include any special characters. This value will be passed into the snowflake table under the project column
+#     environment      = string // Do not include any special characters. This value will be passed into the snowflake table under the environment column
+#   }))
+# }
+
+variable "script_env" {
+  # type = {
+  #   ENV_1 : "abc"
+  #   ENV_2 : []
+  # }
+  default = {}
 }
