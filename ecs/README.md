@@ -39,22 +39,43 @@ module "ecs" {
   custom_policies = []
   enable_xray     = true
   autoscale_metrics_map = {
-    web = [{
-      metric_name    = "CPUUtilization"
-      statistic      = "Average"
-      threshold_up   = 60
-      threshold_down = 20
-    }]
-    sidekiq = [{
-      metric_name    = "CPUUtilization"
-      statistic      = "Average"
-      threshold_up   = 60
-      threshold_down = 20
-    }]
-   }
+    web = {
+      ecs_min_count = 2 # Optional, default value is 1
+      ecs_max_count = 4 # Optional, default value is 30
+      metrics = [
+        {
+          metric_name    = "CPUUtilization"
+          statistic      = "Average"
+          threshold_up   = 50
+          threshold_down = 30
+        },
+        {
+          metric_name    = "MemoryUtilization"
+          statistic      = "Average"
+          threshold_up   = 50
+          threshold_down = 30
+        }
+      ]
+    },
+    sidekiq = {
+      ecs_max_count = 4
+      metrics = [
+        {
+          metric_name    = "CPUUtilization"
+          statistic      = "Average"
+          threshold_up   = 50
+          threshold_down = 30
+        },
+        {
+          metric_name    = "MemoryUtilization"
+          statistic      = "Average"
+          threshold_up   = 50
+          threshold_down = 30
+        }
+      ]
+    }
+  }
   autoscale_params = {
-    ecs_min_count            = 1
-    ecs_max_count            = 5
     alarm_evaluation_periods = 5
     alarm_period             = 60  # seconds
     datapoints_to_alarm_up   = 3
@@ -66,8 +87,8 @@ module "ecs" {
     scale_down_upper_bound   = 0
     ecs_autoscale_role_arn   = "arn:aws:iam::123456789:role/ecs-autoscale"
     sns_topic_arn            = "arn:aws:sns:us-east-1:175743622168:slack-sns"
-    service_name             = "web"
   }
+
 }
 ```
 
