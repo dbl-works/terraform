@@ -53,13 +53,13 @@ module "ecs-autoscaling-cpu" {
 | ecs_service_name  | ECS Service name                                           |
 | ecs_cluster_name  | ECS Cluster name                                           |
 | metric_name       | Metric which used to decide whether or not to scale in/out |
-| ecs_max_count     | Max capacity of the scalable target                        |
 | autoscale_metrics | {<br>&nbsp; metric_name    = string # Metric which used to decide whether or not to scale in/out <br>&nbsp; statistic      = string # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum <br>&nbsp; threshold_up   = number # Threshold of which ECS should start to scale up <br>&nbsp; threshold_down = number # Threshold of which ECS should start to scale down <br> } |
 
 
 ### Optional Variables
 | Variables                | Descriptions                                                                                                                                                                                        | Default Value |
 |--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| ecs_max_count            | Max capacity of the scalable target                                                                                                                                                                 | 30            |
 | ecs_min_count            | Min capacity of the scalable target                                                                                                                                                                 | 1             |
 | cooldown                 | Amount of time, in seconds, after a scaling activity completes before another scaling activity can start                                                                                            | 300           |
 | alarm_evaluation_periods | The number of periods over which data is compared to the specified threshold.                                                                                                                       | 5             |
@@ -72,5 +72,3 @@ module "ecs-autoscaling-cpu" {
 | scale_down_upper_bound   | Upper bound for the difference between the alarm threshold and the CloudWatch metric. Without a value, AWS will treat this bound as infinity. The upper bound must be greater than the lower bound. | 0             |
 | sns_topic_arn            | SNS Topics that will receive message when the threshold is hit                                                                                                                                      | null          |
 | ecs_autoscale_role_arn   | Optional. Role which allow the autoscaling policy to autoscale and read cloudwatch alarm. If it is not provided, the role will be created in this module.                                           | null          |
-| threshold_up             | Optional. Will be used as default value if threshold_up is not provided in the autoscale_metrics                                                                                                    | null          |
-| threshold_down           | Optional. Will be used as default value if threshold_down is not provided in the autoscale_metrics                                                                                                  | null          |

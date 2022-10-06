@@ -67,8 +67,6 @@ module "ecs" {
     ecs_autoscale_role_arn   = "arn:aws:iam::123456789:role/ecs-autoscale"
     sns_topic_arn            = "arn:aws:sns:us-east-1:175743622168:slack-sns"
     service_name             = "web"
-    threshold_up             = 60 # This value will be used as default if threshold_up is not provided in the autoscale_metrics
-    threshold_down           = 20 # This value will be used as default if threshold_down is not provided in the autoscale_metrics
   }
 }
 ```
