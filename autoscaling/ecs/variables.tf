@@ -14,7 +14,6 @@ variable "ecs_max_count" {
 
 variable "ecs_min_count" {
   type        = number
-  default     = 1
   description = "Min capacity of the scalable target"
 }
 

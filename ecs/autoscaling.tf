@@ -9,7 +9,7 @@ module "ecs-autoscaling" {
   ecs_max_count     = try(each.value.ecs_max_count, 30)
 
   # Optional
-  ecs_min_count            = try(each.value.ecs_min_count, 1)
+  ecs_min_count            = each.value.ecs_min_count
   alarm_evaluation_periods = lookup(var.autoscale_params, "alarm_evaluation_periods", 5)
   alarm_period             = lookup(var.autoscale_params, "alarm_period", 60)
   cooldown                 = lookup(var.autoscale_params, "cooldown", 300)
