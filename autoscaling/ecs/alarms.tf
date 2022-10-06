@@ -9,6 +9,8 @@ locals {
     "${lower(metric.metric_name)} < ${metric.threshold_down}"
     ]
   )
+
+  less_than_threshold_up_expression = replace(replace(local.scale_up_expression, "||", "&&"), ">", "<")
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
@@ -61,8 +63,10 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   datapoints_to_alarm = var.datapoints_to_alarm_down
 
   metric_query {
-    id          = "e1"
-    expression  = "IF (${local.scale_down_expression},1,0)"
+    id = "e1"
+    # Make sure all fo the expression is less than the threshold_up value
+    # So we don't stop the autoscaling from spinning more resources
+    expression  = "IF ((${local.scale_down_expression} && ${local.less_than_threshold_up_expression}),1,0)"
     label       = "Exceed Scale Down Threshold"
     return_data = "true"
   }
