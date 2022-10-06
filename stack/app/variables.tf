@@ -265,20 +265,21 @@ variable "enable_xray" {
 
 # AutoScaling Configuration
 variable "autoscale_params" {
-  # type = object({
-  #   alarm_evaluation_periods = number
-  #   alarm_period             = number
-  #   cooldown                 = number
-  #   datapoints_to_alarm_up   = number
-  #   datapoints_to_alarm_down = number
-  #   scale_up_adjustment      = number
-  #   scale_up_lower_bound     = number
-  #   scale_down_adjustment    = number
-  #   scale_down_upper_bound   = number
-  #   ecs_autoscale_role_arn   = string
-  #   service_name             = string
-  #   sns_topic_arn            = string
-  # })
+  type = object({
+    alarm_evaluation_periods = number
+    alarm_period             = number
+    cooldown                 = number
+    datapoints_to_alarm_down = number
+    datapoints_to_alarm_up   = number
+    ecs_autoscale_role_arn   = string
+    scale_down_adjustment    = number
+    scale_down_upper_bound   = number
+    scale_up_adjustment      = number
+    scale_up_lower_bound     = number
+    sns_topic_arn            = string
+    threshold_down           = optional(number)
+    threshold_up             = optional(number)
+  })
   default = {}
 }
 
