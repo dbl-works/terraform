@@ -12,7 +12,6 @@ module "ecs-autoscaling-cpu" {
   # Required
   ecs_service_name = "web"
   ecs_cluster_name = "meta-loadtesting-us-east"
-  ecs_max_count = 4
   autoscale_metrics = [
     {
       metric_name    = "CPUUtilization"
@@ -29,6 +28,7 @@ module "ecs-autoscaling-cpu" {
   ]
 
   # Optional
+  ecs_max_count = 4
   ecs_min_count = 1
   alarm_evaluation_periods = 5
   datapoints_to_alarm_up = 3
@@ -41,8 +41,6 @@ module "ecs-autoscaling-cpu" {
   scale_down_upper_bound = 0
   sns_topic_arn = "arn:aws:sns:us-east-1:12345678:slack-sns" # If present, it will send notifications to the SNS topics when the alarm is triggered
   ecs_autoscale_role_arn = "arn:aws:iam::123456789:role/ecs-autoscale"
-  threshold_up             = 60 # This value will be used as default if threshold_up is not provided in the autoscale_metrics
-  threshold_down           = 20 # This value will be used as default if threshold_down is not provided in the autoscale_metrics
 }
 ```
 
