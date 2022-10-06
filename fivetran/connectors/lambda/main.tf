@@ -1,5 +1,6 @@
 locals {
-  function_name = replace(join("_", compact([var.service_name, var.project, var.environment, var.aws_region_code])), "/-/", "_")
+  function_name      = replace(join("_", compact([var.service_name, var.project, var.environment, var.aws_region_code])), "/-/", "_")
+  is_role_name_exist = var.lambda_role_name != null || length(aws_iam_role.lambda) > 0
 }
 
 data "archive_file" "zip" {
@@ -73,7 +74,7 @@ resource "aws_iam_role" "lambda" {
 }
 
 resource "aws_iam_role_policy_attachment" "fivetran_policy_for_lambda" {
-  count      = var.lambda_role_arn == null ? 1 : 0
-  role       = aws_iam_role.lambda[0].name
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
+  count      = local.is_role_name_exist ? length(var.policy_arns_for_lambda) : 0
+  role       = var.lambda_role_name == null ? aws_iam_role.lambda[0].name : var.lambda_role_name
+  policy_arn = var.policy_arns_for_lambda[count.index]
 }

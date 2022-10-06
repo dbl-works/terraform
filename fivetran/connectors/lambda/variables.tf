@@ -74,3 +74,15 @@ variable "script_env" {
   # }
   default = {}
 }
+
+variable "policy_arns_for_lambda" {
+  type        = list(string)
+  default     = []
+  description = "compulsory if user pass a lambda_role_arn and would also add the "
+}
+
+variable "lambda_role_name" {
+  type        = string
+  default     = null
+  description = "compulsory if user pass a lambda_role_arn and would also add the "
+}
