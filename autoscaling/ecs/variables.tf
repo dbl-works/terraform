@@ -12,10 +12,11 @@ variable "ecs_max_count" {
   description = "Max capacity of the scalable target"
 }
 
-# variable "ecs_min_count" {
-#   type        = number
-#   description = "Min capacity of the scalable target"
-# }
+variable "ecs_min_count" {
+  type        = number
+  default     = 1
+  description = "Min capacity of the scalable target"
+}
 
 variable "cooldown" {
   type        = number
