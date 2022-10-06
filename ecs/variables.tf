@@ -84,17 +84,17 @@ variable "enable_xray" {
 ##########################################################################
 variable "autoscale_params" {
   type = object({
-    alarm_evaluation_periods = number
-    alarm_period             = number
-    cooldown                 = number
-    datapoints_to_alarm_up   = number
-    datapoints_to_alarm_down = number
-    scale_up_adjustment      = number
-    scale_up_lower_bound     = number
-    scale_down_adjustment    = number
-    scale_down_upper_bound   = number
-    ecs_autoscale_role_arn   = string
-    sns_topic_arn            = string
+    alarm_evaluation_periods = optional(number)
+    alarm_period             = optional(number)
+    cooldown                 = optional(number)
+    datapoints_to_alarm_up   = optional(number)
+    datapoints_to_alarm_down = optional(number)
+    scale_up_adjustment      = optional(number)
+    scale_up_lower_bound     = optional(number)
+    scale_down_adjustment    = optional(number)
+    scale_down_upper_bound   = optional(number)
+    ecs_autoscale_role_arn   = optional(string)
+    sns_topic_arn            = optional(string)
     threshold_up             = optional(number)
     threshold_down           = optional(number)
   })
@@ -103,8 +103,8 @@ variable "autoscale_params" {
 
 variable "autoscale_metrics_map" {
   type = map(object({
-    ecs_min_count = number
-    ecs_max_count = number
+    ecs_min_count = optional(number)
+    ecs_max_count = optional(number)
     metrics = set(object({
       metric_name    = string
       statistic      = string

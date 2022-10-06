@@ -8,6 +8,7 @@ variable "ecs_cluster_name" {
 
 variable "ecs_max_count" {
   type        = number
+  default     = 30
   description = "Max capacity of the scalable target"
 }
 
