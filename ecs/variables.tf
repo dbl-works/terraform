@@ -84,8 +84,6 @@ variable "enable_xray" {
 ##########################################################################
 variable "autoscale_params" {
   # type = object({
-  #   ecs_min_count            = number
-  #   ecs_max_count            = number
   #   alarm_evaluation_periods = number
   #   alarm_period             = number
   #   cooldown                 = number
@@ -99,17 +97,19 @@ variable "autoscale_params" {
   #   service_name             = string
   #   sns_topic_arn            = string
   # })
-  type    = map(string)
   default = {}
 }
 
 variable "autoscale_metrics_map" {
-  type = map(set(map(string)))
-  # type = map(set(object({
-  #   metric_name    = string
-  #   statistic      = string
-  #   threshold_up   = optional(number)
-  #   threshold_down = optional(number)
-  # })))
+  type = map(object({
+    ecs_min_count = number
+    ecs_max_count = number
+    metrics = set(object({
+      metric_name    = string
+      statistic      = string
+      threshold_up   = optional(number)
+      threshold_down = optional(number)
+    }))
+  }))
   default = {}
 }
