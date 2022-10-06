@@ -277,8 +277,6 @@ variable "autoscale_params" {
     scale_up_adjustment      = optional(number)
     scale_up_lower_bound     = optional(number)
     sns_topic_arn            = optional(string)
-    threshold_down           = optional(number)
-    threshold_up             = optional(number)
   })
   default = {}
 }
@@ -290,8 +288,8 @@ variable "autoscale_metrics_map" {
     metrics = set(object({
       metric_name    = string
       statistic      = string
-      threshold_up   = optional(number)
-      threshold_down = optional(number)
+      threshold_up   = number
+      threshold_down = number
     }))
   }))
   default = {}

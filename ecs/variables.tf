@@ -95,8 +95,6 @@ variable "autoscale_params" {
     scale_down_upper_bound   = optional(number)
     ecs_autoscale_role_arn   = optional(string)
     sns_topic_arn            = optional(string)
-    threshold_up             = optional(number)
-    threshold_down           = optional(number)
   })
   default = {}
 }
@@ -108,8 +106,8 @@ variable "autoscale_metrics_map" {
     metrics = set(object({
       metric_name    = string
       statistic      = string
-      threshold_up   = optional(number)
-      threshold_down = optional(number)
+      threshold_up   = number
+      threshold_down = number
     }))
   }))
   default = {}
