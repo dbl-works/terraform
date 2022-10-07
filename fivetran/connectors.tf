@@ -63,11 +63,11 @@ module "lambda_connector" {
 
   # required
   fivetran_group_id = fivetran_group.group.id # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
+  project           = each.value.project      # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
+  environment       = each.value.environment  # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
 
   # optional
   service_name       = each.value.service_name
-  project            = each.value.project                  # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
-  environment        = each.value.environment              # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
   aws_region_code    = each.value.aws_region_code          # lambda's aws region
   lambda_role_arn    = var.lambda_settings.lambda_role_arn # Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created.
   lambda_source_dir  = each.value.lambda_source_dir

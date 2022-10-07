@@ -1,6 +1,7 @@
 # Terraform Module: Fivetran lambda
 
-Set up lambda connector in fivetran
+### Example
+Set up lambda connector in fivetran which sync cloudwatch metrics
 
 ```
 terraform {
@@ -33,6 +34,20 @@ provider "fivetran" {
 ```
 
 ```
+module "lambda_role" {
+  source = "github.com/dbl-works/terraform//iam/iam-policy-for-fivetran-lambda?ref=v2022.07.05"
+
+  fivetran_group_id = "fivetran-group-id" # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
+  fivetran_aws_account_id = "834469178297" # Fivetran AWS account ID. We need to allow this account to access our lambda function.
+}
+
+resource "aws_iam_role_policy_attachment" "fivetran_policy_for_lambda" {
+  role       = module.lambda_role.lambda_role_name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
+}
+```
+
+```
 module "lambda_connector" {
   source = "github.com/dbl-works/terraform//fivetran/connectors/lambda?ref=v2022.07.05"
 
@@ -41,14 +56,11 @@ module "lambda_connector" {
   environment             = "staging" # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
 
   # optional
+  service_name            = "lambda" # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
   aws_region_code         = "us-east-1" # lambda's aws region
-  fivetran_aws_account_id = "834469178297" # Fivetran AWS account ID. We need to allow this account to access our lambda function.
-  lambda_role_arn         = "arn:aws:iam::123456789:role/fivetran_lambda" # Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created.
-  lambda_role_name        = "fivetran_lambda" # Lambda role name if you already have the role created
-  policy_arns_for_lambda  = ["arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"]
+  lambda_role_arn         = module.lambda_role.lambda_role_arn # Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created.
   lambda_source_dir       = "${path.module}/tracker"
   lambda_output_path      = "${path.module}/dist/tracker.zip"
-  service_name            = "lambda" # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
   connector_name          = "lambda_meta_staging_eu-central" # connector name shown on Fivetran UI. If not specified, it will be the combination of (service_name)_(project)_(env)_(aws_region_code)
   script_env              = {
     RESOURCES_DATA: [{
