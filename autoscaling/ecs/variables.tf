@@ -82,8 +82,7 @@ variable "sns_topic_arn" {
 
 variable "ecs_autoscale_role_arn" {
   type        = string
-  default     = null
-  description = "Optional. Role which allow the autoscaling policy to autoscale and read cloudwatch alarm. If it is not provided, the role will be created in this module."
+  description = "Role which allow the autoscaling policy to autoscale and read cloudwatch alarm."
 }
 
 variable "autoscale_metrics" {

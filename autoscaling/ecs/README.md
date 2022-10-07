@@ -40,18 +40,52 @@ module "ecs-autoscaling-cpu" {
   scale_down_adjustment = -1
   scale_down_upper_bound = 0
   sns_topic_arn = "arn:aws:sns:us-east-1:12345678:slack-sns" # If present, it will send notifications to the SNS topics when the alarm is triggered
-  ecs_autoscale_role_arn = "arn:aws:iam::123456789:role/ecs-autoscale"
+  ecs_autoscale_role_arn = aws_iam_role.ecs_autoscale_role.arn
 }
 ```
 
+iam.tf (We need this role to run the autoscaling)
+```
+resource "aws_iam_role" "ecs_autoscale_role" {
+  name  = "ecs-scale-application"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "application-autoscaling.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-autoscale" {
+  role       = aws_iam_role.ecs-autoscale-role.id
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceAutoscaleRole"
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_cloudwatch" {
+  role       = aws_iam_role.ecs-autoscale-role.id
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
+}
+```
+
+
 ## Variables
 ### Required Variables
-| Variables         | Descriptions                                               |
-|-------------------|------------------------------------------------------------|
-| ecs_service_name  | ECS Service name                                           |
-| ecs_cluster_name  | ECS Cluster name                                           |
-| metric_name       | Metric which used to decide whether or not to scale in/out |
-| autoscale_metrics | {<br>&nbsp; metric_name    = string # Metric which used to decide whether or not to scale in/out <br>&nbsp; statistic      = string # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum <br>&nbsp; threshold_up   = number # Threshold of which ECS should start to scale up <br>&nbsp; threshold_down = number # Threshold of which ECS should start to scale down <br> } |
+| Variables                | Descriptions                                               |
+|--------------------------|------------------------------------------------------------|
+| ecs_service_name         | ECS Service name                                           |
+| ecs_cluster_name         | ECS Cluster name                                           |
+| metric_name              | Metric which used to decide whether or not to scale in/out |
+| ecs_autoscale_role_arn   | Role which allow the autoscaling policy to autoscale and read cloudwatch alarm. |
+| autoscale_metrics        | {<br>&nbsp; metric_name    = string # Metric which used to decide whether or not to scale in/out <br>&nbsp; statistic      = string # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum <br>&nbsp; threshold_up   = number # Threshold of which ECS should start to scale up <br>&nbsp; threshold_down = number # Threshold of which ECS should start to scale down <br> } |
 
 
 ### Optional Variables
@@ -69,4 +103,3 @@ module "ecs-autoscaling-cpu" {
 | scale_down_adjustment    | Number of members by which to scale, when the adjustment bounds are breached. Should be a negative number.                                                                                          | -1            |
 | scale_down_upper_bound   | Upper bound for the difference between the alarm threshold and the CloudWatch metric. Without a value, AWS will treat this bound as infinity. The upper bound must be greater than the lower bound. | 0             |
 | sns_topic_arn            | SNS Topics that will receive message when the threshold is hit                                                                                                                                      | null          |
-| ecs_autoscale_role_arn   | Optional. Role which allow the autoscaling policy to autoscale and read cloudwatch alarm. If it is not provided, the role will be created in this module.                                           | null          |
