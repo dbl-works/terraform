@@ -10,16 +10,16 @@ variable "lambda_output_path" {
   default     = null
 }
 
-variable "fivetran_group_id" {
-  type        = string
-  description = "Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui"
-}
+# variable "fivetran_group_id" {
+#   type        = string
+#   description = "Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui"
+# }
 
-variable "fivetran_aws_account_id" {
-  type        = string
-  default     = "834469178297" # the default aws account_id for fivetrans
-  description = "Fivetran AWS account ID. We need to allow this account to access our lambda function."
-}
+# variable "fivetran_aws_account_id" {
+#   type        = string
+#   default     = "834469178297" # the default aws account_id for fivetrans
+#   description = "Fivetran AWS account ID. We need to allow this account to access our lambda function."
+# }
 
 variable "aws_region_code" {
   type        = string
@@ -54,13 +54,11 @@ variable "service_name" {
 variable "project" {
   type        = string
   description = "connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)"
-  default     = null
 }
 
 variable "environment" {
   type        = string
   description = "connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)"
-  default     = null
 }
 
 variable "connector_name" {

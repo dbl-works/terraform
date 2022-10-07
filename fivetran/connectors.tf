@@ -57,7 +57,9 @@ module "lambda_connector" {
   for_each = { for lambda in var.sources_lambda : join("-", compact([lambda.service_name, lambda.project, lambda.environment])) => lambda }
   source   = "../fivetran/connectors/lambda"
 
-  providers = { fivetran = fivetran }
+  providers = {
+    fivetran = fivetran
+  }
 
   # required
   fivetran_group_id = fivetran_group.group.id # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
@@ -74,4 +76,15 @@ module "lambda_connector" {
   lambda_source_dir       = each.value.lambda_source_dir
   lambda_output_path      = each.value.lambda_output_path
   script_env              = each.value.script_env
+}
+
+data "aws_iam_role" "lambda" {
+  count = lookup(var.lambda_settings, "lambda_role_name", null) == null ? 0 : 1
+  name  = var.lambda_role_name
+}
+
+resource "aws_iam_role_policy_attachment" "fivetran_policy_for_lambda" {
+  count      = lookup(var.lambda_settings, "lambda_role_name", null) ? length(var.policy_arns_for_lambda) : 0
+  role       = var.lambda_settings.lambda_role_name
+  policy_arn = var.policy_arns_for_lambda[count.index]
 }

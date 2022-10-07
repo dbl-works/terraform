@@ -7,10 +7,12 @@ terraform {
   }
 }
 
+# Can be set by FIVETRAN_APIKEY
 variable "fivetran_api_key" {
   type = string
 }
 
+# Can be set by FIVETRAN_APISECRET
 variable "fivetran_api_secret" {
   type = string
 }

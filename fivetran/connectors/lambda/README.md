@@ -36,10 +36,9 @@ provider "fivetran" {
 module "lambda_connector" {
   source = "github.com/dbl-works/terraform//fivetran/connectors/lambda?ref=v2022.07.05"
 
-  fivetran_api_key    = XXXXXXXXXXX
-  fivetran_api_secret = YYYYYYYYYY
-  fivetran_group_id   = "fivetran-group-id" # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
-  organisation        = "meta" # connector name shown on Fivetran UI, i.e. cloudwatch_metrics_(organisation)_eu_central_1
+  fivetran_group_id       = "fivetran-group-id" # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
+  project                 = "meta" # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
+  environment             = "staging" # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
 
   # optional
   aws_region_code         = "us-east-1" # lambda's aws region
@@ -50,8 +49,6 @@ module "lambda_connector" {
   lambda_source_dir       = "${path.module}/tracker"
   lambda_output_path      = "${path.module}/dist/tracker.zip"
   service_name            = "lambda" # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
-  project                 = "meta" # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
-  environment             = "staging" # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
   connector_name          = "lambda_meta_staging_eu-central" # connector name shown on Fivetran UI. If not specified, it will be the combination of (service_name)_(project)_(env)_(aws_region_code)
   script_env              = {
     RESOURCES_DATA: [{
