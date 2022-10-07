@@ -1,8 +1,3 @@
-locals {
-  function_name      = replace(join("_", compact([var.service_name, var.project, var.environment, var.aws_region_code])), "/-/", "_")
-  is_role_name_exist = var.lambda_role_name != null || length(aws_iam_role.lambda) > 0
-}
-
 data "archive_file" "zip" {
   type        = "zip"
   source_dir  = var.lambda_source_dir == null ? "${path.module}/tracker" : var.lambda_source_dir
@@ -25,56 +20,4 @@ resource "aws_lambda_function" "cloudwatch_metrics_tracker" {
   environment {
     variables = var.script_env
   }
-}
-
-resource "aws_iam_role" "lambda" {
-  count = var.lambda_role_arn == null ? 1 : 0
-  name  = "fivetran_lambda_${var.fivetran_group_id}"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
-      },
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          AWS = "arn:aws:iam::${var.fivetran_aws_account_id}:root"
-        }
-        Condition = {
-          StringEquals = {
-            "sts:ExternalId" : "${var.fivetran_group_id}"
-          }
-        }
-      },
-    ]
-  })
-
-  inline_policy {
-    name = "LambdaInvokePolicy"
-
-    policy = jsonencode({
-      Version = "2012-10-17"
-      Statement = [
-        {
-          Sid      = "InvokePermission"
-          Effect   = "Allow"
-          Action   = ["lambda:InvokeFunction"]
-          Resource = "*"
-        }
-      ]
-    })
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "fivetran_policy_for_lambda" {
-  count      = local.is_role_name_exist ? length(var.policy_arns_for_lambda) : 0
-  role       = var.lambda_role_name == null ? aws_iam_role.lambda[0].name : var.lambda_role_name
-  policy_arn = var.policy_arns_for_lambda[count.index]
 }
