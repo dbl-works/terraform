@@ -65,26 +65,18 @@ module "lambda_connector" {
   fivetran_group_id = fivetran_group.group.id # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
 
   # optional
-  service_name            = each.value.service_name
-  project                 = each.value.project         # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
-  environment             = each.value.environment     # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
-  aws_region_code         = each.value.aws_region_code # lambda's aws region
-  fivetran_aws_account_id = var.lambda_settings.fivetran_aws_account_id
-  lambda_role_arn         = var.lambda_settings.lambda_role_arn  # Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created.
-  lambda_role_name        = var.lambda_settings.lambda_role_name # Lambda role name if you already have the role created
-  policy_arns_for_lambda  = each.value.policy_arns_for_lambda
-  lambda_source_dir       = each.value.lambda_source_dir
-  lambda_output_path      = each.value.lambda_output_path
-  script_env              = each.value.script_env
-}
-
-data "aws_iam_role" "lambda" {
-  count = lookup(var.lambda_settings, "lambda_role_name", null) == null ? 0 : 1
-  name  = var.lambda_role_name
+  service_name       = each.value.service_name
+  project            = each.value.project                  # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
+  environment        = each.value.environment              # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
+  aws_region_code    = each.value.aws_region_code          # lambda's aws region
+  lambda_role_arn    = var.lambda_settings.lambda_role_arn # Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created.
+  lambda_source_dir  = each.value.lambda_source_dir
+  lambda_output_path = each.value.lambda_output_path
+  script_env         = each.value.script_env
 }
 
 resource "aws_iam_role_policy_attachment" "fivetran_policy_for_lambda" {
-  count      = lookup(var.lambda_settings, "lambda_role_name", null) ? length(var.policy_arns_for_lambda) : 0
+  count      = lookup(var.lambda_settings, "lambda_role_name", null) ? length(var.lambda_settings.policy_arns_for_lambda) : 0
   role       = var.lambda_settings.lambda_role_name
-  policy_arn = var.policy_arns_for_lambda[count.index]
+  policy_arn = var.lambda_settings.policy_arns_for_lambda[count.index]
 }
