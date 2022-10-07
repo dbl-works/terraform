@@ -101,7 +101,7 @@ variable "sources_github" {
 
 variable "sources_lambda" {
   description = "All lambda connector that we want to connect ot fivetran."
-  default     = {}
+  default     = []
 
   type = list(object({
     service_name           = optional(string, null)
@@ -111,7 +111,7 @@ variable "sources_lambda" {
     lambda_output_path     = optional(string, null)
     aws_region_code        = string
     policy_arns_for_lambda = list(string)
-    script_env             = optional(object, {})
+    script_env             = optional(map(any), {})
   }))
 }
 

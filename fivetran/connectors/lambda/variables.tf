@@ -74,5 +74,6 @@ variable "script_env" {
   #   ENV_1 : "abc"
   #   ENV_2 : []
   # }
+  type    = map(any)
   default = {}
 }

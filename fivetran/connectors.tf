@@ -57,9 +57,10 @@ module "lambda_connector" {
   for_each = { for lambda in var.sources_lambda : join("-", compact([lambda.service_name, lambda.project, lambda.environment])) => lambda }
   source   = "../fivetran/connectors/lambda"
 
-  fivetran_api_key    = var.fivetran_api_key
-  fivetran_api_secret = var.fivetran_api_secret
-  fivetran_group_id   = fivetran_group.group.id # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
+  providers = { fivetran = fivetran }
+
+  # required
+  fivetran_group_id = fivetran_group.group.id # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
 
   # optional
   service_name            = each.value.service_name
