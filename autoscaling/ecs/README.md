@@ -6,6 +6,10 @@ This module should allow the ECS to autoscale based on the metric threshold valu
 ## Usage
 
 ```terraform
+module "iam_role_for_ecs_scaling" {
+  source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs-scaling?ref=v2022.10.04"
+}
+
 module "ecs-autoscaling-cpu" {
   source = "github.com/dbl-works/terraform//autoscaling/ecs?ref=v2022.10.04"
 
@@ -40,42 +44,8 @@ module "ecs-autoscaling-cpu" {
   scale_down_adjustment = -1
   scale_down_upper_bound = 0
   sns_topic_arn = "arn:aws:sns:us-east-1:12345678:slack-sns" # If present, it will send notifications to the SNS topics when the alarm is triggered
-  ecs_autoscale_role_arn = aws_iam_role.ecs_autoscale_role.arn
+  ecs_autoscale_role_arn = module.iam_role_for_ecs_scaling.ecs_autoscale_role_arn
 }
-```
-
-iam.tf (We need this role to run the autoscaling)
-```
-resource "aws_iam_role" "ecs_autoscale_role" {
-  name  = "ecs-scale-application"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "application-autoscaling.amazonaws.com"
-      },
-      "Effect": "Allow"
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "ecs-autoscale" {
-  role       = aws_iam_role.ecs-autoscale-role.id
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceAutoscaleRole"
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_cloudwatch" {
-  role       = aws_iam_role.ecs-autoscale-role.id
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
-}
-```
-
 
 ## Variables
 ### Required Variables
