@@ -47,9 +47,11 @@ module "ecs" {
   grant_read_access_to_sqs_arns  = var.grant_read_access_to_sqs_arns
   grant_write_access_to_sqs_arns = var.grant_write_access_to_sqs_arns
 
-  custom_policies  = var.ecs_custom_policies
-  enable_dashboard = var.cloudwatch_dashboard_view == "simple"
-  enable_xray      = var.enable_xray
+  custom_policies       = var.ecs_custom_policies
+  enable_dashboard      = var.cloudwatch_dashboard_view == "simple"
+  enable_xray           = var.enable_xray
+  autoscale_params      = var.autoscale_params
+  autoscale_metrics_map = var.autoscale_metrics_map
 }
 
 module "cloudwatch" {

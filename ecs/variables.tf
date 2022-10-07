@@ -78,3 +78,37 @@ variable "enable_xray" {
   default     = false
   description = "Grant Xray permission to ECS"
 }
+
+##########################################################################
+# AutoScaling Configuration
+##########################################################################
+variable "autoscale_params" {
+  type = object({
+    alarm_evaluation_periods = optional(number)
+    alarm_period             = optional(number)
+    cooldown                 = optional(number)
+    datapoints_to_alarm_up   = optional(number)
+    datapoints_to_alarm_down = optional(number)
+    scale_up_adjustment      = optional(number)
+    scale_up_lower_bound     = optional(number)
+    scale_down_adjustment    = optional(number)
+    scale_down_upper_bound   = optional(number)
+    ecs_autoscale_role_arn   = optional(string)
+    sns_topic_arn            = optional(string)
+  })
+  default = {}
+}
+
+variable "autoscale_metrics_map" {
+  type = map(object({
+    ecs_min_count = optional(number)
+    ecs_max_count = optional(number)
+    metrics = set(object({
+      metric_name    = string
+      statistic      = string
+      threshold_up   = number
+      threshold_down = number
+    }))
+  }))
+  default = {}
+}

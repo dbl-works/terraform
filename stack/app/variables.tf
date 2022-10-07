@@ -262,6 +262,39 @@ variable "enable_xray" {
   type    = bool
   default = false
 }
+
+# AutoScaling Configuration
+variable "autoscale_params" {
+  type = object({
+    alarm_evaluation_periods = optional(number)
+    alarm_period             = optional(number)
+    cooldown                 = optional(number)
+    datapoints_to_alarm_down = optional(number)
+    datapoints_to_alarm_up   = optional(number)
+    ecs_autoscale_role_arn   = optional(string)
+    scale_down_adjustment    = optional(number)
+    scale_down_upper_bound   = optional(number)
+    scale_up_adjustment      = optional(number)
+    scale_up_lower_bound     = optional(number)
+    sns_topic_arn            = optional(string)
+  })
+  default = {}
+}
+
+variable "autoscale_metrics_map" {
+  type = map(object({
+    ecs_min_count = optional(number, 1)
+    ecs_max_count = optional(number, 30)
+    metrics = set(object({
+      metric_name    = string
+      statistic      = string
+      threshold_up   = number
+      threshold_down = number
+    }))
+  }))
+  default = {}
+}
+
 # =============== ECS ================ #
 
 # =============== Cloudwatch ================ #
