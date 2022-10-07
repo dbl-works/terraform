@@ -18,7 +18,7 @@ locals {
 }
 
 module "lambda_connector" {
-  source = "github.com/dbl-works/terraform//fivetran/connectors/lambda?ref=v2022.07.05"
+  source = "github.com/dbl-works/terraform//fivetran/connectors/lambda?ref=main"
   providers = {
     # Have to specified the provider because fivetran is not from hashicorp
     fivetran = fivetran
