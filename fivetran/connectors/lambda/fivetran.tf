@@ -12,7 +12,7 @@ resource "fivetran_connector" "lambda" {
 
   config {
     function = aws_lambda_function.cloudwatch_metrics_tracker.function_name
-    role_arn = var.lambda_role_arn == null ? aws_iam_role.lambda[0].arn : var.lambda_role_arn
+    role_arn = local.lambda_role_arn
     region   = var.aws_region_code
   }
 }

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda" {
-  count = var.lambda_role_arn == null ? 1 : 0
+  count = var.lambda_role_name == null ? 1 : 0
   name  = "fivetran_lambda_${var.fivetran_group_id}"
 
   assume_role_policy = jsonencode({
@@ -42,6 +42,11 @@ resource "aws_iam_role" "lambda" {
       ]
     })
   }
+}
+
+data "aws_iam_role" "lambda" {
+  count = var.lambda_role_name == null ? 0 : 1
+  name  = var.lambda_role_name
 }
 
 resource "aws_iam_role_policy_attachment" "fivetran_policy_for_lambda" {

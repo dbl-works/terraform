@@ -28,6 +28,45 @@ module "fivetran" {
   destination_connection_type  = "Directly"
   destination_password         = "XXX"
   destination_database_name    = "${project}-${environment}"
+
+  # Sources
+  ## Github
+  sources_github = [
+    {
+      organisation = "facebook"
+      sync_mode    = "SpecificRepositories"
+      repositories = ["facebook/react"]
+      username     = "squake-bot"
+      pat          = var.github_pat
+    }
+  ]
+
+  ## lambda
+  sources_lambda = [
+    service_name           = "cloudwatch_metrics"
+    project                = "react"
+    environment            = "staging"
+    lambda_source_dir      = "${path.module}/tracker"
+    lambda_output_path     = "${path.module}/dist/tracker.zip"
+    aws_region_code        = "eu-central-1"
+    policy_arns_for_lambda = ["arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"]
+    script_env             = {
+      RESOURCES_DATA = {
+        projectName      = "facebook"
+        serviceName      = "web",
+        clusterName      = "facebook-staging"
+        loadBalancerName = "app/facebook-staging/a1c2a365faf11127"
+        environment      = "staging"
+      },
+      PERIOD         = "3600"
+    }
+  ]
+
+  lambda_settings = {
+    lambda_role_arn = "arn:aws:iam::123456789:role/fivetran_lambda" # optional
+    lambda_role_name = "fivetran_lambda" # optional
+    fivetran_aws_account_id ="834469178297" # optional
+  } # optional
 }
 
 #
