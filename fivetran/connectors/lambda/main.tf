@@ -20,4 +20,9 @@ resource "aws_lambda_function" "cloudwatch_metrics_tracker" {
   environment {
     variables = var.script_env
   }
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+  }
 }
