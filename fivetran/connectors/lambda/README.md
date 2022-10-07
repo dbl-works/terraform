@@ -88,6 +88,7 @@ module "lambda_connector" {
   script_env              = {
     RESOURCES_DATA = jsonencode(local.tracked_resources_data)
     PERIOD         = "3600"
+    AWS_REGION     = var.aws_region_code
   }
 }
 ```
