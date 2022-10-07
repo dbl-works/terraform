@@ -43,8 +43,6 @@ provider "fivetran" {
 module "metrics" {
   source = "github.com/dbl-works/terraform//cloudwatch-snowflake"
 
-  fivetran_api_key    = XXXXXXXXXXX
-  fivetran_api_secret = YYYYYYYYYY
   fivetran_group_id   = "fivetran-group-id" # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
   organisation        = "meta" # connector name shown on Fivetran UI, i.e. cloudwatch_metrics_(organisation)_eu_central_1
   tracked_resources_data = [
