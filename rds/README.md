@@ -234,4 +234,3 @@ If the application DB is behind bastion, an SSH tunnel has to be configured to a
 1. Bastion URL is the same you use to access the database.
 2. Please read how to setup bastion with public key [here](https://github.com/dbl-works/terraform/pull/118/files#diff-94cb490f08aaef66dedfd461d69ed21f92555c728a81212e41accf096b31c118)
 
-Check [Modifly connector](https://fivetran.com/integrations/postgres_rds/?name=modifly&groupId=plausible_comprise) for example.
