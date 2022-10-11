@@ -7,6 +7,8 @@ jobs:
     strategy:
       matrix:
         module:
+          - analytics
+          - autoscaling/ecs
           - certificate
           - cloudwatch
           - cloudflare
@@ -14,6 +16,7 @@ jobs:
           - ecr
           - ecs
           - elasticache
+          - fivetran
           - global-accelerator
           - iam/iam-for-deploy-bot
           - iam/iam-for-humans
@@ -30,6 +33,7 @@ jobs:
           - s3-public
           - secrets
           - slack/chatbot
+          - snowflake/cloud
           - slack/sns
           - stack/app
           - stack/setup

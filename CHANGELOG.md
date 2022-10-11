@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [unreleased]
+
+## [v2022.09.30]
+## Elasticache
+- set `cluster_mode`, `maxmemory_policy`, `elasticache_node_count`, `elasticache_automatic_failover_enabled` as variables instead of hardcore values.
+
+## Analytics, Cloudwatch-Snowflake, Fivetran, Snowflake/Cloud
+- added new modules to launch a **Snowflake Warehouse**, and connect various data sources to the warehouse using **Fivetran**. The "Analytics" module brings all these sub modules together and introduces default values. Submodules can also be combined in any way if more flexibility is needed. These modules have been tested and are operational, though there are still some rough edges (see for example [Issue #127](https://github.com/dbl-works/terraform/issues/127)).
+
 ## RDS
 - set replacement of non-alphanumeric chars with underscore on RDS DBName value to avoid naming validation errors.
 

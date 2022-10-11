@@ -102,6 +102,11 @@ variable "elasticache_node_type" {
   default = "cache.t3.micro"
 }
 
+variable "elasticache_node_count" {
+  type    = number
+  default = 1
+}
+
 variable "elasticache_parameter_group_name" {
   type    = string
   default = "default.redis6.x.cluster.on"
@@ -132,6 +137,21 @@ variable "elasticache_multi_az_enabled" {
 variable "elasticache_snapshot_retention_limit" {
   type    = number
   default = 0
+}
+
+variable "elasticache_cluster_mode" {
+  type    = bool
+  default = true
+}
+
+variable "elasticache_maxmemory_policy" {
+  type    = string
+  default = null
+}
+
+variable "elasticache_automatic_failover_enabled" {
+  type    = bool
+  default = true
 }
 # =============== Elasticache ================ #
 
@@ -242,6 +262,39 @@ variable "enable_xray" {
   type    = bool
   default = false
 }
+
+# AutoScaling Configuration
+variable "autoscale_params" {
+  type = object({
+    alarm_evaluation_periods = optional(number)
+    alarm_period             = optional(number)
+    cooldown                 = optional(number)
+    datapoints_to_alarm_down = optional(number)
+    datapoints_to_alarm_up   = optional(number)
+    ecs_autoscale_role_arn   = optional(string)
+    scale_down_adjustment    = optional(number)
+    scale_down_upper_bound   = optional(number)
+    scale_up_adjustment      = optional(number)
+    scale_up_lower_bound     = optional(number)
+    sns_topic_arn            = optional(string)
+  })
+  default = {}
+}
+
+variable "autoscale_metrics_map" {
+  type = map(object({
+    ecs_min_count = optional(number, 1)
+    ecs_max_count = optional(number, 30)
+    metrics = set(object({
+      metric_name    = string
+      statistic      = string
+      threshold_up   = number
+      threshold_down = number
+    }))
+  }))
+  default = {}
+}
+
 # =============== ECS ================ #
 
 # =============== Cloudwatch ================ #

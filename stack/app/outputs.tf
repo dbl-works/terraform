@@ -55,3 +55,11 @@ output "accept_status-accepter" {
 output "rds_kms_key_arn" {
   value = var.rds_master_db_kms_key_arn == null ? join("", module.rds-kms-key.*.arn) : "KMS ARN only printed for the master DB to be passed to each replica."
 }
+
+output "ecs_cluster_name" {
+  value = module.ecs.ecs_cluster_name
+}
+
+output "alb_arn_suffix" {
+  value = module.ecs.alb_arn_suffix
+}

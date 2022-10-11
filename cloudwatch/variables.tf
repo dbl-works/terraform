@@ -76,13 +76,11 @@ variable "db_allocated_storage_in_gb" {
   type = number
 }
 
-
 variable "datapoints_to_alarm" {
   type        = number
   default     = 1
   description = "The number of datapoints that must be breaching to trigger the alarm."
 }
-
 
 variable "treat_missing_data" {
   type    = string
