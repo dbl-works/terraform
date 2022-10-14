@@ -18,3 +18,14 @@ module "xray" {
   name                    = "${var.region}-xray" # set a custom name if you want to follow a different naming convention
 }
 ```
+
+To grant access to a limited IAM user role, add the following group:
+
+```
+${region}-xray-view
+```
+or
+```
+${name}-view
+```
+if you opted for a custom name.
