@@ -5,7 +5,7 @@ Policy that allows humans to login to AWS and manage their account (e.g. add MFA
 
 ```terraform
 module "human_policies" {
-  source = "github.com/dbl-works/terraform//iam//iam-for-humans?ref=v2022.05.27"
+  source = "github.com/dbl-works/terraform//iam/iam-for-humans?ref=v2022.05.27"
 }
 ```
 
