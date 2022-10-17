@@ -36,7 +36,7 @@ module "fivetran" {
       organisation = "facebook"
       sync_mode    = "SpecificRepositories"
       repositories = ["facebook/react"]
-      username     = "squake-bot"
+      username     = "dbl-bot"
       pat          = var.github_pat
     }
   ]
