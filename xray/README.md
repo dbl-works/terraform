@@ -15,4 +15,4 @@ module "xray" {
 }
 ```
 
-You will need to grant access to non-admin users, see [iam/xray](../iam/xray/README.md).
+You will need to grant access to non-admin users, see [iam/xray](../iam/iam-xray/README.md).
