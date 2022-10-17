@@ -24,6 +24,7 @@ jobs:
           - iam/iam-policy-for-ecs/taggable-resources
           - iam/iam-policy-for-s3
           - iam/iam-policy-for-taggable-resources
+          - iam/iam-xray
           - kms-key
           - kms-key-replica
           - nat

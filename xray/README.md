@@ -14,3 +14,5 @@ module "xray" {
   duration_threshold      = 0.25
 }
 ```
+
+You will need to grant access to non-admin users, see [iam/xray](../iam/iam-xray/README.md).
