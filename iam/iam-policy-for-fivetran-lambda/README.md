@@ -1,6 +1,6 @@
 ## IAM for fivetran lambda
 
-Creates a IAM role which connect lambda and fivetran
+Creates an IAM role that connects Lambda and Fivetran.
 
 ```terraform
 module "lambda_role" {
