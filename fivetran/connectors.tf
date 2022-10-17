@@ -55,7 +55,7 @@ resource "fivetran_connector" "github" {
 
 module "lambda_connector" {
   for_each = { for lambda in var.sources_lambda : join("-", compact([lambda.service_name, lambda.project, lambda.environment])) => lambda }
-  source   = "../fivetran/connectors/lambda"
+  source   = "./connectors/lambda"
 
   providers = {
     fivetran = fivetran
