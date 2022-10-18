@@ -7,7 +7,7 @@ resource "fivetran_connector" "lambda" {
   run_setup_tests   = true
 
   destination_schema {
-    name = try(var.connector_name, local.function_name)
+    name = var.connector_name == null ? local.function_name : var.connector_name
   }
 
   config {
