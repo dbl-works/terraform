@@ -4,10 +4,10 @@ locals {
     "${lower(metric.metric_name)} > ${metric.threshold_up}"
     ]
   )
-  scale_down_expression = join(" || ", [
+  scale_down_expression = join(" || ", compact([
     for metric in var.autoscale_metrics :
-    "${lower(metric.metric_name)} < ${metric.threshold_down}"
-    ]
+    (metric.threshold_down == null ? "" : "${lower(metric.metric_name)} < ${metric.threshold_down}")
+    ])
   )
 
   less_than_threshold_up_expression = replace(replace(local.scale_up_expression, "||", "&&"), ">", "<")
@@ -35,14 +35,14 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
 
       metric {
         metric_name = metric_query.value.metric_name
-        namespace   = "AWS/ECS"
+        namespace   = metric_query.value.namespace
         period      = var.alarm_period
         stat        = metric_query.value.statistic
 
-        dimensions = {
+        dimensions = metric_query.value.dimensions == null ? {
           ClusterName = var.ecs_cluster_name
           ServiceName = var.ecs_service_name
-        }
+        } : metric_query.value.dimensions
       }
     }
   }
@@ -72,20 +72,20 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   }
 
   dynamic "metric_query" {
-    for_each = { for metric in var.autoscale_metrics : metric.metric_name => metric }
+    for_each = { for metric in var.autoscale_metrics : metric.metric_name => metric if metric.threshold_down != null }
     content {
       id = lower(metric_query.key)
 
       metric {
         metric_name = metric_query.value.metric_name
-        namespace   = "AWS/ECS"
+        namespace   = metric_query.value.namespace
         period      = var.alarm_period
         stat        = metric_query.value.statistic
 
-        dimensions = {
+        dimensions = metric_query.value.dimensions == null ? {
           ClusterName = var.ecs_cluster_name
           ServiceName = var.ecs_service_name
-        }
+        } : metric_query.value.dimensions
       }
     }
   }
