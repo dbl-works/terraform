@@ -41,11 +41,12 @@ module "stack" {
   ]
 
   # Optional
-  region          = "eu-central-1"
-  skip_cloudflare = false
+  region          = "eu-central-1" # Region to deploy the resources
+  skip_cloudflare = false # Skip the creation of cloudflare modules
 
   # S3 Private
   private_buckets_list = [
+    # Example of S3 bucket with replicas
     {
       bucket_name                     = "project-staging-apps",
       versioning                      = true,
@@ -59,6 +60,7 @@ module "stack" {
         }
       ]
     },
+    # Example of S3 bucket without replicas
     {
       bucket_name = "project-staging-reports",
       versioning = false,
@@ -105,6 +107,7 @@ module "stack" {
   # ECS
   allow_internal_traffic_to_ports = []
   allowlisted_ssh_ips             = []
+  # ECS access has been given to the private S3 bucket created in the stack module
   grant_read_access_to_s3_arns    = []
   grant_write_access_to_s3_arns   = []
   grant_read_access_to_sqs_arns   = []
@@ -192,6 +195,10 @@ module "stack" {
   elasticache_parameter_group_name          = "default.redis6.x.cluster.on" # "default.redis6.x" for non-cluster mode
   elasticache_data_tiering_enabled          = false # see the README in the Elasticache Module
   elasticache_multi_az_enabled              = true
+  elasticache_maxmemory_policy              = "noeviction"
+  elasticache_cluster_mode                  = false
+  elasticache_automatic_failover_enabled    = true
+  elasticache_node_count                    = 1
 
   # vpc
   vpc_cidr_block     = "10.0.0.0/16"
