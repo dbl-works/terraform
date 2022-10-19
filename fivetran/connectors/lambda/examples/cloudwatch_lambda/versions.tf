@@ -1,20 +1,22 @@
 terraform {
   required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.0"
+    }
     fivetran = {
       source  = "fivetran/fivetran"
       version = "~> 0.6.1"
     }
   }
 
-  required_version = "~> 1.3"
+  required_version = ">= 1.0"
 }
 
-# Can be set by FIVETRAN_APIKEY
 variable "fivetran_api_key" {
   type = string
 }
 
-# Can be set by FIVETRAN_APISECRET
 variable "fivetran_api_secret" {
   type = string
 }

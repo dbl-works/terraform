@@ -87,7 +87,7 @@ variable "sources_rds" {
 }
 
 variable "sources_github" {
-  description = "All Github Accounts that we want to sync. User one user per account with access to that account only."
+  description = "All Github Accounts that we want to sync. Use one user per account with access to that account only."
   default     = []
 
   type = list(object({
@@ -97,4 +97,29 @@ variable "sources_github" {
     username     = string
     pat          = string
   }))
+}
+
+variable "sources_lambda" {
+  description = "All lambda connector that we want to connect ot fivetran."
+  default     = []
+
+  type = list(object({
+    service_name       = optional(string, null)
+    project            = optional(string, null)
+    environment        = optional(string, null)
+    lambda_source_dir  = optional(string, null)
+    lambda_output_path = optional(string, null)
+    aws_region_code    = string
+    script_env         = optional(map(any), {})
+  }))
+}
+
+variable "lambda_settings" {
+  description = "All lambda connector that we want to connect to fivetran."
+  default     = {}
+  type = object({
+    lambda_role_arn        = optional(string, null) # Required for fivetran
+    lambda_role_name       = optional(string, null) # Required if user want to setup the policy
+    policy_arns_for_lambda = optional(list(string), [])
+  })
 }

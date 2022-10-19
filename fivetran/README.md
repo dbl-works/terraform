@@ -14,6 +14,8 @@ SELECT current_account() as SNOWFLAKE_ACCOUNT_LOCATOR;
 #
 # main.tf
 #
+data "aws_region" "current" {}
+
 module "fivetran" {
   source = "github.com/dbl-works/terraform//fivetran?ref=v2021.07.05"
 
@@ -28,7 +30,93 @@ module "fivetran" {
   destination_connection_type  = "Directly"
   destination_password         = "XXX"
   destination_database_name    = "${project}-${environment}"
+
+  # Sources
+  ## Github
+  sources_github = [
+    {
+      organisation = "facebook"
+      sync_mode    = "SpecificRepositories"
+      repositories = ["facebook/react"]
+      username     = "dbl-bot"
+      pat          = var.github_pat
+    }
+  ]
+
+  ## lambda
+  sources_lambda = [
+    service_name           = "cloudwatch_metrics"
+    project                = "react"
+    environment            = "staging"
+    lambda_source_dir      = "${path.module}/tracker"
+    lambda_output_path     = "${path.module}/dist/tracker.zip"
+    ## NOTES: Fivetran connector needs this value to know which aws region code that lambda is deployed from
+    ## If you would like to deploy the lambda connector to region other than the default aws region, please refer
+    ## to the example below.
+    aws_region_code        = data.aws_region.current.name
+    policy_arns_for_lambda = ["arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"]
+    script_env             = {
+      RESOURCES_DATA = {
+        projectName      = "facebook"
+        serviceName      = "web",
+        clusterName      = "facebook-staging"
+        loadBalancerName = "app/facebook-staging/a1c2a365faf11127"
+        environment      = "staging"
+      },
+      PERIOD         = "3600"
+    }
+  ]
+
+  lambda_settings = {
+    lambda_role_arn = "arn:aws:iam::123456789:role/fivetran_lambda" # optional
+    lambda_role_name = "fivetran_lambda" # optional
+    fivetran_aws_account_id ="834469178297" # optional
+  } # optional
 }
+
+#
+# multi-region-lambda.tf
+#
+
+## Multi region lambdas have to be created by the fivetran lambda module
+## because terraform currently doesn't support the feature of instantiating multiple provider by loop
+## https://github.com/hashicorp/terraform/issues/19932
+module "fivetran_lambda" {
+  source = "github.com/dbl-works/terraform//fivetran/connectors/lambda?ref=v2022.07.05"
+
+  providers = {
+    fivetran = fivetran
+    aws      = aws.sa-east-1
+  }
+
+  fivetran_group_id = "plausible_ansible" # Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui
+  project           = "test"              # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
+  environment       = "staging"           # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
+
+  # optional
+  service_name       = "lambda"                                         # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
+  aws_region_code    = "sa-east-1"
+  lambda_role_arn    = "arn:aws:iam::175743622168:role/fivetran_lambda" # Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created.
+  lambda_source_dir  = "${path.module}/cloudwatch_metrics"
+  lambda_output_path = "${path.module}/dist/cloudwatch_metrics.zip"
+
+  script_env             = {
+    RESOURCES_DATA = {
+      projectName      = "facebook"
+      serviceName      = "web",
+      clusterName      = "facebook-staging"
+      loadBalancerName = "app/facebook-staging/a1c2a365faf11127"
+      environment      = "staging"
+    },
+    PERIOD         = "3600"
+  }
+}
+
+provider "aws" {
+  alias  = "sa-east-1"
+  region = "sa-east-1"
+}
+
 
 #
 # versions.tf
