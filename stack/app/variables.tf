@@ -360,7 +360,9 @@ variable "cloudwatch_cluster_names" {
 
 # https://aws.amazon.com/rds/instance-types/
 variable "db_instance_class_memory_in_gb" {
-  type = number
+  type    = number
+  default = null
+  description = "Optional. Used for calculating the cloudwatch alarm threshold"
 }
 
 variable "datapoints_to_alarm" {
