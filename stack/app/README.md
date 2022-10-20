@@ -43,6 +43,8 @@ module "stack" {
   # Optional
   region          = "eu-central-1" # Region to deploy the resources
   skip_cloudflare = false # Skip the creation of cloudflare modules
+  cdn_worker_script_name = "serve-cdn"
+  app_worker_script_name = "serve-app"
 
   # S3 Private
   private_buckets_list = [
