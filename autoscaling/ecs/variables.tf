@@ -92,7 +92,7 @@ variable "autoscale_metrics" {
     threshold_up   = number                 # Threshold of which ECS should start to scale up
     threshold_down = optional(number, null) # Threshold of which ECS should start to scale down
     namespace      = optional(string, "AWS/ECS")
-    dimensions     = optional(map, {})
+    dimensions     = optional(map(string), {})
   }))
   default = []
 }

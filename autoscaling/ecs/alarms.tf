@@ -3,7 +3,7 @@ locals {
     for metric in var.autoscale_metrics : metric if metric.threshold_up != null
   ]
   scale_up_expression = join(" || ", [
-    for metric in var.scale_up_metrics : "${lower(metric.metric_name)} > ${metric.threshold_up}"
+    for metric in local.scale_up_metrics : "${lower(metric.metric_name)} > ${metric.threshold_up}"
     ]
   )
 
@@ -11,7 +11,7 @@ locals {
     for metric in var.autoscale_metrics : metric if metric.threshold_down != null
   ]
   scale_down_expression = join(" || ", [
-    for metric in var.scale_down_metrics : "${lower(metric.metric_name)} < ${metric.threshold_down}"
+    for metric in local.scale_down_metrics : "${lower(metric.metric_name)} < ${metric.threshold_down}"
     ]
   )
 
@@ -19,7 +19,7 @@ locals {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
-  count               = length(var.scale_up_metrics) > 0 ? 1 : 0
+  count               = length(local.scale_up_metrics) > 0 ? 1 : 0
   alarm_name          = "ECS-${var.ecs_cluster_name}-${var.ecs_service_name}-ScaleUpAlarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
@@ -34,7 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
   }
 
   dynamic "metric_query" {
-    for_each = { for metric in var.scale_up_metrics : metric.metric_name => metric }
+    for_each = { for metric in local.scale_up_metrics : metric.metric_name => metric }
     content {
       id = lower(metric_query.key)
 
@@ -60,7 +60,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
-  count               = length(var.scale_down_metrics) > 0 ? 1 : 0
+  count               = length(local.scale_down_metrics) > 0 ? 1 : 0
   alarm_name          = "ECS-${var.ecs_cluster_name}-${var.ecs_service_name}-ScaleDownAlarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
@@ -77,7 +77,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   }
 
   dynamic "metric_query" {
-    for_each = { for metric in var.scale_down_metrics : metric.metric_name => metric }
+    for_each = { for metric in local.scale_down_metrics : metric.metric_name => metric }
     content {
       id = lower(metric_query.key)
 
