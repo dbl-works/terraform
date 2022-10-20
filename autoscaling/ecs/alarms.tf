@@ -77,7 +77,8 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   }
 
   dynamic "metric_query" {
-    for_each = { for metric in local.scale_down_metrics : metric.metric_name => metric }
+    # Include all metrics here so less_than_threshold_up_expression would not throw error due to missing metrics
+    for_each = { for metric in var.autoscale_metrics : metric.metric_name => metric }
     content {
       id = lower(metric_query.key)
 

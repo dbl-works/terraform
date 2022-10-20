@@ -26,9 +26,18 @@ module "ecs-autoscaling-cpu" {
     {
       metric_name    = "MemoryUtilization"
       statistic      = "Average"
-      threshold_up   = 60
-      threshold_down = 50
-    }
+      threshold_up   = 60 # Optional. If missing, it would not be included in the scale up alarm
+      threshold_down = 50 # Optional. If missing, it would not be included in the scale down alarm
+    },
+    {
+      metric_name  = "TargetResponseTime"
+      statistic    = "p95"
+      threshold_up = 0.130 # in seconds.
+      namespace    = "AWS/ApplicationELB" # Optional value, default value is AWS/ECS
+      dimensions = {
+        LoadBalancer = "app/fb-loadtesting/123456789"
+      } # Optional value, default value is ClusterName/ServiceName
+    },
   ]
 
   # Optional
