@@ -26,6 +26,18 @@ variable "skip_cloudflare" {
 }
 # =============== Certificate Manager ================ #
 
+# =============== Cloudflare ================ #
+variable "cdn_worker_script_name" {
+  type    = string
+  default = "serve-cdn"
+}
+
+variable "app_worker_script_name" {
+  type    = string
+  default = "serve-app"
+}
+# =============== Cloudflare ================ #
+
 # =============== S3 private ================ #
 variable "private_buckets_list" {
   default = []
@@ -360,8 +372,8 @@ variable "cloudwatch_cluster_names" {
 
 # https://aws.amazon.com/rds/instance-types/
 variable "db_instance_class_memory_in_gb" {
-  type    = number
-  default = null
+  type        = number
+  default     = null
   description = "Optional. Used for calculating the cloudwatch alarm threshold"
 }
 

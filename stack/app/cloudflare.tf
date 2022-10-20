@@ -9,8 +9,8 @@ module "cloudflare" {
 
   domain                 = var.domain_name
   alb_dns_name           = module.ecs.alb_dns_name
-  cdn_worker_script_name = "serve-cdn"
-  app_worker_script_name = "serve-app"
+  cdn_worker_script_name = var.cdn_worker_script_name
+  app_worker_script_name = var.app_worker_script_name
 
   # optional
   bastion_enabled    = true
