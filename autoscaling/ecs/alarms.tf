@@ -66,6 +66,9 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   evaluation_periods  = var.alarm_evaluation_periods
   threshold           = 1
   datapoints_to_alarm = var.datapoints_to_alarm_down
+  # if we measure the response time, and we have *zero* requests, we have not enough data
+  # so scale down is never triggered when there are no request
+  treat_missing_data  = "breaching"
 
   metric_query {
     id = "e1"
