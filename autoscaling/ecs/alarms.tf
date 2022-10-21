@@ -1,12 +1,17 @@
 locals {
+  scale_up_metrics = [
+    for metric in var.autoscale_metrics : metric if metric.threshold_up != null
+  ]
   scale_up_expression = join(" || ", [
-    for metric in var.autoscale_metrics :
-    "${lower(metric.metric_name)} > ${metric.threshold_up}"
+    for metric in local.scale_up_metrics : "${lower(metric.metric_name)} > ${metric.threshold_up}"
     ]
   )
+
+  scale_down_metrics = [
+    for metric in var.autoscale_metrics : metric if metric.threshold_down != null
+  ]
   scale_down_expression = join(" || ", [
-    for metric in var.autoscale_metrics :
-    "${lower(metric.metric_name)} < ${metric.threshold_down}"
+    for metric in local.scale_down_metrics : "${lower(metric.metric_name)} < ${metric.threshold_down}"
     ]
   )
 
@@ -14,7 +19,7 @@ locals {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
-  count               = length(var.autoscale_metrics) > 0 ? 1 : 0
+  count               = length(local.scale_up_metrics) > 0 ? 1 : 0
   alarm_name          = "ECS-${var.ecs_cluster_name}-${var.ecs_service_name}-ScaleUpAlarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
@@ -29,20 +34,20 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
   }
 
   dynamic "metric_query" {
-    for_each = { for metric in var.autoscale_metrics : metric.metric_name => metric }
+    for_each = { for metric in local.scale_up_metrics : metric.metric_name => metric }
     content {
       id = lower(metric_query.key)
 
       metric {
         metric_name = metric_query.value.metric_name
-        namespace   = "AWS/ECS"
+        namespace   = metric_query.value.namespace
         period      = var.alarm_period
         stat        = metric_query.value.statistic
 
-        dimensions = {
+        dimensions = metric_query.value.dimensions == null ? {
           ClusterName = var.ecs_cluster_name
           ServiceName = var.ecs_service_name
-        }
+        } : metric_query.value.dimensions
       }
     }
   }
@@ -55,7 +60,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
-  count               = length(var.autoscale_metrics) > 0 ? 1 : 0
+  count               = length(local.scale_down_metrics) > 0 ? 1 : 0
   alarm_name          = "ECS-${var.ecs_cluster_name}-${var.ecs_service_name}-ScaleDownAlarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.alarm_evaluation_periods
@@ -72,20 +77,21 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   }
 
   dynamic "metric_query" {
+    # Include all metrics here so less_than_threshold_up_expression would not throw error due to missing metrics
     for_each = { for metric in var.autoscale_metrics : metric.metric_name => metric }
     content {
       id = lower(metric_query.key)
 
       metric {
         metric_name = metric_query.value.metric_name
-        namespace   = "AWS/ECS"
+        namespace   = metric_query.value.namespace
         period      = var.alarm_period
         stat        = metric_query.value.statistic
 
-        dimensions = {
+        dimensions = metric_query.value.dimensions == null ? {
           ClusterName = var.ecs_cluster_name
           ServiceName = var.ecs_service_name
-        }
+        } : metric_query.value.dimensions
       }
     }
   }

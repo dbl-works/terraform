@@ -87,10 +87,12 @@ variable "ecs_autoscale_role_arn" {
 
 variable "autoscale_metrics" {
   type = set(object({
-    metric_name    = string # Metric which used to decide whether or not to scale in/out
-    statistic      = string # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum
-    threshold_up   = number # Threshold of which ECS should start to scale up
-    threshold_down = number # Threshold of which ECS should start to scale down
+    metric_name    = string                 # Metric which used to decide whether or not to scale in/out
+    statistic      = string                 # The statistic to apply to the alarm's associated metric. Supported Argument: SampleCount, Average, Sum, Minimum, Maximum
+    threshold_up   = optional(number, null) # Threshold of which ECS should start to scale up. If null, would not be included in the scale up alarm
+    threshold_down = optional(number, null) # Threshold of which ECS should start to scale down. If null, would not be included in the scale down alarm
+    namespace      = optional(string, "AWS/ECS")
+    dimensions     = optional(map(string), {})
   }))
   default = []
 }
