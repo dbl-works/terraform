@@ -25,6 +25,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
   evaluation_periods  = var.alarm_evaluation_periods
   threshold           = 1
   datapoints_to_alarm = var.datapoints_to_alarm_up
+  treat_missing_data  = var.scale_up_treat_missing_data
 
   metric_query {
     id          = "e1"
@@ -66,6 +67,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
   evaluation_periods  = var.alarm_evaluation_periods
   threshold           = 1
   datapoints_to_alarm = var.datapoints_to_alarm_down
+  treat_missing_data  = var.scale_down_treat_missing_data
 
   metric_query {
     id = "e1"
