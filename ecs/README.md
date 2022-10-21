@@ -89,6 +89,8 @@ module "ecs" {
     sns_topic_arn            = "arn:aws:sns:us-east-1:175743622168:slack-sns"
   }
 
+  autoscaling_scale_down_treat_missing_data = "breaching"
+  autoscaling_scale_up_treat_missing_data   = "missing"
 }
 ```
 

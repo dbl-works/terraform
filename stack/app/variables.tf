@@ -297,6 +297,17 @@ variable "autoscale_metrics_map" {
   default = {}
 }
 
+
+variable "autoscaling_scale_down_treat_missing_data" {
+  type    = string
+  default = "breaching"
+}
+
+variable "autoscaling_scale_up_treat_missing_data" {
+  type    = string
+  default = "missing"
+}
+
 # =============== ECS ================ #
 
 # =============== Cloudwatch ================ #
