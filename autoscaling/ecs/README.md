@@ -41,19 +41,21 @@ module "ecs-autoscaling-cpu" {
   ]
 
   # Optional
-  ecs_max_count = 4
-  ecs_min_count = 1
-  alarm_evaluation_periods = 5
-  datapoints_to_alarm_up = 3
-  datapoints_to_alarm_down = 3
-  alarm_period = 60 # seconds
-  cooldown = 300 # Autoscale will wait for another 300s before spinning more task (if the threshold still exceed the value)
-  scale_up_adjustment = 1
-  scale_up_lower_bound = 0
-  scale_down_adjustment = -1
-  scale_down_upper_bound = 0
-  sns_topic_arn = "arn:aws:sns:us-east-1:12345678:slack-sns" # If present, it will send notifications to the SNS topics when the alarm is triggered
-  ecs_autoscale_role_arn = module.iam_role_for_ecs_scaling.ecs_autoscale_role_arn
+  ecs_max_count                 = 4
+  ecs_min_count                 = 1
+  alarm_evaluation_periods      = 5
+  datapoints_to_alarm_up        = 3
+  datapoints_to_alarm_down      = 3
+  alarm_period                  = 60  # seconds
+  cooldown                      = 300 # Autoscale will wait for another 300s before spinning more task (if the threshold still exceed the value)
+  scale_up_adjustment           = 1
+  scale_up_lower_bound          = 0
+  scale_down_adjustment         = -1
+  scale_down_upper_bound        = 0
+  sns_topic_arn                 = "arn:aws:sns:us-east-1:12345678:slack-sns" # If present, it will send notifications to the SNS topics when the alarm is triggered
+  ecs_autoscale_role_arn        = module.iam_role_for_ecs_scaling.ecs_autoscale_role_arn
+  scale_down_treat_missing_data = "breaching"
+  scale_up_treat_missing_data   = "missing"
 }
 
 ## Variables

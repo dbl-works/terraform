@@ -84,17 +84,19 @@ variable "enable_xray" {
 ##########################################################################
 variable "autoscale_params" {
   type = object({
-    alarm_evaluation_periods = optional(number)
-    alarm_period             = optional(number)
-    cooldown                 = optional(number)
-    datapoints_to_alarm_up   = optional(number)
-    datapoints_to_alarm_down = optional(number)
-    scale_up_adjustment      = optional(number)
-    scale_up_lower_bound     = optional(number)
-    scale_down_adjustment    = optional(number)
-    scale_down_upper_bound   = optional(number)
-    ecs_autoscale_role_arn   = optional(string)
-    sns_topic_arn            = optional(string)
+    alarm_evaluation_periods      = optional(number)
+    alarm_period                  = optional(number)
+    cooldown                      = optional(number)
+    datapoints_to_alarm_up        = optional(number)
+    datapoints_to_alarm_down      = optional(number)
+    scale_up_adjustment           = optional(number)
+    scale_up_lower_bound          = optional(number)
+    scale_down_adjustment         = optional(number)
+    scale_down_upper_bound        = optional(number)
+    ecs_autoscale_role_arn        = optional(string)
+    sns_topic_arn                 = optional(string)
+    scale_down_treat_missing_data = optional(string, "breaching")
+    scale_up_treat_missing_data   = optional(string, "missing")
   })
   default = {}
 }

@@ -74,6 +74,20 @@ variable "scale_down_upper_bound" {
   description = "Upper bound for the difference between the alarm threshold and the CloudWatch metric. Without a value, AWS will treat this bound as infinity. The upper bound must be greater than the lower bound."
 }
 
+# if we measure the response time, and we have *zero* requests, we have not enough data
+# so scale down is never triggered when there are no request
+variable "scale_down_treat_missing_data" {
+  type        = string
+  default     = "breaching"
+  description = "(Optional) Sets how this alarm is to handle missing data points. The following values are supported: missing, ignore, breaching and notBreaching. Defaults to breaching."
+}
+
+variable "scale_up_treat_missing_data" {
+  type        = string
+  default     = "missing"
+  description = "(Optional) Sets how this alarm is to handle missing data points. The following values are supported: missing, ignore, breaching and notBreaching. Defaults to missing."
+}
+
 variable "sns_topic_arn" {
   type        = string
   description = "SNS Topics that will receive message when the threshold is hit"
