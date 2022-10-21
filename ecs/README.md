@@ -76,21 +76,20 @@ module "ecs" {
     }
   }
   autoscale_params = {
-    alarm_evaluation_periods = 5
-    alarm_period             = 60  # seconds
-    datapoints_to_alarm_up   = 3
-    datapoints_to_alarm_down = 3
-    cooldown                 = 300 # seconds
-    scale_up_adjustment      = 1
-    scale_up_lower_bound     = 0
-    scale_down_adjustment    = -1
-    scale_down_upper_bound   = 0
-    ecs_autoscale_role_arn   = "arn:aws:iam::123456789:role/ecs-autoscale"
-    sns_topic_arn            = "arn:aws:sns:us-east-1:175743622168:slack-sns"
+    alarm_evaluation_periods      = 5
+    alarm_period                  = 60 # seconds
+    datapoints_to_alarm_up        = 3
+    datapoints_to_alarm_down      = 3
+    cooldown                      = 300 # seconds
+    scale_up_adjustment           = 1
+    scale_up_lower_bound          = 0
+    scale_down_adjustment         = -1
+    scale_down_upper_bound        = 0
+    ecs_autoscale_role_arn        = "arn:aws:iam::123456789:role/ecs-autoscale"
+    sns_topic_arn                 = "arn:aws:sns:us-east-1:175743622168:slack-sns"
+    scale_down_treat_missing_data = "breaching"
+    scale_up_treat_missing_data   = "missing"
   }
-
-  autoscaling_scale_down_treat_missing_data = "breaching"
-  autoscaling_scale_up_treat_missing_data   = "missing"
 }
 ```
 
