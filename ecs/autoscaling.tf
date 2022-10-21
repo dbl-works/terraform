@@ -21,6 +21,6 @@ module "ecs-autoscaling" {
   scale_up_adjustment           = lookup(var.autoscale_params, "scale_up_adjustment", 1)
   scale_up_lower_bound          = lookup(var.autoscale_params, "scale_up_lower_bound", 0)
   sns_topic_arn                 = lookup(var.autoscale_params, "sns_topic_arn", null)
-  scale_down_treat_missing_data = var.autoscaling_scale_down_treat_missing_data
-  scale_up_treat_missing_data   = var.autoscaling_scale_up_treat_missing_data
+  scale_down_treat_missing_data = lookup(var.autoscale_params, "scale_down_treat_missing_data", "breaching")
+  scale_up_treat_missing_data   = lookup(var.autoscale_params, "scale_up_treat_missing_data", "missing")
 }
