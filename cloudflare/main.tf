@@ -38,6 +38,6 @@ resource "cloudflare_worker_route" "route" {
   for_each = var.s3_cloudflare_records
 
   zone_id     = data.cloudflare_zone.default.id
-  pattern     = "*${data.key}.${var.domain}/*"
-  script_name = data.value.worker_script_name
+  pattern     = "*${each.key}.${var.domain}/*"
+  script_name = each.value.worker_script_name
 }
