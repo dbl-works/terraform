@@ -27,14 +27,19 @@ variable "skip_cloudflare" {
 # =============== Certificate Manager ================ #
 
 # =============== Cloudflare ================ #
-variable "cdn_worker_script_name" {
-  type    = string
-  default = "serve-cdn"
-}
+variable "s3_cloudflare_records" {
+  type = map(object({
+    worker_script_name = string
+  }))
+  default = {
+    cdn = {
+      worker_script_name = "serve-cdn"
+    },
+    app = {
+      worker_script_name = "serve-app"
+    }
+  }
 
-variable "app_worker_script_name" {
-  type    = string
-  default = "serve-app"
 }
 # =============== Cloudflare ================ #
 

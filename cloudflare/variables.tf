@@ -16,10 +16,17 @@ variable "alb_dns_name" {
   type = string
 }
 
-variable "cdn_worker_script_name" {
-  type = string
-}
-
-variable "app_worker_script_name" {
-  type = string
+variable "s3_cloudflare_records" {
+  # {
+  #   cdn = {
+  #     worker_script_name = "serve-cdn"
+  #   },
+  #   app = {
+  #     worker_script_name = "serve-app"
+  #   }
+  # }
+  type = map(object({
+    worker_script_name = string
+  }))
+  default = {}
 }

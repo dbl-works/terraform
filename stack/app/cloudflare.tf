@@ -7,10 +7,9 @@ module "cloudflare" {
     module.s3-frontend,
   ]
 
-  domain                 = var.domain_name
-  alb_dns_name           = module.ecs.alb_dns_name
-  cdn_worker_script_name = var.cdn_worker_script_name
-  app_worker_script_name = var.app_worker_script_name
+  domain                = var.domain_name
+  alb_dns_name          = module.ecs.alb_dns_name
+  s3_cloudflare_records = var.s3_cloudflare_records
 
   # optional
   bastion_enabled    = true
