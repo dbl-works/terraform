@@ -48,7 +48,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
 
   metric_query {
     id          = "e1"
-    expression  = var.scale_down_treat_missing_data == "breaching" ? "IF (${local.scale_up_breaching_expression},1,0)" : "IF (${local.scale_up_non_breaching_expression},1,0)"
+    expression  = var.scale_up_treat_missing_data == "breaching" ? "IF (${local.scale_up_breaching_expression},1,0)" : "IF (${local.scale_up_non_breaching_expression},1,0)"
     label       = "Exceed Scale Up Threshold"
     return_data = "true"
   }
