@@ -2,23 +2,39 @@ locals {
   scale_up_metrics = [
     for metric in var.autoscale_metrics : metric if metric.threshold_up != null
   ]
-  scale_up_expression = join(" || ", [
-    for metric in local.scale_up_metrics : "${lower(metric.metric_name)} > ${metric.threshold_up}"
+  # Autoscaling will throw "Metric data points must be provided" if the data is missing, so we must use FILL to replace the null value
+  scale_up_breaching_expression = join(" || ", [
+    for metric in local.scale_up_metrics : "FILL(${lower(metric.metric_name)}, ${metric.threshold_up + 0.01}) > ${metric.threshold_up}"
+    ]
+  )
+  scale_up_non_breaching_expression = join(" || ", [
+    for metric in local.scale_up_metrics : "FILL(${lower(metric.metric_name)}, ${metric.threshold_up - 0.01}) > ${metric.threshold_up}"
     ]
   )
 
   scale_down_metrics = [
     for metric in var.autoscale_metrics : metric if metric.threshold_down != null
   ]
-  scale_down_expression = join(" || ", [
+  scale_down_breaching_expression = join(" || ", [
     for metric in local.scale_down_metrics : "FILL(${lower(metric.metric_name)}, ${metric.threshold_down - 0.01}) < ${metric.threshold_down}"
     ]
   )
+  scale_down_non_breaching_expression = join(" || ", [
+    for metric in local.scale_down_metrics : "FILL(${lower(metric.metric_name)}, ${metric.threshold_down + 0.01}) < ${metric.threshold_down}"
+    ]
+  )
 
-  less_than_threshold_up_expression = join(" && ", [
+  less_than_threshold_up_breaching_expression = join(" && ", [
     for metric in local.scale_up_metrics : "FILL(${lower(metric.metric_name)}, ${metric.threshold_up - 0.01}) < ${metric.threshold_up}"
     ]
   )
+  less_than_threshold_up_non_breaching_expression = join(" && ", [
+    for metric in local.scale_up_metrics : "FILL(${lower(metric.metric_name)}, ${metric.threshold_up + 0.01}) < ${metric.threshold_up}"
+    ]
+  )
+
+  scale_down_breaching_combined_expression     = "IF (((${local.scale_down_breaching_expression}) && ${local.less_than_threshold_up_breaching_expression}),1,0)"
+  scale_down_non_breaching_combined_expression = "IF (((${local.scale_down_non_breaching_expression}) && ${local.less_than_threshold_up_non_breaching_expression}),1,0)"
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
@@ -32,7 +48,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
 
   metric_query {
     id          = "e1"
-    expression  = "IF (${local.scale_up_expression},1,0)"
+    expression  = var.scale_down_treat_missing_data == "breaching" ? "IF (${local.scale_up_breaching_expression},1,0)" : "IF (${local.scale_up_non_breaching_expression},1,0)"
     label       = "Exceed Scale Up Threshold"
     return_data = "true"
   }
@@ -76,7 +92,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_down_alarm" {
     id = "e1"
     # Make sure all fo the expression is less than the threshold_up value
     # So we don't stop the autoscaling from spinning more resources
-    expression  = "IF (((${local.scale_down_expression}) && ${local.less_than_threshold_up_expression}),1,0)"
+    expression  = var.scale_down_treat_missing_data == "breaching" ? local.scale_down_breaching_combined_expression : local.scale_down_non_breaching_combined_expression
     label       = "Exceed Scale Down Threshold"
     return_data = "true"
   }
