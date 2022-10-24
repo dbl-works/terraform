@@ -15,7 +15,10 @@ locals {
     ]
   )
 
-  less_than_threshold_up_expression = replace(replace(local.scale_up_expression, "||", "&&"), ">", "<")
+  less_than_threshold_up_expression = join(" && ", [
+    for metric in local.scale_up_metrics : "FILL(${lower(metric.metric_name)}, ${metric.threshold_up - 0.01}) < ${metric.threshold_up}"
+    ]
+  )
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
