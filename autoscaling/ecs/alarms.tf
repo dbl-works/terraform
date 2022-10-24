@@ -11,7 +11,7 @@ locals {
     for metric in var.autoscale_metrics : metric if metric.threshold_down != null
   ]
   scale_down_expression = join(" || ", [
-    for metric in local.scale_down_metrics : "${lower(metric.metric_name)} < ${metric.threshold_down}"
+    for metric in local.scale_down_metrics : "FILL(${lower(metric.metric_name)}, ${metric.threshold_down - 0.01}) < ${metric.threshold_down}"
     ]
   )
 
