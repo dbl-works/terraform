@@ -10,6 +10,7 @@ Pre-requirements:
 (1) In order to perform actions in cloudflare, you would need to create api token with at least the following permissions:
   - Zone | DNS | Edit
   - Zone | Worker Routes | Edit
+  - Zone | Zone Settings | Edit
 in the Zone Resources
   - Include | Specific Zone | <Your Zone>
 
