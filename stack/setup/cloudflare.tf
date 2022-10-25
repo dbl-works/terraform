@@ -35,7 +35,7 @@ resource "aws_acm_certificate_validation" "default" {
 }
 
 resource "cloudflare_zone_settings_override" "tls" {
-  name = data.cloudflare_zone.default.id
+  zone_id = data.cloudflare_zone.default.id
 
   settings {
     tls_1_3                  = "on"
