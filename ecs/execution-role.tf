@@ -175,7 +175,9 @@ resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
     "Statement" : [
       {
         "Effect" : "Deny",
-        "Action" : [],
+        "Action" : [
+          "secretsmanager:GetSecretValue",
+        ],
         "Resource" : "",
       }
     ]
