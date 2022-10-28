@@ -4,13 +4,13 @@
 # 2. terraform apply
 # https://github.com/cloudflare/terraform-provider-cloudflare/issues/808
 resource "cloudflare_zone_settings_override" "tls" {
-  count   = var.https_enabled ? 1 : 0
+  count   = var.tls_settings == null ? 0 : 1
   zone_id = data.cloudflare_zone.default.id
 
   settings {
-    tls_1_3                  = "on"
-    automatic_https_rewrites = "on"
-    ssl                      = "strict"
-    always_use_https         = "on"
+    tls_1_3                  = var.tls_settings.tls_1_3
+    automatic_https_rewrites = var.tls_settings.automatic_https_rewrites
+    ssl                      = var.tls_settings.ssl
+    always_use_https         = var.tls_settings.always_use_https
   }
 }
