@@ -40,11 +40,11 @@ variable "auth" {
 }
 
 variable "reports" {
-  type = object({
+  type = list(object({
     table           = string # Table name
     config_type     = string # Prebuilt, Custom
     prebuilt_report = string # List of prebuilt reports, https://fivetran.com/docs/applications/google-analytics/prebuilt-reports#prebuiltreports
-  })
+  }))
   default = [
     {
       table           = "traffic"
