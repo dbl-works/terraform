@@ -170,5 +170,5 @@ resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
         "Resource" : local.kms_and_secret_arns,
       }
     ]
-  }) : []
+  }) : ""
 }
