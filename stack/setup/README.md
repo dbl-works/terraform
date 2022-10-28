@@ -67,7 +67,6 @@ module "stack-setup" {
 # export AWS_REGION=
 provider "aws" {}
 
-# export CLOUDFLARE_EMAIL=
 # export CLOUDFLARE_API_TOKEN=
 provider "cloudflare" {}
 ```
