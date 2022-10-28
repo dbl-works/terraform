@@ -13,5 +13,6 @@ module "cloudflare" {
 
   # optional
   bastion_enabled    = true
+  https_enabled      = var.https_enabled
   bastion_public_dns = module.ecs.nlb_dns_name
 }

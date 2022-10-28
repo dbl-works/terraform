@@ -39,7 +39,11 @@ variable "s3_cloudflare_records" {
       worker_script_name = "serve-app"
     }
   }
+}
 
+variable "https_enabled" {
+  type    = bool
+  default = false
 }
 # =============== Cloudflare ================ #
 
