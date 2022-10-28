@@ -25,9 +25,9 @@ resource "fivetran_connector" "google_analytics" {
       for_each = { for report in var.reports : report.table => report }
 
       content {
-        table           = report.key
-        config_type     = report.value.config_type
-        prebuilt_report = report.value.prebuilt_report
+        table           = reports.key
+        config_type     = reports.value.config_type
+        prebuilt_report = reports.value.prebuilt_report
       }
     }
   }
