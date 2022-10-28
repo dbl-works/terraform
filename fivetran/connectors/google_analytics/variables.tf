@@ -4,12 +4,12 @@ variable "fivetran_group_id" {
 }
 
 variable "google_profile_ids" {
-  type        = string
+  type        = list(string)
   description = "Specific User Profile IDs to sync. Must be populated if syncMode is set to SpecificAccounts"
 }
 
 variable "google_account_ids" {
-  type        = string
+  type        = list(string)
   description = "The list of specific Account IDs to sync. Must be populated if syncMode is set to SpecificAccounts."
 }
 
