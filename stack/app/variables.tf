@@ -26,6 +26,32 @@ variable "skip_cloudflare" {
 }
 # =============== Certificate Manager ================ #
 
+# =============== Cloudflare ================ #
+variable "s3_cloudflare_records" {
+  type = map(object({
+    worker_script_name = string
+  }))
+  default = {
+    cdn = {
+      worker_script_name = "serve-cdn"
+    },
+    app = {
+      worker_script_name = "serve-app"
+    }
+  }
+}
+
+variable "tls_settings" {
+  type = object({
+    tls_1_3                  = string # "on/off"
+    automatic_https_rewrites = string # "on/off"
+    ssl                      = string # "strict"
+    always_use_https         = string # "on/off"
+  })
+  default = null
+}
+# =============== Cloudflare ================ #
+
 # =============== S3 private ================ #
 variable "private_buckets_list" {
   default = []
@@ -360,7 +386,9 @@ variable "cloudwatch_cluster_names" {
 
 # https://aws.amazon.com/rds/instance-types/
 variable "db_instance_class_memory_in_gb" {
-  type = number
+  type        = number
+  default     = null
+  description = "Optional. Used for calculating the cloudwatch alarm threshold"
 }
 
 variable "datapoints_to_alarm" {

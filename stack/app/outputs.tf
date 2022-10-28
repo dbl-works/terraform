@@ -63,3 +63,7 @@ output "ecs_cluster_name" {
 output "alb_arn_suffix" {
   value = module.ecs.alb_arn_suffix
 }
+
+output "alb_dns_name" {
+  value = module.ecs.alb_dns_name
+}

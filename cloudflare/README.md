@@ -46,6 +46,12 @@ module "cloudflare" {
   # optional
   bastion_enabled    = false # set to true if required
   bastion_public_dns = "project-staging-xxxxx.nlb.eu-central-1.amazonaws.com"
+  tls_settings = {
+    tls_1_3                  = "on"
+    automatic_https_rewrites = "on"
+    ssl                      = "strict"
+    always_use_https         = "on"
+  }
 }
 ```
 

@@ -59,6 +59,16 @@ module "stack-setup" {
   # In case this stack has a read-replica RDS in a different region
   rds_cross_region_kms_key_arn = null
 }
+
+# versions.tf
+
+# export AWS_ACCESS_KEY_ID=
+# export AWS_SECRET_ACCESS_KEY=
+# export AWS_REGION=
+provider "aws" {}
+
+# export CLOUDFLARE_API_TOKEN=
+provider "cloudflare" {}
 ```
 
 ```terraform

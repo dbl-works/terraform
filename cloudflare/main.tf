@@ -25,7 +25,7 @@ resource "cloudflare_record" "bastion" {
 # cdn.my-project.com to the S3-Bucket -> e.g. folder "public"
 # app.my-project.com to the S3-Bucket -> e.g. folder "app"
 resource "cloudflare_record" "s3" {
-  for_each = toset(["cdn", "app"])
+  for_each = var.s3_cloudflare_records
 
   zone_id = data.cloudflare_zone.default.id
   name    = each.key
@@ -34,14 +34,10 @@ resource "cloudflare_record" "s3" {
   proxied = true
 }
 
-resource "cloudflare_worker_route" "cdn_route" {
-  zone_id     = data.cloudflare_zone.default.id
-  pattern     = "*cdn.${var.domain}/*"
-  script_name = var.cdn_worker_script_name
-}
+resource "cloudflare_worker_route" "route" {
+  for_each = var.s3_cloudflare_records
 
-resource "cloudflare_worker_route" "app_route" {
   zone_id     = data.cloudflare_zone.default.id
-  pattern     = "*app.${var.domain}/*"
-  script_name = var.app_worker_script_name
+  pattern     = "*${each.key}.${var.domain}/*"
+  script_name = each.value.worker_script_name
 }
