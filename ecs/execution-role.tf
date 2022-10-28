@@ -146,11 +146,18 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
   })
 }
 
+locals {
+  kms_and_secret_arns = flatten([
+    var.secrets_arns,
+    var.kms_key_arns,
+  ])
+}
+
 resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
   name = "ecs-task-execution-secrets-policy"
   role = aws_iam_role.ecs-task-execution.name
 
-  policy = jsonencode({
+  policy = length(local.kms_and_secret_arns) > 0 ? jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
@@ -160,11 +167,8 @@ resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
           "kms:Decrypt",
           "kms:GenerateDataKey" # for writing to an encrypted S3 bucket
         ],
-        "Resource" : flatten([
-          var.secrets_arns,
-          var.kms_key_arns,
-        ]),
+        "Resource" : kms_and_secret_arns,
       }
     ]
-  })
+  }) : []
 }

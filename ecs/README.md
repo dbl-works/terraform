@@ -15,10 +15,10 @@ module "ecs" {
   vpc_id             = module.vpc.id
   subnet_private_ids = module.vpc.subnet_private_ids
   subnet_public_ids  = module.vpc.subnet_private_ids
-  secrets_arns       = []
-  kms_key_arns       = []
 
   # optional
+  secrets_arns      = []
+  kms_key_arns      = []
   health_check_path = "/healthz"
   certificate_arn   = module.ssl-certificate.arn # requires a `certificate` module to be created separately
   regional          = true

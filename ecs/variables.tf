@@ -31,8 +31,14 @@ variable "subnet_private_ids" { type = list(string) }
 variable "subnet_public_ids" { type = list(string) }
 
 # Allow containers to access the following resources from inside the cluster
-variable "secrets_arns" { type = list(string) }
-variable "kms_key_arns" { type = list(string) }
+variable "secrets_arns" {
+  type    = list(string)
+  default = []
+}
+variable "kms_key_arns" {
+  type    = list(string)
+  default = []
+}
 
 # Sets the certficate for https traffic into the cluster
 # If not passed, no SSL endpoint will be setup
