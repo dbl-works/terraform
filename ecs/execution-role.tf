@@ -146,11 +146,22 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
   })
 }
 
+locals {
+  kms_and_secret_arns = flatten([
+    var.secrets_arns,
+    var.kms_key_arns,
+  ])
+}
+
+# Making secret/kms ARNs optional was added later.
+# To avoid a breaking change by introducing a `count` logic (the name would change),
+# we added a dummy policy without any effect instead. AWS performs some validations
+# on policies, hence we can't just use a blank string.
 resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
   name = "ecs-task-execution-secrets-policy"
   role = aws_iam_role.ecs-task-execution.name
 
-  policy = jsonencode({
+  policy = length(local.kms_and_secret_arns) > 0 ? jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
@@ -160,10 +171,18 @@ resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
           "kms:Decrypt",
           "kms:GenerateDataKey" # for writing to an encrypted S3 bucket
         ],
-        "Resource" : flatten([
-          var.secrets_arns,
-          var.kms_key_arns,
-        ]),
+        "Resource" : local.kms_and_secret_arns,
+      }
+    ]
+    }) : jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Deny",
+        "Action" : [
+          "secretsmanager:GetSecretValue",
+        ],
+        "Resource" : "arn:aws:secretsmanager:${var.region}:*:secret:can-t-be-blank",
       }
     ]
   })
