@@ -12,6 +12,11 @@ variable "bastion_enabled" {
   default = false
 }
 
+variable "https_enabled" {
+  type    = bool
+  default = false
+}
+
 variable "alb_dns_name" {
   type = string
 }
