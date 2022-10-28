@@ -153,6 +153,10 @@ locals {
   ])
 }
 
+# Making secret/kms ARNs optional was added later.
+# To avoid a breaking change by introducing a `count` logic (the name would change),
+# we added a dummy policy without any effect instead. AWS performs some validations
+# on policies, hence we can't just use a blank string.
 resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
   name = "ecs-task-execution-secrets-policy"
   role = aws_iam_role.ecs-task-execution.name
