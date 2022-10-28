@@ -167,7 +167,7 @@ resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
           "kms:Decrypt",
           "kms:GenerateDataKey" # for writing to an encrypted S3 bucket
         ],
-        "Resource" : kms_and_secret_arns,
+        "Resource" : length(local.kms_and_secret_arns) > 0 ? kms_and_secret_arns : "can-t-be-blank",
       }
     ]
   }) : []
