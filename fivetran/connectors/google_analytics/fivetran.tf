@@ -4,7 +4,7 @@ locals {
 }
 
 resource "fivetran_connector" "google_analytics" {
-  group_id          = local.fivetran_group_id
+  group_id          = var.fivetran_group_id
   service           = "google_analytics"
   sync_frequency    = var.sync_frequency // min
   paused            = false
