@@ -45,6 +45,12 @@ module "stack" {
   skip_cloudflare = false # Skip the creation of cloudflare modules
   cdn_worker_script_name = "serve-cdn"
   app_worker_script_name = "serve-app"
+  tls_settings = {
+    tls_1_3                  = "on"
+    automatic_https_rewrites = "on"
+    ssl                      = "strict"
+    always_use_https         = "on"
+  }
 
   # S3 Private
   private_buckets_list = [
