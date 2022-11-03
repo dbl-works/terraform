@@ -17,6 +17,8 @@ jobs:
           - ecs
           - elasticache
           - fivetran
+          - fivetran/connectors/google_analytics
+          - fivetran/connectors/lambda
           - global-accelerator
           - iam/iam-for-deploy-bot
           - iam/iam-for-humans
