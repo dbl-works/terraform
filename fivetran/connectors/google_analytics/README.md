@@ -48,6 +48,7 @@ module "google_analytics" {
   # optional
   sync_frequency = 360 # Interval to sync that connector (min)
   timeframe_months = "ALL_TIME" # Number of months of reporting data you'd like to include in your initial sync. This cannot be modified once connection is created.
+  # Refer to this to obtain auth: https://www.ibm.com/docs/en/app-connect/cloud?topic=gmail-connecting-google-application-by-providing-credentials-app-connect-use-basic-oauth
   auth = {
     client_id     = "xxxxxxx" # Client ID of your Google Analytics client application.
     client_secret = "xxxxxxx" # Client Secret of your Google Analytics client application.
