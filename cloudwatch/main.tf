@@ -143,7 +143,7 @@ locals {
             ["...", { "id" : "m3", "label" : "p99", "stat" : "p99" }],
           ],
           "view" : "timeSeries",
-          "stacked" : true,
+          "stacked" : false,
           "region" : "${var.region}",
           "title" : "Memory Usage",
           "period" : var.metric_period,
