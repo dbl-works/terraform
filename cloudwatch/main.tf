@@ -138,14 +138,15 @@ locals {
         "type" : "metric",
         "properties" : {
           "metrics" : [
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", "web", "ClusterName", name, { "label" : name }]
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", "web", "ClusterName", name, { "id" : "m1", "label" : "Max", "stat" : "Maximum" }],
+            ["...", { "id" : "m2", "label" : "Avg", "stat" : "Average" }],
+            ["...", { "id" : "m3", "label" : "p99", "stat" : "p99" }],
           ],
           "view" : "timeSeries",
-          "stacked" : true,
+          "stacked" : false,
           "region" : "${var.region}",
           "title" : "Memory Usage",
           "period" : var.metric_period,
-          "stat" : "Maximum",
           "yAxis" : {
             "left" : {
               "min" : 0,
@@ -162,14 +163,15 @@ locals {
         "type" : "metric",
         "properties" : {
           "metrics" : [
-            ["AWS/ECS", "CPUUtilization", "ServiceName", "web", "ClusterName", name, { "label" : name }]
+            ["AWS/ECS", "CPUUtilization", "ServiceName", "web", "ClusterName", name, { "id" : "m1", "label" : "Max", "stat" : "Maximum" }],
+            ["...", { "id" : "m2", "label" : "Avg", "stat" : "Average" }],
+            ["...", { "id" : "m3", "label" : "p99", "stat" : "p99" }],
           ],
           "view" : "timeSeries",
           "stacked" : false,
           "region" : "${var.region}",
           "title" : "CPU Usage",
           "period" : var.metric_period,
-          "stat" : "Maximum",
           "yAxis" : {
             "left" : {
               "min" : 0,
