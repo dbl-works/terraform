@@ -69,5 +69,5 @@ output "alb_dns_name" {
 }
 
 output "nlb_dns_name" {
-  value =  module.ecs.nlb_dns_name
+  value = module.ecs.nlb_dns_name
 }
