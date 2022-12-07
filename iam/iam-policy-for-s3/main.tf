@@ -33,6 +33,8 @@ locals {
       }
     ]
   ])
+
+  skip_aws_iam_policy_s3 = var.allow_listing_s3 == false && length(developer_access_projects) == 0 && length(admin_access_projects) == 0
 }
 
 data "aws_iam_policy_document" "s3_list" {
@@ -89,7 +91,7 @@ data "aws_iam_policy_document" "s3_policy" {
 }
 
 resource "aws_iam_policy" "s3" {
-  count = length(data.aws_iam_policy_document.s3_policy.json) > 0 ? 1 : 0
+  count = skip_aws_iam_policy_s3 ? 0 : 1
 
   name        = replace("S3AccessFor${title(var.username)}", "/[^0-9A-Za-z]/", "")
   path        = "/"
