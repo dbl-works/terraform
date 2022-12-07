@@ -9,3 +9,8 @@ variable "project_access" {
 variable "region" {
   type = string
 }
+
+variable "allow_listing_ecs" {
+  type    = bool
+  default = true
+}

@@ -33,6 +33,8 @@ locals {
       }
     ]
   ])
+
+  skip_aws_iam_policy_s3 = var.allow_listing_s3 == false && length(local.developer_access_projects) == 0 && length(local.admin_access_projects) == 0
 }
 
 data "aws_iam_policy_document" "s3_list" {
@@ -43,7 +45,6 @@ data "aws_iam_policy_document" "s3_list" {
     ]
     resources = ["arn:aws:s3:::*"]
   }
-
 }
 
 data "aws_iam_policy_document" "s3_read" {
@@ -83,13 +84,15 @@ data "aws_iam_policy_document" "s3_full" {
 
 data "aws_iam_policy_document" "s3_policy" {
   source_policy_documents = concat(
-    [data.aws_iam_policy_document.s3_list.json],
+    (var.allow_listing_s3 ? [data.aws_iam_policy_document.s3_list.json] : []),
     (length(local.developer_access_projects) == 0 ? [] : [data.aws_iam_policy_document.s3_read.json]),
     (length(local.admin_access_projects) == 0 ? [] : [data.aws_iam_policy_document.s3_full.json])
   )
 }
 
 resource "aws_iam_policy" "s3" {
+  count = local.skip_aws_iam_policy_s3 ? 0 : 1
+
   name        = replace("S3AccessFor${title(var.username)}", "/[^0-9A-Za-z]/", "")
   path        = "/"
   description = "Allow access to s3 resources for ${var.username}"
@@ -98,6 +101,8 @@ resource "aws_iam_policy" "s3" {
 }
 
 resource "aws_iam_user_policy_attachment" "user" {
+  count = local.skip_aws_iam_policy_s3 ? 0 : 1
+
   user       = var.username
-  policy_arn = aws_iam_policy.s3.arn
+  policy_arn = aws_iam_policy.s3[0].arn
 }

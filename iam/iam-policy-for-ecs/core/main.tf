@@ -33,6 +33,8 @@ locals {
       }
     ]
   ])
+
+  skip_aws_iam_policy_ecs = var.allow_listing_ecs == false && length(local.developer_access_projects) == 0 && length(local.admin_access_projects) == 0
 }
 
 # Taggable resources are only needed for admin full access
@@ -78,7 +80,7 @@ data "aws_iam_policy_document" "ecs_policy" {
   source_policy_documents = flatten(concat(
     [
       # All user should have list access so they can see the index page
-      data.aws_iam_policy_document.ecs_list.json,
+      (var.allow_listing_ecs ? [data.aws_iam_policy_document.ecs_list.json] : []),
       length(local.developer_access_projects) > 0 ? [
         data.aws_iam_policy_document.ecs_read.json
       ] : [],
@@ -94,6 +96,8 @@ data "aws_iam_policy_document" "ecs_policy" {
 }
 
 resource "aws_iam_policy" "ecs" {
+  count = local.skip_aws_iam_policy_ecs ? 0 : 1
+
   # the name must be alphanumeric, i.e. [^0-9A-Za-z]*
   name        = replace("ECSAccessIn${title(var.region)}For${title(var.username)}", "/[^0-9A-Za-z]/", "")
   path        = "/"
@@ -103,6 +107,8 @@ resource "aws_iam_policy" "ecs" {
 }
 
 resource "aws_iam_user_policy_attachment" "user" {
+  count = local.skip_aws_iam_policy_ecs ? 0 : 1
+
   user       = var.username
-  policy_arn = aws_iam_policy.ecs.arn
+  policy_arn = aws_iam_policy.ecs[0].arn
 }

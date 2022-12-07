@@ -17,13 +17,14 @@ module "s3-storage" {
   bucket_name = "someproject-staging-storage"
 
   # Optional
-  kms_deletion_window_in_days     = 30
-  versioning                      = true
-  regional                        = false
-  region                          = null   # IAM Policy Names must be unique across regions
-  name                            = ""     # used for policies, if null "project-environment-region" is used
-  primary_storage_class_retention = 0
-  s3_replicas                     = [
+  policy_allow_listing_all_buckets = true # Needed if we want to be able to browse the index page for buckets in the UI
+  kms_deletion_window_in_days      = 30
+  versioning                       = true
+  regional                         = false
+  region                           = null   # IAM Policy Names must be unique across regions
+  name                             = ""     # used for policies, if null "project-environment-region" is used
+  primary_storage_class_retention  = 0
+  s3_replicas                      = [
     {
       bucket_arn = "arn:aws:s3:::staging-storage-us-east-1"
       kms_arn = "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
