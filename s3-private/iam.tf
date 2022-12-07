@@ -14,14 +14,7 @@ resource "aws_iam_policy" "usage" {
 {
   "Version": "2012-10-17",
   "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:ListAllMyBuckets",
-        "s3:GetBucketLocation"
-      ],
-      "Resource": "arn:aws:s3:::${var.bucket_name}"
-    },
+    ${var.policy_allow_listing_all_buckets ? "{\"Effect\": \"Allow\", \"Action\": [\"s3:ListAllMyBuckets\", \"s3:GetBucketLocation\"], \"Resource\": \"arn:aws:s3:::*\"}," : ""}
     {
       "Effect": "Allow",
       "Action": [
@@ -55,6 +48,7 @@ resource "aws_iam_policy" "usage" {
 }
 EOF
 }
+
 resource "aws_iam_group_policy_attachment" "usage" {
   group      = aws_iam_group.usage.name
   policy_arn = aws_iam_policy.usage.arn
