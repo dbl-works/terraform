@@ -20,7 +20,7 @@ resource "aws_iam_policy" "usage" {
         "s3:ListAllMyBuckets",
         "s3:GetBucketLocation"
       ],
-      "Resource": "arn:aws:s3:::*"
+      "Resource": "arn:aws:s3:::${var.bucket_name}"
     },
     {
       "Effect": "Allow",
