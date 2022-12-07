@@ -34,7 +34,7 @@ locals {
     ]
   ])
 
-  skip_aws_iam_policy_s3 = var.allow_listing_s3 == false && length(developer_access_projects) == 0 && length(admin_access_projects) == 0
+  skip_aws_iam_policy_s3 = var.allow_listing_s3 == false && length(local.developer_access_projects) == 0 && length(local.admin_access_projects) == 0
 }
 
 data "aws_iam_policy_document" "s3_list" {
