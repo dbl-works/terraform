@@ -67,3 +67,7 @@ output "alb_arn_suffix" {
 output "alb_dns_name" {
   value = module.ecs.alb_dns_name
 }
+
+output "nlb_dns_name" {
+  value = module.ecs.nlb_dns_name
+}
