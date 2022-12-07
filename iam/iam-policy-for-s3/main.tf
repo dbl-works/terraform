@@ -91,7 +91,7 @@ data "aws_iam_policy_document" "s3_policy" {
 }
 
 resource "aws_iam_policy" "s3" {
-  count = skip_aws_iam_policy_s3 ? 0 : 1
+  count = local.skip_aws_iam_policy_s3 ? 0 : 1
 
   name        = replace("S3AccessFor${title(var.username)}", "/[^0-9A-Za-z]/", "")
   path        = "/"
