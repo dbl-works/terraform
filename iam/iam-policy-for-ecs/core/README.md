@@ -58,5 +58,8 @@ module "iam_ecs_policies" {
   username       = each.value["iam"]
   project_access = each.value["project_access"]
   region         = "eu-central-1"
+
+  # optional
+  allow_listing_ecs = true
 }
 ```
