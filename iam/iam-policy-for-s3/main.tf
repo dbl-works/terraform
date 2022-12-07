@@ -89,6 +89,8 @@ data "aws_iam_policy_document" "s3_policy" {
 }
 
 resource "aws_iam_policy" "s3" {
+  count = length(data.aws_iam_policy_document.s3_policy) > 0 ? 1 : 0
+
   name        = replace("S3AccessFor${title(var.username)}", "/[^0-9A-Za-z]/", "")
   path        = "/"
   description = "Allow access to s3 resources for ${var.username}"
@@ -97,6 +99,8 @@ resource "aws_iam_policy" "s3" {
 }
 
 resource "aws_iam_user_policy_attachment" "user" {
+  count = length(data.aws_iam_policy_document.s3_policy) > 0 ? 1 : 0
+
   user       = var.username
   policy_arn = aws_iam_policy.s3.arn
 }
