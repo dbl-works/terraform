@@ -89,7 +89,7 @@ data "aws_iam_policy_document" "s3_policy" {
 }
 
 resource "aws_iam_policy" "s3" {
-  count = length(data.aws_iam_policy_document.s3_policy) > 0 ? 1 : 0
+  count = length(data.aws_iam_policy_document.s3_policy.json) > 0 ? 1 : 0
 
   name        = replace("S3AccessFor${title(var.username)}", "/[^0-9A-Za-z]/", "")
   path        = "/"
