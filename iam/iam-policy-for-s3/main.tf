@@ -101,7 +101,7 @@ resource "aws_iam_policy" "s3" {
 }
 
 resource "aws_iam_user_policy_attachment" "user" {
-  count = length(data.aws_iam_policy_document.s3_policy) > 0 ? 1 : 0
+  count = local.skip_aws_iam_policy_s3 ? 0 : 1
 
   user       = var.username
   policy_arn = aws_iam_policy.s3[0].arn
