@@ -53,5 +53,8 @@ module "iam_policies" {
 
   project_access = local.users["gh-user"]["project_access"]
   username       = local.users["gh-user"]["iam"]
+
+  # optional
+  allow_listing_s3 = true # for the S3 index page on the UI, you need to allow listing all (excludes viewing the content)
 }
 ```
