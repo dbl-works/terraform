@@ -60,6 +60,8 @@ locals {
     "Effect" : "Allow",
     "Action" : [
       "s3:ListBucket",
+      "s3:ListBucketVersions",
+      "s3:ListObjectVersions",
       "s3:GetObject",
       "s3:GetObjectVersion"
     ],
