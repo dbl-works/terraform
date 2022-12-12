@@ -11,11 +11,11 @@ This project does not follow SemVer, since modules are independent of each other
 ## [v2022.12.12]
 ## Autoscaling/ECS
 - added new module to configure auto-scaling for ECS [#136](https://github.com/dbl-works/terraform/pull/136), [#140](https://github.com/dbl-works/terraform/pull/140), [#142](https://github.com/dbl-works/terraform/pull/142), [#143](https://github.com/dbl-works/terraform/pull/143)
-- Enable that we can (dis)allow listing all ECS Clusters or S3 Buckets [#149](https://github.com/dbl-works/terraform/pull/149)
-- Adds missing permissions to retrieve object versions from S3 [#150](https://github.com/dbl-works/terraform/pull/150)
 
 ## ECS
 - allow creating a cluster without passing secret/KMS key ARN(s) [#146](https://github.com/dbl-works/terraform/pull/146)
+- Enable that we can (dis)allow listing all ECS Clusters or S3 Buckets [#149](https://github.com/dbl-works/terraform/pull/149)
+- Adds missing permissions to retrieve object versions from S3 [#150](https://github.com/dbl-works/terraform/pull/150)
 
 ## Multiple Modules
 - Internal refactoring, better outputs, etc [#139](https://github.com/dbl-works/terraform/pull/139), [#148](https://github.com/dbl-works/terraform/pull/148)
