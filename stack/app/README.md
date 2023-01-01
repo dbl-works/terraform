@@ -121,7 +121,12 @@ module "stack" {
   grant_read_access_to_sqs_arns   = []
   grant_write_access_to_sqs_arns  = []
   ecs_custom_policies             = []
-  additional_certificate_arns     = []
+  additional_certificate_arns     = [
+    {
+      name = "my-second-domain.test"
+      arn  = module.ssl-certificate-second-domain.arn
+    }
+  ]
   # This is only needed when we want to add additional secrets to the ECS
   secret_arns                     = []
   # appends region to the name (usually ${project}-${environment}) for globally unique names

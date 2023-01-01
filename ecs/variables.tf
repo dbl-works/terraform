@@ -45,8 +45,13 @@ variable "kms_key_arns" {
 variable "certificate_arn" {}
 
 variable "additional_certificate_arns" {
-  type    = list(string)
-  default = []
+  description = "Additional certificates to add to the load balancer"
+  default     = []
+
+  type = list(object({
+    name = string
+    arn  = string
+  }))
 }
 
 # CIDR blocks to allow traffic from

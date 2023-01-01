@@ -275,8 +275,13 @@ variable "ecs_custom_policies" {
 }
 
 variable "additional_certificate_arns" {
-  type    = list(string)
-  default = []
+  description = "Additional certificates to add to the load balancer"
+  default     = []
+
+  type = list(object({
+    name = string
+    arn  = string
+  }))
 }
 
 variable "secret_arns" {
