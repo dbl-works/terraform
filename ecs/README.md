@@ -17,11 +17,12 @@ module "ecs" {
   subnet_public_ids  = module.vpc.subnet_private_ids
 
   # optional
-  secrets_arns      = []
-  kms_key_arns      = []
-  health_check_path = "/healthz"
-  certificate_arn   = module.ssl-certificate.arn # requires a `certificate` module to be created separately
-  regional          = true
+  secrets_arns                = []
+  kms_key_arns                = []
+  health_check_path           = "/healthz"
+  certificate_arn             = module.ssl-certificate.arn # requires a `certificate` module to be created separately
+  additional_certificate_arns = [] # Using SNI to attach multiple certificates to the same load balancer
+  regional                    = true
 
   allow_internal_traffic_to_ports = []
 
