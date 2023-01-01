@@ -274,6 +274,11 @@ variable "ecs_custom_policies" {
   default = []
 }
 
+variable "additional_certificate_arns" {
+  type    = list(string)
+  default = []
+}
+
 variable "secret_arns" {
   description = "arns of the secret manager that ECS can access"
   default     = []
