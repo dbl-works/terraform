@@ -40,3 +40,11 @@ resource "aws_alb_listener" "https" {
     type             = "forward"
   }
 }
+
+# Using SNI to attach multiple certificates to the same load balancer
+resource "aws_alb_listener_certificate" "https" {
+  for_each = { for cert in var.additional_certificate_arns : cert.name => cert }
+
+  listener_arn    = aws_alb_listener.https.arn
+  certificate_arn = each.value.arn
+}

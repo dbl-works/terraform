@@ -44,6 +44,16 @@ variable "kms_key_arns" {
 # If not passed, no SSL endpoint will be setup
 variable "certificate_arn" {}
 
+variable "additional_certificate_arns" {
+  description = "Additional certificates to add to the load balancer"
+  default     = []
+
+  type = list(object({
+    name = string
+    arn  = string
+  }))
+}
+
 # CIDR blocks to allow traffic from
 # Setting this will enable NLB traffic
 variable "allowlisted_ssh_ips" {
@@ -52,7 +62,10 @@ variable "allowlisted_ssh_ips" {
 }
 
 # This is where the load balancer will send health check requests to the app containers
-variable "health_check_path" { default = "/healthz" }
+variable "health_check_path" {
+  type    = string
+  default = "/healthz"
+}
 
 variable "grant_read_access_to_s3_arns" {
   default = []
