@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_log_group" "ecs-app" {
-  name              = "/ecs/${var.project}/app/${var.environment}"
-  retention_in_days = 3
+  name              = "/ecs/${var.name}"
+  retention_in_days = 90
 
   tags = {
     Project     = var.project
