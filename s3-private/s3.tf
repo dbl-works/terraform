@@ -27,10 +27,10 @@ resource "aws_s3_bucket_cors_configuration" "main-bucket-cors-configuration" {
   bucket = module.s3.bucket_name
 
   cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["PUT"]
-    allowed_origins = ["*"]
-    expose_headers  = ["ETag"]
+    allowed_headers = var.cors_allowed_headers
+    allowed_methods = var.cors_allowed_methods
+    allowed_origins = var.cors_allowed_origins
+    expose_headers  = var.cors_expose_headers
   }
 }
 
