@@ -1,6 +1,9 @@
 variable "project" {}
 variable "environment" {}
-variable "bucket_name" {}
+variable "bucket_name" {
+  default = null
+  type    = string
+}
 variable "kms_deletion_window_in_days" {
   default     = 30
   type        = number
@@ -24,11 +27,6 @@ variable "regional" {
 }
 
 variable "region" {
-  default = null
-  type    = string
-}
-
-variable "name" {
   default = null
   type    = string
 }
