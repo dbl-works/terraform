@@ -3,8 +3,6 @@ locals {
     "admin",
     "readonly",
   ]
-
-  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
 }
 
 # Readonly access to database

@@ -1,9 +1,9 @@
 resource "aws_db_subnet_group" "main" {
-  name       = "${var.project}-${var.environment}"
+  name       = local.name
   subnet_ids = var.subnet_ids
 
   tags = {
-    Name        = "${var.project}-${var.environment}"
+    Name        = local.name
     Project     = var.project
     Environment = var.environment
   }

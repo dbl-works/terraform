@@ -1,9 +1,9 @@
 resource "aws_security_group" "db" {
-  name   = "${var.project}-${var.environment}-db"
+  name   = "${local.name}-db"
   vpc_id = var.vpc_id
 
   tags = {
-    Name        = "${var.project}-${var.environment}-db"
+    Name        = "${local.name}-db"
     Project     = var.project
     Environment = var.environment
   }

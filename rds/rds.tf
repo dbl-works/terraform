@@ -5,7 +5,7 @@ resource "aws_db_instance" "main" {
   engine                              = var.is_read_replica ? null : "postgres"
   engine_version                      = var.is_read_replica ? null : var.engine_version
   instance_class                      = var.instance_class
-  identifier                          = "${var.project}-${var.environment}${var.is_read_replica ? "-read-replica" : ""}"
+  identifier                          = "${local.name}${var.is_read_replica ? "-read-replica" : ""}"
   db_name                             = var.is_read_replica ? null : replace("${var.project}_${var.environment}", "/[^0-9A-Za-z_]/", "_") # name of the initial database
   skip_final_snapshot                 = true
   username                            = var.is_read_replica ? null : var.username # credentials of the master DB are used

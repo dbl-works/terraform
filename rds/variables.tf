@@ -78,3 +78,7 @@ variable "enable_replication" {
   description = "Enables logical replication of the database."
   default     = false
 }
+
+locals {
+  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+}
