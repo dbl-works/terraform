@@ -1,5 +1,5 @@
 resource "aws_db_parameter_group" "postgres13" {
-  name   = "${var.project}-${var.environment}-postgres13"
+  name   = "${local.name}-postgres13"
   family = "postgres13"
   parameter {
     name  = "log_statement"
@@ -33,7 +33,7 @@ resource "aws_db_parameter_group" "postgres13" {
 }
 
 resource "aws_db_parameter_group" "postgres14" {
-  name   = "${var.project}-${var.environment}-postgres14"
+  name   = "${local.name}-postgres14"
   family = "postgres14"
   parameter {
     name  = "log_statement"

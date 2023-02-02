@@ -78,3 +78,8 @@ variable "enable_replication" {
   description = "Enables logical replication of the database."
   default     = false
 }
+
+locals {
+  name             = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+  name_underscored = var.name != null ? replace(var.name, "-", "_") : "${var.project}_${var.environment}${var.regional ? "_${var.region}" : ""}"
+}
