@@ -38,7 +38,7 @@ resource "aws_db_instance" "main" {
   replicate_source_db = var.master_db_instance_arn
 
   tags = {
-    Name        = "${var.project}-${var.environment}"
+    Name        = local.name
     Project     = var.project
     Environment = var.environment
   }

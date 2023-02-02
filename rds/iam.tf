@@ -15,7 +15,7 @@ resource "aws_iam_policy" "rds-db-connect" {
   for_each    = toset(local.db_roles)
   name        = "${local.name}-rds-db-connect-${each.key}"
   path        = "/"
-  description = "Allow connecting as ${each.key} to ${var.project} ${var.environment} (${var.region}) using IAM roles"
+  description = "Allow connecting as ${each.key} to ${local.name} (${var.region}) using IAM roles"
 
   policy = <<EOF
 {
@@ -27,7 +27,7 @@ resource "aws_iam_policy" "rds-db-connect" {
         "rds-db:connect"
       ],
       "Resource": [
-        "arn:aws:rds-db:${var.region}:${var.account_id}:dbuser:${aws_db_instance.main.resource_id}/${var.project}_${var.environment}_${each.key}"
+        "arn:aws:rds-db:${var.region}:${var.account_id}:dbuser:${aws_db_instance.main.resource_id}/${local.name_underscored}_${each.key}"
       ]
     },
     {
@@ -59,7 +59,7 @@ resource "aws_iam_group" "rds-view" {
 resource "aws_iam_policy" "rds-view" {
   name        = "${local.name}-rds-view"
   path        = "/"
-  description = "Allow viewing db instances for ${var.project} ${var.environment}"
+  description = "Allow viewing db instances for ${local.name}"
 
   policy = <<EOF
 {
