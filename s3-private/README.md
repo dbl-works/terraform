@@ -20,6 +20,10 @@ module "s3-storage" {
   policy_allow_listing_all_buckets = true # Needed if we want to be able to browse the index page for buckets in the UI
   kms_deletion_window_in_days      = 30
   versioning                       = true
+  cors_allowed_headers             = ["*"]
+  cors_allowed_methods             = ["PUT", "POST"]
+  cors_allowed_origins             = ["*"]
+  cors_expose_headers              = ["ETag"]
   regional                         = false
   region                           = null   # IAM Policy Names must be unique across regions
   name                             = ""     # used for policies, if null "project-environment-region" is used

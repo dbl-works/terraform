@@ -1,6 +1,9 @@
 variable "project" {}
 variable "environment" {}
-variable "bucket_name" {}
+variable "bucket_name" {
+  default = null
+  type    = string
+}
 variable "kms_deletion_window_in_days" {
   default     = 30
   type        = number
@@ -28,11 +31,6 @@ variable "region" {
   type    = string
 }
 
-variable "name" {
-  default = null
-  type    = string
-}
-
 # How many days objects should remain in the primary storage class before being transitions
 # Setting to 0 will disable class transition and all data will stay in the primary storage class
 variable "primary_storage_class_retention" {
@@ -55,4 +53,29 @@ variable "s3_replicas" {
     kms_arn    = string
     region     = string
   }))
+}
+
+# The headers which are allowed to be used for direct browser uploads.
+variable "cors_allowed_headers" {
+  type    = list(string)
+  default = ["*"]
+}
+
+# The methods which are allowed to be used for direct browser uploads.
+variable "cors_allowed_methods" {
+  type    = list(string)
+  default = ["POST", "PUT"]
+}
+
+# The origins which are allowed to be used for direct browser uploads.
+# The default is all origins which is not recommended for production.
+variable "cors_allowed_origins" {
+  type    = list(string)
+  default = ["*"]
+}
+
+# The headers to expose when making requests from the browser.
+variable "cors_expose_headers" {
+  type    = list(string)
+  default = ["ETag"]
 }

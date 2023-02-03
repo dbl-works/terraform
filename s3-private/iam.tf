@@ -1,5 +1,5 @@
 locals {
-  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+  name = var.bucket_name != null ? var.bucket_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
 }
 
 resource "aws_iam_group" "usage" {
