@@ -1,9 +1,13 @@
+locals {
+  major_engine_version = split(".", var.engine_version)[0]
+}
+
 resource "aws_db_instance" "main" {
   db_subnet_group_name                = aws_db_subnet_group.main.name
   allocated_storage                   = var.allocated_storage
   storage_type                        = "gp2"
   engine                              = var.is_read_replica ? null : "postgres"
-  engine_version                      = var.is_read_replica ? null : var.engine_version
+  engine_version                      = var.is_read_replica ? null : local.major_engine_version # Use major version only to allow AWS to update the minor/patch version automatically
   instance_class                      = var.instance_class
   identifier                          = "${local.name}${var.is_read_replica ? "-read-replica" : ""}"
   db_name                             = var.is_read_replica ? null : replace("${var.project}_${var.environment}", "/[^0-9A-Za-z_]/", "_") # name of the initial database
@@ -11,7 +15,7 @@ resource "aws_db_instance" "main" {
   username                            = var.is_read_replica ? null : var.username # credentials of the master DB are used
   password                            = var.is_read_replica ? null : var.password # credentials of the master DB are used
   iam_database_authentication_enabled = true
-  parameter_group_name                = split(".", var.engine_version)[0] == "14" ? aws_db_parameter_group.postgres14.name : aws_db_parameter_group.postgres13.name
+  parameter_group_name                = local.major_engine_version == "14" ? aws_db_parameter_group.postgres14.name : aws_db_parameter_group.postgres13.name
   apply_immediately                   = true
   multi_az                            = var.multi_az
   publicly_accessible                 = var.publicly_accessible
