@@ -8,7 +8,11 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## [unreleased]
 ### RDS
-- consistenly use `local.name` instead of `project-environment`. By default, both are the same, but `local.name` can be overridden to allow for more flexibility; e.g. when one needs to launch multiple RDS instances for the same project/environment.
+- consistenly use `local.name` instead of `project-environment`. By default, both are the same, but `local.name` can be overridden to allow for more flexibility; e.g. when one needs to launch multiple RDS instances for the same project/environment. [#154](https://github.com/dbl-works/terraform/pull/154)
+- always trim engine_version to its major version only. This allow AWS to do the minor/patch version updates automatically. [#155](https://github.com/dbl-works/terraform/pull/155)
+
+### Stack/app
+- Make S3 replicas as optional variables. [#158](https://github.com/dbl-works/terraform/pull/158)
 
 ## [v2022.12.12]
 ## Autoscaling/ECS
