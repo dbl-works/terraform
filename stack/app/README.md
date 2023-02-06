@@ -82,7 +82,9 @@ module "stack" {
       bucket_name                     = "project-staging-media",
       versioning                      = true,
       primary_storage_class_retention = 0,
-      # replicas is an optional variables, it can be omitted
+
+      # optional      
+      replicas = []
     },
   ]
 
