@@ -13,5 +13,5 @@ module "s3-frontend" {
   # Optional
   versioning                      = each.value.versioning
   primary_storage_class_retention = each.value.primary_storage_class_retention
-  s3_replicas                     = each.value.replicas
+  s3_replicas                     = each.value.replicas == null ? [] : each.value.replicas
 }

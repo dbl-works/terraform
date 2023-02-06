@@ -59,11 +59,11 @@ variable "private_buckets_list" {
     bucket_name                     = string
     versioning                      = bool
     primary_storage_class_retention = number
-    replicas = list(object({
+    replicas = optional(list(object({
       bucket_arn = string
       kms_arn    = string
       region     = string
-    }))
+    })))
   }))
 }
 
@@ -76,9 +76,9 @@ variable "public_buckets_list" {
     bucket_name                     = string
     versioning                      = bool
     primary_storage_class_retention = number
-    replicas = list(object({
+    replicas = optional(list(object({
       bucket_arn = string
-    }))
+    })))
   }))
 }
 # =============== S3 public ================ #

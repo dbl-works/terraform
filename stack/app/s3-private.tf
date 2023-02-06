@@ -16,5 +16,5 @@ module "s3-storage" {
   primary_storage_class_retention = each.value.primary_storage_class_retention
   region                          = var.region
   regional                        = true
-  s3_replicas                     = each.value.replicas
+  s3_replicas                     = each.value.replicas == null ? [] : each.value.replicas
 }
