@@ -2,7 +2,10 @@ data "aws_iam_policy_document" "developer" {
   statement {
     sid = "AllowDeveloperAccessBasedOnTags"
     actions = flatten([for resource in local.resources : [
-      "${resource}:Get*"
+      "${resource}:Get*",
+      # The batch commands are to include some of the ecr permissions, e.g. ecr:BatchCheckLayerAvailability, ecr:BatchGetImage
+      "${resource}:BatchGet*",
+      "${resource}:BatchCheck*"
     ]])
 
     resources = ["*"]
