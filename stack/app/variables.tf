@@ -95,7 +95,8 @@ variable "kms_app_arn" {
 
 # =============== NAT ================ #
 variable "public_ips" {
-  type = list(string)
+  type    = list(string)
+  default = []
 }
 # =============== NAT ================ #
 
