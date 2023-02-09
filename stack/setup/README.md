@@ -54,7 +54,7 @@ module "stack-setup" {
 
   # KMS
   kms_deletion_window_in_days = 30
-  eips_nat_count              = 1 # for production use, set this to the number of AZs
+  eips_nat_count              = 0 # if you need static IPs, set this to the number of AZs. Most likely, you do NOT need static IPs (the resulting NAT adds significant cost to the stack)
 
   # In case this stack has a read-replica RDS in a different region
   rds_cross_region_kms_key_arn = null
