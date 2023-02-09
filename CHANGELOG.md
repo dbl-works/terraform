@@ -13,6 +13,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### Stack/app
 - Make S3 replicas as optional variables. [#158](https://github.com/dbl-works/terraform/pull/158)
+- Make NAT optional. NAT is not created if `public_ips` is not given.
 
 ## [v2022.12.12]
 ## Autoscaling/ECS
