@@ -13,7 +13,10 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### Stack/app
 - Make S3 replicas as optional variables. [#158](https://github.com/dbl-works/terraform/pull/158)
-- Make NAT optional. NAT is not created if `public_ips` is not given.
+- Make NAT optional. NAT is not created if `public_ips` is not given. [#164](https://github.com/dbl-works/terraform/pull/164)
+
+### iam/iam-policy-for-taggable-resources
+- Add BatchGet* and BatchCheck* commands to include the missing read permissions for ECR (e.g. BatchCheckLayerAvailability, BatchGetImage). [#162](https://github.com/dbl-works/terraform/pull/162)
 
 ## [v2022.12.12]
 ## Autoscaling/ECS
