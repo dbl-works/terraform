@@ -31,7 +31,7 @@ output "subnet_private_ids" {
 }
 
 output "nat_route_table_ids" {
-  value = length(var.public_ips) > 0 ? module.nat[0].aws_route_table_ids : []
+  value = module.nat.aws_route_table_ids
 }
 
 # Target groups, for use in deployments

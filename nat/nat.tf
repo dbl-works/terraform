@@ -18,6 +18,13 @@ resource "aws_nat_gateway" "main" {
   }
 }
 
+resource "aws_route" "main" {
+  # Do not create this route if we do not have a NAT Gateway
+  count                  = length(var.public_ips) > 0 ? length(var.subnet_private_ids) : 0
+  route_table_id         = aws_route_table.main[count.index].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = element(aws_nat_gateway.main, count.index).id
+}
 
 # Create route tables so elastic IPs are used for outgoing traffic
 resource "aws_route_table" "main" {
@@ -29,13 +36,6 @@ resource "aws_route_table" "main" {
     Environment = var.environment
     Project     = var.project
   }
-}
-
-resource "aws_route" "main" {
-  count                  = length(var.subnet_private_ids)
-  route_table_id         = aws_route_table.main[count.index].id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = element(aws_nat_gateway.main, count.index).id
 }
 
 resource "aws_route_table_association" "main" {

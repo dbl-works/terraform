@@ -22,7 +22,7 @@ variable "is_read_replica_on_same_domain" {
 
 variable "eips_nat_count" {
   type    = number
-  default = 1
+  default = 0
 }
 
 variable "alternative_domains" {

@@ -34,6 +34,8 @@ module "stack" {
   vpc_availability_zones = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
 
   # NAT -> you get these from the set-up
+  #     -> in most cases, you do not need fixed IPs nor a NAT
+  #     -> a NAT significantly increases costs.
   public_ips = [
     "123.123.123.123",
     "234.234.234.234",
@@ -83,7 +85,7 @@ module "stack" {
       versioning                      = true,
       primary_storage_class_retention = 0,
 
-      # optional      
+      # optional
       replicas = []
     },
   ]
