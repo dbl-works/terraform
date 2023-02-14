@@ -18,6 +18,9 @@ This project does not follow SemVer, since modules are independent of each other
 ### iam/iam-policy-for-taggable-resources
 - Add BatchGet* and BatchCheck* commands to include the missing read permissions for ECR (e.g. BatchCheckLayerAvailability, BatchGetImage). [#162](https://github.com/dbl-works/terraform/pull/162)
 
+### ecr
+- Add lifecycle policy rules. []()
+
 ## [v2022.12.12]
 ## Autoscaling/ECS
 - added new module to configure auto-scaling for ECS [#136](https://github.com/dbl-works/terraform/pull/136), [#140](https://github.com/dbl-works/terraform/pull/140), [#142](https://github.com/dbl-works/terraform/pull/142), [#143](https://github.com/dbl-works/terraform/pull/143)
