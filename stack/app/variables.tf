@@ -24,6 +24,11 @@ variable "skip_cloudflare" {
   type    = bool
   default = false
 }
+
+variable "certificate_arn" {
+  type    = string
+  default = null
+}
 # =============== Certificate Manager ================ #
 
 # =============== Cloudflare ================ #
