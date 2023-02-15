@@ -15,6 +15,7 @@ This project does not follow SemVer, since modules are independent of each other
 - Make S3 replicas as optional variables. [#158](https://github.com/dbl-works/terraform/pull/158)
 - Make NAT optional. NAT is not created if `public_ips` is not given. [#164](https://github.com/dbl-works/terraform/pull/164)
 - Add certificate_arn as optional variables. Allows the user to decide which aws acm certificate to be used.[#170](https://github.com/dbl-works/terraform/pull/170)
+- Always use the most recent aws_acm_certificate to avoid the multiple certificates error.[#170](https://github.com/dbl-works/terraform/pull/170)
 
 ### Stack/setup
 - Remove the creation of aws_acm_certificate when is_read_replica_on_same_domain is true. [#170](https://github.com/dbl-works/terraform/pull/170)
