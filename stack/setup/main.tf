@@ -60,6 +60,8 @@ module "secrets-kms-key" {
 }
 
 resource "aws_acm_certificate" "main" {
+  count = var.is_read_replica_on_same_domain ? 0 : 1
+
   domain_name = var.domain
 
   subject_alternative_names = flatten(concat(

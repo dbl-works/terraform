@@ -1,10 +1,10 @@
 locals {
   distinct_domain_names = distinct(
-    [for s in setunion([var.domain], aws_acm_certificate.main.subject_alternative_names) : replace(s, "*.", "")]
+    [for s in setunion([var.domain], aws_acm_certificate.main[0].subject_alternative_names) : replace(s, "*.", "")]
   )
   # https://github.com/hashicorp/terraform/issues/26043
   domain_validation_options = distinct(
-    [for k, v in aws_acm_certificate.main.domain_validation_options : merge(
+    [for k, v in aws_acm_certificate.main[0].domain_validation_options : merge(
       tomap(v), { domain_name = replace(v.domain_name, "*.", "") }
     )]
   )
@@ -30,6 +30,6 @@ resource "cloudflare_record" "validation" {
 resource "aws_acm_certificate_validation" "default" {
   count = var.is_read_replica_on_same_domain ? 0 : 1
 
-  certificate_arn         = aws_acm_certificate.main.arn
+  certificate_arn         = aws_acm_certificate.main[0].arn
   validation_record_fqdns = cloudflare_record.validation.*.hostname
 }
