@@ -1,5 +1,6 @@
 data "aws_acm_certificate" "default" {
   domain = var.domain_name
+  most_recent = true
 }
 
 module "ecs" {
