@@ -20,7 +20,7 @@ module "ecr" {
       "rulePriority": 2,
       "description": "Keep last 30 images",
       "selection": {
-          "tagStatus": "tagged",
+          "tagStatus": "untagged",
           "tagPrefixList": ["v"],
           "countType": "imageCountMoreThan",
           "countNumber": 30
