@@ -19,7 +19,7 @@ This project does not follow SemVer, since modules are independent of each other
 - Add BatchGet* and BatchCheck* commands to include the missing read permissions for ECR (e.g. BatchCheckLayerAvailability, BatchGetImage). [#162](https://github.com/dbl-works/terraform/pull/162)
 
 ### ecr
-- Add lifecycle policy rules. []()
+- Add lifecycle policy rules. [#169](https://github.com/dbl-works/terraform/pull/169)
 
 ## [v2022.12.12]
 ## Autoscaling/ECS
