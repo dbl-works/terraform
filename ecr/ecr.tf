@@ -34,7 +34,7 @@ resource "aws_ecr_lifecycle_policy" "expiry_policy" {
             "type" : "expire"
           }
         }
-      ], var.ecr_lifecycle_policy_rules)
+      , var.ecr_lifecycle_policy_rules])
     }
   )
 }

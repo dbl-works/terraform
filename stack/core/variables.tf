@@ -10,7 +10,7 @@ variable "valid_days" {
 }
 
 variable "ecr_lifecycle_policy_rules" {
-  type    = list(object)
+  type    = list(any)
   default = []
 }
 # =============== ECR ================ #
