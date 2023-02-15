@@ -23,3 +23,7 @@ output "eips-nat" {
 output "kms-key-replica-rds-arn" {
   value = var.rds_cross_region_kms_key_arn == null ? "Not applicable if 'rds_cross_region_kms_key_arn' is not set." : join("", module.kms-key-replica-rds.*.arn)
 }
+
+output "cloudflare_validation_hostnames" {
+  value = var.is_read_replica_on_same_domain ? [] : cloudflare_record.validation.*.hostname
+}
