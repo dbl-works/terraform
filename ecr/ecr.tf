@@ -14,3 +14,27 @@ resource "aws_ecr_repository" "main" {
     Project = var.project
   }
 }
+
+resource "aws_ecr_lifecycle_policy" "expiry_policy" {
+  repository = aws_ecr_repository.main.name
+
+  policy = jsonencode(
+    {
+      "rules" : flatten([
+        {
+          "rulePriority" : var.valid_days,
+          "description" : "Expire images older than ${var.valid_days} days",
+          "selection" : {
+            "tagStatus" : "any",
+            "countType" : "sinceImagePushed",
+            "countUnit" : "days",
+            "countNumber" : var.valid_days
+          },
+          "action" : {
+            "type" : "expire"
+          }
+        }
+      , var.ecr_lifecycle_policy_rules])
+    }
+  )
+}
