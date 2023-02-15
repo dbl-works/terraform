@@ -1,10 +1,10 @@
 locals {
-  distinct_domain_names = distinct(
-    [for s in setunion([var.domain], try(aws_acm_certificate.main[0].subject_alternative_names), []) : replace(s, "*.", "")]
+  distinct_domain_names = var.is_read_replica_on_same_domain ? [] : distinct(
+    [for s in setunion([var.domain], aws_acm_certificate.main[0].subject_alternative_names) : replace(s, "*.", "")]
   )
   # https://github.com/hashicorp/terraform/issues/26043
-  domain_validation_options = distinct(
-    [for k, v in try(aws_acm_certificate.main[0].domain_validation_options, []) : merge(
+  domain_validation_options = var.is_read_replica_on_same_domain ? [] : distinct(
+    [for k, v in aws_acm_certificate.main[0].domain_validation_options : merge(
       tomap(v), { domain_name = replace(v.domain_name, "*.", "") }
     )]
   )
