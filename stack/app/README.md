@@ -125,6 +125,7 @@ module "stack" {
   grant_read_access_to_sqs_arns   = []
   grant_write_access_to_sqs_arns  = []
   ecs_custom_policies             = []
+  certificate_arn                 = "arn:aws:acm:eu-central-1:xxxxxxxxxxxx:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # Optional, will use the default cert if it is not provided
   additional_certificate_arns     = [
     {
       name = "my-second-domain.test"
