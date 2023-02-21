@@ -37,9 +37,9 @@ resource "aws_ecr_lifecycle_policy" "expiry_policy" {
   policy = jsonencode(
     {
       "rules" : flatten([
-        local.protected_tags,
+        local.protect_rules,
         {
-          "rulePriority" : length(var.protect_tags) + 1,
+          "rulePriority" : length(var.protected_tags) + 1,
           "description" : "Expire images older than ${var.valid_days} days",
           "selection" : {
             "tagStatus" : "any",
