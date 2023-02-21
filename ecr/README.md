@@ -3,7 +3,6 @@
 A repository for storing built docker images.
 
 
-
 ## Usage
 
 ```terraform
@@ -15,9 +14,10 @@ module "ecr" {
   # Optional
   mutable = false
   valid_days = 3
+  protected_tags = ["latest-master", "latest-production"] # will keep at least 1 of this tag
   ecr_lifecycle_policy_rules = [
     {
-      "rulePriority": 2,
+      "rulePriority": 4,
       "description": "Keep last 30 images",
       "selection": {
           "tagStatus": "untagged",
