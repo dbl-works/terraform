@@ -14,7 +14,7 @@ module "ecr" {
   # Optional
   mutable = false
   valid_days = 3
-  protected_tags = ["latest-master", "latest-production"] # will keep at least 1 of this tag
+  protected_tags = ["latest-main", "latest-production"] # will keep at least 1 of this tag
   ecr_lifecycle_policy_rules = [
     {
       "rulePriority": 4,
