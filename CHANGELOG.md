@@ -26,6 +26,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### ecr
 - Add lifecycle policy rules. [#169](https://github.com/dbl-works/terraform/pull/169)
+- Add default lifecycle policy rules to keep at least 1 images on important branchs. [#172](https://github.com/dbl-works/terraform/pull/172)
 
 ## [v2022.12.12]
 ## Autoscaling/ECS
