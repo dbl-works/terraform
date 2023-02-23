@@ -2,6 +2,7 @@ variable "fivetran_group_id" {
   type        = string
   description = "Also know as external_id. Understand the group concept here: https://fivetran.com/docs/getting-started/powered-by-fivetran#createagroupusingtheui"
 }
+
 variable "lambda_source_dir" {
   type        = string
   description = "Path to the directory containing the lambda function code"
