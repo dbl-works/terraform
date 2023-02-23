@@ -29,6 +29,7 @@ jobs:
           - iam/iam-xray
           - kms-key
           - kms-key-replica
+          - lambda
           - nat
           - rds
           - s3
