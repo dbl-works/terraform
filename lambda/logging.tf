@@ -7,8 +7,3 @@ resource "aws_cloudwatch_log_group" "lambda" {
     Environment = var.environment
   }
 }
-
-resource "aws_iam_role_policy_attachment" "lambda_logs" {
-  role       = aws_iam_role.main.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
