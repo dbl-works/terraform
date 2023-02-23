@@ -15,6 +15,7 @@ resource "aws_lambda_function" "main" {
   runtime          = var.runtime
   timeout          = var.timeout
   memory_size      = var.memory_size
+  layers           = [aws_lambda_layer_version.package_layer.arn]
 
   vpc_config {
     subnet_ids         = var.subnet_ids
