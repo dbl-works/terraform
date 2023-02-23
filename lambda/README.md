@@ -7,7 +7,8 @@ Used for managing lambda functions.
 
 ```terraform
 module "lambda" {
-  vpc_id          = "vpc-123"
+  source = "github.com/dbl-works/terraform//lambda?ref=main"
+
   project         = "dbl"
   environment     = "production"
 
