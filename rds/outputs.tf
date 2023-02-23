@@ -10,3 +10,7 @@ output "database_arn" {
 output "database_identifier" {
   value = aws_db_instance.main.identifier
 }
+
+output "database_security_group_id" {
+  value = aws_security_group.db.id
+}

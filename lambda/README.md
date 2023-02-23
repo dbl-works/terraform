@@ -25,8 +25,8 @@ module "lambda" {
 
   # To allow or deny specific access to resources in the VPC.
   security_group_ids = [
-    "sg-123",
-    "sg-456",
+    module.rds.database_security_group_id, # e.g. for accessing the DB
+    "sg-456",                              # any other security group
   ]
 
   # [optional] Grant access to the lambda function to Secrets and KMS keys
