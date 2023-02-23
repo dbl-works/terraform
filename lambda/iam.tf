@@ -30,15 +30,13 @@ data "aws_iam_policy_document" "main" {
       "secretsmanager:GetSecretValue",
       "kms:Decrypt",
     ]
-    resources = [
-      var.secrets_and_kms_arns,
-    ]
+    resources = var.secrets_and_kms_arns
   }
 }
 
 data "aws_iam_policy_document" "dummy" {
   statement {
-    Effect    = "Deny"
+    effect    = "Deny"
     actions   = ["secretsmanager:GetSecretValue"]
     resources = ["arn:aws:secretsmanager:*:secret:can-t-be-blank"]
   }

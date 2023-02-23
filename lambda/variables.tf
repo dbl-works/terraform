@@ -34,7 +34,7 @@ variable "secrets_and_kms_arns" {
   default     = []
 }
 
-variable "source_directory" {
+variable "source_dir" {
   type        = string
   description = "Path to the directory containing the lambda function code."
   default     = null

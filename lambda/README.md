@@ -11,7 +11,7 @@ module "lambda" {
   project         = "dbl"
   environment     = "production"
 
-  source_directory = "Path to the directory containing the lambda function code."
+  source_dir = "Path to the directory containing the lambda function code."
 
   # optional
   handler = "index.handler"
