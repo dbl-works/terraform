@@ -29,5 +29,5 @@ output "cloudflare_validation_hostnames" {
 }
 
 output "aws_acm_certificate_arn" {
-  value = var.is_read_replica_on_same_domain ? "" : aws_acm_certificate.main.arn
+  value = var.is_read_replica_on_same_domain ? "" : aws_acm_certificate.main[0].arn
 }
