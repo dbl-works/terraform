@@ -27,3 +27,7 @@ output "kms-key-replica-rds-arn" {
 output "cloudflare_validation_hostnames" {
   value = var.is_read_replica_on_same_domain ? [] : cloudflare_record.validation.*.hostname
 }
+
+output "aws_acm_certificate_arn" {
+  value = var.is_read_replica_on_same_domain ? "" : aws_acm_certificate.main.arn
+}
