@@ -15,14 +15,31 @@ resource "aws_ecr_repository" "main" {
   }
 }
 
+locals {
+  protect_rules = [for tag in var.protected_tags : {
+    "rulePriority" : index(var.protected_tags, tag) + 1,
+    "description" : "Protect ${tag}",
+    "selection" : {
+      "tagStatus" : "tagged",
+      "tagPrefixList" : [tag],
+      "countType" : "imageCountMoreThan",
+      "countNumber" : 1
+    },
+    "action" : {
+      "type" : "expire"
+    }
+  }]
+}
+
 resource "aws_ecr_lifecycle_policy" "expiry_policy" {
   repository = aws_ecr_repository.main.name
 
   policy = jsonencode(
     {
       "rules" : flatten([
+        local.protect_rules,
         {
-          "rulePriority" : var.valid_days,
+          "rulePriority" : length(var.protected_tags) + 1,
           "description" : "Expire images older than ${var.valid_days} days",
           "selection" : {
             "tagStatus" : "any",
