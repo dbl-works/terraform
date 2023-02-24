@@ -12,7 +12,7 @@ module "ecr" {
   project = local.project
 
   # Optional
-  mutable = false # Keep mutable to false for protected tags to work
+  mutable = false # Set mutable to true when using protected tags, so tags like `latest-main` can be overwritten
   valid_days = 3
   protected_tags = ["latest-main", "latest-production"] # will keep at least 1 of this tag
   ecr_lifecycle_policy_rules = [
