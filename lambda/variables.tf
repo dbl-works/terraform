@@ -40,9 +40,10 @@ variable "source_dir" {
   default     = null
 }
 
-variable "package_layer_source_zip_file_path" {
+variable "lambda_layer_source_zip_file" {
   type        = string
   description = "Path to the directory containing the lambda layer zip file"
+  default     = null
 }
 
 # https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
