@@ -40,6 +40,11 @@ variable "source_dir" {
   default     = null
 }
 
+variable "package_layer_source_zip_file_path" {
+  type        = string
+  description = "Path to the directory containing the lambda layer zip file"
+}
+
 # https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
 variable "timeout" {
   type        = number
