@@ -40,8 +40,11 @@ variable "source_dir" {
   default     = null
 }
 
-variable "lambda_layer_source_zip_file" {
-  type        = string
+variable "lambda_layer_source" {
+  type = object({
+    lambda_layer_s3_bucket = string
+    lambda_layer_s3_key    = string
+  })
   description = "Path to the directory containing the lambda layer zip file"
   default     = null
 }
