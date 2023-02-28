@@ -129,6 +129,11 @@ variable "remote_cidr_blocks" {
 
 
 # =============== Elasticache ================ #
+variable "skip_elasticache" {
+  type    = bool
+  default = false
+}
+
 variable "elasticache_node_type" {
   type    = string
   default = "cache.t3.micro"

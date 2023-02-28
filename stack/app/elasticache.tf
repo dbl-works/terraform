@@ -1,4 +1,5 @@
 module "elasticache" {
+  count  = var.skip_elasticache ? 0 : 1
   source = "../../elasticache"
 
   project     = var.project

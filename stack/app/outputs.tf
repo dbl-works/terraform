@@ -7,7 +7,7 @@ output "database_arn" {
 }
 
 output "redis_url" {
-  value = module.elasticache.endpoint
+  value = var.skip_elasticache ? "" : module.elasticache[0].endpoint
 }
 
 output "vpc_id" {
@@ -18,6 +18,7 @@ output "vpc_id" {
 output "alb_security_group_id" {
   value = module.ecs.alb_security_group_id
 }
+
 output "ecs_security_group_id" {
   value = module.ecs.ecs_security_group_id
 }

@@ -207,6 +207,7 @@ module "stack" {
   db_instance_class_memory_in_gb  = 1
 
   # Elasticache
+  skip_elasticache                          = false # optional, will skip the creation of elasticache if set to true
   elasticache_node_type                     = "cache.t3.micro"
   elasticache_replicas_per_node_group       = 1
   elasticache_shards_per_replication_group  = 1
