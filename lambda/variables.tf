@@ -40,13 +40,10 @@ variable "source_dir" {
   default     = null
 }
 
-variable "lambda_layer_source" {
-  type = object({
-    lambda_layer_s3_bucket = string
-    lambda_layer_s3_key    = string
-  })
-  description = "Path to the directory containing the lambda layer zip file"
-  default     = null
+variable "aws_lambda_layer_arns" {
+  type        = list(string)
+  description = "Get a list of available layers here: https://github.com/keithrozario/Klayers"
+  default     = []
 }
 
 # https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
