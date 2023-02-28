@@ -16,10 +16,12 @@ This project does not follow SemVer, since modules are independent of each other
 - Make NAT optional. NAT is not created if `public_ips` is not given. [#164](https://github.com/dbl-works/terraform/pull/164)
 - Add certificate_arn as optional variables. Allows the user to decide which aws acm certificate to be used.[#170](https://github.com/dbl-works/terraform/pull/170)
 - Always use the most recent aws_acm_certificate to avoid the multiple certificates error.[#170](https://github.com/dbl-works/terraform/pull/170)
+- Introduce new variables skip_elasticache to skip the creation of elasticache in stack/app module. [#174](https://github.com/dbl-works/terraform/pull/174)
 
 ### Stack/setup
 - Remove the creation of aws_acm_certificate when is_read_replica_on_same_domain is true. [#170](https://github.com/dbl-works/terraform/pull/170)
 - Add cloudflare_validation_hostnames as output.[#170](https://github.com/dbl-works/terraform/pull/170)
+- Add aws_acm_certificate_arn in the output. [#174](https://github.com/dbl-works/terraform/pull/174)
 
 ### iam/iam-policy-for-taggable-resources
 - Add BatchGet* and BatchCheck* commands to include the missing read permissions for ECR (e.g. BatchCheckLayerAvailability, BatchGetImage). [#162](https://github.com/dbl-works/terraform/pull/162)
