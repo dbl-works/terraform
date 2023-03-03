@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "secret_manager" {
   statement {
     sid = "AllowSecretAccessBasedOnTags"
     actions = flatten([for resource in local.admin_resources : [
-      "${resource}:Get*",
+      "${resource}:*",
     ]])
 
     resources = ["*"]
