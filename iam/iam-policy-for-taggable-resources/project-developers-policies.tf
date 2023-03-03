@@ -33,10 +33,15 @@ data "aws_iam_policy_document" "developer" {
 data "aws_iam_policy_document" "read_access" {
   statement {
     sid = "AllowReadAccess"
-    actions = flatten([for resource in concat(local.resources, local.admin_resources) : [
-      "${resource}:Describe*",
-      "${resource}:List*"
-    ]], ["kms:Decrypt"])
+    actions = concat(
+      flatten([
+        for resource in concat(local.resources, local.admin_resources) : [
+          "${resource}:Describe*",
+          "${resource}:List*"
+        ]
+      ]),
+      ["kms:Decrypt"]
+    )
 
     resources = ["*"]
   }
