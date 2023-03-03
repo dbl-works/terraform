@@ -106,8 +106,8 @@ resource "aws_iam_policy" "ecs" {
 
 data "aws_iam_policy_document" "ecs_admin" {
   source_policy_documents = concat(
-    data.aws_iam_policy_document.ecs_ssm.json,
-    data.aws_iam_policy_document.ecs_iam.json
+    [data.aws_iam_policy_document.ecs_ssm.json],
+    [data.aws_iam_policy_document.ecs_iam.json]
   )
 }
 
