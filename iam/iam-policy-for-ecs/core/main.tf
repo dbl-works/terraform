@@ -130,7 +130,7 @@ resource "aws_iam_user_policy_attachment" "user" {
 }
 
 resource "aws_iam_user_policy_attachment" "ecs_admin" {
-  count = local.skip_aws_iam_policy_ecs ? 0 : 1
+  count = !local.skip_aws_iam_policy_ecs && length(local.admin_access_projects) > 0 ? 1 : 0
 
   user       = var.username
   policy_arn = aws_iam_policy.ecs_admin[0].arn
