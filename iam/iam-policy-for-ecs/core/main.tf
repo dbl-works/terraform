@@ -104,6 +104,13 @@ resource "aws_iam_policy" "ecs" {
   policy = data.aws_iam_policy_document.ecs_policy.json
 }
 
+data "aws_iam_policy_document" "ecs_admin" {
+  source_policy_documents = concat(
+    data.aws_iam_policy_document.ecs_ssm.json,
+    data.aws_iam_policy_document.ecs_iam.json
+  )
+}
+
 resource "aws_iam_policy" "ecs_admin" {
   count = !local.skip_aws_iam_policy_ecs && length(local.admin_access_projects) > 0 ? 1 : 0
 
@@ -112,10 +119,7 @@ resource "aws_iam_policy" "ecs_admin" {
   path        = "/"
   description = "Allow admin access to ECS resources in ${var.region} for ${var.username}"
 
-  policy = concat([
-    data.aws_iam_policy_document.ecs_ssm.json,
-    data.aws_iam_policy_document.ecs_iam.json
-  ])
+  policy = data.aws_iam_policy_document.ecs_admin.json
 }
 
 resource "aws_iam_user_policy_attachment" "user" {
