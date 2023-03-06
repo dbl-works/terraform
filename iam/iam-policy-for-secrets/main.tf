@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "secrets" {
       "${resource}:*",
     ]])
 
-    resources = length(local.secretmanager_arns) > 0 ? local.secretmanager_arns : ["dummy-secret-manager-arn"]
+    resources = length(local.secretmanager_arns) > 0 ? local.secretmanager_arns : ["arn:aws:secretsmanager:*:secret:can-t-be-blank"]
   }
 }
 
