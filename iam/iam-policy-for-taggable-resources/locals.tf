@@ -10,10 +10,13 @@ locals {
     "ec2",
     "elasticloadbalancing",
     "elasticache",
-    "kms",
-    "secretsmanager",
     "rds",
     "s3"
+  ]
+
+  admin_resources = [
+    "kms",
+    "secretsmanager",
   ]
 }
 

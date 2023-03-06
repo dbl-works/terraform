@@ -86,8 +86,6 @@ data "aws_iam_policy_document" "ecs_policy" {
       ] : [],
 
       length(local.admin_access_projects) > 0 ? [
-        data.aws_iam_policy_document.ecs_iam.json,
-        data.aws_iam_policy_document.ecs_ssm.json,
         data.aws_iam_policy_document.ecs_full.json
       ] : []
     ],
@@ -106,9 +104,34 @@ resource "aws_iam_policy" "ecs" {
   policy = data.aws_iam_policy_document.ecs_policy.json
 }
 
+data "aws_iam_policy_document" "ecs_admin" {
+  source_policy_documents = concat(
+    [data.aws_iam_policy_document.ecs_ssm.json],
+    [data.aws_iam_policy_document.ecs_iam.json]
+  )
+}
+
+resource "aws_iam_policy" "ecs_admin" {
+  count = !local.skip_aws_iam_policy_ecs && length(local.admin_access_projects) > 0 ? 1 : 0
+
+  # the name must be alphanumeric, i.e. [^0-9A-Za-z]*
+  name        = replace("ECSAdminAccessIn${title(var.region)}For${title(var.username)}", "/[^0-9A-Za-z]/", "")
+  path        = "/"
+  description = "Allow admin access to ECS resources in ${var.region} for ${var.username}"
+
+  policy = data.aws_iam_policy_document.ecs_admin.json
+}
+
 resource "aws_iam_user_policy_attachment" "user" {
   count = local.skip_aws_iam_policy_ecs ? 0 : 1
 
   user       = var.username
   policy_arn = aws_iam_policy.ecs[0].arn
+}
+
+resource "aws_iam_user_policy_attachment" "ecs_admin" {
+  count = !local.skip_aws_iam_policy_ecs && length(local.admin_access_projects) > 0 ? 1 : 0
+
+  user       = var.username
+  policy_arn = aws_iam_policy.ecs_admin[0].arn
 }

@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [unreleased]
+### iam/iam-policy-for-secrets
+- Added a new module to manage access to the secretsmaanger and kms based on project_access variables. [#175](https://github.com/dbl-works/terraform/pull/175)
+
 ### lambda
 - Added a new module to manage Lambdas that can (optionally) access resources within a VPC and outside a VPC (e.g. secrets)
 [#173](https://github.com/dbl-works/terraform/pull/173)
@@ -29,6 +32,8 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### iam/iam-policy-for-taggable-resources
 - Add BatchGet* and BatchCheck* commands to include the missing read permissions for ECR (e.g. BatchCheckLayerAvailability, BatchGetImage). [#162](https://github.com/dbl-works/terraform/pull/162)
+- Separate the ECSAccess into 2 policies and shorten the policy json documents. [#175](https://github.com/dbl-works/terraform/pull/175)
+- Remove the iam policy for secrets because tag policy doesn't work well with secretsmanager and kms. [#175](https://github.com/dbl-works/terraform/pull/175)
 
 ### ecr
 - Add lifecycle policy rules. [#169](https://github.com/dbl-works/terraform/pull/169)

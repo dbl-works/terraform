@@ -28,13 +28,20 @@ data "aws_iam_policy_document" "developer" {
 }
 
 # "List" and "Describe" cannot be matched using tags
+# Check here for the list of actions that does not support tagging
+# https://docs.aws.amazon.com/service-authorization/latest/reference/list_awskeymanagementservice.html
 data "aws_iam_policy_document" "read_access" {
   statement {
     sid = "AllowReadAccess"
-    actions = flatten([for resource in local.resources : [
-      "${resource}:Describe*",
-      "${resource}:List*"
-    ]])
+    actions = concat(
+      flatten([
+        for resource in concat(local.resources, local.admin_resources) : [
+          "${resource}:Describe*",
+          "${resource}:List*"
+        ]
+      ]),
+      ["kms:Decrypt"]
+    )
 
     resources = ["*"]
   }
