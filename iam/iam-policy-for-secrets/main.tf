@@ -15,9 +15,9 @@ data "aws_secretsmanager_secret" "terraform" {
 }
 
 data "aws_kms_key" "secrets" {
-  for_each = toset(local.kms_ids)
+  count = length(local.kms_ids)
 
-  key_id = each.key
+  key_id = local.kms_ids[count.index]
 }
 
 data "aws_iam_policy_document" "secrets" {
