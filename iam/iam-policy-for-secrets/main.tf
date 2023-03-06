@@ -21,11 +21,7 @@ data "aws_iam_policy_document" "secrets" {
       "${resource}:*",
     ]])
 
-    resources = concat(
-      values(data.aws_secretsmanager_secret.app)[*].arn,
-      values(data.aws_secretsmanager_secret.terraform)[*].arn,
-    )
-  }
+    resources = length(local.secretmanager_arns) > 0 ? local.secretmanager_arns : ["dummy-secret-manager-arn"]
 }
 
 
