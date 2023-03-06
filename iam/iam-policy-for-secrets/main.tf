@@ -14,6 +14,12 @@ data "aws_secretsmanager_secret" "terraform" {
   name = "${each.value.name}/app/${each.value.environment}"
 }
 
+data "aws_kms_key" "secrets" {
+  for_each = local.kms_ids
+
+  key_id = each.key
+}
+
 data "aws_iam_policy_document" "secrets" {
   statement {
     sid = "AllowSecretAccess"
@@ -21,10 +27,9 @@ data "aws_iam_policy_document" "secrets" {
       "${resource}:*",
     ]])
 
-    resources = length(local.secretmanager_and_kms_arns) > 0 ? local.secretmanager_and_kms_arns : ["arn:aws:secretsmanager:*:secret:can-t-be-blank"]
+    resources = length(local.secretmanager_arns) > 0 ? concat(local.secretmanager_arns, values(data.aws_kms_key.secrets[*]).arn) : ["arn:aws:secretsmanager:*:secret:can-t-be-blank"]
   }
 }
-
 
 resource "aws_iam_policy" "secrets" {
   name        = "SecretAccessIn${title(var.region)}For${title(var.username)}"
