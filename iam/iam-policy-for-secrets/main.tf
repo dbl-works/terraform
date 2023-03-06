@@ -15,7 +15,7 @@ data "aws_secretsmanager_secret" "terraform" {
 }
 
 data "aws_kms_key" "secrets" {
-  for_each = local.kms_ids
+  for_each = toset(local.kms_ids)
 
   key_id = each.key
 }
