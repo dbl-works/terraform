@@ -2,7 +2,6 @@ data "aws_iam_policy_document" "taggable_resources" {
   source_policy_documents = [
     # ======== Admin Access ======== #
     data.aws_iam_policy_document.admin.json,
-    data.aws_iam_policy_document.secret_manager.json,
     # ======== Developer Access ======== #
     data.aws_iam_policy_document.developer.json,
 
