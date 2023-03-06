@@ -1,17 +1,17 @@
 data "aws_secretsmanager_secret" "app" {
   for_each = {
-    for project in local.admin_access_projects : project.name => project
+    for project in local.admin_access_projects : "${project.name}-${project.environment}" => project
   }
 
-  name = "${each.key}/app/${each.value.environment}"
+  name = "${each.value.name}/app/${each.value.environment}"
 }
 
 data "aws_secretsmanager_secret" "terraform" {
   for_each = {
-    for project in local.admin_access_projects : project.name => project
+    for project in local.admin_access_projects : "${project.name}-${project.environment}" => project
   }
 
-  name = "${each.key}/app/${each.value.environment}"
+  name = "${each.value.name}/app/${each.value.environment}"
 }
 
 data "aws_iam_policy_document" "secrets" {
