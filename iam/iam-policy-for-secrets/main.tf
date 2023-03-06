@@ -22,8 +22,8 @@ data "aws_iam_policy_document" "secrets" {
     ]])
 
     resources = concat(
-      data.aws_secretsmanager_secret.app.*.id,
-      data.aws_secretsmanager_secret.terraform.*.id
+      values(data.aws_secretsmanager_secret.app)[*].arn,
+      values(data.aws_secretsmanager_secret.terraform)[*].arn,
     )
   }
 }
