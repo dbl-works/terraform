@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
-## [unreleased]
+## [v2023.03.06]
 ### iam/iam-policy-for-secrets
 - Added a new module to manage access to the secretsmaanger and kms based on project_access variables. [#175](https://github.com/dbl-works/terraform/pull/175)
 
