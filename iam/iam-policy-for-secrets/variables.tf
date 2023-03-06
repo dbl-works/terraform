@@ -3,8 +3,8 @@ variable "environment" {
 }
 
 variable "project_access" {
-  type = map(any)
-  default = []
+  type    = map(any)
+  default = {}
 }
 
 variable "region" {
