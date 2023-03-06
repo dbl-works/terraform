@@ -22,6 +22,7 @@ data "aws_iam_policy_document" "secrets" {
     ]])
 
     resources = length(local.secretmanager_arns) > 0 ? local.secretmanager_arns : ["dummy-secret-manager-arn"]
+  }
 }
 
 

@@ -17,5 +17,4 @@ locals {
     values(data.aws_secretsmanager_secret.app)[*].arn,
     values(data.aws_secretsmanager_secret.terraform)[*].arn,
   )
-
 }
