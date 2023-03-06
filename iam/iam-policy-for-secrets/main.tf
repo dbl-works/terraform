@@ -38,3 +38,8 @@ resource "aws_iam_policy" "secrets" {
 
   policy = data.aws_iam_policy_document.secrets.json
 }
+
+resource "aws_iam_user_policy_attachment" "secrets" {
+  user       = var.username
+  policy_arn = aws_iam_policy.secrets.arn
+}
