@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "secrets" {
 }
 
 resource "aws_iam_policy" "secrets" {
-  name        = "SecretAccessIn${title(var.region)}For${title(var.username)}"
+  name        = replace("SecretAccessIn${title(var.region)}For${title(var.username)}", "/[^0-9A-Za-z]/", "")
   path        = "/"
   description = "Allow access to secrets based on project"
 
