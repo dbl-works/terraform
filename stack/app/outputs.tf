@@ -7,7 +7,7 @@ output "database_arn" {
 }
 
 output "redis_url" {
-  value = var.skip_elasticache ? "" : module.elasticache[0].endpoint
+  value = var.skip_elasticache ? [] : module.elasticache[0].endpoint
 }
 
 output "vpc_id" {
