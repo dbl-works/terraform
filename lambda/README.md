@@ -9,6 +9,7 @@ Used for managing lambda functions.
 module "lambda" {
   source = "github.com/dbl-works/terraform//lambda?ref=main"
 
+  function_name   = "lambda"
   project         = "dbl"
   environment     = "production"
   source_dir = "Path to the directory containing the lambda function code."
