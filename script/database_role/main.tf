@@ -21,7 +21,7 @@ resource "null_resource" "database_script" {
         psql -U root -h localhost -p 5433 -d $DB_NAME -c "$line"
       done  < <(awk -v ENVIRONMENT="$ENVIRONMENT" -v PROJECT="$PROJECT" -v DB_NAME="$DB_NAME" 'BEGIN{RS=";\n"}{gsub(/\n/,""); gsub(/{project}/, PROJECT); gsub(/{environment}/, ENVIRONMENT); gsub(/{db_name}/, DB_NAME); if(NF>0) {print $0";"}}' db_readonly_role.sql)
       # Close the connection of 5433 port
-      lsof -ti:5433 | xargs kill 5433
+      lsof -ti:5433 | xargs kill -9
     EOF
 
 
