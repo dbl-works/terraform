@@ -34,6 +34,7 @@ resource "null_resource" "database_script" {
     }
 
     interpreter = ["bash", "-c"]
+    working_dir = path.module
   }
 }
 
