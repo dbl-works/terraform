@@ -38,5 +38,4 @@ resource "null_resource" "database_script" {
   }
 }
 
-
 # psql -U root -h localhost -p 5433 -d $DB_NAME -c "$line"
