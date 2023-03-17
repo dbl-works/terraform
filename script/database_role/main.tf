@@ -27,7 +27,7 @@ resource "null_resource" "database_script" {
     environment = {
       RDS_ENDPOINT = data.aws_db_instance.main.endpoint
       DB_NAME      = data.aws_db_instance.main.db_name
-      PGPASSWORD   = local.credentials.db_root_password
+      PGPASSWORD   = nonsensitive(local.credentials.db_root_password)
       BASTION_HOST = "${var.bastion_subdomain}.${var.domain_name}"
       PROJECT      = replace(var.project, "-", "_")
       ENVIRONMENT  = var.environment
