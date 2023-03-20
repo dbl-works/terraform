@@ -45,4 +45,9 @@ resource "aws_route_table_association" "main" {
   subnet_id = each.key
 
   route_table_id = aws_route_table.main[each.value].id
+
+  lifecycle {
+    # required to upgrade from a previous version
+    replace_triggered_by = aws_route_table.main[*].id
+  }
 }
