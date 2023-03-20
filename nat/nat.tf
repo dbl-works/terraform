@@ -28,7 +28,7 @@ resource "aws_route" "main" {
 
 # Create route tables so elastic IPs are used for outgoing traffic
 resource "aws_route_table" "main" {
-  count  = length(local.subnets_all)
+  count  = length(var.subnet_private_ids)
   vpc_id = var.vpc_id
 
   tags = {
@@ -41,7 +41,7 @@ resource "aws_route_table" "main" {
 # route tables for public subnet, e.g. if we want VPC peering between stacks without NATs
 # running the web process in a public subnet
 resource "aws_route_table_association" "main" {
-  for_each  = { for idx, subnet in local.subnets_all : subnet => idx }
+  for_each  = { for idx, subnet in var.subnet_private_ids : subnet => idx }
   subnet_id = each.key
 
   route_table_id = aws_route_table.main[each.value].id
