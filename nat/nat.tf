@@ -49,7 +49,7 @@ resource "aws_route_table_association" "main" {
   lifecycle {
     # required to upgrade from a previous version
     replace_triggered_by = [
-      aws_route_table.main[each.value].id,
+      aws_route_table.main[each.key].id,
     ]
   }
 }
