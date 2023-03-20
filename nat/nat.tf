@@ -28,7 +28,7 @@ resource "aws_route" "main" {
 
 # Create route tables so elastic IPs are used for outgoing traffic
 resource "aws_route_table" "main" {
-  count  = length(var.subnet_public_ids)
+  count  = length(local.subnets_all)
   vpc_id = var.vpc_id
 
   tags = {
