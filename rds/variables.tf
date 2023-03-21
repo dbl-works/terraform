@@ -80,7 +80,8 @@ variable "enable_replication" {
 }
 
 variable "subnet_group_name" {
-  type = string
+  type    = string
+  default = null
 }
 
 locals {
