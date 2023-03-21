@@ -1,14 +1,10 @@
 resource "aws_db_subnet_group" "main" {
-  name       = local.name
+  name       = var.subnet_group_name ? local.name : var.subnet_group_name
   subnet_ids = var.subnet_ids
 
   tags = {
-    Name        = local.name
+    Name        = var.subnet_group_name ? local.name : var.subnet_group_name
     Project     = var.project
     Environment = var.environment
-  }
-
-  lifecycle {
-    create_before_destroy = true
   }
 }
