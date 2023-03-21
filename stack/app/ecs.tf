@@ -37,12 +37,12 @@ module "ecs" {
   ])))
 
   grant_read_access_to_s3_arns = distinct(flatten(concat([
-    [for arn in values(module.s3-storage)[*].arn : "${arn}/*"],
+    [for arn in values(module.s3-storage)[*].arn : arn],
     var.grant_read_access_to_s3_arns
   ])))
 
   grant_write_access_to_s3_arns = distinct(flatten(concat([
-    [for arn in values(module.s3-storage)[*].arn : "${arn}/*"],
+    [for arn in values(module.s3-storage)[*].arn : arn],
     var.grant_write_access_to_s3_arns
   ])))
 
