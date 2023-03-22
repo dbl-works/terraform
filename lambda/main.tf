@@ -17,6 +17,10 @@ resource "aws_lambda_function" "main" {
   memory_size      = var.memory_size
   layers           = var.aws_lambda_layer_arns
 
+  environment {
+    variable = var.environment_variables
+  }
+
   vpc_config {
     subnet_ids         = var.subnet_ids
     security_group_ids = var.security_group_ids

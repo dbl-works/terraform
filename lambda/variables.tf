@@ -64,3 +64,8 @@ variable "memory_size" {
   description = "The amount of memory that your function has access to."
   default     = 128
 }
+
+variable "environment_variables" {
+  type    = map(any)
+  default = {}
+}
