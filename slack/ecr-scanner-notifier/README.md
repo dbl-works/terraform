@@ -12,5 +12,6 @@ module "ecr-scanner-notifier" {
   project = local.project
   slack_webhook_url = "https://hooks.slack.com/services/XXXXXXXXX/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
   slack_channel = "ecr-scanner"
+  runtime       = "python3.9"
 }
 ```
