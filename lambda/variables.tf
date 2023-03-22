@@ -1,11 +1,13 @@
 variable "subnet_ids" {
   type        = list(string)
   description = "Subnets the lambdas are allowed to use to access resources in the VPC."
+  default     = []
 }
 
 variable "security_group_ids" {
   type        = list(string)
   description = "To allow or deny specific access to resources in the VPC."
+  default     = []
 }
 
 variable "project" {
