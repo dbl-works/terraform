@@ -32,7 +32,7 @@ resource "aws_cloudwatch_event_rule" "console" {
   })
 }
 
-resource "aws_cloudwatch_event_target" "sns" {
+resource "aws_cloudwatch_event_target" "ecr-scanner" {
   rule      = aws_cloudwatch_event_rule.console.name
   target_id = "ecr-scanner-${var.project}" # The unique target assignment ID. If missing, will generate a random, unique id.
   arn       = module.lambda.lambda_arn
