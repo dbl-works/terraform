@@ -4,7 +4,7 @@ module "lambda" {
   function_name = "ecr-scanner-notifier-${var.project}"
   project       = var.project
   environment   = "production"
-  source_dir    = "./script"
+  source_dir    = "${path.module}/script"
 
   environment_variables = {
     WEBHOOK_URL = var.slack_webhook_url
