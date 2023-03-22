@@ -1,5 +1,5 @@
 module "lambda" {
-  source = "../lambda"
+  source = "../../lambda"
 
   function_name = "ecr-scanner-notifier-${var.project}"
   project       = var.project
