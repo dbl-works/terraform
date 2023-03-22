@@ -1,9 +1,9 @@
 module "lambda" {
   source = "../lambda"
 
-  function_name = "ecr-scanner-notifier-${var.project}-${var.environment}"
+  function_name = "ecr-scanner-notifier-${var.project}"
   project       = var.project
-  environment   = var.environment
+  environment   = "production"
   source_dir    = "./script"
 
   environment_variables = {
@@ -19,7 +19,7 @@ module "lambda" {
 
 # EventBridge was formerly known as CloudWatch Events. The functionality is identical.
 resource "aws_cloudwatch_event_rule" "console" {
-  name        = "ecr-scanner-${var.project}-${var.environment}"
+  name        = "ecr-scanner-${var.project}"
   description = "Send notification to slack after each ecr scan"
 
   event_pattern = jsonencode({
@@ -34,6 +34,6 @@ resource "aws_cloudwatch_event_rule" "console" {
 
 resource "aws_cloudwatch_event_target" "sns" {
   rule      = aws_cloudwatch_event_rule.console.name
-  target_id = "ecr-scanner-${var.project}-${var.environment}" # The unique target assignment ID. If missing, will generate a random, unique id.
+  target_id = "ecr-scanner-${var.project}" # The unique target assignment ID. If missing, will generate a random, unique id.
   arn       = module.lambda.lambda_arn
 }
