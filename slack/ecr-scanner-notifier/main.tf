@@ -14,6 +14,7 @@ module "lambda" {
   # optional
   handler               = "lambda.lambda_handler"
   aws_lambda_layer_arns = []
+  runtime               = var.runtime
 }
 
 
