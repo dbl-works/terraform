@@ -41,5 +41,9 @@ module "lambda" {
   secrets_and_kms_arns = [
     "arn:aws:secrets:*:abc:123",
   ]
+
+  environment_variables = {
+    foo = "bar"
+  }
 }
 ```

@@ -18,7 +18,7 @@ resource "aws_lambda_function" "main" {
   layers           = var.aws_lambda_layer_arns
 
   environment {
-    variable = var.environment_variables
+    variables = var.environment_variables
   }
 
   vpc_config {
