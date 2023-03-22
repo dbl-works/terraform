@@ -248,7 +248,7 @@ variable "rds_allow_from_cidr_blocks" {
 }
 
 variable "rds_subnet_group_name" {
-  type = string
+  type    = string
   default = null
 }
 # =============== RDS ================ #
