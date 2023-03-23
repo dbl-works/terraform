@@ -365,6 +365,11 @@ variable "cloudwatch_dashboard_view" {
   default = "simple"
 }
 
+variable "enable_cloudwatch_dashboard" {
+  type = bool
+  default = true
+}
+
 variable "cloudwatch_sns_topic_arns" {
   type    = list(string)
   default = []

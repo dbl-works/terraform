@@ -50,14 +50,14 @@ module "ecs" {
   grant_write_access_to_sqs_arns = var.grant_write_access_to_sqs_arns
 
   custom_policies       = var.ecs_custom_policies
-  enable_dashboard      = var.cloudwatch_dashboard_view == "simple"
+  enable_dashboard      = var.enable_cloudwatch_dashboard && var.cloudwatch_dashboard_view == "simple"
   enable_xray           = var.enable_xray
   autoscale_params      = var.autoscale_params
   autoscale_metrics_map = var.autoscale_metrics_map
 }
 
 module "cloudwatch" {
-  count  = var.cloudwatch_dashboard_view == "simple" ? 0 : 1
+  count  = var.enable_cloudwatch_dashboard && var.cloudwatch_dashboard_view == "simple" ? 0 : 1
   source = "../../cloudwatch"
 
   # Required

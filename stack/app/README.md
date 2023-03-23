@@ -194,6 +194,7 @@ module "stack" {
 
   # Cloudwatch
   cloudwatch_dashboard_view       = "detailed" # default is simple
+  enable_cloudwatch_dashboard     = false
   metric_period                   = 60
   alarm_period                    = 120
   alarm_evaluation_periods        = 1
