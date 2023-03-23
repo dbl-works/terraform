@@ -431,4 +431,9 @@ variable "datapoints_to_alarm" {
   type    = number
   default = 1
 }
+
+variable "cloudwatch_logs_retention_in_days" {
+  type    = number
+  default = 90
+}
 # =============== Cloudwatch ================ #
