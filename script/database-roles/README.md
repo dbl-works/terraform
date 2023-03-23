@@ -1,7 +1,7 @@
 # Terraform Module: DB SQL Script - Create readonly role
 
 Run SQL script in DB to create DB role(s).
-This script will be run on the machine which run this TF script.
+This script will be run on the machine which run this TF script. It assumes bastion host have been setup and your SSH keys is allowed in the bastion host.
 
 ## Usage
 
