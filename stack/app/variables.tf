@@ -253,9 +253,9 @@ variable "rds_subnet_group_name" {
 }
 
 variable "rds_multi_az" {
-  type    = bool
+  type        = bool
   description = "if no value is passed, multi-az will be set to true if the environment is production"
-  default = null
+  default     = null
 }
 # =============== RDS ================ #
 
