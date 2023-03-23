@@ -36,6 +36,7 @@ jobs:
           - s3
           - s3-private
           - s3-public
+          - script/database-roles
           - secrets
           - slack/chatbot
           - snowflake/cloud
