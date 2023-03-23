@@ -366,7 +366,7 @@ variable "cloudwatch_dashboard_view" {
 }
 
 variable "enable_cloudwatch_dashboard" {
-  type = bool
+  type    = bool
   default = true
 }
 
