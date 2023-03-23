@@ -1,4 +1,4 @@
-output "DNSSEC" {
+output "dnssec_instructions" {
   description = "Instructions"
   value       = "Add the DNSSEC public key to AWS Route53 -> Under 'Domains' -> 'Registered Domains' -> 'DNSSEC status'"
 }
