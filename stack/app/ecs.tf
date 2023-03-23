@@ -58,7 +58,7 @@ module "ecs" {
 }
 
 module "cloudwatch" {
-  count  = var.enable_cloudwatch_dashboard == true && var.cloudwatch_dashboard_view == "simple" ? 0 : 1
+  count  = var.enable_cloudwatch_dashboard == false || var.cloudwatch_dashboard_view == "simple" ? 0 : 1
   source = "../../cloudwatch"
 
   # Required
