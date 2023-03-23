@@ -251,6 +251,11 @@ variable "rds_subnet_group_name" {
   type    = string
   default = null
 }
+
+variable "rds_multi_az" {
+  type    = bool
+  default = null
+}
 # =============== RDS ================ #
 
 # =============== ECS ================ #

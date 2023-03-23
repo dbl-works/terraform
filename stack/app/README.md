@@ -98,6 +98,7 @@ module "stack" {
   rds_instance_class     = "db.t3.micro"
   rds_engine_version     = "13"
   rds_allocated_storage  = 100
+  rds_multi_az           = true
 
   ## set these, if you want to create a read-replica instead of a master DB
   ## the master-instance-arn MUST be the ARN of the DB, if the master DB is in
