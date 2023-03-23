@@ -6,8 +6,8 @@ This script will be run on the machine which run this TF script. It assumes bast
 ## Usage
 
 ```terraform
-module "db_readonly_script" {
-  source = "github.com/dbl-works/terraform//script/database_role?ref=v2023.03.06"
+module "database_roles_scripts" {
+  source = "github.com/dbl-works/terraform//script/database-roles?ref=v2023.03.06"
 
   project = local.project
   environment = local.environment
