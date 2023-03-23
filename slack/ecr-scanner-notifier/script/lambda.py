@@ -91,6 +91,22 @@ def get_findings(detail):
 def lambda_handler(event, context):
     """AWS Lambda Function to send ECR Image Scan Findings to Slack"""
     response = 1
+    # Sample responses
+    # {
+    #   'version': '0',
+    #   'id': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    #   'detail-type': 'ECR Image Scan',
+    #   'source': 'aws.ecr',
+    #   'account': 'xxxxxxxxxxxx',
+    #   'time': '2023-03-23T09:17:32Z',
+    #   'region': 'eu-central-1',
+    #   'resources': ['arn:aws:ecr:eu-central-1:xxxxxxxxxxxx:repository/xxx'],
+    #   'detail': {'scan-status': 'COMPLETE',
+    #   'repository-name': 'xxxxxxxx',
+    #   'image-digest': 'sha256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    #   'image-tags': ['commit-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'],
+    #   'finding-severity-counts': {'UNDEFINED': 1}}
+    # }
     scan_result = get_findings(event['detail'])
     slack_message = get_params(scan_result)
     req = Request(os.environ['WEBHOOK_URL'], json.dumps(slack_message).encode('utf-8'))
