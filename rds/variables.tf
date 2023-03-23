@@ -79,6 +79,11 @@ variable "enable_replication" {
   default     = false
 }
 
+variable "subnet_group_name" {
+  type    = string
+  default = null
+}
+
 locals {
   name             = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
   name_underscored = var.name != null ? replace(var.name, "-", "_") : "${var.project}_${var.environment}${var.regional ? "_${var.region}" : ""}"

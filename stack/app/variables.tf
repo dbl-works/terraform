@@ -246,6 +246,11 @@ variable "rds_allow_from_cidr_blocks" {
   type    = list(string)
   default = []
 }
+
+variable "rds_subnet_group_name" {
+  type    = string
+  default = null
+}
 # =============== RDS ================ #
 
 # =============== ECS ================ #

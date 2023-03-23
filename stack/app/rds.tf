@@ -44,4 +44,5 @@ module "rds" {
   regional               = var.regional
   name                   = var.rds_name
   allow_from_cidr_blocks = var.rds_allow_from_cidr_blocks
+  subnet_group_name      = var.rds_subnet_group_name
 }
