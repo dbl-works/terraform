@@ -30,3 +30,8 @@ resource "cloudflare_record" "s3" {
   proxied = true
 }
 
+# DNSSEC outputs a public key that must be added to AWS Route53
+# Under "Domains" -> "Registered Domains" -> "DNSSEC status"
+resource "cloudflare_zone_dnssec" "main" {
+  zone_id = data.cloudflare_zone.default.id
+}
