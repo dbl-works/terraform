@@ -75,17 +75,17 @@ output "nlb_dns_name" {
 
 # DNSSEC outputs a public key that must be added to AWS Route53
 output "dnssec_instructions" {
-  value = module.cloudflare.dnssec_instructions
+  value = module.cloudflare[*].dnssec_instructions
 }
 
 output "dnssec_algorithm" {
-  value = module.cloudflare.dnssec_algorithm
+  value = module.cloudflare[*].dnssec_algorithm
 }
 
 output "dnssec_key_type" {
-  value = module.cloudflare.dnssec_key_type
+  value = module.cloudflare[*].dnssec_key_type
 }
 
 output "dnssec_public_key" {
-  value = module.cloudflare.dnssec_public_key
+  value = module.cloudflare[*].dnssec_public_key
 }
