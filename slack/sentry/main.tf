@@ -1,6 +1,6 @@
 resource "sentry_issue_alert" "main" {
   organization = var.sentry_organization
-  project      = var.sentry_project_slug
+  project      = var.sentry_project_slug == null ? local.sentry_project_name : var.sentry_project_slug
   name         = "Send a slack notification for new issues"
 
   action_match = "any"
@@ -35,7 +35,8 @@ resource "sentry_project" "main" {
   organization = var.sentry_organization
 
   teams = var.sentry_team
-  name  = var.sentry_project_name == null ? "${var.project}-api" : var.sentry_project_name
+  name  = local.sentry_project_name
+  slug  = local.sentry_project_name
 
   platform    = var.platform
   resolve_age = var.resolve_age
@@ -47,4 +48,8 @@ data "sentry_organization_integration" "slack" {
 
   provider_key = "slack"
   name         = var.slack_workspace_name
+}
+
+locals {
+  sentry_project_name = var.sentry_project_name == null ? "${var.project}-api" : var.sentry_project_name
 }

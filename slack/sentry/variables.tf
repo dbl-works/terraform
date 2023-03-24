@@ -36,12 +36,13 @@ variable "frequency" {
 variable "sentry_project_slug" {
   type        = string
   default     = null
-  description = "The slug of the project to create the issue alert for. Check the project link, it should follow the following format: https://<sentry_organization>.sentry.io/projects/<sentry_project_slug>/?project=<project-id>"
+  description = "(Optional) The slug of the existing project to create the issue alert for. Check the project link, it should follow the following format: https://<sentry_organization>.sentry.io/projects/<sentry_project_slug>/?project=<project-id>"
 }
 
 variable "sentry_project_name" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "(Optional) Name of the project. If given, it will be used as the slug of the project as well."
 }
 
 variable "tags" {
