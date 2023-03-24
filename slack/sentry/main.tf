@@ -1,6 +1,6 @@
 resource "sentry_issue_alert" "main" {
   organization = var.sentry_organization
-  project      = var.sentry_project_id
+  project      = var.sentry_project_slug
   name         = "Send a notification for new issues"
 
   action_match = "any"
@@ -30,7 +30,7 @@ resource "sentry_issue_alert" "main" {
 }
 
 resource "sentry_project" "main" {
-  count        = var.sentry_project_id == null ? 1 : 0
+  count        = var.sentry_project_slug == null ? 1 : 0
   organization = var.sentry_organization
 
   teams = var.sentry_team

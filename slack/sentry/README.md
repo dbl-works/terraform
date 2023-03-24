@@ -15,12 +15,12 @@ module "sentry_slack_alert" {
 
   # Optional
   frequency = 30
-  sentry_project_id = "123456"
+  sentry_project_slug = "123456"
   sentry_project_name = "facebook-api"
   platform = "javascript"
   resolve_age = 760
 
-  # Required if sentry_project_id is null
+  # Required if sentry_project_slug is null
   sentry_team = ["developers"]
 }
 

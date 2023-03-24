@@ -25,8 +25,15 @@ variable "resolve_age" {
   description = "Hours in which an issue is automatically resolve if not seen after this amount of time."
   default     = 720
 }
+
 variable "frequency" {
   type        = number
   description = "Perform actions at most once every X minutes for this issue. Defaults to 30."
   default     = 30
+}
+
+variable "sentry_project_slug" {
+  type        = string
+  default     = null
+  description = "The slug of the project to create the issue alert for."
 }
