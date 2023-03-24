@@ -17,7 +17,7 @@ variable "platform" {
 
 variable "sentry_team" {
   type        = list(string)
-  description = " The slugs of the teams to create the project for."
+  description = "The slugs of the teams to create the project for."
   default     = null
 }
 
