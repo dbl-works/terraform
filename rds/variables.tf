@@ -86,7 +86,22 @@ variable "subnet_group_name" {
 
 variable "delete_automated_backups" {
   type    = bool
+  default = true
+}
+
+variable "delete_automated_backups" {
+  type    = bool
+  default = true
+}
+
+variable "skip_final_snapshot" {
+  type    = bool
   default = false
+}
+
+variable "final_snapshot_identifier" {
+  type    = string
+  default = null
 }
 
 locals {
