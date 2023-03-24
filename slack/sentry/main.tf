@@ -1,7 +1,7 @@
 resource "sentry_issue_alert" "main" {
   organization = var.sentry_organization
   project      = var.sentry_project_slug
-  name         = "Send a notification for new issues"
+  name         = "Send a slack notification for new issues"
 
   action_match = "any"
   filter_match = "any"
