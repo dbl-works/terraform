@@ -32,7 +32,7 @@ resource "aws_db_instance" "main" {
   snapshot_identifier             = var.snapshot_identifier
   delete_automated_backups        = var.delete_automated_backups
   skip_final_snapshot             = var.skip_final_snapshot
-  final_snapshot_identifier       = var.is_read_replica ? null : (var.final_snapshot_identifier == null ? "rds:${var.project}-${var.environment}-${timestamp()}" : var.final_snapshot_identifier)
+  final_snapshot_identifier       = var.is_read_replica ? null : (var.final_snapshot_identifier == null ? "rds:${var.project}-${var.environment}-${formatdate("DD-MM-YYYY-hhmm", timestamp())}" : var.final_snapshot_identifier)
 
   enabled_cloudwatch_logs_exports = [
     "postgresql",
