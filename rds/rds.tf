@@ -31,6 +31,7 @@ resource "aws_db_instance" "main" {
   performance_insights_enabled    = true
   performance_insights_kms_key_id = var.kms_key_arn
   snapshot_identifier             = var.snapshot_identifier
+  delete_automated_backups        = false
 
   enabled_cloudwatch_logs_exports = [
     "postgresql",
