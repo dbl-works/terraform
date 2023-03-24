@@ -25,6 +25,7 @@ resource "sentry_issue_alert" "main" {
       # From: https://sentry.io/settings/[org-slug]/integrations/slack/[slack-integration-id]/
       # Or use the sentry_organization_integration data source to retrieve the integration ID:
       workspace = data.sentry_organization_integration.slack.internal_id
+      tags      = "environment"
     },
   ]
 }
