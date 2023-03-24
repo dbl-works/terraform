@@ -1,6 +1,6 @@
 locals {
   major_engine_version      = split(".", var.engine_version)[0]
-  final_snapshot_identifier = "rds-${var.project}-${var.environment}-${formatdate("DD-MM-YY-hhmm", timestamp())}"
+  final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}-${formatdate("DD-MM-YY-hhmm", timestamp())}"
 }
 
 resource "aws_db_instance" "main" {
