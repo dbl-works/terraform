@@ -1,6 +1,6 @@
 resource "sentry_issue_alert" "main" {
   organization = var.sentry_organization
-  project      = sentry_project.main.id
+  project      = var.sentry_project_id
   name         = "Send a notification for new issues"
 
   action_match = "any"
@@ -27,6 +27,17 @@ resource "sentry_issue_alert" "main" {
       workspace = data.sentry_organization_integration.slack.internal_id
     },
   ]
+}
+
+resource "sentry_project" "main" {
+  count        = var.sentry_project_id == null ? 1 : 0
+  organization = var.sentry_organization
+
+  teams = var.sentry_team
+  name  = var.sentry_project_name == null ? "${var.project}-api" : var.sentry_project_name
+
+  platform    = var.platform
+  resolve_age = var.resolve_age
 }
 
 # Retrieve a Slack integration
