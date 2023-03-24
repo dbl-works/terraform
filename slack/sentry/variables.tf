@@ -40,5 +40,6 @@ variable "sentry_project_slug" {
 }
 
 variable "sentry_project_name" {
-  type = string
+  type    = string
+  default = null
 }
