@@ -12,7 +12,7 @@ variable "project" {
 
 variable "platform" {
   type    = string
-  default = "rails"
+  default = "ruby-rails"
 }
 
 variable "sentry_team" {
