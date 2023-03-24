@@ -47,8 +47,7 @@ provider "aws" {
 # https://github.com/cloudflare/terraform-provider-cloudflare/issues/1711
 provider "cloudflare" {}
 
-provider "sentry" {
-  token = "xxx"
-}
 
+# export SENTRY_AUTH_TOKEN=
+provider "sentry" {}
 ```
