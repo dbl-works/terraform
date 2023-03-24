@@ -39,6 +39,7 @@ jobs:
           - script/database-roles
           - secrets
           - slack/chatbot
+          - slack/sentry
           - snowflake/cloud
           - slack/sns
           - stack/app
