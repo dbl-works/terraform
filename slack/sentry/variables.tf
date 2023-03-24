@@ -38,3 +38,7 @@ variable "sentry_project_slug" {
   default     = null
   description = "The slug of the project to create the issue alert for."
 }
+
+variable "sentry_project_name" {
+  type = string
+}
