@@ -43,3 +43,9 @@ variable "sentry_project_name" {
   type    = string
   default = null
 }
+
+variable "tags" {
+  type        = string
+  default     = "environment"
+  description = "tag included in the slack message, i.e environment,user,my_tag"
+}
