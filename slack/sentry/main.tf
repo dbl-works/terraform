@@ -1,3 +1,15 @@
+resource "sentry_project" "main" {
+  count        = var.sentry_project_slug == null ? 1 : 0
+  organization = var.sentry_organization
+
+  teams = var.sentry_team
+  name  = local.sentry_project_name
+  slug  = local.sentry_project_name
+
+  platform    = var.platform
+  resolve_age = var.resolve_age
+}
+
 resource "sentry_issue_alert" "main" {
   organization = var.sentry_organization
   project      = var.sentry_project_slug == null ? local.sentry_project_name : var.sentry_project_slug
@@ -28,18 +40,10 @@ resource "sentry_issue_alert" "main" {
       tags      = var.tags
     },
   ]
-}
 
-resource "sentry_project" "main" {
-  count        = var.sentry_project_slug == null ? 1 : 0
-  organization = var.sentry_organization
-
-  teams = var.sentry_team
-  name  = local.sentry_project_name
-  slug  = local.sentry_project_name
-
-  platform    = var.platform
-  resolve_age = var.resolve_age
+  depends_on = [
+    sentry_project.main
+  ]
 }
 
 # Retrieve a Slack integration
