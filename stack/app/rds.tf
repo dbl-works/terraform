@@ -38,7 +38,7 @@ module "rds" {
   instance_class         = var.rds_instance_class
   engine_version         = var.rds_engine_version
   allocated_storage      = var.rds_allocated_storage
-  multi_az               = var.environment == "production"
+  multi_az               = var.rds_multi_az == null ? var.environment == "production" : var.rds_multi_az
   master_db_instance_arn = var.rds_master_db_instance_arn
   is_read_replica        = var.rds_is_read_replica
   regional               = var.regional

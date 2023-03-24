@@ -251,6 +251,12 @@ variable "rds_subnet_group_name" {
   type    = string
   default = null
 }
+
+variable "rds_multi_az" {
+  type        = bool
+  description = "if no value is passed, multi-az will be set to true if the environment is production"
+  default     = null
+}
 # =============== RDS ================ #
 
 # =============== ECS ================ #
@@ -360,6 +366,11 @@ variable "cloudwatch_dashboard_view" {
   default = "simple"
 }
 
+variable "enable_cloudwatch_dashboard" {
+  type    = bool
+  default = true
+}
+
 variable "cloudwatch_sns_topic_arns" {
   type    = list(string)
   default = []
@@ -420,5 +431,10 @@ variable "db_instance_class_memory_in_gb" {
 variable "datapoints_to_alarm" {
   type    = number
   default = 1
+}
+
+variable "cloudwatch_logs_retention_in_days" {
+  type    = number
+  default = 90
 }
 # =============== Cloudwatch ================ #
