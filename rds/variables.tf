@@ -84,6 +84,21 @@ variable "subnet_group_name" {
   default = null
 }
 
+variable "delete_automated_backups" {
+  type    = bool
+  default = true
+}
+
+variable "skip_final_snapshot" {
+  type    = bool
+  default = false
+}
+
+variable "final_snapshot_identifier" {
+  type    = string
+  default = null
+}
+
 locals {
   name             = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
   name_underscored = var.name != null ? replace(var.name, "-", "_") : "${var.project}_${var.environment}${var.regional ? "_${var.region}" : ""}"
