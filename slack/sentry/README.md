@@ -21,7 +21,7 @@ module "sentry_slack_alert" {
   resolve_age = 760
 
   # Required if sentry_project_slug is null
-  sentry_team = ["developers"]
+  sentry_teams = ["developers"]
 }
 
 

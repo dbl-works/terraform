@@ -15,7 +15,7 @@ variable "platform" {
   default = "ruby-rails"
 }
 
-variable "sentry_team" {
+variable "sentry_teams" {
   type        = list(string)
   description = "The slugs of the teams to create the project for."
   default     = null

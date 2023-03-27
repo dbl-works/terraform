@@ -2,7 +2,7 @@ resource "sentry_project" "main" {
   count        = var.sentry_project_slug == null ? 1 : 0
   organization = var.sentry_organization
 
-  teams = var.sentry_team
+  teams = var.sentry_teams
   name  = local.sentry_project_name
   slug  = local.sentry_project_name
 
