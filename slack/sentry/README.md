@@ -26,19 +26,16 @@ module "sentry_slack_alert" {
 
 
 ### Providers
-terraform {
-  required_providers {
-    sentry = {
-      source = "jianyuan/sentry"
-      version = "~> 0.11"
-    }
-  }
-  required_version = ">= 1.0"
-}
-
-# AWS config
-
+# You will need to configure the provider by providing an authentication token. You can create an authentication token within Sentry by creating an internal integration. This is also available for self-hosted Sentry.
+# It's best practice not to store the authentication token in plain text. As an alternative, the provider can source the authentication token from the SENTRY_AUTH_TOKEN environment variable. If you choose to do this, you can omit the token variable from the configuration block above.
+# https://docs.sentry.io/product/integrations/integration-platform/internal-integration/#auth-tokens
 
 # export SENTRY_AUTH_TOKEN=
 provider "sentry" {}
+
+# OR
+
+provider "sentry" {
+  token = "my-auth-token"
+}
 ```
