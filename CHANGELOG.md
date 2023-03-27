@@ -10,6 +10,9 @@ This project does not follow SemVer, since modules are independent of each other
 ### script/database-roles
 - Add SQL script for creating DB readonly role [#177](https://github.com/dbl-works/terraform/pull/177)
 
+### stack/app
+- Add Add elasticache_name as variables [#187](https://github.com/dbl-works/terraform/pull/187)
+
 ## [v2023.03.06]
 ### iam/iam-policy-for-secrets
 - Added a new module to manage access to the secretsmaanger and kms based on project_access variables. [#175](https://github.com/dbl-works/terraform/pull/175)

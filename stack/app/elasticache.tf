@@ -14,6 +14,7 @@ module "elasticache" {
   ])))
 
   # optional
+  name                       = var.elasticache_name
   node_type                  = var.elasticache_node_type
   node_count                 = var.elasticache_node_count == null ? (var.elasticache_automatic_failover_enabled ? 2 : 1) : var.elasticache_node_count
   snapshot_retention_limit   = var.elasticache_snapshot_retention_limit
