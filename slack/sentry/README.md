@@ -36,16 +36,7 @@ terraform {
   required_version = ">= 1.0"
 }
 
-# Configure the AWS Provider
-provider "aws" {
-  region  = local.region
-  profile = "crossboard" # based on the AWS account
-}
-
-# Ignore the error below,
-# Use resource specific `account_id` attributes instead.
-# https://github.com/cloudflare/terraform-provider-cloudflare/issues/1711
-provider "cloudflare" {}
+# AWS config
 
 
 # export SENTRY_AUTH_TOKEN=
