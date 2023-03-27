@@ -262,6 +262,21 @@ variable "rds_multi_az" {
   description = "if no value is passed, multi-az will be set to true if the environment is production"
   default     = null
 }
+
+variable "rds_delete_automated_backups" {
+  type    = bool
+  default = true
+}
+
+variable "rds_skip_final_snapshot" {
+  type    = bool
+  default = false
+}
+
+variable "rds_final_snapshot_identifier" {
+  type    = string
+  default = null
+}
 # =============== RDS ================ #
 
 # =============== ECS ================ #

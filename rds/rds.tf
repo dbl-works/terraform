@@ -1,5 +1,6 @@
 locals {
-  major_engine_version = split(".", var.engine_version)[0]
+  major_engine_version      = split(".", var.engine_version)[0]
+  final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}-${formatdate("DD-MM-YY-hhmm", timestamp())}"
 }
 
 resource "aws_db_instance" "main" {
@@ -11,9 +12,8 @@ resource "aws_db_instance" "main" {
   instance_class                      = var.instance_class
   identifier                          = "${var.project}-${var.environment}${var.is_read_replica ? "-read-replica" : ""}"
   db_name                             = var.is_read_replica ? null : replace("${var.project}_${var.environment}", "/[^0-9A-Za-z_]/", "_") # name of the initial database
-  skip_final_snapshot                 = true
-  username                            = var.is_read_replica ? null : var.username # credentials of the master DB are used
-  password                            = var.is_read_replica ? null : var.password # credentials of the master DB are used
+  username                            = var.is_read_replica ? null : var.username                                                         # credentials of the master DB are used
+  password                            = var.is_read_replica ? null : var.password                                                         # credentials of the master DB are used
   iam_database_authentication_enabled = true
   parameter_group_name                = local.major_engine_version == "14" ? aws_db_parameter_group.postgres14.name : aws_db_parameter_group.postgres13.name
   apply_immediately                   = true
@@ -31,6 +31,9 @@ resource "aws_db_instance" "main" {
   performance_insights_enabled    = true
   performance_insights_kms_key_id = var.kms_key_arn
   snapshot_identifier             = var.snapshot_identifier
+  delete_automated_backups        = var.delete_automated_backups
+  skip_final_snapshot             = var.skip_final_snapshot
+  final_snapshot_identifier       = var.is_read_replica ? null : (var.final_snapshot_identifier == null ? local.final_snapshot_identifier : var.final_snapshot_identifier)
 
   enabled_cloudwatch_logs_exports = [
     "postgresql",

@@ -10,6 +10,9 @@ This project does not follow SemVer, since modules are independent of each other
 ### script/database-roles
 - Add SQL script for creating DB readonly role [#177](https://github.com/dbl-works/terraform/pull/177)
 
+### slack/sentry
+- Add Slack notifier for Sentry issue alerts [#184](https://github.com/dbl-works/terraform/pull/184)
+
 ### stack/app
 - Add Add elasticache_name as variables [#187](https://github.com/dbl-works/terraform/pull/187)
 
