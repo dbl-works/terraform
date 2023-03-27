@@ -134,6 +134,11 @@ variable "skip_elasticache" {
   default = false
 }
 
+variable "elasticache_name" {
+  type    = string
+  default = null
+}
+
 variable "elasticache_node_type" {
   type    = string
   default = "cache.t3.micro"
