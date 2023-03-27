@@ -210,7 +210,7 @@ module "stack" {
 
   # Elasticache
   skip_elasticache                          = false # optional, will skip the creation of elasticache if set to true
-  elasticache_name                          = "redis" # optional
+  elasticache_name                          = "sidekiq" # optional, appended to the default "${project}-${environment}"
   elasticache_node_type                     = "cache.t3.micro"
   elasticache_replicas_per_node_group       = 1
   elasticache_shards_per_replication_group  = 1
