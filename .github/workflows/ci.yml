@@ -15,6 +15,7 @@ jobs:
           - cognito
           - ecr
           - ecs
+          - ecs_service
           - elasticache
           - fivetran
           - fivetran/connectors/google_analytics
