@@ -34,10 +34,6 @@ data "aws_security_group" "ecs" {
   name = "${var.project}-${var.environment}-ecs"
 }
 
-output "security_group" {
-  value = data.aws_security_group.ecs
-}
-
 resource "aws_ecs_service" "main" {
   name            = var.container_name
   cluster         = data.aws_ecs_cluster.main.id
