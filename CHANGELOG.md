@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## [Unreleased]
 ### stack/app
-- Add kms_app_arns as variables [#188](https://github.com/dbl-works/terraform/pull/188)
+- Add kms_app_arns as variables
 
 ### ecs_service
 - Add AWS ecs service module [#188](https://github.com/dbl-works/terraform/pull/188)
