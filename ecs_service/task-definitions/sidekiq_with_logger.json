@@ -1,0 +1,64 @@
+[
+  {
+      "name": "${CONTAINER_NAME}",
+      "image": "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}",
+      "portMappings": [],
+      "essential": true,
+      "command": ${COMMANDS},
+      "environment": ${ENVIRONMENT_VARIABLES},
+      "mountPoints": [
+          {
+              "sourceVolume": "${VOLUME_NAME}",
+              "containerPath": "/app/${LOG_PATH}"
+          }
+      ],
+      "volumesFrom": [],
+      "secrets": ${SECRETS_LIST},
+      "dependsOn": [
+          {
+              "containerName": "logger",
+              "condition": "START"
+          }
+      ],
+      "readonlyRootFilesystem": false,
+      "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-create-group": "true",
+              "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}",
+              "awslogs-region": "${REGION}",
+              "awslogs-stream-prefix": "${CONTAINER_NAME}"
+          }
+      }
+  },
+  {
+      "name": "logger",
+      "image": "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${LOGGER_ECR_REPO_NAME}:${IMAGE_TAG}",
+      "portMappings": [
+        {
+            "containerPort": ${LOGGER_CONTAINER_PORT},
+            "hostPort": ${LOGGER_CONTAINER_PORT},
+            "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [
+          {
+              "sourceVolume": "${VOLUME_NAME}",
+              "containerPath": "/${LOG_PATH}"
+          }
+      ],
+      "volumesFrom": [],
+      "readonlyRootFilesystem": false,
+      "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-create-group": "true",
+              "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}",
+              "awslogs-region": "${REGION}",
+              "awslogs-stream-prefix": "logger"
+          }
+      }
+  }
+]

@@ -50,10 +50,18 @@ resource "aws_ecs_service" "main" {
     assign_public_ip = true
   }
 
-  load_balancer {
-    target_group_arn = data.aws_lb_target_group.ecs.arn
-    container_name   = var.container_name
-    container_port   = var.app_container_port
+  # not required if you don't want to use a load balancer, e.g. for Sidekiq
+  dynamic "load_balancer" {
+    for_each = var.app_container_port == null ? [] : [{
+      target_group_arn = data.aws_lb_target_group.ecs.arn,
+      container_name   = var.container_name,
+      container_port   = var.app_container_port
+    }]
+    content {
+      target_group_arn = load_balancer.value.target_group_arn
+      container_name   = load_balancer.value.container_name
+      container_port   = load_balancer.value.container_port
+    }
   }
 
   deployment_controller {
