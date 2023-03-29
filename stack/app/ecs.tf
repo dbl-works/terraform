@@ -16,11 +16,11 @@ module "ecs" {
     var.secret_arns
   ])
 
-  kms_key_arns = flatten(concat([
-    var.kms_app_arns,
+  kms_key_arns = compact(flatten(concat([
+    var.grant_access_to_kms_arns,
     var.kms_app_arn,
     values(module.s3-storage)[*].kms-key-arn
-  ]))
+  ])))
 
   # optional
   health_check_path           = var.health_check_path

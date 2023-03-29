@@ -91,7 +91,8 @@ module "stack" {
   ]
 
   # KMS
-  kms_app_arn                 = "" # output from stack/setup
+  kms_app_arn                 = "" # output from stack/setup. Used for encrypt elasticache
+  grant_access_to_kms_arns    = []
   kms_deletion_window_in_days = 30
 
   # RDS
