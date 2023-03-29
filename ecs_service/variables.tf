@@ -1,0 +1,74 @@
+variable "project" {
+  type = string
+}
+
+variable "environment" {
+  type = string
+}
+
+variable "image_tag" {
+  type    = string
+  default = "latest-main"
+}
+
+variable "cpu" {
+  type    = number
+  default = 512
+}
+
+variable "memory" {
+  type    = number
+  default = 1024
+}
+
+variable "ecr_repo_name" {
+  type = string
+}
+
+variable "container_name" {
+  type    = string
+  default = "web"
+}
+
+variable "volume_name" {
+  type    = string
+  default = "log"
+}
+
+variable "service_json_file_name" {
+  type        = string
+  default     = "web_with_logger"
+  description = "service json file name to be used. Options: web_with_logger"
+}
+
+variable "logger_ecr_repo_name" {
+  type = string
+}
+
+variable "logger_container_port" {
+  type    = string
+  default = 4318
+}
+
+variable "app_container_port" {
+  type    = number
+  default = 3000
+}
+
+variable "log_path" {
+  type        = string
+  default     = "log"
+  description = "path in the apps which store the log"
+}
+
+# TODO: Read env in a file
+variable "environment_variables" {
+  type    = map(string)
+  default = {}
+}
+
+variable "secrets" {
+  type        = list(string)
+  default     = []
+  description = "secrets key which is stored in the aws secret"
+}
