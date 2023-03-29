@@ -94,7 +94,7 @@ variable "kms_deletion_window_in_days" {
 }
 
 variable "kms_app_arns" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
