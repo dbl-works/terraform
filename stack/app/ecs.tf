@@ -17,7 +17,7 @@ module "ecs" {
   ])
 
   kms_key_arns = compact(flatten(concat([
-    var.kms_app_arns,
+    var.grant_access_to_kms_arns,
     var.kms_app_arn,
     values(module.s3-storage)[*].kms-key-arn
   ])))
