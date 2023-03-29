@@ -23,3 +23,8 @@ variable "kms_deletion_window_in_days" {
   default = 30
   type    = number
 }
+
+variable "multi_region_kms_key" {
+  default = false
+  type    = bool
+}

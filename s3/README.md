@@ -16,5 +16,6 @@ module "s3" {
   versioning                  = var.versioning
   kms_deletion_window_in_days = 30
   enable_encryption           = true
+  multi_region_kms_key        = false  # If true, the KMS key can be used in other regions
 }
 ```
