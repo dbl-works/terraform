@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [Unreleased]
+### ecs_service
+- Add AWS ecs service module [#188](https://github.com/dbl-works/terraform/pull/188)
+
 ### script/database-roles
 - Add SQL script for creating DB readonly role [#177](https://github.com/dbl-works/terraform/pull/177)
 
