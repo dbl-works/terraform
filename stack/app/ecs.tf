@@ -18,7 +18,7 @@ module "ecs" {
 
   kms_key_arns = flatten(concat([
     var.kms_app_arns,
-    var.kms_app_arn,
+    (var.kms_app_arn == null ? [] : var.kms_app_arn),
     values(module.s3-storage)[*].kms-key-arn
   ]))
 
