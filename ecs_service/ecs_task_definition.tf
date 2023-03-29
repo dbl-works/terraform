@@ -2,6 +2,9 @@ data "aws_secretsmanager_secret" "app" {
   name = "${var.project}/app/${var.environment}"
 }
 
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 locals {
   environment_variables = flatten([
     for name, value in var.environment_variables : { name : name, value : value }
