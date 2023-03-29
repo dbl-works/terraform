@@ -16,7 +16,7 @@ locals {
     }
   ]
 
-  task_definition_name = "${var.project}-web-${var.environment}"
+  task_definition_name = "${var.project}-${var.container_name}-${var.environment}"
   container_definitions = templatefile("${path.module}/task-definitions/${var.service_json_file_name}.json", {
     ACCOUNT_ID            = data.aws_caller_identity.current.account_id
     COMMANDS              = jsonencode(var.commands)
