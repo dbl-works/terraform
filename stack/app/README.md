@@ -91,7 +91,8 @@ module "stack" {
   ]
 
   # KMS
-  kms_app_arn                 = "" # output from stack/setup
+  kms_app_arn                 = "" # Deprecated. output from stack/setup
+  kms_app_arns                = [] # output from stack/setup
   kms_deletion_window_in_days = 30
 
   # RDS
