@@ -22,15 +22,15 @@ locals {
     CONTAINER_PORT        = var.app_container_port
     CONTAINER_NAME        = var.container_name
     ECR_REPO_NAME         = var.ecr_repo_name
-    ENVIRONMENT           = local.environment
+    ENVIRONMENT           = var.environment
     ENVIRONMENT_VARIABLES = jsonencode(local.environment_variables)
     IMAGE_TAG             = var.image_tag
     LOG_PATH              = var.log_path
     LOGGER_CONTAINER_PORT = var.logger_container_port
     LOGGER_ECR_REPO_NAME  = var.logger_ecr_repo_name
-    PROJECT               = local.project
+    PROJECT               = var.project
     REGION                = data.aws_region.current.name
-    VOLUME_NAME           = local.volume_name
+    VOLUME_NAME           = var.volume_name
     SECRETS_LIST          = jsonencode(local.secrets)
   })
 }
