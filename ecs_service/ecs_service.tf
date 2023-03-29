@@ -50,8 +50,7 @@ resource "aws_ecs_service" "main" {
     assign_public_ip = true
   }
 
-  # TODO: Make load balancer optional for sidekiq?? only exist if container port is exist
-  # dynamic block
+  # not required if you don't want to use a load balancer, e.g. for Sidekiq
   dynamic "load_balancer" {
     for_each = var.app_container_port == null ? [] : [{
       target_group_arn = data.aws_lb_target_group.ecs.arn,
