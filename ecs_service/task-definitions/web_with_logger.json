@@ -22,7 +22,7 @@
       "secrets": ${SECRETS_LIST},
       "dependsOn": [
           {
-              "containerName": "vector",
+              "containerName": "logger",
               "condition": "START"
           }
       ],
@@ -38,7 +38,7 @@
       }
   },
   {
-      "name": "vector",
+      "name": "logger",
       "image": "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${LOGGER_ECR_REPO_NAME}:${IMAGE_TAG}",
       "portMappings": [
         {
@@ -63,7 +63,7 @@
               "awslogs-create-group": "true",
               "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}",
               "awslogs-region": "${REGION}",
-              "awslogs-stream-prefix": "vector"
+              "awslogs-stream-prefix": "logger"
           }
       }
   }

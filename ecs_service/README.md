@@ -15,15 +15,17 @@ module "ecs_service" {
 
   # Optional
   image_tag              = "latest-main"
-  cpu                    = 512
-  memory                 = 1024
+  cpu                    = 256
+  memory                 = 512
   container_name         = "web"
   volume_name            = "log"
-  service_json_file_name = "web_with_logger"
+  service_json_file_name = "web_with_logger" # or: "web" if no logger used
   logger_container_port  = 4318
   app_container_port     = 3000
   log_path               = "log"
   environment_variables  = {}
   secrets                = []
+  commands               = ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+  secrets_alias          = null # defaults to "${var.project}/app/${var.environment}"
 }
 ```

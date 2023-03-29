@@ -114,6 +114,7 @@ resource "aws_iam_group" "deploy-bot-deploy-access" {
   name = "deploy-bot-deploy-access"
 }
 
+# Missing in "AmazonECS_FullAccess" bur required for deploying
 resource "aws_iam_policy" "deploy-bot-extra-access" {
   name        = "DeployBot_ExtraAccess"
   path        = "/"

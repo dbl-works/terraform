@@ -1,5 +1,5 @@
 data "aws_secretsmanager_secret" "app" {
-  name = "${var.project}/app/${var.environment}"
+  name = var.secrets_alias == null ? "${var.project}/app/${var.environment}" : var.secrets_alias
 }
 
 data "aws_caller_identity" "current" {}

@@ -13,12 +13,12 @@ variable "image_tag" {
 
 variable "cpu" {
   type    = number
-  default = 512
+  default = 256
 }
 
 variable "memory" {
   type    = number
-  default = 1024
+  default = 512
 }
 
 variable "ecr_repo_name" {
@@ -81,4 +81,10 @@ variable "commands" {
     "-C",
     "config/puma.rb"
   ]
+}
+
+
+variable "secrets_alias" {
+  type    = string
+  default = null
 }
