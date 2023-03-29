@@ -93,13 +93,13 @@ variable "kms_deletion_window_in_days" {
   type = number
 }
 
-variable "kms_app_arns" {
-  type = list(string)
+variable "grant_access_to_kms_arns" {
+  type    = list(string)
+  default = []
 }
 
 variable "kms_app_arn" {
-  type        = string
-  description = "Deprecated. Please use kms_app_arns instead."
+  type = string
 }
 # =============== KMS ================ #
 

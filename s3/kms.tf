@@ -10,4 +10,5 @@ module "kms_key" {
   environment             = var.environment
   description             = "Used for encrypting files in a private bucket replica"
   deletion_window_in_days = var.kms_deletion_window_in_days
+  multi_region            = var.multi_region_kms_key
 }

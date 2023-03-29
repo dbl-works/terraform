@@ -26,6 +26,7 @@ module "s3-storage" {
   cors_expose_headers              = ["ETag"]
   regional                         = false
   region                           = null   # IAM Policy Names must be unique across regions
+  multi_region_kms_key             = false  # If true, the KMS key can be used in other regions
   name                             = ""     # used for policies, if null "project-environment-region" is used
   primary_storage_class_retention  = 0
   s3_replicas                      = [
