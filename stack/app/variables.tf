@@ -100,7 +100,7 @@ variable "kms_app_arns" {
 
 variable "kms_app_arn" {
   type        = string
-  default     = null
+  default     = ""
   description = "Deprecated. Please use kms_app_arns instead."
 }
 # =============== KMS ================ #
