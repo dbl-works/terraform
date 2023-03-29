@@ -61,7 +61,6 @@ variable "log_path" {
   description = "path in the apps which store the log"
 }
 
-# TODO: Read env in a file
 variable "environment_variables" {
   type    = map(string)
   default = {}
@@ -71,4 +70,15 @@ variable "secrets" {
   type        = list(string)
   default     = []
   description = "secrets key which is stored in the aws secret"
+}
+
+variable "commands" {
+  type = list(string)
+  default = [
+    "bundle",
+    "exec",
+    "puma",
+    "-C",
+    "config/puma.rb"
+  ]
 }

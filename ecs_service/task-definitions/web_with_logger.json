@@ -10,13 +10,7 @@
         }
       ],
       "essential": true,
-      "command": [
-          "bundle",
-          "exec",
-          "puma",
-          "-C",
-          "config/puma.rb"
-      ],
+      "command": ${COMMANDS},
       "environment": ${ENVIRONMENT_VARIABLES},
       "mountPoints": [
           {
