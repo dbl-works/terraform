@@ -19,9 +19,9 @@ module "ecs_service" {
   memory                 = 512
   container_name         = "web"
   volume_name            = "log"
-  service_json_file_name = "web_with_logger" # or: "web" if no logger used
+  service_json_file_name = "web_with_logger" # or: "web" for no logging, or "sidekiq_with_logger" for sidekiq
   logger_container_port  = 4318
-  app_container_port     = 3000
+  app_container_port     = 3000 # set to "null" to skip port mapping, necessary e.g. for sidekiq
   log_path               = "log"
   environment_variables  = {}
   secrets                = []
