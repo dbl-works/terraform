@@ -138,7 +138,7 @@ resource "aws_iam_policy" "deploy-bot-ecs-full-access" {
                 "elasticloadbalancing:DeleteLoadBalancer",
                 "elasticloadbalancing:DeleteRule",
                 "elasticloadbalancing:DeleteTargetGroup",
-                "elasticloadbalancing:Describe*"
+                "elasticloadbalancing:Describe*",
                 "events:DeleteRule",
                 "events:DescribeRule",
                 "events:ListRuleNamesByTarget",
