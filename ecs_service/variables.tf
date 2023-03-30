@@ -6,6 +6,11 @@ variable "environment" {
   type = string
 }
 
+variable "desired_count" {
+  type    = number
+  default = 1
+}
+
 variable "image_tag" {
   type    = string
   default = "latest-main"

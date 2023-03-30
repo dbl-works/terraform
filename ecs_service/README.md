@@ -33,5 +33,6 @@ module "ecs_service" {
   logger_image_name      = "google/logger"
   volume_name            = "log"
   with_logger            = false
+  desired_count          = 2
 }
 ```
