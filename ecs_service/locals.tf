@@ -47,7 +47,7 @@ locals {
     ENVIRONMENT           = var.environment
     ENVIRONMENT_VARIABLES = jsonencode(local.environment_variables)
     IMAGE_NAME            = local.image_name
-    IMAGE_TAG             = var.logger_image_tag == null ? var.image_tag : var.logger_image_tag
+    IMAGE_TAG             = var.image_tag
     LOG_PATH              = var.log_path
     PROJECT               = var.project
     REGION                = data.aws_region.current.name
@@ -60,7 +60,7 @@ locals {
   logger_container_definitions = var.with_logger ? templatefile("${path.module}/task-definitions/logger.json", {
     ENVIRONMENT           = var.environment
     IMAGE_NAME            = local.logger_image_name
-    IMAGE_TAG             = var.image_tag
+    IMAGE_TAG             = var.logger_image_tag == null ? var.image_tag : var.logger_image_tag
     LOG_PATH              = var.log_path
     LOGGER_CONTAINER_PORT = var.logger_container_port
     LOGGER_IMAGE_NAME     = local.logger_image_name
