@@ -15,6 +15,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### ecs_service
 - Add AWS ecs service module [#188](https://github.com/dbl-works/terraform/pull/188)
+- Refactor and add more variables to ecs_service [#192](https://github.com/dbl-works/terraform/pull/192)
 
 ### script/database-roles
 - Add SQL script for creating DB readonly role [#177](https://github.com/dbl-works/terraform/pull/177)

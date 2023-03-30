@@ -23,9 +23,31 @@ variable "environment" {
   type = string
 }
 
-variable "image_tag" {
+variable "desired_count" {
+  type    = number
+  default = 1
+}
+
+variable "app_image_tag" {
   type    = string
   default = "latest-main"
+}
+
+variable "logger_image_tag" {
+  type    = string
+  default = null
+}
+
+variable "app_image_name" {
+  type        = string
+  default     = null
+  description = "Docker image name of the app container. Required if ecr_repo_name is null."
+}
+
+variable "logger_image_name" {
+  type        = string
+  default     = null
+  description = "Required if logger_ecr_repo_name is null."
 }
 
 variable "cpu" {
@@ -39,7 +61,9 @@ variable "memory" {
 }
 
 variable "ecr_repo_name" {
-  type = string
+  type        = string
+  default     = null
+  description = "Required if app_image_name is null."
 }
 
 variable "container_name" {
@@ -54,12 +78,14 @@ variable "volume_name" {
 
 variable "service_json_file_name" {
   type        = string
-  default     = "web_with_logger"
-  description = "service json file name to be used. Options: web_with_logger"
+  default     = "web"
+  description = "service json file name to be used."
 }
 
 variable "logger_ecr_repo_name" {
-  type = string
+  type        = string
+  default     = null
+  description = "Required if logger_image_name is null."
 }
 
 variable "logger_container_port" {
@@ -100,8 +126,22 @@ variable "commands" {
   ]
 }
 
-
 variable "secrets_alias" {
   type    = string
   default = null
+}
+
+variable "load_balancer_target_group_name" {
+  type    = string
+  default = null
+}
+
+variable "with_logger" {
+  type    = bool
+  default = true
+}
+
+variable "with_load_balancer" {
+  type    = bool
+  default = true
 }
