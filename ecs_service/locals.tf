@@ -55,7 +55,7 @@ locals {
     ] : []
   })
 
-  logger_container_definitions = templatefile("${path.module}/task-definitions/logger.json", {
+  logger_container_definitions = var.with_logger ? templatefile("${path.module}/task-definitions/logger.json", {
     ENVIRONMENT           = var.environment
     IMAGE_NAME            = local.logger_image_name
     IMAGE_TAG             = var.image_tag
@@ -65,7 +65,7 @@ locals {
     PROJECT               = var.project
     REGION                = local.region
     VOLUME_NAME           = var.volume_name
-  })
+  }) : ""
 
   container_definitions = var.with_logger ? [
     local.app_container_definitions, local.logger_container_definitions
