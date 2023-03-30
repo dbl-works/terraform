@@ -1,6 +1,6 @@
 {
   "name": "logger",
-  "image": "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${LOGGER_ECR_REPO_NAME}:${IMAGE_TAG}",
+  "image": "${LOGGER_IMAGE_NAME}:${IMAGE_TAG}",
   "portMappings": [
     {
         "containerPort": ${LOGGER_CONTAINER_PORT},
