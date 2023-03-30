@@ -13,6 +13,12 @@ variable "project" {
   type = string
 }
 
+variable "cluster_name" {
+  type        = string
+  default     = null
+  description = "If not provided, the cluster name will be generated from the project and environment (and region if regional)."
+}
+
 variable "environment" {
   type = string
 }
