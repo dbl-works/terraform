@@ -25,6 +25,7 @@ module "ecs_service" {
   secrets                = []
   secrets_alias          = null # defaults to "${var.project}/app/${var.environment}"
   service_json_file_name = "web_with_logger" # or: "web" for no logging, or "sidekiq_with_logger" for sidekiq
+  with_load_balancer     = false
 
   log_path               = "log"
   logger_container_port  = 4318

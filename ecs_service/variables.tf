@@ -113,3 +113,8 @@ variable "with_logger" {
   type    = bool
   default = true
 }
+
+variable "with_load_balancer" {
+  type    = bool
+  default = true
+}
