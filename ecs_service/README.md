@@ -21,6 +21,7 @@ module "ecs_service" {
   cpu                    = 256
   environment_variables  = {}
   image_tag              = "latest-main"
+  logger_image_tag       = "latest-main"
   memory                 = 512
   secrets                = []
   secrets_alias          = null # defaults to "${var.project}/app/${var.environment}"
