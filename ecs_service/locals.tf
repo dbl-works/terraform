@@ -25,6 +25,18 @@ locals {
   region            = data.aws_region.current.name
   image_name        = var.app_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.app_image_name
   logger_image_name = var.with_logger && var.logger_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.logger_ecr_repo_name}" : var.logger_image_name
+  mount_points = var.with_logger ? [
+    {
+      sourceVolume : var.volume_name,
+      containerPath : "/app/${var.log_path}"
+    }
+  ] : []
+  depends_on = var.with_logger ? [
+    {
+      containerName : "logger",
+      condition : "START"
+    }
+  ] : []
 
   task_definition_name = "${var.project}-${var.container_name}-${var.environment}"
   app_container_definitions = templatefile("${path.module}/task-definitions/${var.service_json_file_name}.json", {
@@ -41,18 +53,8 @@ locals {
     REGION                = data.aws_region.current.name
     SECRETS_LIST          = jsonencode(local.secrets)
     VOLUME_NAME           = var.volume_name
-    MOUNT_POINTS = var.with_logger ? [
-      {
-        sourceVolume : var.volume_name,
-        containerPath : "/app/${var.log_path}"
-      }
-    ] : []
-    DEPENDS_ON = var.with_logger ? [
-      {
-        containerName : "logger",
-        condition : "START"
-      }
-    ] : []
+    MOUNT_POINTS          = jsonencode(local.mount_points)
+    DEPENDS_ON            = jsonencode(local.depends_on)
   })
 
   logger_container_definitions = var.with_logger ? templatefile("${path.module}/task-definitions/logger.json", {
@@ -65,9 +67,9 @@ locals {
     PROJECT               = var.project
     REGION                = local.region
     VOLUME_NAME           = var.volume_name
-  }) : ""
+  }) : "{}"
 
   container_definitions = var.with_logger ? [
-    local.app_container_definitions, local.logger_container_definitions
-  ] : [local.app_container_definitions]
+    jsondecode(local.app_container_definitions), jsondecode(local.logger_container_definitions)
+  ] : [jsondecode(local.app_container_definitions)]
 }
