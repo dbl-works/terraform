@@ -14,7 +14,7 @@ variable "image_tag" {
 variable "app_image_name" {
   type        = string
   default     = null
-  description = "Required if ecr_repo_name is null."
+  description = "Docker image name of the app container. Required if ecr_repo_name is null."
 }
 
 variable "cpu" {

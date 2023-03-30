@@ -14,18 +14,23 @@ module "ecs_service" {
   logger_ecr_repo_name = "facebook-log"
 
   # Optional
-  image_tag              = "latest-main"
-  cpu                    = 256
-  memory                 = 512
-  container_name         = "web"
-  volume_name            = "log"
-  service_json_file_name = "web_with_logger" # or: "web" for no logging, or "sidekiq_with_logger" for sidekiq
-  logger_container_port  = 4318
   app_container_port     = 3000 # set to "null" to skip port mapping, necessary e.g. for sidekiq
-  log_path               = "log"
-  environment_variables  = {}
-  secrets                = []
+  app_image_name         = "google/cloud-sdk"
   commands               = ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+  container_name         = "web"
+  cpu                    = 256
+  environment_variables  = {}
+  image_tag              = "latest-main"
+  memory                 = 512
+  secrets                = []
   secrets_alias          = null # defaults to "${var.project}/app/${var.environment}"
+  service_json_file_name = "web_with_logger" # or: "web" for no logging, or "sidekiq_with_logger" for sidekiq
+
+  log_path               = "log"
+  logger_container_port  = 4318
+  logger_ecr_repo_name   = "logger-private-registry"
+  logger_image_name      = "google/logger"
+  volume_name            = "log"
+  with_logger            = false
 }
 ```
