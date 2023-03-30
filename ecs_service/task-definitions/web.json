@@ -1,6 +1,6 @@
 {
     "name": "${CONTAINER_NAME}",
-    "image": "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}",
+    "image": "${IMAGE_NAME}:${IMAGE_TAG}",
     "portMappings": ${APP_PORT_MAPPINGS},
     "essential": true,
     "command": ${COMMANDS},

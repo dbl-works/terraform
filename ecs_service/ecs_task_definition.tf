@@ -21,17 +21,19 @@ locals {
     hostPort : var.app_container_port,
     protocol : "tcp"
   }]
-
+  account_id = data.aws_caller_identity.current.account_id
+  region     = data.aws_region.current.name
+  image_name = var.app_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.image_name
 
   task_definition_name = "${var.project}-${var.container_name}-${var.environment}"
   app_container_definitions = templatefile("${path.module}/task-definitions/${var.service_json_file_name}.json", {
-    ACCOUNT_ID            = data.aws_caller_identity.current.account_id
     APP_PORT_MAPPINGS     = jsonencode(local.app_port_mappings)
     COMMANDS              = jsonencode(var.commands)
     CONTAINER_NAME        = var.container_name
     ECR_REPO_NAME         = var.ecr_repo_name
     ENVIRONMENT           = var.environment
     ENVIRONMENT_VARIABLES = jsonencode(local.environment_variables)
+    IMAGE_NAME            = local.image_name
     IMAGE_TAG             = var.image_tag
     LOG_PATH              = var.log_path
     PROJECT               = var.project
@@ -53,14 +55,14 @@ locals {
   })
 
   logger_container_definitions = templatefile("${path.module}/task-definitions/logger.json", {
-    ACCOUNT_ID            = data.aws_caller_identity.current.account_id
+    ACCOUNT_ID            = local.account_id
     ENVIRONMENT           = var.environment
     IMAGE_TAG             = var.image_tag
     LOG_PATH              = var.log_path
     LOGGER_CONTAINER_PORT = var.logger_container_port
     LOGGER_ECR_REPO_NAME  = var.logger_ecr_repo_name
     PROJECT               = var.project
-    REGION                = data.aws_region.current.name
+    REGION                = local.region
     VOLUME_NAME           = var.volume_name
   })
 

@@ -11,6 +11,11 @@ variable "image_tag" {
   default = "latest-main"
 }
 
+variable "app_image_name" {
+  type    = string
+  default = null
+}
+
 variable "cpu" {
   type    = number
   default = 256
