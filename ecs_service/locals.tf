@@ -39,7 +39,7 @@ locals {
   ] : []
 
   task_definition_name = "${var.project}-${var.container_name}-${var.environment}"
-  app_container_definitions = templatefile("${path.module}/task-definitions/${var.service_json_file_name}.json", {
+  app_container_definitions = jsondecode(templatefile("${path.module}/task-definitions/${var.service_json_file_name}.json", {
     APP_PORT_MAPPINGS     = jsonencode(local.app_port_mappings)
     COMMANDS              = jsonencode(var.commands)
     CONTAINER_NAME        = var.container_name
@@ -55,9 +55,9 @@ locals {
     VOLUME_NAME           = var.volume_name
     MOUNT_POINTS          = jsonencode(local.mount_points)
     DEPENDS_ON            = jsonencode(local.depends_on)
-  })
+  }))
 
-  logger_container_definitions = var.with_logger ? templatefile("${path.module}/task-definitions/logger.json", {
+  logger_container_definitions = var.with_logger ? jsondecode(templatefile("${path.module}/task-definitions/logger.json", {
     ENVIRONMENT           = var.environment
     IMAGE_NAME            = local.logger_image_name
     IMAGE_TAG             = var.image_tag
@@ -67,9 +67,9 @@ locals {
     PROJECT               = var.project
     REGION                = local.region
     VOLUME_NAME           = var.volume_name
-  }) : "{}"
+  })) : null
 
-  container_definitions = var.with_logger ? [
-    jsondecode(local.app_container_definitions), jsondecode(local.logger_container_definitions)
-  ] : [jsondecode(local.app_container_definitions)]
+  container_definitions = compact([
+    local.app_container_definitions, local.logger_container_definitions
+  ])
 }
