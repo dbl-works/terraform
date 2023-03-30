@@ -18,7 +18,7 @@ variable "image_tag" {
 
 variable "logger_image_tag" {
   type    = string
-  default = "latest-main"
+  default = null
 }
 
 variable "app_image_name" {
