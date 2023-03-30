@@ -83,8 +83,12 @@ variable "commands" {
   ]
 }
 
-
 variable "secrets_alias" {
+  type    = string
+  default = null
+}
+
+variable "load_balancer_target_group_name" {
   type    = string
   default = null
 }

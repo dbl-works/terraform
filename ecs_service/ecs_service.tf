@@ -7,7 +7,7 @@ data "aws_iam_role" "main" {
 }
 
 data "aws_lb_target_group" "ecs" {
-  name = "${var.project}-${var.environment}-ecs"
+  name = var.load_balancer_target_group_name == null ? "${var.project}-${var.environment}-ecs" : var.load_balancer_target_group_name
 }
 
 data "aws_vpc" "main" {

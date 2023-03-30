@@ -16,11 +16,17 @@ locals {
     }
   ]
 
+  app_port_mappings = var.app_container_port == null ? [] : [{
+    containerPort : var.app_container_port,
+    hostPort : var.app_container_port,
+    protocol : "tcp"
+  }]
+
+
   task_definition_name = "${var.project}-${var.container_name}-${var.environment}"
   container_definitions = templatefile("${path.module}/task-definitions/${var.service_json_file_name}.json", {
     ACCOUNT_ID            = data.aws_caller_identity.current.account_id
     COMMANDS              = jsonencode(var.commands)
-    CONTAINER_PORT        = var.app_container_port
     CONTAINER_NAME        = var.container_name
     ECR_REPO_NAME         = var.ecr_repo_name
     ENVIRONMENT           = var.environment
@@ -33,6 +39,7 @@ locals {
     REGION                = data.aws_region.current.name
     VOLUME_NAME           = var.volume_name
     SECRETS_LIST          = jsonencode(local.secrets)
+    APP_PORT_MAPPINGS     = jsonencode(local.app_port_mappings)
   })
 }
 
