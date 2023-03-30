@@ -20,7 +20,7 @@ module "ecs_service" {
   container_name         = "web"
   cpu                    = 256
   environment_variables  = {}
-  image_tag              = "latest-main"
+  app_image_tag          = "latest-main"
   logger_image_tag       = "latest-main"
   memory                 = 512
   secrets                = []

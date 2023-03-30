@@ -28,7 +28,7 @@ variable "desired_count" {
   default = 1
 }
 
-variable "image_tag" {
+variable "app_image_tag" {
   type    = string
   default = "latest-main"
 }
@@ -42,6 +42,12 @@ variable "app_image_name" {
   type        = string
   default     = null
   description = "Docker image name of the app container. Required if ecr_repo_name is null."
+}
+
+variable "logger_image_name" {
+  type        = string
+  default     = null
+  description = "Required if logger_ecr_repo_name is null."
 }
 
 variable "cpu" {
@@ -85,12 +91,6 @@ variable "logger_ecr_repo_name" {
 variable "logger_container_port" {
   type    = string
   default = 4318
-}
-
-variable "logger_image_name" {
-  type        = string
-  default     = null
-  description = "Required if logger_ecr_repo_name is null."
 }
 
 variable "app_container_port" {
