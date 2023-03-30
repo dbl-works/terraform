@@ -8,11 +8,11 @@ data "aws_ecs_cluster" "main" {
 }
 
 data "aws_iam_role" "main" {
-  name = "ecs-task-execution-${var.project}-${var.environment}"
+  name = "ecs-task-execution-${local.name}"
 }
 
 data "aws_lb_target_group" "ecs" {
-  name = "${var.project}-${var.environment}-ecs"
+  name = "${local.name}-ecs"
 }
 
 data "aws_vpc" "main" {
@@ -36,7 +36,7 @@ data "aws_subnets" "public" {
 }
 
 data "aws_security_group" "ecs" {
-  name = "${var.project}-${var.environment}-ecs"
+  name = "${local.name}-ecs"
 }
 
 resource "aws_ecs_service" "main" {
