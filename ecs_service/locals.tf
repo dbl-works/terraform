@@ -47,7 +47,7 @@ locals {
     ENVIRONMENT           = var.environment
     ENVIRONMENT_VARIABLES = jsonencode(local.environment_variables)
     IMAGE_NAME            = local.image_name
-    IMAGE_TAG             = var.image_tag
+    IMAGE_TAG             = var.logger_image_tag == null ? var.image_tag : var.logger_image_tag
     LOG_PATH              = var.log_path
     PROJECT               = var.project
     REGION                = data.aws_region.current.name
