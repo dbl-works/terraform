@@ -12,8 +12,9 @@ variable "image_tag" {
 }
 
 variable "app_image_name" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "Required if ecr_repo_name is null."
 }
 
 variable "cpu" {
@@ -27,7 +28,9 @@ variable "memory" {
 }
 
 variable "ecr_repo_name" {
-  type = string
+  type        = string
+  default     = null
+  description = "Required if app_image_name is null."
 }
 
 variable "container_name" {
@@ -47,12 +50,20 @@ variable "service_json_file_name" {
 }
 
 variable "logger_ecr_repo_name" {
-  type = string
+  type        = string
+  default     = null
+  description = "Required if logger_image_name is null."
 }
 
 variable "logger_container_port" {
   type    = string
   default = 4318
+}
+
+variable "logger_image_name" {
+  type        = string
+  default     = null
+  description = "Required if logger_ecr_repo_name is null."
 }
 
 variable "app_container_port" {
