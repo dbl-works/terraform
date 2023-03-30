@@ -1,5 +1,10 @@
+locals {
+  name = var.cluster_name != null ? var.cluster_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+}
+
+
 data "aws_ecs_cluster" "main" {
-  cluster_name = "${var.project}-${var.environment}"
+  cluster_name = local.name
 }
 
 data "aws_iam_role" "main" {

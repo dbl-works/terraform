@@ -1,3 +1,14 @@
+variable "regional" {
+  type    = bool
+  default = false
+}
+
+variable "region" {
+  type        = string
+  default     = null
+  description = "Typically, we abbreviate the region for naming, e.g. 'us-east-1' is passed as 'us-east'."
+}
+
 variable "project" {
   type = string
 }
