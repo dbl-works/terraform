@@ -23,7 +23,7 @@ locals {
   }]
   account_id        = data.aws_caller_identity.current.account_id
   region            = data.aws_region.current.name
-  image_name        = var.app_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.image_name
+  image_name        = var.app_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.app_image_name
   logger_image_name = var.logger_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.logger_ecr_repo_name}" : var.logger_image_name
 
   task_definition_name = "${var.project}-${var.container_name}-${var.environment}"
@@ -61,7 +61,7 @@ locals {
     IMAGE_TAG             = var.image_tag
     LOG_PATH              = var.log_path
     LOGGER_CONTAINER_PORT = var.logger_container_port
-    LOGGER_ECR_REPO_NAME  = var.logger_ecr_repo_name
+    LOGGER_IMAGE_NAME     = local.logger_image_name
     PROJECT               = var.project
     REGION                = local.region
     VOLUME_NAME           = var.volume_name
