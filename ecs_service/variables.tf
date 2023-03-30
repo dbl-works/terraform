@@ -95,5 +95,5 @@ variable "load_balancer_target_group_name" {
 
 variable "with_logger" {
   type    = bool
-  default = false
+  default = true
 }
