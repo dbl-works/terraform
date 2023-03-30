@@ -1,24 +1,22 @@
-[
-  {
-      "name": "${CONTAINER_NAME}",
-      "image": "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}",
-      "portMappings": ${APP_PORT_MAPPINGS},
-      "essential": true,
-      "command": ${COMMANDS},
-      "environment": ${ENVIRONMENT_VARIABLES},
-      "mountPoints": [],
-      "volumesFrom": [],
-      "secrets": ${SECRETS_LIST},
-      "dependsOn": [],
-      "readonlyRootFilesystem": false,
-      "logConfiguration": {
-          "logDriver": "awslogs",
-          "options": {
-              "awslogs-create-group": "true",
-              "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}",
-              "awslogs-region": "${REGION}",
-              "awslogs-stream-prefix": "${CONTAINER_NAME}"
-          }
-      }
-  }
-]
+{
+    "name": "${CONTAINER_NAME}",
+    "image": "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}",
+    "portMappings": ${APP_PORT_MAPPINGS},
+    "essential": true,
+    "command": ${COMMANDS},
+    "environment": ${ENVIRONMENT_VARIABLES},
+    "mountPoints": [],
+    "volumesFrom": [],
+    "secrets": ${SECRETS_LIST},
+    "dependsOn": [],
+    "readonlyRootFilesystem": false,
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-create-group": "true",
+            "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}",
+            "awslogs-region": "${REGION}",
+            "awslogs-stream-prefix": "${CONTAINER_NAME}"
+        }
+    }
+}

@@ -37,8 +37,8 @@ variable "volume_name" {
 
 variable "service_json_file_name" {
   type        = string
-  default     = "web_with_logger"
-  description = "service json file name to be used. Options: web_with_logger"
+  default     = "web"
+  description = "service json file name to be used."
 }
 
 variable "logger_ecr_repo_name" {
@@ -91,4 +91,9 @@ variable "secrets_alias" {
 variable "load_balancer_target_group_name" {
   type    = string
   default = null
+}
+
+variable "with_logger" {
+  type    = bool
+  default = false
 }
