@@ -24,7 +24,7 @@ locals {
   account_id        = data.aws_caller_identity.current.account_id
   region            = data.aws_region.current.name
   image_name        = var.app_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.app_image_name
-  logger_image_name = var.logger_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.logger_ecr_repo_name}" : var.logger_image_name
+  logger_image_name = var.with_logger && var.logger_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.logger_ecr_repo_name}" : var.logger_image_name
 
   task_definition_name = "${var.project}-${var.container_name}-${var.environment}"
   app_container_definitions = templatefile("${path.module}/task-definitions/${var.service_json_file_name}.json", {
