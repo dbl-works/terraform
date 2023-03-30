@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [Unreleased]
+### global-accelerator
+- Add weight to the load_balancers variables [#194](https://github.com/dbl-works/terraform/pull/194)
+
 ### stack/app
 - Add kms_app_arns as variables
 
