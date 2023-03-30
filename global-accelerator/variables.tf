@@ -10,6 +10,7 @@ variable "load_balancers" {
   type = list(object({
     region   = string
     endpoint = string
+    weight   = optional(number, 128)
   }))
 }
 

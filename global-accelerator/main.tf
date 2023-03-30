@@ -34,5 +34,6 @@ resource "aws_globalaccelerator_endpoint_group" "endpoint-group-443" {
 
   endpoint_configuration {
     endpoint_id = each.value.endpoint
+    weight      = each.value.weight
   }
 }
