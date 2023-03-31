@@ -25,6 +25,6 @@ module "iam_cross_account_policies" {
 
   username = "muthu"
   destination_aws_account_id = "xxxxxxxxxxxxx"
-  destination_iam_role_name = "assume_role"
+  destination_iam_role_name = "assume-role-12345667878-admin"
 }
 ```

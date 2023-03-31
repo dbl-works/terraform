@@ -12,3 +12,8 @@ variable "max_session_duration" {
 variable "policy_name" {
   type = string
 }
+
+variable "aws_role_name" {
+  type        = string
+  description = "assume-role"
+}

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "assume_role" {
-  name = "assume_role"
+  name = var.aws_role_name
 
   max_session_duration = var.max_session_duration
 
