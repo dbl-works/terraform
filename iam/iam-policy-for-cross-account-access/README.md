@@ -10,7 +10,7 @@ In addition, users don't have to sign out of one account and sign in to another 
 module "iam_cross_account_policies" {
   source = "github.com/dbl-works/terraform//iam/iam-policy-for-cross-account-access/destination-account?ref=main"
 
-  aws_account_id = "xxxxxxxxxxxxxx"
+  bastion_aws_account_id = "xxxxxxxxxxxxxx"
   policy_name = "AdministratorAccess"
 
   # Optional
