@@ -23,7 +23,7 @@ module "iam_cross_account_policies" {
 module "iam_cross_account_policies" {
   source = "github.com/dbl-works/terraform//iam/iam-policy-for-cross-account-access/bastion-account?ref=main"
 
-  username = "muthu"
+  usernames = ["muthu", "ali"]
   destination_aws_account_id = "xxxxxxxxxxxxx"
   destination_iam_role_name = "assume-role-12345667878-admin"
 }
