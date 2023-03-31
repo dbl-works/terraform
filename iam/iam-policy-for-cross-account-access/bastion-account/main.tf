@@ -13,6 +13,8 @@ resource "aws_iam_policy" "main" {
 }
 
 resource "aws_iam_user_policy_attachment" "assume_role" {
-  user       = var.username
+  count = length(var.usernames)
+
+  user       = var.usernames[count.index]
   policy_arn = aws_iam_policy.main.arn
 }

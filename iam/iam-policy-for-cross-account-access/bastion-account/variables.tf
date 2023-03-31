@@ -1,5 +1,6 @@
-variable "username" {
-  type = string
+variable "usernames" {
+  type    = list(string)
+  default = []
 }
 
 variable "destination_aws_account_id" {
