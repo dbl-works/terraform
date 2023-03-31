@@ -9,7 +9,7 @@ resource "aws_iam_role" "assume_role" {
       {
         Action    = "sts:AssumeRole"
         Effect    = "Allow"
-        Principal = { "AWS" : "arn:aws:iam::${var.bastion_aws_account_id}:root" }
+        Principal = { "AWS" : "arn:aws:iam::${var.origin_aws_account_id}:root" }
         Condition = {
           Bool = {
             "aws:MultiFactorAuthPresent" = "true"

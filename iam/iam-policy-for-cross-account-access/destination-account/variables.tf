@@ -1,6 +1,6 @@
-variable "bastion_aws_account_id" {
+variable "origin_aws_account_id" {
   type        = string
-  description = "aws account id for the bastion account."
+  description = "aws account id for the origin account."
 }
 
 variable "max_session_duration" {
