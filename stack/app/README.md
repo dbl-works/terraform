@@ -91,13 +91,15 @@ module "stack" {
   ]
 
   # KMS
-  kms_app_arn                 = "" # output from stack/setup
+  kms_app_arn                 = "" # output from stack/setup. Used for encrypt elasticache
+  grant_access_to_kms_arns    = []
   kms_deletion_window_in_days = 30
 
   # RDS
   rds_instance_class     = "db.t3.micro"
   rds_engine_version     = "13"
   rds_allocated_storage  = 100
+  rds_multi_az           = true
 
   ## set these, if you want to create a read-replica instead of a master DB
   ## the master-instance-arn MUST be the ARN of the DB, if the master DB is in
@@ -114,7 +116,7 @@ module "stack" {
   rds_name                          = null # unique name, shouldn't be necessary if "regional" is set to true
   rds_multi_region_kms_key          = false # set to true for the MASTER stack, so that replicas can create a replica of the key
   rds_allow_from_cidr_blocks        = [] # non-master regions must be granted access to RDS by passing their CIDR block ( vpc-peering enabled! )
-  rds_master_nat_route_table_ids    = [] # for the peering connection
+  rds_master_nat_route_table_ids    = [] # for the peering connection, pass route tables for public and private subnets
 
   # ECS
   allow_internal_traffic_to_ports = []
@@ -193,6 +195,7 @@ module "stack" {
 
   # Cloudwatch
   cloudwatch_dashboard_view       = "detailed" # default is simple
+  enable_cloudwatch_dashboard     = false
   metric_period                   = 60
   alarm_period                    = 120
   alarm_evaluation_periods        = 1
@@ -208,6 +211,7 @@ module "stack" {
 
   # Elasticache
   skip_elasticache                          = false # optional, will skip the creation of elasticache if set to true
+  elasticache_name                          = "sidekiq" # optional, appended to the default "${project}-${environment}"
   elasticache_node_type                     = "cache.t3.micro"
   elasticache_replicas_per_node_group       = 1
   elasticache_shards_per_replication_group  = 1

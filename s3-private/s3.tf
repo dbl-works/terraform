@@ -8,6 +8,7 @@ module "s3" {
   versioning                  = var.versioning
   kms_deletion_window_in_days = var.kms_deletion_window_in_days
   enable_encryption           = true
+  multi_region_kms_key        = var.multi_region_kms_key
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "main-bucket-lifecycle-rule" {

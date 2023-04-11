@@ -6,6 +6,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
+## [Unreleased]
+### iam/iam-policy-for-cross-account-access
+- Add IAM policy for cross account access [#195](https://github.com/dbl-works/terraform/pull/195)
+
+## [v2023.03.30]
+### global-accelerator
+- Add `weight` to the load_balancers variables, defaulting to 128 [#194](https://github.com/dbl-works/terraform/pull/194)
+
+### ecs_service
+- Add AWS ecs service module [#188](https://github.com/dbl-works/terraform/pull/188), [#192](https://github.com/dbl-works/terraform/pull/192)
+
+### script/database-roles
+- Add SQL script for creating DB `readonly` role [#177](https://github.com/dbl-works/terraform/pull/177)
+
+### slack/sentry
+- Add Slack notifier for Sentry issue alerts [#184](https://github.com/dbl-works/terraform/pull/184)
+
+### stack/app
+- Add Add `elasticache_name` as variables [#187](https://github.com/dbl-works/terraform/pull/187)
+- Add `kms_app_arns` as variables
+- Fix path for buckets to allow access to files at root level [#180](https://github.com/dbl-works/terraform/pull/180)
+
+### S3
+- Allow creating a S3 Bucket with a multi region KMS Key [#190](https://github.com/dbl-works/terraform/pull/190)
+
+### Cloudflare
+- Added DNSSEC config [#181](https://github.com/dbl-works/terraform/pull/181)
+
+### VPC Peering
+- Create routes for public subnet [#179](https://github.com/dbl-works/terraform/pull/179)
+
+
 ## [v2023.03.06]
 ### iam/iam-policy-for-secrets
 - Added a new module to manage access to the secretsmaanger and kms based on project_access variables. [#175](https://github.com/dbl-works/terraform/pull/175)

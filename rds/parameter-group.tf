@@ -30,6 +30,10 @@ resource "aws_db_parameter_group" "postgres13" {
     value        = -1 # this should be default, but apparently its not on AWS RDS https://postgresqlco.nf/doc/en/param/wal_buffers/
     apply_method = "pending-reboot"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_db_parameter_group" "postgres14" {
@@ -63,5 +67,9 @@ resource "aws_db_parameter_group" "postgres14" {
     name         = "wal_buffers"
     value        = -1
     apply_method = "pending-reboot"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }

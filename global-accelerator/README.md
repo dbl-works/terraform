@@ -19,10 +19,12 @@ module "global-accelerator" {
     {
       region   = "eu-central-1"
       endpoint = "arn:aws:elasticloadbalancing:eu-central-1:${account_id}:loadbalancer/app/${project}-${environment}/xxx"
+      weight   = 128
     },
     {
       region   = "us-east-1"
       endpoint = "arn:aws:elasticloadbalancing:us-east-1:${account_id}:loadbalancer/app/${ecs_name}/xxx"
+      weight   = 128
     }
   ]
 

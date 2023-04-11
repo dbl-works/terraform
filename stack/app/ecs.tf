@@ -16,10 +16,11 @@ module "ecs" {
     var.secret_arns
   ])
 
-  kms_key_arns = flatten(concat([
+  kms_key_arns = compact(flatten(concat([
+    var.grant_access_to_kms_arns,
     var.kms_app_arn,
     values(module.s3-storage)[*].kms-key-arn
-  ]))
+  ])))
 
   # optional
   health_check_path           = var.health_check_path
@@ -49,15 +50,16 @@ module "ecs" {
   grant_read_access_to_sqs_arns  = var.grant_read_access_to_sqs_arns
   grant_write_access_to_sqs_arns = var.grant_write_access_to_sqs_arns
 
-  custom_policies       = var.ecs_custom_policies
-  enable_dashboard      = var.cloudwatch_dashboard_view == "simple"
-  enable_xray           = var.enable_xray
-  autoscale_params      = var.autoscale_params
-  autoscale_metrics_map = var.autoscale_metrics_map
+  custom_policies                   = var.ecs_custom_policies
+  enable_dashboard                  = var.enable_cloudwatch_dashboard && var.cloudwatch_dashboard_view == "simple"
+  enable_xray                       = var.enable_xray
+  autoscale_params                  = var.autoscale_params
+  autoscale_metrics_map             = var.autoscale_metrics_map
+  cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
 }
 
 module "cloudwatch" {
-  count  = var.cloudwatch_dashboard_view == "simple" ? 0 : 1
+  count  = var.enable_cloudwatch_dashboard == false || var.cloudwatch_dashboard_view == "simple" ? 0 : 1
   source = "../../cloudwatch"
 
   # Required
