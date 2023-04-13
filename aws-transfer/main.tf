@@ -5,5 +5,8 @@ resource "aws_transfer_server" "main" {
   endpoint_type          = var.endpoint_type
 
   tags = {
+    Name        = var.domain
+    Project     = var.project
+    Environment = var.environment
   }
 }

@@ -23,17 +23,21 @@ data "aws_iam_policy_document" "s3" {
     actions = [
       "s3:DeleteObject",
       "s3:DeleteObjectVersion",
-      "s3:GetObject",
-      "s3:GetObjectVersion",
-      "s3:ListBucket",
-      "s3:ListBucketVersions",
-      "s3:ListObjectVersions",
+      # "s3:GetObject",
+      # "s3:GetObjectVersion",
+      # "s3:ListBucket",
+      # "s3:ListBucketVersions",
+      # "s3:ListObjectVersions",
       "s3:PutObject",
       "s3:PutObjectAcl",
       "s3:PutObjectVersion",
       "s3:PutObjectVersionAcl",
     ]
-    resources = ["*"]
+
+    # TODO: Add s3 bucket name
+    resources = [
+      "${var.s3_bucket_name}/*"
+    ]
   }
 }
 
@@ -49,10 +53,12 @@ resource "aws_transfer_user" "main" {
   user_name = each.key
   role      = aws_iam_role.main.arn
 
-  home_directory_type = "LOGICAL"
-  home_directory_mappings {
-    entry  = "/test.pdf"
-    target = "/bucket3/test-path/tftestuser.pdf"
+  home_directory = "/${var.s3_bucket_name}"
+
+  tags = {
+    Name        = each.key
+    Project     = var.project
+    Environment = var.environment
   }
 }
 
