@@ -28,6 +28,8 @@ jobs:
           - iam/iam-policy-for-s3
           - iam/iam-policy-for-secrets
           - iam/iam-policy-for-taggable-resources
+          - iam/iam-policy-for-cross-account-access/destination-account
+          - iam/iam-policy-for-cross-account-access/origin-account
           - iam/iam-xray
           - kms-key
           - kms-key-replica

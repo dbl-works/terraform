@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [Unreleased]
+### iam/iam-policy-for-cross-account-access
+- Add IAM policy for cross account access [#195](https://github.com/dbl-works/terraform/pull/195)
 
 ## [v2023.03.30]
 ### global-accelerator
