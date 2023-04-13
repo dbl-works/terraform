@@ -9,6 +9,7 @@ jobs:
         module:
           - analytics
           - autoscaling/ecs
+          - aws-transfer
           - certificate
           - cloudwatch
           - cloudflare
