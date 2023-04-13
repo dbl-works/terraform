@@ -10,6 +10,11 @@ variable "s3_bucket_name" {
   type = string
 }
 
+variable "s3_prefix" {
+  type    = string
+  default = null
+}
+
 variable "identity_provider_type " {
   type    = string
   default = "SERVICE_MANAGED"
@@ -41,6 +46,7 @@ variable "endpoint_details " {
 variable "users " {
   type        = map(string)
   description = "List of user names who will use the aws transfer family servers"
+  # Example:
   # {
   #   Harry = {
   #     ssh_key = "ssh-public-key-string"

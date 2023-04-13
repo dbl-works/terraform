@@ -34,17 +34,16 @@ data "aws_iam_policy_document" "s3" {
       "s3:PutObjectVersionAcl",
     ]
 
-    # TODO: Add s3 bucket name
     resources = [
-      "${var.s3_bucket_name}/*"
+      var.s3_prefix == null ? "${module.s3-storage.arn}/*" : "${module.s3-storage.arn}/${var.s3_prefix}*"
     ]
   }
 }
 
 resource "aws_iam_role_policy" "main" {
-  name   = "aws-transfer-user-iam-policy-for-${var.s3_bucket_name}"
+  name   = "aws-transfer-user-for-${var.project}-${var.environment}"
   role   = aws_iam_role.main.id
-  policy = data.aws_iam_role_policy.s3.json
+  policy = data.aws_iam_policy_document.s3.json
 }
 
 resource "aws_transfer_user" "main" {
