@@ -54,7 +54,7 @@ variable "endpoint_details" {
 }
 
 variable "users" {
-  type        = map(string)
+  type        = map(object({ ssh_key = string }))
   description = "List of user names who will use the aws transfer family servers"
   # Example:
   # {
