@@ -42,4 +42,7 @@ resource "aws_transfer_ssh_key" "main" {
   server_id = aws_transfer_server.main.id
   user_name = each.key
   body      = each.value["ssh_key"]
+  depends_on = [
+    aws_transfer_user.main
+  ]
 }
