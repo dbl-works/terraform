@@ -27,7 +27,7 @@ resource "aws_transfer_user" "main" {
   user_name = each.key
   role      = aws_iam_role.main.arn
 
-  home_directory = "/${var.s3_bucket_name}/${var.s3_prefix}"
+  home_directory = "/${var.s3_bucket_name}/${each.value["s3_prefix"]}"
 
   tags = {
     Name        = each.key

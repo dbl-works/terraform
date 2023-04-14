@@ -10,11 +10,6 @@ variable "s3_bucket_name" {
   type = string
 }
 
-variable "s3_prefix" {
-  type    = string
-  default = null
-}
-
 variable "identity_provider_type" {
   type    = string
   default = "SERVICE_MANAGED"
@@ -54,7 +49,10 @@ variable "endpoint_details" {
 }
 
 variable "users" {
-  type        = map(object({ ssh_key = string }))
+  type = map(object({
+    ssh_key   = string
+    s3_prefix = string
+  }))
   description = "List of user names who will use the aws transfer family servers"
   # Example:
   # {
