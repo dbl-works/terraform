@@ -16,36 +16,6 @@ resource "aws_iam_role" "main" {
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-# data "aws_iam_policy_document" "s3" {
-#   statement {
-#     sid    = "AllowAccessToS3"
-#     effect = "Allow"
-#     actions = [
-#       # "s3:DeleteObject",
-#       # "s3:DeleteObjectVersion",
-#       "s3:GetObject",
-#       "s3:GetObjectVersion",
-#       "s3:ListBucket",
-#       "s3:ListBucketVersions",
-#       "s3:ListObjectVersions",
-#       "s3:PutObject",
-#       "s3:PutObjectAcl",
-#       "s3:PutObjectVersion",
-#       "s3:PutObjectVersionAcl",
-#     ]
-
-#     resources = [
-#       var.s3_prefix == null ? "${module.s3-storage.arn}/*" : "${module.s3-storage.arn}/${var.s3_prefix}*"
-#     ]
-#   }
-# }
-
-# resource "aws_iam_role_policy" "main" {
-#   name   = "aws-transfer-user-for-${var.project}-${var.environment}"
-#   role   = aws_iam_role.main.id
-#   policy = data.aws_iam_policy_document.s3.json
-# }
-
 resource "aws_iam_role_policy_attachment" "main" {
   role       = aws_iam_role.main.id
   policy_arn = module.s3-storage.policy_arn
@@ -57,7 +27,7 @@ resource "aws_transfer_user" "main" {
   user_name = each.key
   role      = aws_iam_role.main.arn
 
-  home_directory = "/${var.s3_bucket_name}"
+  home_directory = "/${var.s3_bucket_name}/${var.s3_prefix}"
 
   tags = {
     Name        = each.key
