@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "main" {
-  name               = "aws-transfer-family-roles-for-${var.project}"
+  name               = "aws-transfer-family-roles-for-${var.project}-${var.environment}"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
