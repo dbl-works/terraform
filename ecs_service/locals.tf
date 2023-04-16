@@ -15,6 +15,12 @@ locals {
       valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
     }
   ]
+  logger_secrets = [
+    for secret_name in var.logger_secrets : {
+      name : secret_name,
+      valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
+    }
+  ]
 
   app_port_mappings = var.app_container_port == null ? [] : [{
     containerPort : var.app_container_port,
