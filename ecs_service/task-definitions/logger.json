@@ -17,6 +17,7 @@
       }
   ],
   "volumesFrom": [],
+  "secrets": ${SECRETS_LIST},
   "readonlyRootFilesystem": false,
   "logConfiguration": {
       "logDriver": "awslogs",
