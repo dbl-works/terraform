@@ -64,6 +64,7 @@ locals {
     LOG_PATH              = var.log_path
     LOGGER_CONTAINER_PORT = var.logger_container_port
     LOGGER_IMAGE_NAME     = local.logger_image_name
+    SECRETS_LIST          = jsonencode(local.logger_secrets)
     PROJECT               = var.project
     REGION                = local.region
     VOLUME_NAME           = var.volume_name

@@ -24,6 +24,7 @@ module "ecs_service" {
   logger_image_tag       = "latest-main"
   memory                 = 512
   secrets                = []
+  logger_secrets         = [] # e.g. tokens for remote services logs are sent to
   secrets_alias          = null # defaults to "${var.project}/app/${var.environment}"
   service_json_file_name = "web_with_logger" # or: "web" for no logging, or "sidekiq_with_logger" for sidekiq
   with_load_balancer     = false
