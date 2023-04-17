@@ -3,6 +3,7 @@ resource "aws_transfer_server" "main" {
   protocols              = var.protocols
   identity_provider_type = var.identity_provider_type
   endpoint_type          = var.endpoint_type
+  logging_role           = aws_iam_role.logging.arn
 
   dynamic "endpoint_details" {
     for_each = var.endpoint_details == null ? [] : [var.endpoint_details]
