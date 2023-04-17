@@ -10,6 +10,7 @@ jobs:
           - analytics
           - autoscaling/ecs
           - aws-transfer
+          - aws-transfer/iam-role
           - certificate
           - cloudwatch
           - cloudflare
