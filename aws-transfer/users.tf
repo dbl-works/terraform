@@ -11,7 +11,7 @@ resource "aws_transfer_user" "main" {
     for_each = var.home_directory_type == "LOGICAL" ? [{ target = "/${var.s3_bucket_name}/${each.value["s3_prefix"]}" }] : []
     content {
       entry  = "/"
-      target = home_directory_mappings.target
+      target = home_directory_mappings.value["target"]
     }
   }
 
