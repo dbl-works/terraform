@@ -39,6 +39,7 @@ data "aws_iam_policy_document" "s3" {
       "s3:ListBucket",
       "s3:ListBucketVersions",
     ]
+    # List bucket permissions have to be allowed in the bucket level
     resources = [
       "arn:aws:s3:::${var.s3_bucket_name}"
     ]

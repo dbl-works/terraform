@@ -5,10 +5,16 @@ resource "aws_transfer_user" "main" {
   role      = module.aws-transfer-iam-role[each.key].role_arn
 
   home_directory_type = var.home_directory_type
-  home_directory      = var.home_directory_type == "PATH" ? "/${var.s3_bucket_name}/${each.value["s3_prefix"]}" : null
+  home_directory = var.home_directory_type == "PATH" ? (
+    each.value.s3_bucket_name == null ? "/${var.s3_bucket_name}/${each.value["s3_prefix"]}" :
+    "/${each.value.s3_bucket_name}/${each.value["s3_prefix"]}"
+  ) : null
 
   dynamic "home_directory_mappings" {
-    for_each = var.home_directory_type == "LOGICAL" ? [{ target = "/${var.s3_bucket_name}/${each.value["s3_prefix"]}" }] : []
+    for_each = var.home_directory_type == "LOGICAL" ? (
+      each.value.s3_bucket_name == null ? [{ target = "/${var.s3_bucket_name}/${each.value["s3_prefix"]}" }] :
+      [{ target = "/${each.value.s3_bucket_name}/${each.value["s3_prefix"]}" }]
+    ) : []
     content {
       entry  = "/"
       target = home_directory_mappings.value["target"]
