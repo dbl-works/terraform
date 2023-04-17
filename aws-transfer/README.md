@@ -11,11 +11,11 @@ module "aws-transfer" {
 
   project = local.project
   environment = local.environment
-  s3_bucket_name = "aws-transfer-bucket"
-  s3_prefix = "brussel"
 
   # Optional
+  s3_bucket_name = "aws-transfer-bucket"
   identity_provider_type = "SERVICE_MANAGED"
+  server_domain = "S3"
   protocols = ["SFTP"]
   endpoint_type = "PUBLIC"
   endpoint_details = {
@@ -26,7 +26,11 @@ module "aws-transfer" {
   users = {
     Harry = {
       ssh_key = "ssh-public-key-string"
+      s3_prefix = "my-folder"
+      s3_bucket_name = "aws-transfer-bucket" # required if s3_bucket_name is null
+      s3_kms_arn =  "arn::kms::xxxxxxxx" # required if s3_bucket_name is null and the bucket is private
     }
   }
+  home_directory_type = "LOGICAL"
 }
 ```
