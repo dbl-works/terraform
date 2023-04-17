@@ -9,8 +9,22 @@ module "aws-transfer-iam-role" {
   s3_kms_arn     = each.value["s3_kms_arn"] == null ? module.s3-storage[0].kms-key-arn : each.value["s3_kms_arn"]
 }
 
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["transfer.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
 resource "aws_iam_role" "logging" {
-  name = "aws-transfer-family-logging-role-for-${var.project}-${var.environment}"
+  name               = "aws-transfer-family-logging-role-for-${var.project}-${var.environment}"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
 resource "aws_iam_role_policy_attachment" "logging" {
