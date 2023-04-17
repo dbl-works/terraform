@@ -1,5 +1,5 @@
 module "aws-transfer-iam-role" {
-  source = "/iam-role"
+  source = "./iam-role"
 
   for_each = var.users
 
