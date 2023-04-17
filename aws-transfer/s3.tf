@@ -1,5 +1,5 @@
 module "s3-storage" {
-  count  = var.s3_bucket_name ? 1 : 0
+  count  = var.s3_bucket_name == null ? 0 : 1
   source = "../s3-private"
 
   # Required
