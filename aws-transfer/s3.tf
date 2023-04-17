@@ -1,4 +1,5 @@
 module "s3-storage" {
+  count  = var.skip_s3 ? 0 : 1
   source = "../s3-private"
 
   # Required

@@ -10,6 +10,11 @@ variable "s3_bucket_name" {
   type = string
 }
 
+variable "skip_s3" {
+  type    = bool
+  default = false
+}
+
 variable "identity_provider_type" {
   type    = string
   default = "SERVICE_MANAGED"
@@ -61,4 +66,10 @@ variable "users" {
   #   }
   # }
   default = {}
+}
+
+variable "home_directory_type" {
+  type        = string
+  description = "The type of landing directory (folder) you mapped for your users' home directory. Valid values are PATH and LOGICAL"
+  default     = "PATH"
 }

@@ -21,6 +21,11 @@ resource "aws_iam_role_policy_attachment" "main" {
   policy_arn = module.s3-storage.policy_arn
 }
 
+locals {
+  accessible_s3_path = var.s3_prefix == null ? var.s3_bucket_name : "${var.s3_bucket_name}/${var.s3_prefix}"
+  s3_arn             = "arn:aws:s3:::${local.accessible_s3_path}"
+}
+
 data "aws_iam_policy_document" "s3" {
   statement {
     sid    = "AllowAccessToS3"
@@ -36,14 +41,10 @@ data "aws_iam_policy_document" "s3" {
       "s3:PutObjectVersion",
       "s3:PutObjectVersionAcl",
     ]
-    resources = var.s3_prefix == null ?
-      [
-        "${module.s3-storage.arn}" :
-        "${module.s3-storage.arn}/*" :
-      ] : [
-        "${module.s3-storage.arn}/${var.s3_prefix}"
-        "${module.s3-storage.arn}/${var.s3_prefix}/*"
-      ]
+    resources = [
+      local.s3_arn,
+      "${local.s3_arn}/*"
+    ]
   }
 
   statement {
@@ -55,7 +56,7 @@ data "aws_iam_policy_document" "s3" {
       "kms:GenerateDataKey",
     ]
     resources = [
-      "arn:aws:kms:eu-central-1:450135850488:key/21fd46fc-ec37-45f1-b59e-f65caf420818",
+      module.s3-storage.kms-key-arn
     ]
   }
 }
