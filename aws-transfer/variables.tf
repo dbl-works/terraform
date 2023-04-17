@@ -7,12 +7,9 @@ variable "project" {
 }
 
 variable "s3_bucket_name" {
-  type = string
-}
-
-variable "skip_s3" {
-  type    = bool
-  default = false
+  type        = string
+  default     = null
+  description = "default s3 bucket created to store the aws transfer family uploaded file"
 }
 
 variable "identity_provider_type" {
@@ -44,25 +41,24 @@ variable "endpoint_details" {
     subnet_ids             = list(string)
     vpc_id                 = string
   })
-  # Example:
-  # {
-  #   Harry = {
-  #     ssh_key = "ssh-public-key-string"
-  #   }
-  # }
   default = null
 }
 
 variable "users" {
   type = map(object({
-    ssh_key   = string
-    s3_prefix = string
+    ssh_key        = string
+    s3_prefix      = string
+    s3_bucket_name = optional(string, null) # Must present if no default value provided for s3_bucket_name
+    s3_kms_arn     = optional(string, null)
   }))
-  description = "List of user names who will use the aws transfer family servers"
+  description = "List of user who will use the aws transfer family servers"
   # Example:
   # {
   #   Harry = {
   #     ssh_key = "ssh-public-key-string"
+  #     s3_prefix = "ssh-public-key-string"
+  #     s3_bucket_name = "brussels"
+  #     s3_kms_arn     = "arn::kms::xxxxxx"
   #   }
   # }
   default = {}
