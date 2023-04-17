@@ -22,9 +22,8 @@ resource "aws_iam_role_policy_attachment" "main" {
 }
 
 resource "aws_iam_policy" "main" {
-  for_each = var.users
-  name     = "aws-transfer-family-s3-policy-for-${var.username}-using-${var.s3_bucket_name}-"
-  policy   = data.aws_iam_policy_document.s3.json
+  name   = "aws-transfer-family-s3-policy-for-${var.username}-using-${var.s3_bucket_name}"
+  policy = data.aws_iam_policy_document.s3.json
 }
 
 locals {
