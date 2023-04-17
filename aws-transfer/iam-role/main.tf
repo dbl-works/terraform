@@ -33,17 +33,25 @@ locals {
 
 data "aws_iam_policy_document" "s3" {
   statement {
+    sid    = "AllowReadAccessToS3Bucket"
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket",
+      "s3:ListBucketVersions",
+    ]
+    resources = [
+      "arn:aws:s3:::${var.s3_bucket_name}"
+    ]
+  }
+
+  statement {
     sid    = "AllowAccessToS3"
     effect = "Allow"
     actions = [
       "s3:GetObject",
       "s3:GetObjectVersion",
-      "s3:ListBucket",
-      "s3:ListBucketVersions",
-      "s3:ListObjectVersions",
       "s3:PutObject",
       "s3:PutObjectAcl",
-      "s3:PutObjectVersion",
       "s3:PutObjectVersionAcl",
     ]
     resources = [
