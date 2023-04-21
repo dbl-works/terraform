@@ -77,6 +77,5 @@ resource "aws_ecs_service" "main" {
     Name        = var.container_name
     Project     = var.project
     Environment = var.environment
-    CodeVersion = var.code_version
   }
 }

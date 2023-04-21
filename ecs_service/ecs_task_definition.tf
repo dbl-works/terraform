@@ -24,5 +24,6 @@ resource "aws_ecs_task_definition" "main" {
     Name        = local.task_definition_name
     Project     = var.project
     Environment = var.environment
+    CodeVersion = var.code_version
   }
 }
