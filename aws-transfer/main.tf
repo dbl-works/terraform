@@ -8,9 +8,9 @@ resource "aws_transfer_server" "main" {
   dynamic "endpoint_details" {
     for_each = var.endpoint_details == null ? [] : [var.endpoint_details]
     content {
-      address_allocation_ids = endpoint_details.address_allocation_ids
-      subnet_ids             = endpoint_details.subnet_ids
-      vpc_id                 = endpoint_details.vpc_id
+      address_allocation_ids = endpoint_details.value.address_allocation_ids
+      subnet_ids             = endpoint_details.value.subnet_ids
+      vpc_id                 = endpoint_details.value.vpc_id
     }
   }
 
