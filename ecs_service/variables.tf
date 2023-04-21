@@ -33,6 +33,12 @@ variable "app_image_tag" {
   default = "latest-main"
 }
 
+variable "version" {
+  type        = string
+  default     = "latest-main"
+  description = "Set this to the current commit hash to force a new deployment, e.g. for services that have a fixed image tag like Bastion."
+}
+
 variable "logger_image_tag" {
   type    = string
   default = null

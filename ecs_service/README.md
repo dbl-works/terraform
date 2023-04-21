@@ -16,6 +16,7 @@ module "ecs_service" {
   # Optional
   app_container_port     = 3000 # set to "null" to skip port mapping, necessary e.g. for sidekiq
   app_image_name         = "google/cloud-sdk"
+  version                = "latest-main" Set this to the current commit hash to force a new deployment, e.g. for services that have a fixed image tag like Bastion.
   commands               = ["bundle", "exec", "puma", "-C", "config/puma.rb"]
   container_name         = "web"
   cpu                    = 256
