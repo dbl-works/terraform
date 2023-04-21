@@ -60,7 +60,7 @@ module "secrets-kms-key" {
 }
 
 resource "aws_acm_certificate" "main" {
-  count = var.is_read_replica_on_same_domain ? 0 : 1
+  count = var.is_read_replica_on_same_domain_and_same_region ? 0 : 1
 
   domain_name = var.domain
 
