@@ -23,6 +23,11 @@ variable "environment" {
   type = string
 }
 
+variable "ecs_fargate_log_mode" {
+  type    = string
+  default = "non-blocking"
+}
+
 variable "desired_count" {
   type    = number
   default = 1
