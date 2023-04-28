@@ -45,13 +45,25 @@ resource "aws_iam_policy" "iam-humans-usage" {
         Resource = "arn:aws:iam::*:user/$${aws:username}"
       },
       {
-        Sid    = "AllowManageVirtualMFADevice",
+        Sid    = "AllowCreateVirtualMFADevice",
         Effect = "Allow",
         Action = [
           "iam:CreateVirtualMFADevice",
-          "iam:DeleteVirtualMFADevice"
         ],
         "Resource" : "arn:aws:iam::*:mfa/*"
+      },
+      {
+        Sid    = "AllowDeleteVirtualMFADevice",
+        Effect = "Allow",
+        Action = [
+          "iam:DeleteVirtualMFADevice"
+        ],
+        Resource = "arn:aws:iam::*:mfa/*",
+        Condition = {
+          "Bool" : {
+            "aws:MultiFactorAuthPresent" : "true"
+          }
+        }
       },
       {
         Sid    = "AllowManageOwnUserMFA",
@@ -64,6 +76,23 @@ resource "aws_iam_policy" "iam-humans-usage" {
           "iam:ResyncMFADevice"
         ],
         Resource = "arn:aws:iam::*:user/$${aws:username}"
+      },
+      {
+        Sid    = "DenyAllExceptListedIfNoMFA",
+        Effect = "Deny",
+        NotAction = [
+          "iam:CreateVirtualMFADevice",
+          "iam:EnableMFADevice",
+          "iam:GetUser",
+          "iam:ListMFADevices",
+          "iam:ListVirtualMFADevices",
+          "iam:ResyncMFADevice",
+          "sts:GetSessionToken"
+        ],
+        Resource = "*",
+        Condition = {
+          "BoolIfExists" : { "aws:MultiFactorAuthPresent" : "false" }
+        }
       }
     ]
   })
