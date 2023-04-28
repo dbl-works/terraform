@@ -10,6 +10,9 @@ This project does not follow SemVer, since modules are independent of each other
 ### iam/iam-policy-for-cross-account-access
 - Add IAM policy for cross account access [#195](https://github.com/dbl-works/terraform/pull/195)
 
+### iam/iam-for-humans/human-policies
+- Allow user to create MFA device under any name [#204](https://github.com/dbl-works/terraform/pull/204)
+
 ## [v2023.03.30]
 ### global-accelerator
 - Add `weight` to the load_balancers variables, defaulting to 128 [#194](https://github.com/dbl-works/terraform/pull/194)
