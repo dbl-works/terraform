@@ -76,23 +76,6 @@ resource "aws_iam_policy" "iam-humans-usage" {
           "iam:ResyncMFADevice"
         ],
         Resource = "arn:aws:iam::*:user/$${aws:username}"
-      },
-      {
-        Sid    = "DenyAllExceptListedIfNoMFA",
-        Effect = "Deny",
-        NotAction = [
-          "iam:CreateVirtualMFADevice",
-          "iam:EnableMFADevice",
-          "iam:GetUser",
-          "iam:ListMFADevices",
-          "iam:ListVirtualMFADevices",
-          "iam:ResyncMFADevice",
-          "sts:GetSessionToken"
-        ],
-        Resource = "*",
-        Condition = {
-          "BoolIfExists" : { "aws:MultiFactorAuthPresent" : "false" }
-        }
       }
     ]
   })
