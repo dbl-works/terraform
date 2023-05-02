@@ -10,7 +10,6 @@ variable "project" {
   type = string
 }
 
-
 # Regional allows clusters with the same name to be in multiple regions
 variable "region" {
   type    = string
@@ -18,12 +17,8 @@ variable "region" {
 }
 
 variable "ecs_cluster_name" {
-  type = string
-}
-
-variable "region" {
   type    = string
-  default = "eu-central-1"
+  default = null
 }
 
 variable "ecs_http_port" {
