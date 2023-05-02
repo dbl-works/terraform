@@ -52,7 +52,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
   # Required for non-S3 destinations
   s3_configuration {
-    role_arn           = data.aws_iam_role.ecs-task-execution.arn
+    role_arn           = aws_iam_policy.kinesis.arn
     bucket_arn         = var.log_bucket_arn
     buffer_size        = var.buffer_size_for_s3     # in MB
     buffer_interval    = var.buffer_interval_for_s3 # in seconds
