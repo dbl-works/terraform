@@ -52,7 +52,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
   # Required for non-S3 destinations
   s3_configuration {
-    role_arn           = aws_iam_policy.kinesis.arn
+    role_arn           = aws_iam_role.kinesis.arn
     bucket_arn         = var.log_bucket_arn
     buffer_size        = var.buffer_size_for_s3     # in MB
     buffer_interval    = var.buffer_interval_for_s3 # in seconds
@@ -69,7 +69,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     name               = local.ecs_cluster_name
     buffering_size     = var.buffer_size_for_http_endpoint
     buffering_interval = var.buffer_interval_for_http_endpoint
-    role_arn           = aws_iam_policy.kinesis.arn
+    role_arn           = aws_iam_role.kinesis.arn
     s3_backup_mode     = "FailedDataOnly"
     cloudwatch_logging_options {
       enabled         = var.enable_cloudwatch
