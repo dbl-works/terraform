@@ -7,13 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [Unreleased]
+
 ### iam/iam-policy-for-cross-account-access
 - Add IAM policy for cross account access [#195](https://github.com/dbl-works/terraform/pull/195)
 
 ### iam/iam-for-humans/human-policies
 - Allow user to create MFA device under any name [#204](https://github.com/dbl-works/terraform/pull/204)
 
+### ecs-deploy
+- :warning: breaking change: this was previously named `ecs_service` which was inconsistent with all other module names and didn't communicate its usage in the name
+
+
+
 ## [v2023.03.30]
+
 ### global-accelerator
 - Add `weight` to the load_balancers variables, defaulting to 128 [#194](https://github.com/dbl-works/terraform/pull/194)
 
@@ -41,7 +48,9 @@ This project does not follow SemVer, since modules are independent of each other
 - Create routes for public subnet [#179](https://github.com/dbl-works/terraform/pull/179)
 
 
+
 ## [v2023.03.06]
+
 ### iam/iam-policy-for-secrets
 - Added a new module to manage access to the secretsmaanger and kms based on project_access variables. [#175](https://github.com/dbl-works/terraform/pull/175)
 
@@ -74,7 +83,10 @@ This project does not follow SemVer, since modules are independent of each other
 - Add lifecycle policy rules. [#169](https://github.com/dbl-works/terraform/pull/169)
 - Add default lifecycle policy rules to keep at least 1 images on important branchs. [#172](https://github.com/dbl-works/terraform/pull/172)
 
+
+
 ## [v2022.12.12]
+
 ## Autoscaling/ECS
 - added new module to configure auto-scaling for ECS [#136](https://github.com/dbl-works/terraform/pull/136), [#140](https://github.com/dbl-works/terraform/pull/140), [#142](https://github.com/dbl-works/terraform/pull/142), [#143](https://github.com/dbl-works/terraform/pull/143)
 
@@ -98,6 +110,7 @@ This project does not follow SemVer, since modules are independent of each other
 - Add DB instructions to connect DB to Fivetran, [#125](https://github.com/dbl-works/terraform/pull/125)
 
 ## [v2022.09.30]
+
 ## Elasticache
 - set `cluster_mode`, `maxmemory_policy`, `elasticache_node_count`, `elasticache_automatic_failover_enabled` as variables instead of hardcore values.
 
@@ -107,7 +120,10 @@ This project does not follow SemVer, since modules are independent of each other
 ## RDS
 - set replacement of non-alphanumeric chars with underscore on RDS DBName value to avoid naming validation errors.
 
+
+
 ## [v2022.09.07]
+
 ## Elasticache
 - added `maxmemory_policy` as the optional options. Default value is `volatile-lru`
 
@@ -121,7 +137,10 @@ This project does not follow SemVer, since modules are independent of each other
 - add option to enable DB replication with new parameter `enable_replication` [#119](https://github.com/dbl-works/terraform/pull/119)
 - if `enable_replication` is changed on a running DB, the DB will need to be restarted manually
 
+
+
 ## [v2022.08.05]
+
 ## Elasticache
 - `multi_az_enabled` can now optionally be turned off
 
@@ -132,6 +151,8 @@ This project does not follow SemVer, since modules are independent of each other
 ## Stack
 - pass `multi_az_enabled` through to Elasticache
 - fix `allow_from_security_groups` to have a predictable length for terraform
+
+
 
 ## [v2022.08.03]
 
