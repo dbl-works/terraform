@@ -1,7 +1,3 @@
-data "aws_ecs_cluster" "main" {
-  cluster_name = local.ecs_cluster_name
-}
-
 data "aws_lb" "main" {
   name = local.ecs_cluster_name
 }
@@ -33,6 +29,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     request_configuration {
       content_encoding = "GZIP"
 
+      # Describes the metadata sent to the HTTP endpoint destination
       common_attributes {
         name  = "environment"
         value = var.environment
