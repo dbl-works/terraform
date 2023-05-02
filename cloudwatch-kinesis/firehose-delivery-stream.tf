@@ -69,7 +69,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     name               = local.ecs_cluster_name
     buffering_size     = var.buffer_size_for_http_endpoint
     buffering_interval = var.buffer_interval_for_http_endpoint
-    role_arn           = data.aws_iam_role.ecs-task-execution.arn
+    role_arn           = aws_iam_policy.kinesis.arn
     s3_backup_mode     = "FailedDataOnly"
     cloudwatch_logging_options {
       enabled         = var.enable_cloudwatch
