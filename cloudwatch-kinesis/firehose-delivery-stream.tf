@@ -7,9 +7,10 @@ data "aws_iam_role" "ecs-task-execution" {
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "main" {
-  name        = "${var.project}-${var.environment}-main"
+  name        = "${var.project}-${var.environment}-http-endpoint"
   destination = "http_endpoint"
 
+  # Required for non-S3 destinations
   s3_configuration {
     role_arn           = data.aws_iam_role.ecs-task-execution.arn
     bucket_arn         = var.log_bucket_arn
@@ -55,5 +56,10 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
         value = var.region
       }
     }
+  }
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
   }
 }
