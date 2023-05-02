@@ -58,9 +58,8 @@ resource "aws_iam_policy" "kinesis" {
           "kms:Decrypt",
           "kms:GenerateDataKey"
         ],
-        "Resource" : [
-          var.log_bucket_arn
-        ]
+        # TODO: Please stricten the rules
+        "Resource" : "*"
       }
     ]
   })

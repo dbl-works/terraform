@@ -15,6 +15,7 @@ resource "aws_iam_role" "subscription_filter" {
   })
 }
 
+# TODO: Please stricten the rules
 resource "aws_iam_policy" "subscription_filter" {
   name = "subscription-filter-to-firehose-${local.name}"
 
