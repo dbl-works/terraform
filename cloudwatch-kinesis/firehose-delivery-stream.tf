@@ -129,7 +129,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
   }
 }
 
-resource "aws_cloudwatch_log_group" "ecs-app" {
+resource "aws_cloudwatch_log_group" "main" {
   name              = local.log_group_name
   retention_in_days = var.cloudwatch_logs_retention_in_days
 
@@ -137,4 +137,14 @@ resource "aws_cloudwatch_log_group" "ecs-app" {
     Project     = var.project
     Environment = var.environment
   }
+}
+
+resource "aws_cloudwatch_log_stream" "http_endpoint" {
+  name           = "http"
+  log_group_name = local.log_group_name
+}
+
+resource "aws_cloudwatch_log_stream" "s3" {
+  name           = "s3"
+  log_group_name = local.log_group_name
 }

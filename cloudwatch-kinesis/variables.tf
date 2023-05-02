@@ -75,5 +75,5 @@ variable "access_key" {
 
 variable "cloudwatch_logs_retention_in_days" {
   type    = number
-  default = 30
+  default = 7
 }
