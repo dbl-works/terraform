@@ -17,7 +17,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     buffer_size        = var.buffer_size_for_s3     # in MB
     buffer_interval    = var.buffer_interval_for_s3 # in seconds
     compression_format = "GZIP"
-    cloudwatch_logging_options = {
+    cloudwatch_logging_options {
       enabled         = var.enable_cloudwatch
       log_group_name  = "kinesis/${local.ecs_cluster_name}"
       log_stream_name = "s3"
@@ -31,7 +31,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     buffering_interval = var.buffer_interval_for_http_endpoint
     role_arn           = data.aws_iam_role.ecs-task-execution.arn
     s3_backup_mode     = "FailedDataOnly"
-    cloudwatch_logging_options = {
+    cloudwatch_logging_options {
       enabled         = var.enable_cloudwatch
       log_group_name  = "kinesis/${local.ecs_cluster_name}"
       log_stream_name = "http"
