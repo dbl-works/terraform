@@ -1,11 +1,11 @@
-# Terraform Module: ECR Service
+# Terraform Module: ECS Deploy
 
-Deploy ECS Service
+Deploy ECS services with Terraform.
 
 ## Usage
 
 ```terraform
-module "ecs_service" {
+module "ecs-deploy" {
   source = "github.com/dbl-works/terraform//ecs_service?ref=main"
 
   project              = local.project
