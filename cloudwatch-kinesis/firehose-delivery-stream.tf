@@ -2,8 +2,48 @@ data "aws_lb" "main" {
   name = local.ecs_cluster_name
 }
 
-data "aws_iam_role" "ecs-task-execution" {
-  name = "ecs-task-execution-${local.ecs_cluster_name}"
+resource "aws_iam_role" "kinesis" {
+  name = "firehose-task-execution-${local.name}"
+
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "firehose.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "kinesis" {
+  name = "firehose-task-execution-${local.name}"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : [
+          "kinesis:DescribeStream",
+          "kinesis:GetRecords",
+          "kinesis:GetShardIterator",
+          "kinesis:ListShards"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "*"
+      }
+    ]
+  })
+}
+
+
+resource "aws_iam_role_policy_attachment" "kinesis" {
+  role       = aws_iam_role.kinesis.name
+  policy_arn = aws_iam_policy.kinesis.arn
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "main" {

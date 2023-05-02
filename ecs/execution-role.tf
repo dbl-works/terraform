@@ -31,14 +31,7 @@ locals {
         "ecr:BatchGetImage",
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
-        "logs:PutLogEvents",
-        "logs:FilterLogEvents",
-        "logs:GetLogEvents",
-        "logs:StartQuery",
-        "logs:StopQuery",
-        "logs:GetQueryResults",
-        "logs:DescribeLogGroups",
-        "logs:DescribeLogStreams"
+        "logs:PutLogEvents"
       ],
       "Resource" : "*"
     },
