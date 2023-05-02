@@ -60,3 +60,8 @@ variable "enable_cloudwatch" {
   type    = bool
   default = false
 }
+
+variable "http_endpoint_url" {
+  type    = string
+  default = null
+}
