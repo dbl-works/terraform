@@ -45,6 +45,7 @@ jobs:
           - slack/chatbot
           - slack/sentry
           - slack/sns
+          - slack-chatbot
           - snowflake/cloud
           - stack/app
           - stack/setup
