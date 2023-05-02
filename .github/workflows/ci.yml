@@ -12,6 +12,7 @@ jobs:
           - certificate
           - cloudflare
           - cloudwatch
+          - cloudwatch-snowflake
           - cognito
           - ecr
           - ecs
