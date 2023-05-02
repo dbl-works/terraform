@@ -45,9 +45,8 @@ resource "aws_s3_bucket_acl" "main-bucket-data-acl" {
 resource "aws_s3_bucket_ownership_controls" "main" {
   bucket = module.s3.id
   rule {
-    object_ownership = "BucketOwnerEnforced"
+    object_ownership = "BucketOwnerPreferred"
   }
-  # Add just this depends_on condition
   depends_on = [aws_s3_bucket_acl.main-bucket-data-acl]
 }
 
