@@ -23,12 +23,10 @@ resource "aws_iam_policy" "subscription_filter" {
     "Statement" : [
       {
         "Action" : [
-          "firehose:PutRecord",
+          "firehose:*",
         ],
         "Effect" : "Allow",
-        "Resource" : [
-          aws_kinesis_firehose_delivery_stream.main.arn
-        ]
+        "Resource" : "*"
       }
     ]
   })
