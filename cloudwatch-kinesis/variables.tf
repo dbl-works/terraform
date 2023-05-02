@@ -1,6 +1,7 @@
 locals {
   ecs_cluster_name = var.ecs_cluster_name == null ? "${var.project}-${var.environment}" : var.ecs_cluster_name
   name             = "${var.project}-${var.environment}-http-endpoint"
+  log_group_name   = "kinesis/${local.ecs_cluster_name}"
 }
 
 variable "environment" {
@@ -70,4 +71,9 @@ variable "access_key" {
   type      = string
   sensitive = true
   default   = null
+}
+
+variable "cloudwatch_logs_retention_in_days" {
+  type    = number
+  default = 30
 }

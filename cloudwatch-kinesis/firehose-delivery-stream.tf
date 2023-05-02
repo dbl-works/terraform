@@ -83,7 +83,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     compression_format = "GZIP"
     cloudwatch_logging_options {
       enabled         = var.enable_cloudwatch
-      log_group_name  = "kinesis/${local.ecs_cluster_name}"
+      log_group_name  = local.log_group_name
       log_stream_name = "s3"
     }
   }
@@ -98,7 +98,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     s3_backup_mode     = "FailedDataOnly"
     cloudwatch_logging_options {
       enabled         = var.enable_cloudwatch
-      log_group_name  = "kinesis/${local.ecs_cluster_name}"
+      log_group_name  = local.log_group_name
       log_stream_name = "http"
     }
 
@@ -122,6 +122,16 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
       }
     }
   }
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
+  }
+}
+
+resource "aws_cloudwatch_log_group" "ecs-app" {
+  name              = local.log_group_name
+  retention_in_days = var.cloudwatch_logs_retention_in_days
 
   tags = {
     Project     = var.project
