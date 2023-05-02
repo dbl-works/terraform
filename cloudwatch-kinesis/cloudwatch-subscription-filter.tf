@@ -37,6 +37,15 @@ resource "aws_iam_policy" "main" {
           "${var.log_bucket_arn}/*"
         ]
       },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:DescribeLogGroups",
+          "logs:DescribeLogStreams",
+          "logs:GetLogEvents"
+        ],
+        "Resource" : "*"
+      }
     ]
   })
 }
