@@ -13,3 +13,7 @@ variable "slack_workspace_id" {
 variable "sns_topic_name" {
   type = string
 }
+
+variable "guardrail_policies" {
+  type = list(string)
+}
