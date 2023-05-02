@@ -2,14 +2,14 @@ data "aws_lb" "main" {
   name = local.ecs_cluster_name
 }
 
+# https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html#FirehoseExample
 resource "aws_iam_role" "kinesis" {
-  name = "firehose-task-execution-${local.name}"
+  name = "kinesis-${local.name}"
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Sid" : "",
         "Effect" : "Allow",
         "Principal" : {
           "Service" : "firehose.amazonaws.com"
@@ -21,25 +21,49 @@ resource "aws_iam_role" "kinesis" {
 }
 
 resource "aws_iam_policy" "kinesis" {
-  name = "firehose-task-execution-${local.name}"
+  name = "kinesis-policy-${local.name}"
 
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
         "Action" : [
-          "kinesis:DescribeStream",
-          "kinesis:GetRecords",
-          "kinesis:GetShardIterator",
-          "kinesis:ListShards"
+          "s3:AbortMultipartUpload",
+          "s3:GetBucketLocation",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:ListBucketMultipartUploads",
+          "s3:PutObject"
         ],
         "Effect" : "Allow",
+        "Resource" : [
+          var.log_bucket_arn,
+          "${var.log_bucket_arn}/*"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:DescribeLogGroups",
+          "logs:DescribeLogStreams",
+          "logs:GetLogEvents"
+        ],
         "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:GenerateDataKey"
+        ],
+        "Resource" : [
+          var.log_bucket_arn
+        ]
       }
     ]
   })
 }
-
 
 resource "aws_iam_role_policy_attachment" "kinesis" {
   role       = aws_iam_role.kinesis.name

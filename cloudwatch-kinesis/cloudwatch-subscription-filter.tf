@@ -1,5 +1,4 @@
-# https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html#FirehoseExample
-resource "aws_iam_role" "main" {
+resource "aws_iam_role" "subscription_filter" {
   name = "subscription-filter-to-firehose-${local.name}"
 
   assume_role_policy = jsonencode({
@@ -8,7 +7,7 @@ resource "aws_iam_role" "main" {
       {
         "Effect" : "Allow",
         "Principal" : {
-          "Service" : "firehose.amazonaws.com"
+          "Service" : "logs.amazonaws.com"
         },
         "Action" : "sts:AssumeRole"
       }
@@ -16,59 +15,33 @@ resource "aws_iam_role" "main" {
   })
 }
 
-resource "aws_iam_policy" "main" {
-  name = "subscription-filter-to-firehose-policy"
+resource "aws_iam_policy" "subscription_filter" {
+  name = "subscription-filter-to-firehose-${local.name}"
 
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
         "Action" : [
-          "s3:AbortMultipartUpload",
-          "s3:GetBucketLocation",
-          "s3:GetObject",
-          "s3:ListBucket",
-          "s3:ListBucketMultipartUploads",
-          "s3:PutObject"
+          "firehose:PutRecord",
         ],
         "Effect" : "Allow",
         "Resource" : [
-          var.log_bucket_arn,
-          "${var.log_bucket_arn}/*"
-        ]
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "logs:DescribeLogGroups",
-          "logs:DescribeLogStreams",
-          "logs:GetLogEvents"
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "kms:Encrypt",
-          "kms:Decrypt",
-          "kms:GenerateDataKey"
-        ],
-        "Resource" : [
-          var.log_bucket_arn
+          aws_kinesis_firehose_delivery_stream.main.arn
         ]
       }
     ]
   })
 }
 
-resource "aws_iam_role_policy_attachment" "main" {
-  role       = aws_iam_role.main.name
-  policy_arn = aws_iam_policy.main.arn
+resource "aws_iam_role_policy_attachment" "subscription_filter" {
+  role       = aws_iam_role.subscription_filter.name
+  policy_arn = aws_iam_policy.subscription_filter.arn
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "main" {
+resource "aws_cloudwatch_log_subscription_filter" "subscription_filter" {
   name            = local.ecs_cluster_name
-  role_arn        = aws_iam_role.main.arn
+  role_arn        = aws_iam_role.subscription_filter.arn
   filter_pattern  = ""
   log_group_name  = "/ecs/${local.ecs_cluster_name}"
   destination_arn = aws_kinesis_firehose_delivery_stream.main.arn
