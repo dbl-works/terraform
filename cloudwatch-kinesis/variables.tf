@@ -54,3 +54,8 @@ variable "buffer_interval_for_http_endpoint" {
   default     = 60
   description = "Buffer incoming data for the specified period of time, in seconds, before delivering it to the http endpoint."
 }
+
+variable "enable_cloudwatch" {
+  type    = bool
+  default = false
+}
