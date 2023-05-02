@@ -103,7 +103,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     }
 
     request_configuration {
-      content_encoding = "GZIP"
+      content_encoding = "NONE"
 
       # Describes the metadata sent to the HTTP endpoint destination
       common_attributes {
