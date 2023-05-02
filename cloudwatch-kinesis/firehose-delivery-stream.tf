@@ -7,7 +7,7 @@ data "aws_iam_role" "ecs-task-execution" {
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "main" {
-  name        = "${var.project}-${var.environment}-http-endpoint"
+  name        = local.name
   destination = "http_endpoint"
 
   # Required for non-S3 destinations

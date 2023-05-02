@@ -1,5 +1,6 @@
 locals {
   ecs_cluster_name = var.ecs_cluster_name == null ? "${var.project}-${var.environment}" : var.ecs_cluster_name
+  name             = "${var.project}-${var.environment}-http-endpoint"
 }
 
 variable "environment" {

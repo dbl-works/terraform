@@ -1,6 +1,6 @@
 # https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html#FirehoseExample
 resource "aws_iam_role" "main" {
-  name = "subscription-filter-to-firehose"
+  name = "subscription-filter-to-firehose-${local.name}"
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -45,6 +45,17 @@ resource "aws_iam_policy" "main" {
           "logs:GetLogEvents"
         ],
         "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:GenerateDataKey"
+        ],
+        "Resource" : [
+          var.log_bucket_arn
+        ]
       }
     ]
   })
