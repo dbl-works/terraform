@@ -46,7 +46,8 @@ resource "aws_iam_policy" "kinesis" {
         "Action" : [
           "logs:DescribeLogGroups",
           "logs:DescribeLogStreams",
-          "logs:GetLogEvents"
+          "logs:GetLogEvents",
+          "logs:PutLogEvents"
         ],
         "Resource" : "*"
       },
