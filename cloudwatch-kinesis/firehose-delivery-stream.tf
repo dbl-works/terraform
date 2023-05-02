@@ -142,9 +142,12 @@ resource "aws_cloudwatch_log_group" "main" {
 resource "aws_cloudwatch_log_stream" "http_endpoint" {
   name           = "http"
   log_group_name = local.log_group_name
+
+  depends_on = [aws_cloudwatch_log_group.main]
 }
 
 resource "aws_cloudwatch_log_stream" "s3" {
   name           = "s3"
   log_group_name = local.log_group_name
+  depends_on     = [aws_cloudwatch_log_group.main]
 }
