@@ -15,26 +15,26 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
   destination = "http_endpoint"
 
   s3_configuration {
-    role_arn           = aws_iam_role.ecs-task-execution.arn
-    bucket_arn         = variable.log_bucket_arn
-    buffer_size        = 10
-    buffer_interval    = 400
+    role_arn           = data.aws_iam_role.ecs-task-execution.arn
+    bucket_arn         = var.log_bucket_arn
+    buffer_size        = var.buffer_size_for_s3     # in MB
+    buffer_interval    = var.buffer_interval_for_s3 # in seconds
     compression_format = "GZIP"
   }
 
   http_endpoint_configuration {
     url                = "${data.aws_lb.main.dns_name}:${var.ecs_http_port}"
     name               = local.ecs_cluster_name
-    buffering_size     = 1   # MB
-    buffering_interval = 600 # 1 minute
-    role_arn           = aws_iam_role.ecs-task-execution.arn
+    buffering_size     = var.buffer_size_for_http_endpoint
+    buffering_interval = var.buffer_interval_for_http_endpoint
+    role_arn           = data.aws_iam_role.ecs-task-execution.arn
     s3_backup_mode     = "FailedDataOnly"
 
     request_configuration {
       content_encoding = "GZIP"
 
       common_attributes {
-        name  = "envionment"
+        name  = "environment"
         value = var.environment
       }
 
