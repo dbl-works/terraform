@@ -69,4 +69,5 @@ variable "http_endpoint_url" {
 variable "access_key" {
   type      = string
   sensitive = true
+  default   = null
 }
