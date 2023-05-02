@@ -18,6 +18,10 @@ This project does not follow SemVer, since modules are independent of each other
 - :warning: breaking change: this was previously named `ecs_service` which was inconsistent with all other module names and didn't communicate its usage in the name
 
 
+### slack-chatbot
+- deleted this module; it was WIP/broken and a more modular approach is found ins `slack/*` modules
+
+
 
 ## [v2023.03.30]
 
