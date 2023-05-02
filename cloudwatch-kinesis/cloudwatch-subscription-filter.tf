@@ -49,6 +49,7 @@ resource "aws_iam_role_policy_attachment" "main" {
 resource "aws_cloudwatch_log_subscription_filter" "main" {
   name            = local.ecs_cluster_name
   role_arn        = aws_iam_role.main.arn
+  filter_pattern  = ""
   log_group_name  = "/ecs/${local.ecs_cluster_name}"
   destination_arn = aws_kinesis_firehose_delivery_stream.main.arn
   distribution    = "ByLogStream"
