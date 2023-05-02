@@ -91,6 +91,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
   http_endpoint_configuration {
     url                = var.http_endpoint_url == null ? "${data.aws_lb.main.dns_name}:${var.ecs_http_port}" : var.http_endpoint_url
     name               = local.ecs_cluster_name
+    access_key         = var.access_key
     buffering_size     = var.buffer_size_for_http_endpoint
     buffering_interval = var.buffer_interval_for_http_endpoint
     role_arn           = aws_iam_role.kinesis.arn

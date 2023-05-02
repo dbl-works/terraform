@@ -9,11 +9,22 @@ High level overview:
 Kinesis --> send logs via http to ECS cluster that runs vector --> vector transforms logs --> vector sends logs to Snowflake, Logtail, and S3
 
 ```terraform
+data "aws_secretsmanager_secret_version" "app" {
+  name = "${local.project}/app/${local.environment}"
+}
+
+locals {
+  credentials = jsondecode(
+    data.aws_secretsmanager_secret_version.app.secret_string
+  )
+}
+
 module "cloudwatch-kinesis" {
   source = "github.com/dbl-works/terraform//cloudwatch-kinesis?ref=v2023.03.30"
 
   project = local.project
   environment = local.environment
+  access_key = local.credentials["ACCESS_KEY"]
 
   # Optional
   region = "us-east-1"
