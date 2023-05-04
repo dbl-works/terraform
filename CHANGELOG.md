@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [Unreleased]
+### aws-transfer
+- Add AWS transfer family module[#198](https://github.com/dbl-works/terraform/pull/198)
 
 ### iam/iam-policy-for-cross-account-access
 - Add IAM policy for cross account access [#195](https://github.com/dbl-works/terraform/pull/195)
@@ -17,11 +19,8 @@ This project does not follow SemVer, since modules are independent of each other
 ### ecs-deploy
 - :warning: breaking change: this was previously named `ecs_service` which was inconsistent with all other module names and didn't communicate its usage in the name
 
-
 ### slack-chatbot
 - deleted this module; it was WIP/broken and a more modular approach is found ins `slack/*` modules
-
-
 
 ## [v2023.03.30]
 

@@ -17,3 +17,7 @@ output "kms-key-arn" {
 output "group-usage-name" {
   value = aws_iam_group.usage.name
 }
+
+output "policy_arn" {
+  value = aws_iam_policy.usage.arn
+}
