@@ -1,6 +1,6 @@
 // Allow humans to change their own passwords
 resource "aws_iam_group_policy_attachment" "humans-iam-password" {
-  group      = "humans"
+  group      = aws_iam_group.main.name
   policy_arn = "arn:aws:iam::aws:policy/IAMUserChangePassword"
 }
 
@@ -82,6 +82,6 @@ resource "aws_iam_policy" "iam-humans-usage" {
 }
 
 resource "aws_iam_group_policy_attachment" "iam-humans-usage" {
-  group      = "humans"
+  group      = aws_iam_group.main.name
   policy_arn = aws_iam_policy.iam-humans-usage.arn
 }
