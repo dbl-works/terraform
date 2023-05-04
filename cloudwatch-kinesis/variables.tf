@@ -81,5 +81,5 @@ variable "cloudwatch_logs_retention_in_days" {
 variable "s3_backup_mode" {
   type        = string
   default     = "FailedDataOnly"
-  description = "(Optional) Defines how documents should be delivered to Amazon S3.Valid values are FailedDataOnly and AllData"
+  description = "(Optional) Defines how documents should be delivered to Amazon S3. Valid values are FailedDataOnly and AllData"
 }
