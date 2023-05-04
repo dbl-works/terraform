@@ -81,6 +81,12 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     buffer_size        = var.buffer_size_for_s3     # in MB
     buffer_interval    = var.buffer_interval_for_s3 # in seconds
     compression_format = "GZIP"
+
+    # https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html
+    # Sample: myPrefix/result=!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd} => myPrefix/result=processing-failed/2018/08/03
+    prefix              = "data/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}"
+    error_output_prefix = "errors/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}-!{firehose:error-output-type}"
+
     cloudwatch_logging_options {
       enabled         = var.enable_cloudwatch
       log_group_name  = local.log_group_name
@@ -95,7 +101,8 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     buffering_size     = var.buffer_size_for_http_endpoint
     buffering_interval = var.buffer_interval_for_http_endpoint
     role_arn           = aws_iam_role.kinesis.arn
-    s3_backup_mode     = "FailedDataOnly"
+    s3_backup_mode     = var.s3_backup_mode
+
     cloudwatch_logging_options {
       enabled         = var.enable_cloudwatch
       log_group_name  = local.log_group_name
