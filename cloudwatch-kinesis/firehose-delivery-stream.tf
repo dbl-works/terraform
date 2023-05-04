@@ -132,7 +132,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
           parameters {
             parameter_name  = "LambdaArn"
-            parameter_value = "${extended_s3_configuration.value.aws_lambda_arn}:$LATEST"
+            parameter_value = extended_s3_configuration.value.aws_lambda_arn != null ? "${extended_s3_configuration.value.aws_lambda_arn}:$LATEST" : ""
           }
         }
       }
@@ -196,7 +196,7 @@ resource "aws_cloudwatch_log_group" "main" {
 }
 
 resource "aws_cloudwatch_log_stream" "http_endpoint" {
-  count = var.http_endpoint_configuration != null && var.http_endpoint_configuration.enable_cloudwatch ? 1 : 0
+  count = try(var.http_endpoint_configuration.enable_cloudwatch, false) ? 1 : 0
 
   name           = "http"
   log_group_name = local.log_group_name
@@ -205,7 +205,7 @@ resource "aws_cloudwatch_log_stream" "http_endpoint" {
 }
 
 resource "aws_cloudwatch_log_stream" "s3" {
-  count = var.s3_configuration != null && var.s3_configuration.enable_cloudwatch ? 1 : 0
+  count = try(var.s3_configuration.enable_cloudwatch, false) ? 1 : 0
 
   name           = "s3"
   log_group_name = local.log_group_name
