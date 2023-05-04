@@ -17,23 +17,6 @@ variable "log_bucket_arn" {
   description = "destination s3 bucket which will store the logs"
 }
 
-variable "buffer_size_for_s3" {
-  type        = number
-  default     = 10
-  description = "Buffer incoming data to the specified size, in MBs, before delivering it to the s3 bucket."
-}
-
-variable "buffer_interval_for_s3" {
-  type        = number
-  default     = 1800 # 30 min
-  description = "Buffer incoming data for the specified period of time, in seconds, before delivering it to the s3 bucket."
-}
-
-variable "enable_cloudwatch" {
-  type    = bool
-  default = false
-}
-
 variable "cloudwatch_logs_retention_in_days" {
   type    = number
   default = 7
@@ -56,11 +39,23 @@ variable "http_endpoint_configuration" {
   type = object({
     url                = string
     access_key         = optional(string, null)
-    buffering_size     = number
-    buffering_interval = number
+    buffering_size     = optional(number, 1)
+    buffering_interval = optional(number, 60)
     s3_backup_mode     = string
     enable_cloudwatch  = optional(bool, false)
     content_encoding   = optional(string, "NONE")
+  })
+  default = null
+}
+
+variable "s3_configuration" {
+  type = object({
+    s3_bucket_arn      = string
+    buffering_size     = optional(number, 10) # Buffer incoming data to the specified size, in MBs, before delivering it to the s3 bucket.
+    buffering_interval = optional(number, 1800) # Buffer incoming data for the specified period of time, in seconds, before delivering it to the s3 bucket.
+    enable_cloudwatch  = optional(bool, false)
+    compression_format = optional(string, "UNCOMPRESSED")
+    aws_lambda_arn     = optional(string, null)
   })
   default = null
 }
