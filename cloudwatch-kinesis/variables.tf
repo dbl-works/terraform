@@ -73,4 +73,5 @@ variable "http_endpoint_configuration" {
     enable_cloudwatch  = optional(bool, false)
     content_encoding   = optional(string, "NONE")
   })
+  default = null
 }

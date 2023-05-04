@@ -92,7 +92,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
   }
 
   dynamic "http_endpoint_configuration" {
-    for_each = [var.http_endpoint_configuration]
+    for_each = var.http_endpoint_configuration == null ? [] : [var.http_endpoint_configuration]
 
     url                = http_endpoint_configuration.value.url
     name               = local.ecs_cluster_name
