@@ -127,7 +127,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
       processing_configuration {
         enabled = extended_s3_configuration.value.aws_lambda_arn != null
 
-        dynamic "processor" {
+        dynamic "processors" {
           for_each = extended_s3_configuration.value.aws_lambda_arn == null ? [] : [extended_s3_configuration.value.aws_lambda_arn]
 
           content {
@@ -135,7 +135,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
             parameters {
               parameter_name  = "LambdaArn"
-              parameter_value = "${extended_s3_configuration.value.aws_lambda_arn}:$LATEST"
+              parameter_value = "${processors.value}:$LATEST"
             }
           }
         }
