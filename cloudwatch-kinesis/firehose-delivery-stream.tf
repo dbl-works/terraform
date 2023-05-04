@@ -1,7 +1,3 @@
-data "aws_lb" "main" {
-  name = local.ecs_cluster_name
-}
-
 # https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html#FirehoseExample
 resource "aws_iam_role" "kinesis" {
   name = "kinesis-${local.name}"
@@ -73,7 +69,7 @@ resource "aws_iam_role_policy_attachment" "kinesis" {
 
 resource "aws_kinesis_firehose_delivery_stream" "main" {
   name        = local.name
-  destination = "http_endpoint"
+  destination = var.http_endpoint_url == null ? var.kinesis_destination : "http_endpoint"
 
   # Required for non-S3 destinations
   s3_configuration {
@@ -95,23 +91,25 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     }
   }
 
-  http_endpoint_configuration {
-    url                = var.http_endpoint_url == null ? "${data.aws_lb.main.dns_name}:${var.ecs_http_port}" : var.http_endpoint_url
+  dynamic "http_endpoint_configuration" {
+    for_each = [var.http_endpoint_configuration]
+
+    url                = http_endpoint_configuration.value.url
     name               = local.ecs_cluster_name
-    access_key         = var.access_key
-    buffering_size     = var.buffer_size_for_http_endpoint
-    buffering_interval = var.buffer_interval_for_http_endpoint
+    access_key         = http_endpoint_configuration.value.access_key
+    buffering_size     = http_endpoint_configuration.value.buffering_size
+    buffering_interval = http_endpoint_configuration.value.buffering_interval
     role_arn           = aws_iam_role.kinesis.arn
-    s3_backup_mode     = var.s3_backup_mode
+    s3_backup_mode     = http_endpoint_configuration.value.s3_backup_mode
 
     cloudwatch_logging_options {
-      enabled         = var.enable_cloudwatch
+      enabled         = http_endpoint_configuration.value.enable_cloudwatch
       log_group_name  = local.log_group_name
       log_stream_name = "http"
     }
 
     request_configuration {
-      content_encoding = "NONE"
+      content_encoding = http_endpoint_configuration.value.content_encoding
 
       # Describes the metadata sent to the HTTP endpoint destination
       common_attributes {
