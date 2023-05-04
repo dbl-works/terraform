@@ -112,7 +112,13 @@ variable "environment_variables" {
 variable "secrets" {
   type        = list(string)
   default     = []
-  description = "secrets key which is stored in the aws secret"
+  description = "keys of secrets stored in the aws secrets manager required for the app"
+}
+
+variable "logger_secrets" {
+  type        = list(string)
+  default     = []
+  description = "keys of secrets stored in the aws secrets manager required for the logger"
 }
 
 variable "commands" {

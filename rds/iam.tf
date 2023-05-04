@@ -27,7 +27,7 @@ resource "aws_iam_policy" "rds-db-connect" {
         "rds-db:connect"
       ],
       "Resource": [
-        "arn:aws:rds-db:${var.region}:${var.account_id}:dbuser:${aws_db_instance.main.resource_id}/${local.name_underscored}_${each.key}"
+        "arn:aws:rds-db:${var.region}:${var.account_id}:dbuser:${aws_db_instance.main.resource_id}/${var.project}_${var.environment}_${each.key}"
       ]
     },
     {

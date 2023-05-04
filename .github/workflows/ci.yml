@@ -12,12 +12,13 @@ jobs:
           - aws-transfer
           - aws-transfer/iam-role
           - certificate
-          - cloudwatch
           - cloudflare
+          - cloudwatch
+          - cloudwatch-snowflake
           - cognito
           - ecr
           - ecs
-          - ecs_service
+          - ecs-deploy
           - elasticache
           - fivetran
           - fivetran/connectors/google_analytics
@@ -25,13 +26,13 @@ jobs:
           - global-accelerator
           - iam/iam-for-deploy-bot
           - iam/iam-for-humans
+          - iam/iam-policy-for-cross-account-access/destination-account
+          - iam/iam-policy-for-cross-account-access/origin-account
           - iam/iam-policy-for-ecs/core
           - iam/iam-policy-for-ecs/taggable-resources
           - iam/iam-policy-for-s3
           - iam/iam-policy-for-secrets
           - iam/iam-policy-for-taggable-resources
-          - iam/iam-policy-for-cross-account-access/destination-account
-          - iam/iam-policy-for-cross-account-access/origin-account
           - iam/iam-xray
           - kms-key
           - kms-key-replica
@@ -45,8 +46,8 @@ jobs:
           - secrets
           - slack/chatbot
           - slack/sentry
-          - snowflake/cloud
           - slack/sns
+          - snowflake/cloud
           - stack/app
           - stack/setup
           - vpc
