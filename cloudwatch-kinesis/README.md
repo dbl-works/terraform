@@ -24,7 +24,6 @@ module "cloudwatch-kinesis" {
 
   project = local.project
   environment = local.environment
-  access_key = local.credentials["ACCESS_KEY"]
 
   # Optional
   region = "us-east-1"
@@ -34,9 +33,16 @@ module "cloudwatch-kinesis" {
   s3_kms_arn = "arn:aws:kms:eu-central-1:xxxxxxx:key:can-t-be-blank"
   buffer_size_for_s3 = 10
   buffer_interval_for_s3 = 400
-  buffer_size_for_http_endpoint = 1
-  buffer_interval_for_http_endpoint = 60
-  s3_backup_mode = "AllData"
   enable_cloudwatch = true
+
+  http_endpoint_configuration = {
+    url                = "https://logtail.com"
+    access_key         = local.credentials["ACCESS_KEY"]
+    buffering_size     = 1 # MB
+    buffering_interval = 60 # s
+    s3_backup_mode     = 'AllData'
+    enable_cloudwatch  = true
+    content_encoding   = "NONE"
+  }
 }
 ```
