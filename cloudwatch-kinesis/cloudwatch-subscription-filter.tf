@@ -15,7 +15,6 @@ resource "aws_iam_role" "subscription_filter" {
   })
 }
 
-# TODO: Please stricten the rules
 resource "aws_iam_policy" "subscription_filter" {
   name = "subscription-filter-to-firehose-${local.name}"
 
@@ -27,7 +26,9 @@ resource "aws_iam_policy" "subscription_filter" {
           "firehose:*",
         ],
         "Effect" : "Allow",
-        "Resource" : "*"
+        "Resource" : [
+          aws_kinesis_firehose_delivery_stream.main.arn
+        ]
       }
     ]
   })

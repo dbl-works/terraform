@@ -58,8 +58,9 @@ resource "aws_iam_policy" "kinesis" {
           "kms:Decrypt",
           "kms:GenerateDataKey"
         ],
-        # TODO: Please stricten the rules
-        "Resource" : "*"
+        "Resource" : [
+          var.s3_kms_arn
+        ]
       }
     ]
   })
@@ -84,7 +85,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
     # https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html
     # Sample: myPrefix/result=!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd} => myPrefix/result=processing-failed/2018/08/03
-    prefix              = "data/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}"
+    prefix              = "logs/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}"
     error_output_prefix = "errors/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}-!{firehose:error-output-type}"
 
     cloudwatch_logging_options {

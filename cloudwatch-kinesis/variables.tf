@@ -83,3 +83,11 @@ variable "s3_backup_mode" {
   default     = "FailedDataOnly"
   description = "(Optional) Defines how documents should be delivered to Amazon S3. Valid values are FailedDataOnly and AllData"
 }
+
+variable "s3_kms_arn" {
+  type = string
+  # The default value is a dummy value because AWS performs some validations
+  # on policies, hence we can't just use a blank string.
+  default     = "arn:aws:kms:eu-central-1:*:key:can-t-be-blank"
+  description = "(Optional) Required if the logs bucket are encrypted."
+}
