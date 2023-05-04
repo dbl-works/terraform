@@ -40,9 +40,9 @@ resource "aws_iam_role_policy_attachment" "subscription_filter" {
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "subscription_filter" {
-  name            = local.ecs_cluster_name
+  name            = local.name
   role_arn        = aws_iam_role.subscription_filter.arn
   filter_pattern  = ""
-  log_group_name  = "/ecs/${local.ecs_cluster_name}"
+  log_group_name  = var.subscription_log_group_name
   destination_arn = aws_kinesis_firehose_delivery_stream.main.arn
 }

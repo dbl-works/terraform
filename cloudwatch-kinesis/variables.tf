@@ -1,9 +1,3 @@
-locals {
-  ecs_cluster_name = var.ecs_cluster_name == null ? "${var.project}-${var.environment}" : var.ecs_cluster_name
-  name             = "${var.project}-${var.environment}-http-endpoint"
-  log_group_name   = "/kinesis/${local.ecs_cluster_name}"
-}
-
 variable "environment" {
   type = string
 }
@@ -16,11 +10,6 @@ variable "project" {
 variable "region" {
   type    = string
   default = "eu-central-1"
-}
-
-variable "ecs_cluster_name" {
-  type    = string
-  default = null
 }
 
 variable "log_bucket_arn" {
@@ -74,4 +63,8 @@ variable "http_endpoint_configuration" {
     content_encoding   = optional(string, "NONE")
   })
   default = null
+}
+
+variable "subscription_log_group_name" {
+  type = string
 }

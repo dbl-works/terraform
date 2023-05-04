@@ -27,13 +27,13 @@ module "cloudwatch-kinesis" {
 
   # Optional
   region = "us-east-1"
-  ecs_cluster_name = "facebook-staging"
   ecs_http_port = 5073
   log_bucket_arn = "arn:aws:s3:::cloudwatch-logs"
   s3_kms_arn = "arn:aws:kms:eu-central-1:xxxxxxx:key:can-t-be-blank"
   buffer_size_for_s3 = 10
   buffer_interval_for_s3 = 400
   enable_cloudwatch = true
+  subscription_log_group_name = "/ecs/facebook-staging"
 
   http_endpoint_configuration = {
     url                = "https://logtail.com"

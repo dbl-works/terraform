@@ -95,7 +95,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
     for_each = var.http_endpoint_configuration == null ? [] : [var.http_endpoint_configuration]
 
     url                = http_endpoint_configuration.value.url
-    name               = local.ecs_cluster_name
+    name               = "${local.name}-http-endpoint"
     access_key         = http_endpoint_configuration.value.access_key
     buffering_size     = http_endpoint_configuration.value.buffering_size
     buffering_interval = http_endpoint_configuration.value.buffering_interval
