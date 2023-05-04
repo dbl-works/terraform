@@ -68,3 +68,8 @@ variable "http_endpoint_configuration" {
 variable "subscription_log_group_name" {
   type = string
 }
+
+variable "kinesis_stream_name" {
+  type    = string
+  default = null
+}

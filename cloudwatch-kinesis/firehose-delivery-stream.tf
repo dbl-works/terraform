@@ -68,7 +68,7 @@ resource "aws_iam_role_policy_attachment" "kinesis" {
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "main" {
-  name        = local.name
+  name        = var.kinesis_stream_name == null ? local.name : var.kinesis_stream_name
   destination = var.http_endpoint_configuration == null ? var.kinesis_destination : "http_endpoint"
 
   # Required for non-S3 destinations
