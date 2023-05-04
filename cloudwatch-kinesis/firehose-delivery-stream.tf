@@ -34,7 +34,7 @@ locals {
       ]
     }
   ]
-  s3_encryption_policy = var.s3_configuration == null && var.s3_configuration.kms_arn == null ? [] : [
+  s3_encryption_policy = var.s3_configuration != null && var.s3_configuration.kms_arn != null ? [
     {
       "Effect" : "Allow",
       "Action" : [
@@ -46,7 +46,7 @@ locals {
         var.s3_configuration.kms_arn
       ]
     }
-  ]
+  ] : []
 }
 
 resourc "aws_iam_policy" "kinesis" {
