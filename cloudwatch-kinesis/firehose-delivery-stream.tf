@@ -49,7 +49,7 @@ locals {
   ] : []
 }
 
-resourc "aws_iam_policy" "kinesis" {
+resource "aws_iam_policy" "kinesis" {
   name = "kinesis-policy-${local.name}"
 
   policy = jsonencode({
