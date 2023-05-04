@@ -94,37 +94,39 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
   dynamic "http_endpoint_configuration" {
     for_each = var.http_endpoint_configuration == null ? [] : [var.http_endpoint_configuration]
 
-    url                = http_endpoint_configuration.value.url
-    name               = "${local.name}-http-endpoint"
-    access_key         = http_endpoint_configuration.value.access_key
-    buffering_size     = http_endpoint_configuration.value.buffering_size
-    buffering_interval = http_endpoint_configuration.value.buffering_interval
-    role_arn           = aws_iam_role.kinesis.arn
-    s3_backup_mode     = http_endpoint_configuration.value.s3_backup_mode
+    content {
+      url                = http_endpoint_configuration.value.url
+      name               = "${local.name}-http-endpoint"
+      access_key         = http_endpoint_configuration.value.access_key
+      buffering_size     = http_endpoint_configuration.value.buffering_size
+      buffering_interval = http_endpoint_configuration.value.buffering_interval
+      role_arn           = aws_iam_role.kinesis.arn
+      s3_backup_mode     = http_endpoint_configuration.value.s3_backup_mode
 
-    cloudwatch_logging_options {
-      enabled         = http_endpoint_configuration.value.enable_cloudwatch
-      log_group_name  = local.log_group_name
-      log_stream_name = "http"
-    }
-
-    request_configuration {
-      content_encoding = http_endpoint_configuration.value.content_encoding
-
-      # Describes the metadata sent to the HTTP endpoint destination
-      common_attributes {
-        name  = "environment"
-        value = var.environment
+      cloudwatch_logging_options {
+        enabled         = http_endpoint_configuration.value.enable_cloudwatch
+        log_group_name  = local.log_group_name
+        log_stream_name = "http"
       }
 
-      common_attributes {
-        name  = "project"
-        value = var.project
-      }
+      request_configuration {
+        content_encoding = http_endpoint_configuration.value.content_encoding
 
-      common_attributes {
-        name  = "region"
-        value = var.region
+        # Describes the metadata sent to the HTTP endpoint destination
+        common_attributes {
+          name  = "environment"
+          value = var.environment
+        }
+
+        common_attributes {
+          name  = "project"
+          value = var.project
+        }
+
+        common_attributes {
+          name  = "region"
+          value = var.region
+        }
       }
     }
   }
