@@ -165,18 +165,19 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
         content_encoding = http_endpoint_configuration.value.content_encoding
 
         # Describes the metadata sent to the HTTP endpoint destination
+        # the key names follow Open Telemetry Semantic Conventions, see: https://opentelemetry.io/docs/concepts/semantic-conventions/
         common_attributes {
-          name  = "environment"
+          name  = "deployment.environment"
           value = var.environment
         }
 
         common_attributes {
-          name  = "project"
+          name  = "service.name"
           value = var.project
         }
 
         common_attributes {
-          name  = "region"
+          name  = "cloud.region"
           value = var.region
         }
       }
