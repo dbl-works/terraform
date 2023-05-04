@@ -127,12 +127,16 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
       processing_configuration {
         enabled = extended_s3_configuration.value.aws_lambda_arn != null
 
-        processors {
-          type = "Lambda"
+        dynamic "processor" {
+          for_each = extended_s3_configuration.value.aws_lambda_arn == null ? [] : [extended_s3_configuration.value.aws_lambda_arn]
 
-          parameters {
-            parameter_name  = "LambdaArn"
-            parameter_value = extended_s3_configuration.value.aws_lambda_arn != null ? "${extended_s3_configuration.value.aws_lambda_arn}:$LATEST" : ""
+          content {
+            type = "Lambda"
+
+            parameters {
+              parameter_name  = "LambdaArn"
+              parameter_value = "${extended_s3_configuration.value.aws_lambda_arn}:$LATEST"
+            }
           }
         }
       }
