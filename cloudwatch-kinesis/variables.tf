@@ -1,7 +1,7 @@
 locals {
   ecs_cluster_name = var.ecs_cluster_name == null ? "${var.project}-${var.environment}" : var.ecs_cluster_name
   name             = "${var.project}-${var.environment}-http-endpoint"
-  log_group_name   = "kinesis/${local.ecs_cluster_name}"
+  log_group_name   = "/kinesis/${local.ecs_cluster_name}"
 }
 
 variable "environment" {
