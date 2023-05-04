@@ -41,7 +41,7 @@ variable "buffer_size_for_s3" {
 
 variable "buffer_interval_for_s3" {
   type        = number
-  default     = 400
+  default     = 1800 # 30 min
   description = "Buffer incoming data for the specified period of time, in seconds, before delivering it to the s3 bucket."
 }
 
