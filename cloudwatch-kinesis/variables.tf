@@ -12,22 +12,9 @@ variable "region" {
   default = "eu-central-1"
 }
 
-variable "log_bucket_arn" {
-  type        = string
-  description = "destination s3 bucket which will store the logs"
-}
-
 variable "cloudwatch_logs_retention_in_days" {
   type    = number
   default = 7
-}
-
-variable "s3_kms_arn" {
-  type = string
-  # The default value is a dummy value because AWS performs some validations
-  # on policies, hence we can't just use a blank string.
-  default     = "arn:aws:kms:eu-central-1:*:key:can-t-be-blank"
-  description = "(Optional) Required if the logs bucket are encrypted."
 }
 
 variable "kinesis_destination" {
@@ -56,6 +43,7 @@ variable "s3_configuration" {
     enable_cloudwatch  = optional(bool, false)
     compression_format = optional(string, "UNCOMPRESSED")
     aws_lambda_arn     = optional(string, null)
+    kms_arn            = optional(string, null)
   })
   default = null
 }

@@ -16,27 +16,45 @@ resource "aws_iam_role" "kinesis" {
   })
 }
 
-resource "aws_iam_policy" "kinesis" {
+locals {
+  s3_policy = var.s3_configuration == null ? [] : [
+    {
+      "Action" : [
+        "s3:AbortMultipartUpload",
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:ListBucketMultipartUploads",
+        "s3:PutObject"
+      ],
+      "Effect" : "Allow",
+      "Resource" : [
+        var.s3_configuration.s3_bucket_arn,
+        "${var.s3_configuration.s3_bucket_arn}/*"
+      ]
+    }
+  ]
+  s3_encryption_policy = var.s3_configuration == null && var.s3_configuration.kms_arn == null ? [] : [
+    {
+      "Effect" : "Allow",
+      "Action" : [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:GenerateDataKey"
+      ],
+      "Resource" : [
+        var.s3_configuration.kms_arn
+      ]
+    }
+  ]
+}
+
+resourc "aws_iam_policy" "kinesis" {
   name = "kinesis-policy-${local.name}"
 
   policy = jsonencode({
     "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Action" : [
-          "s3:AbortMultipartUpload",
-          "s3:GetBucketLocation",
-          "s3:GetObject",
-          "s3:ListBucket",
-          "s3:ListBucketMultipartUploads",
-          "s3:PutObject"
-        ],
-        "Effect" : "Allow",
-        "Resource" : [
-          var.log_bucket_arn,
-          "${var.log_bucket_arn}/*"
-        ]
-      },
+    "Statement" : concat([
       {
         "Effect" : "Allow",
         "Action" : [
@@ -47,18 +65,7 @@ resource "aws_iam_policy" "kinesis" {
         ],
         "Resource" : "*"
       },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "kms:Encrypt",
-          "kms:Decrypt",
-          "kms:GenerateDataKey"
-        ],
-        "Resource" : [
-          var.s3_kms_arn
-        ]
-      }
-    ]
+    ], local.s3_policy, local.s3_encryption_policy)
   })
 }
 
