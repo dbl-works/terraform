@@ -1,15 +1,21 @@
+locals {
+  secret_and_kms_policy_json = length(var.secrets_and_kms_arns) > 0 ? data.aws_iam_policy_document.main.json : data.aws_iam_policy_document.dummy.json
+}
+
+data "aws_iam_policy_document" "combined" {
+  source_policy_documents = concat(
+    [local.secret_and_kms_policy_json],
+    var.lambda_policy_json == null ? [] : [var.lambda_policy_json]
+  )
+}
+
 resource "aws_iam_role" "main" {
   name               = "${var.project}-${var.environment}-${var.function_name}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_document.json
 
   inline_policy {
-    name = "lambda_policy"
-    policy = (
-      length(var.secrets_and_kms_arns) > 0 ?
-      data.aws_iam_policy_document.main.json
-      :
-      data.aws_iam_policy_document.dummy.json
-    )
+    name   = "lambda_policy"
+    policy = data.aws_iam_policy_document.combined.json
   }
 }
 

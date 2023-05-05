@@ -38,12 +38,23 @@ variable "http_endpoint_configuration" {
 variable "s3_configuration" {
   type = object({
     s3_bucket_arn      = string
-    buffering_size     = optional(number, 10) # Buffer incoming data to the specified size, in MBs, before delivering it to the s3 bucket.
+    buffering_size     = optional(number, 10)   # Buffer incoming data to the specified size, in MBs, before delivering it to the s3 bucket.
     buffering_interval = optional(number, 1800) # Buffer incoming data for the specified period of time, in seconds, before delivering it to the s3 bucket.
     enable_cloudwatch  = optional(bool, false)
-    compression_format = optional(string, "UNCOMPRESSED")
-    aws_lambda_arn     = optional(string, null)
-    kms_arn            = optional(string, null)
+    compression_format = optional(string, "GZIP")
+    kms_arn    = optional(string, null)
+    processors = optional(map(list(object({
+      parameter_name = string
+      parameter_value = string
+    }))), null)
+    # processors = {
+    #   Lambda = [
+    #     {
+    #       parameter_name = "LambdaArn"
+    #       parameter_value = "aws:lambda:xxx"
+    #     }
+    #   ]
+    # }
   })
   default = null
 }
@@ -55,4 +66,19 @@ variable "subscription_log_group_name" {
 variable "kinesis_stream_name" {
   type    = string
   default = null
+}
+
+variable "s3_output_prefix" {
+  type    = string
+  default = null
+}
+
+variable "s3_error_output_prefix" {
+  type    = string
+  default = null
+}
+
+variable "enable_dynamic_partitioning" {
+  type    = bool
+  default = false
 }

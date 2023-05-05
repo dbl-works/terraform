@@ -34,7 +34,7 @@ locals {
       ]
     }
   ]
-  s3_encryption_policy = var.s3_configuration != null && var.s3_configuration.kms_arn != null ? [
+  s3_encryption_policy = try(var.s3_configuration.kms_arn, null) != null ? [
     {
       "Effect" : "Allow",
       "Action" : [
@@ -44,6 +44,18 @@ locals {
       ],
       "Resource" : [
         var.s3_configuration.kms_arn
+      ]
+    }
+  ] : []
+  lambda_policy = try(var.s3_configuration.processors.Lambda, null) != null ? [
+    {
+      "Action" : [
+        "lambda:InvokeFunction",
+        "lambda:GetFunctionConfiguration"
+      ],
+      "Effect" : "Allow",
+      "Resource" : [
+        "${local.lambda_arn}:*"
       ]
     }
   ] : []
@@ -65,7 +77,7 @@ resource "aws_iam_policy" "kinesis" {
         ],
         "Resource" : "*"
       },
-    ], local.s3_policy, local.s3_encryption_policy)
+    ], local.s3_policy, local.s3_encryption_policy, local.lambda_policy)
   })
 }
 
@@ -91,8 +103,8 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
       # https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html
       # Sample: myPrefix/result=!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd} => myPrefix/result=processing-failed/2018/08/03
-      prefix              = "logs/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}"
-      error_output_prefix = "errors/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}-!{firehose:error-output-type}"
+      prefix              = local.s3_output_prefix
+      error_output_prefix = local.s3_error_output_prefix
 
       cloudwatch_logging_options {
         enabled         = s3_configuration.value.enable_cloudwatch
@@ -115,8 +127,8 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
       # https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html
       # Sample: myPrefix/result=!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd} => myPrefix/result=processing-failed/2018/08/03
-      prefix              = "logs/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}"
-      error_output_prefix = "errors/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}-!{firehose:error-output-type}"
+      prefix              = local.s3_output_prefix
+      error_output_prefix = local.s3_error_output_prefix
 
       cloudwatch_logging_options {
         enabled         = extended_s3_configuration.value.enable_cloudwatch
@@ -124,18 +136,26 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
         log_stream_name = "s3"
       }
 
+      dynamic_partitioning_configuration {
+        enabled = var.enable_dynamic_partitioning
+      }
+
       processing_configuration {
-        enabled = extended_s3_configuration.value.aws_lambda_arn != null
+        enabled = extended_s3_configuration.value.processors != null
 
         dynamic "processors" {
-          for_each = extended_s3_configuration.value.aws_lambda_arn == null ? [] : [extended_s3_configuration.value.aws_lambda_arn]
+          for_each = extended_s3_configuration.value.processors
 
           content {
-            type = "Lambda"
+            type = processors.key
 
-            parameters {
-              parameter_name  = "LambdaArn"
-              parameter_value = "${processors.value}:$LATEST"
+            dynamic "parameters" {
+              for_each = processors.value
+
+              content {
+                parameter_name  = parameters.value.parameter_name
+                parameter_value = parameters.value.parameter_value
+              }
             }
           }
         }
