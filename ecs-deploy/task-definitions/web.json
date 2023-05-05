@@ -5,6 +5,7 @@
     "essential": true,
     "command": ${COMMANDS},
     "environment": ${ENVIRONMENT_VARIABLES},
+    "mountPoints": ${MOUNT_POINTS},
     "volumesFrom": [],
     "secrets": ${SECRETS_LIST},
     "dependsOn": ${DEPENDS_ON},
