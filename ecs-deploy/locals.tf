@@ -59,8 +59,9 @@ locals {
     REGION                = data.aws_region.current.name
     SECRETS_LIST          = jsonencode(local.secrets)
     VOLUME_NAME           = var.volume_name
-    MOUNT_POINTS          = jsonencode(local.mount_points)
     DEPENDS_ON            = jsonencode(local.depends_on)
+    MOUNT_POINTS          = jsonencode(local.mount_points)
+    ECS_FARGATE_LOG_MODE  = var.ecs_fargate_log_mode
   })
 
   logger_container_definitions = var.with_logger ? templatefile("${path.module}/task-definitions/logger.json", {
