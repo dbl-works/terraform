@@ -43,7 +43,10 @@ variable "s3_configuration" {
     enable_cloudwatch  = optional(bool, false)
     compression_format = optional(string, "UNCOMPRESSED")
     kms_arn    = optional(string, null)
-    processors = optional(map(string), null)
+    processors = optional(map(list(object({
+      parameter_name = string
+      parameter_value = string
+    }))), null)
     # processors = {
     #   Lambda = [
     #     {
