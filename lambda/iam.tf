@@ -1,5 +1,5 @@
 locals {
-  secret_and_kms_policy_json = length(var.secrets_and_kms_arns) > 0 ?  data.aws_iam_policy_document.main.json : data.aws_iam_policy_document.dummy.json
+  secret_and_kms_policy_json = length(var.secrets_and_kms_arns) > 0 ? data.aws_iam_policy_document.main.json : data.aws_iam_policy_document.dummy.json
 }
 
 data "aws_iam_policy_document" "combined" {
@@ -14,7 +14,7 @@ resource "aws_iam_role" "main" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_document.json
 
   inline_policy {
-    name = "lambda_policy"
+    name   = "lambda_policy"
     policy = data.aws_iam_policy_document.combined.json
   }
 }

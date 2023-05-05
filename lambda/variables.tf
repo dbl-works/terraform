@@ -66,6 +66,6 @@ variable "memory_size" {
 }
 
 variable "lambda_policy_json" {
-  type        = string
-  default     = null
+  type    = string
+  default = null
 }
