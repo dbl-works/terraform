@@ -34,7 +34,7 @@ locals {
       ]
     }
   ]
-  s3_encryption_policy = var.s3_configuration != null && var.s3_configuration.kms_arn != null ? [
+  s3_encryption_policy = try(var.s3_configuration.kms_arn, null) != null ? [
     {
       "Effect" : "Allow",
       "Action" : [
@@ -44,6 +44,18 @@ locals {
       ],
       "Resource" : [
         var.s3_configuration.kms_arn
+      ]
+    }
+  ] : []
+  lambda_policy = try(var.s3_configuration.aws_lambda_arn, null) != null ? [
+    {
+      "Action" : [
+        "lambda:InvokeFunction",
+        "lambda:GetFunctionConfiguration"
+      ],
+      "Effect" : "Allow",
+      "Resource" : [
+        "${var.s3_configuration.aws_lambda_arn}:*"
       ]
     }
   ] : []
@@ -65,7 +77,7 @@ resource "aws_iam_policy" "kinesis" {
         ],
         "Resource" : "*"
       },
-    ], local.s3_policy, local.s3_encryption_policy)
+    ], local.s3_policy, local.s3_encryption_policy, local.lambda_policy)
   })
 }
 
