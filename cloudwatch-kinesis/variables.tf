@@ -41,7 +41,7 @@ variable "s3_configuration" {
     buffering_size     = optional(number, 10)   # Buffer incoming data to the specified size, in MBs, before delivering it to the s3 bucket.
     buffering_interval = optional(number, 1800) # Buffer incoming data for the specified period of time, in seconds, before delivering it to the s3 bucket.
     enable_cloudwatch  = optional(bool, false)
-    compression_format = optional(string, "UNCOMPRESSED")
+    compression_format = optional(string, "GZIP")
     kms_arn    = optional(string, null)
     processors = optional(map(list(object({
       parameter_name = string

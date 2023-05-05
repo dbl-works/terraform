@@ -47,7 +47,7 @@ locals {
       ]
     }
   ] : []
-  lambda_policy = try(var.s3_configuration.processors.lambda, null) != null ? [
+  lambda_policy = try(var.s3_configuration.processors.Lambda, null) != null ? [
     {
       "Action" : [
         "lambda:InvokeFunction",
@@ -55,7 +55,7 @@ locals {
       ],
       "Effect" : "Allow",
       "Resource" : [
-        "${var.s3_configuration.aws_lambda_arn}:*"
+        "${local.lambda_arn}:*"
       ]
     }
   ] : []
