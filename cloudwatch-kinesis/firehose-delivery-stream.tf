@@ -103,8 +103,8 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
       # https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html
       # Sample: myPrefix/result=!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd} => myPrefix/result=processing-failed/2018/08/03
-      prefix              = "logs/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}"
-      error_output_prefix = "errors/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}-!{firehose:error-output-type}"
+      prefix              = local.s3_output_prefix
+      error_output_prefix = local.s3_error_output_prefix
 
       cloudwatch_logging_options {
         enabled         = s3_configuration.value.enable_cloudwatch
@@ -127,8 +127,8 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
       # https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html
       # Sample: myPrefix/result=!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd} => myPrefix/result=processing-failed/2018/08/03
-      prefix              = "logs/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}"
-      error_output_prefix = "errors/${var.environment}/!{timestamp:yyyy-MM/dd/HH}/!{timestamp:yyyy-MM-dd-HH-mm-ss}-${var.environment}-!{firehose:error-output-type}"
+      prefix              = local.s3_output_prefix
+      error_output_prefix = local.s3_error_output_prefix
 
       cloudwatch_logging_options {
         enabled         = extended_s3_configuration.value.enable_cloudwatch

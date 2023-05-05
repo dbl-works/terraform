@@ -56,3 +56,13 @@ variable "kinesis_stream_name" {
   type    = string
   default = null
 }
+
+variable "s3_output_prefix" {
+  type    = string
+  default = null
+}
+
+variable "s3_error_output_prefix" {
+  type    = string
+  default = null
+}
