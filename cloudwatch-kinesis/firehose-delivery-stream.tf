@@ -47,7 +47,7 @@ locals {
       ]
     }
   ] : []
-  lambda_policy = try(var.s3_configuration.aws_lambda_arn, null) != null ? [
+  lambda_policy = try(var.s3_configuration.processors.lambda, null) != null ? [
     {
       "Action" : [
         "lambda:InvokeFunction",
@@ -141,17 +141,21 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
       }
 
       processing_configuration {
-        enabled = extended_s3_configuration.value.aws_lambda_arn != null
+        enabled = extended_s3_configuration.value.processors != null
 
         dynamic "processors" {
-          for_each = extended_s3_configuration.value.aws_lambda_arn == null ? [] : [extended_s3_configuration.value.aws_lambda_arn]
+          for_each = extended_s3_configuration.value.processors
 
           content {
-            type = "Lambda"
+            type = processors.key
 
-            parameters {
-              parameter_name  = "LambdaArn"
-              parameter_value = "${processors.value}:$LATEST"
+            dynamic "parameters" {
+              for_each = processors.value
+
+              content {
+                parameter_name  = parameters.value.parameter_name
+                parameter_value = parameters.value.parameter_value
+              }
             }
           }
         }
