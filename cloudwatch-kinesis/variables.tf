@@ -66,3 +66,8 @@ variable "s3_error_output_prefix" {
   type    = string
   default = null
 }
+
+variable "enable_dynamic_partitioning" {
+  type    = bool
+  default = false
+}

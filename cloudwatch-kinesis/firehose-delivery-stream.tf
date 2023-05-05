@@ -136,6 +136,10 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
         log_stream_name = "s3"
       }
 
+      dynamic_partitioning_configuration {
+        enabled = var.enable_dynamic_partitioning
+      }
+
       processing_configuration {
         enabled = extended_s3_configuration.value.aws_lambda_arn != null
 
