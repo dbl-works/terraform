@@ -26,14 +26,14 @@ module "cloudwatch-kinesis" {
   environment = local.environment
 
   # Optional
+  kinesis_stream_name = "kinesis-aws"
   region = "us-east-1"
-  ecs_http_port = 5073
-  log_bucket_arn = "arn:aws:s3:::cloudwatch-logs"
-  s3_kms_arn = "arn:aws:kms:eu-central-1:xxxxxxx:key:can-t-be-blank"
-  buffer_size_for_s3 = 10
-  buffer_interval_for_s3 = 400
-  enable_cloudwatch = true
   subscription_log_group_name = "/ecs/facebook-staging"
+  s3_output_prefix = "raw/"
+  s3_error_output_prefix = "errors/"
+  enable_dynamic_partitioning = true
+  cloudwatch_logs_retention_in_days = 7
+  kinesis_destination = "s3"
 
   http_endpoint_configuration = {
     url                = "https://logtail.com"
@@ -43,6 +43,33 @@ module "cloudwatch-kinesis" {
     s3_backup_mode     = 'AllData'
     enable_cloudwatch  = true
     content_encoding   = "NONE"
+  }
+
+  s3_configuration = {
+    s3_bucket_arn      = "arn:aws:s3:::cloudwatch-logs"
+    buffering_interval = 60
+    buffering_size     = 64 # Must be at least 64 when dynamic partitioning
+    enable_cloudwatch  = true
+    kms_arn            = "arn:aws:kms:xxxxxx"
+    compression_format = "UNCOMPRESSED"
+    processors = {
+      Lambda = [
+        {
+          parameter_name = "LambdaArn"
+          parameter_value = "arn:aws:lambda:xxxxxx"
+        }
+      ]
+      MetadataExtraction = [
+        {
+          parameter_name = "JsonParsingEngine"
+          parameter_value = "JQ-1.6"
+        },
+        {
+          parameter_name = "MetadataExtractionQuery"
+          parameter_value = "{customer_name:.customer_name}"
+        }
+      ]
+    }
   }
 }
 ```

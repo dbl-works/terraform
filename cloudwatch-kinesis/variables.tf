@@ -51,7 +51,7 @@ variable "s3_configuration" {
     #   Lambda = [
     #     {
     #       parameter_name = "LambdaArn"
-    #       parameter_value = "LambdaArn"
+    #       parameter_value = "aws:lambda:xxx"
     #     }
     #   ]
     # }
