@@ -38,12 +38,12 @@ locals {
       containerPath : "/app/${var.log_path}"
     }
   ] : []
-  logger_mount_points = var.logger_mount_points == null ? var.logger_mount_points : [
+  logger_mount_points = var.logger_mount_points == null ? [
     {
       sourceVolume : var.volume_name,
       containerPath : "/${var.log_path}"
     }
-  ]
+  ] : var.logger_mount_points
   depends_on = var.with_logger ? [
     {
       containerName : "logger",
