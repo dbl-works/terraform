@@ -46,7 +46,7 @@ locals {
   ] : var.logger_mount_points
   depends_on = var.with_logger ? [
     {
-      containerName : "logger",
+      containerName : var.logger_name,
       condition : "START"
     }
   ] : []
