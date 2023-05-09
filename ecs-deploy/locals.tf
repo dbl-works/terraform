@@ -74,12 +74,12 @@ locals {
     IMAGE_NAME            = local.logger_image_name
     IMAGE_TAG             = var.logger_image_tag == null ? var.app_image_tag : var.logger_image_tag
     LOGGER_CONTAINER_PORT = var.logger_container_port
-    LOGGER_IMAGE_NAME     = local.logger_image_name
     SECRETS_LIST          = jsonencode(local.logger_secrets)
     REGION                = local.region
     MOUNT_POINTS          = jsonencode(local.logger_mount_points)
     LOG_GROUP_NAME        = var.logger_log_group_name == null ? "/ecs/${var.project}-${var.environment}" : var.logger_log_group_name
     PROTOCOL              = var.logger_protocol
+    NAME                  = var.logger_name
   }) : null
 
   container_definitions = [for definition in [local.app_container_definitions, local.logger_container_definitions] : jsondecode(definition) if definition != null]

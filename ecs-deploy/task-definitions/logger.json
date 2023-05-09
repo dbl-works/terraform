@@ -1,6 +1,6 @@
 {
-  "name": "logger",
-  "image": "${LOGGER_IMAGE_NAME}:${IMAGE_TAG}",
+  "name": "${NAME}",
+  "image": "${IMAGE_NAME}:${IMAGE_TAG}",
   "portMappings": [
     {
         "containerPort": ${LOGGER_CONTAINER_PORT},
@@ -20,7 +20,7 @@
           "awslogs-create-group": "true",
           "awslogs-group": "${LOG_GROUP_NAME}",
           "awslogs-region": "${REGION}",
-          "awslogs-stream-prefix": "logger"
+          "awslogs-stream-prefix": "${NAME}"
       }
   }
 }

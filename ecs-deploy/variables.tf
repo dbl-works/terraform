@@ -174,3 +174,8 @@ variable "logger_protocol" {
   type    = string
   default = "tcp"
 }
+
+variable "logger_name" {
+  type    = string
+  default = "logger"
+}
