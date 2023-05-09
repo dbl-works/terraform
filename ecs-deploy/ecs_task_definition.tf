@@ -8,6 +8,17 @@ resource "aws_ecs_task_definition" "main" {
   cpu                      = var.cpu
   memory                   = var.memory
 
+  # We only need volume if logger is enabled
+  dynamic "volume" {
+    for_each = var.with_logger ? [{
+      name = var.volume_name
+    }] : []
+
+    content {
+      name = volume.value.name
+    }
+  }
+
   tags = {
     Name        = local.task_definition_name
     Project     = var.project
