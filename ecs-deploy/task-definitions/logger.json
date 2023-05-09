@@ -5,17 +5,12 @@
     {
         "containerPort": ${LOGGER_CONTAINER_PORT},
         "hostPort": ${LOGGER_CONTAINER_PORT},
-        "protocol": "tcp"
+        "protocol": "${PROTOCOL}"
     }
   ],
   "essential": true,
   "environment": [],
-  "mountPoints": [
-      {
-          "sourceVolume": "${VOLUME_NAME}",
-          "containerPath": "/${LOG_PATH}"
-      }
-  ],
+  "mountPoints": ${MOUNT_POINTS},
   "volumesFrom": [],
   "secrets": ${SECRETS_LIST},
   "readonlyRootFilesystem": false,
@@ -23,7 +18,7 @@
       "logDriver": "awslogs",
       "options": {
           "awslogs-create-group": "true",
-          "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}",
+          "awslogs-group": "${LOG_GROUP_NAME}",
           "awslogs-region": "${REGION}",
           "awslogs-stream-prefix": "logger"
       }

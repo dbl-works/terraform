@@ -156,3 +156,21 @@ variable "with_load_balancer" {
   type    = bool
   default = true
 }
+
+variable "logger_mount_points" {
+  type = list(object({
+    sourceVolume : string
+    containerPath : string
+  }))
+  default = null
+}
+
+variable "logger_log_group_name" {
+  type    = string
+  default = null
+}
+
+variable "logger_protocol" {
+  type    = string
+  default = "tcp"
+}

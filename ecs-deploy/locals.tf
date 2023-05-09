@@ -37,6 +37,12 @@ locals {
       containerPath : "/app/${var.log_path}"
     }
   ] : []
+  logger_mount_points = var.logger_mount_points == null ? var.logger_mount_points : [
+    {
+      sourceVolume : var.volume_name,
+      containerPath : "/${var.log_path}"
+    }
+  ]
   depends_on = var.with_logger ? [
     {
       containerName : "logger",
@@ -65,16 +71,15 @@ locals {
   })
 
   logger_container_definitions = var.with_logger ? templatefile("${path.module}/task-definitions/logger.json", {
-    ENVIRONMENT           = var.environment
     IMAGE_NAME            = local.logger_image_name
     IMAGE_TAG             = var.logger_image_tag == null ? var.app_image_tag : var.logger_image_tag
-    LOG_PATH              = var.log_path
     LOGGER_CONTAINER_PORT = var.logger_container_port
     LOGGER_IMAGE_NAME     = local.logger_image_name
     SECRETS_LIST          = jsonencode(local.logger_secrets)
-    PROJECT               = var.project
     REGION                = local.region
-    VOLUME_NAME           = var.volume_name
+    MOUNT_POINTS          = jsonencode(local.logger_mount_points)
+    LOG_GROUP_NAME        = var.logger_log_group_name == null ? "/ecs/${var.project}-${var.environment}" : var.logger_log_group_name
+    PROTOCOL              = var.logger_protocol
   }) : null
 
   container_definitions = [for definition in [local.app_container_definitions, local.logger_container_definitions] : jsondecode(definition) if definition != null]
