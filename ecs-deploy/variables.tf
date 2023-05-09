@@ -65,6 +65,7 @@ variable "memory" {
   default = 512
 }
 
+# TODO: Refactor all the variables relevant to apps and logs to one variables
 variable "ecr_repo_name" {
   type        = string
   default     = null
@@ -78,7 +79,7 @@ variable "container_name" {
 
 variable "volume_name" {
   type    = string
-  default = "log"
+  default = null
 }
 
 variable "service_json_file_name" {

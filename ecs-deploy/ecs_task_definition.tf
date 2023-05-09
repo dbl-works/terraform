@@ -9,10 +9,11 @@ resource "aws_ecs_task_definition" "main" {
   memory                   = var.memory
 
   # We only need volume if logger is enabled
+  # TODO: Refactor this, we should have a way to configure the default volume name if with_logger is set to true
   dynamic "volume" {
-    for_each = var.with_logger ? [{
+    for_each = var.volume_name == null ? [] : [{
       name = var.volume_name
-    }] : []
+    }]
 
     content {
       name = volume.value.name
