@@ -123,6 +123,7 @@ const recordRows = ({ dataPoints, params }) => {
     }
   })
 }
+
 const getCloudwatchData = async () => {
   const resourcesData = JSON.parse(constants.RESOURCES_DATA)
   const metricDataQueries = resourcesData.flatMap((data) => performanceMetricQueries(data))
