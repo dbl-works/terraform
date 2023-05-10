@@ -38,10 +38,84 @@ variable "app_image_tag" {
   default = "latest-main"
 }
 
-variable "logger_image_tag" {
-  type    = string
+variable "app_config" {
+  type = object({
+    image_tag = optional(string, "latest-main")
+  })
+}
+
+variable "sidecar_config" {
+  type = object({
+    name           = optional(string, "logger")
+    secrets        = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the logger
+    image_tag      = optional(string, null)     # If it is null, it would be set as the app image tag
+    image_name     = optional(string, null)     # Required if logger_ecr_repo_name is null.
+    ecr_repo_name  = optional(string, null)     # Required if logger_image_name is null.
+    container_port = optional(number, 4318)
+    protocol       = optional(string, "tcp")
+    log_group_name = optional(string, null) # would be set as /ecs/${var.project}-${var.environment} if null
+    mount_points = optional(
+      list(object({
+        sourceVolume : string
+        containerPath : string
+      }))
+    , null)
+    volume_name = string
+    logPath     = optional(string, "log")
+  })
   default = null
 }
+
+# variable "with_logger" {
+#   type    = bool
+#   default = true
+# }
+
+# variable "logger_secrets" {
+#   type        = list(string)
+#   default     = []
+#   description = "keys of secrets stored in the aws secrets manager required for the logger"
+# }
+
+# variable "logger_mount_points" {
+#   type = list(object({
+#     sourceVolume : string
+#     containerPath : string
+#   }))
+#   default = null
+# }
+
+# variable "logger_log_group_name" {
+#   type    = string
+#   default = null
+# }
+
+# variable "logger_protocol" {
+#   type    = string
+#   default = "tcp"
+# }
+
+# variable "logger_name" {
+#   type    = string
+#   default = "logger"
+# }
+
+# variable "logger_ecr_repo_name" {
+#   type        = string
+#   default     = null
+#   description = "Required if logger_image_name is null."
+# }
+
+# variable "logger_container_port" {
+#   type    = string
+#   default = 4318
+# }
+
+
+# variable "logger_image_tag" {
+#   type    = string
+#   default = null
+# }
 
 variable "app_image_name" {
   type        = string
@@ -49,11 +123,11 @@ variable "app_image_name" {
   description = "Docker image name of the app container. Required if ecr_repo_name is null."
 }
 
-variable "logger_image_name" {
-  type        = string
-  default     = null
-  description = "Required if logger_ecr_repo_name is null."
-}
+# variable "logger_image_name" {
+#   type        = string
+#   default     = null
+#   description = "Required if logger_ecr_repo_name is null."
+# }
 
 variable "cpu" {
   type    = number
@@ -88,17 +162,6 @@ variable "service_json_file_name" {
   description = "service json file name to be used."
 }
 
-variable "logger_ecr_repo_name" {
-  type        = string
-  default     = null
-  description = "Required if logger_image_name is null."
-}
-
-variable "logger_container_port" {
-  type    = string
-  default = 4318
-}
-
 variable "app_container_port" {
   type    = number
   default = 3000
@@ -119,12 +182,6 @@ variable "secrets" {
   type        = list(string)
   default     = []
   description = "keys of secrets stored in the aws secrets manager required for the app"
-}
-
-variable "logger_secrets" {
-  type        = list(string)
-  default     = []
-  description = "keys of secrets stored in the aws secrets manager required for the logger"
 }
 
 variable "commands" {
@@ -148,35 +205,7 @@ variable "load_balancer_target_group_name" {
   default = null
 }
 
-variable "with_logger" {
-  type    = bool
-  default = true
-}
-
 variable "with_load_balancer" {
   type    = bool
   default = true
-}
-
-variable "logger_mount_points" {
-  type = list(object({
-    sourceVolume : string
-    containerPath : string
-  }))
-  default = null
-}
-
-variable "logger_log_group_name" {
-  type    = string
-  default = null
-}
-
-variable "logger_protocol" {
-  type    = string
-  default = "tcp"
-}
-
-variable "logger_name" {
-  type    = string
-  default = "logger"
 }

@@ -6,6 +6,10 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 locals {
+  account_id = data.aws_caller_identity.current.account_id
+  region     = data.aws_region.current.name
+  image_name = var.app_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.app_image_name
+
   environment_variables = flatten([
     for name, value in var.environment_variables : { name : name, value : value }
   ])
@@ -15,8 +19,8 @@ locals {
       valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
     }
   ]
-  logger_secrets = [
-    for secret_name in var.logger_secrets : {
+  logger_secrets = var.sidecar_config == null ? [] : [
+    for secret_name in var.sidecar_config.secrets : {
       name : secret_name,
       valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
     }
@@ -27,31 +31,36 @@ locals {
     hostPort : var.app_container_port,
     protocol : "tcp"
   }]
-  account_id        = data.aws_caller_identity.current.account_id
-  region            = data.aws_region.current.name
-  image_name        = var.app_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.app_image_name
-  logger_image_name = var.with_logger && var.logger_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.logger_ecr_repo_name}" : var.logger_image_name
+
+  # TODO: Fix this
+  sidecar_image_name = try(var.sidecar_config.image_name, null) == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.sidecar_config.ecr_repo_name}" : var.sidecar_config.image_name
   # If with_logger is set to true, set the volume name to a default name if volume name == null
+
+  # TODO: Fix this
   mount_points = var.with_logger && var.volume_name != null ? [
     {
       sourceVolume : var.volume_name,
       containerPath : "/app/${var.log_path}"
     }
   ] : []
+
+  # TODO: Fix this
   logger_mount_points = var.logger_mount_points == null ? [
     {
       sourceVolume : var.volume_name,
       containerPath : "/${var.log_path}"
     }
   ] : var.logger_mount_points
-  depends_on = var.with_logger ? [
+
+  depends_on = var.sidecar_config == null ? [] : [
     {
-      containerName : var.logger_name,
+      containerName : var.sidecar_config.name,
       condition : "START"
     }
-  ] : []
+  ]
 
   task_definition_name = "${var.project}-${var.container_name}-${var.environment}"
+
   app_container_definitions = templatefile("${path.module}/task-definitions/${var.service_json_file_name}.json", {
     APP_PORT_MAPPINGS     = jsonencode(local.app_port_mappings)
     COMMANDS              = jsonencode(var.commands)
@@ -72,7 +81,7 @@ locals {
   })
 
   logger_container_definitions = var.with_logger ? templatefile("${path.module}/task-definitions/logger.json", {
-    IMAGE_NAME            = local.logger_image_name
+    IMAGE_NAME            = local.sidecar_image_name
     IMAGE_TAG             = var.logger_image_tag == null ? var.app_image_tag : var.logger_image_tag
     LOGGER_CONTAINER_PORT = var.logger_container_port
     SECRETS_LIST          = jsonencode(local.logger_secrets)
