@@ -3,23 +3,16 @@ const dateUtil = require('./date');
 
 const recordRows = ({ dataPoints, params }) => {
   return dataPoints.map(data => {
-    const queryParam = params.MetricDataQueries.find((param) =>
-      param.Id === data.Id
-    )
-
-    const [projectName, environment] = queryParam.Id.split("_").slice(-2)
-    const unit = queryParam?.MetricStat.Unit
-
-    const metricStat = queryParam?.MetricStat
-
+    // TODO: Extract the json here and generate multiple data point based on the json string
+    console.log(data)
     return {
-      start_time: params.StartTime.toISOString(),
-      end_time: params.EndTime.toISOString(),
-      project_name: projectName,
-      environment: environment,
+      start_time: params.startTime.toISOString(),
+      end_time: params.endTime.toISOString(),
+      project_name: process.env.PROJECT, // GET this from the log stream name
+      environment: process.env.ENVIRONMENT,
       region: constants.AWS_REGION,
-      metric_name: metricStat?.Metric?.MetricName,
-      value: metricStat?.Stat,
+      metric_name: 'default-metric',
+      value: 'fake-value',
       created_at: new Date().toISOString()
     }
   })

@@ -39,4 +39,11 @@ variable "fivetran_connector_name" {
 
 variable "environment_variables" {
   type = map(any)
+  # Example
+  # {
+  #   PROJECT = "fake-project",
+  #   ENVIRONMENT = "staging",
+  #   FILTER_PATTERN = "[APP]",
+  #   LOG_GROUP_NAME = "/ecs/project-staging"
+  # }
 }
