@@ -1,7 +1,7 @@
 {
     "name": "${NAME}",
     "image": "${IMAGE_NAME}:${IMAGE_TAG}",
-    "portMappings": ${APP_PORT_MAPPINGS},
+    "portMappings": ${PORT_MAPPINGS},
     "essential": true,
     "command": ${COMMANDS},
     "environment": ${ENVIRONMENT_VARIABLES},
