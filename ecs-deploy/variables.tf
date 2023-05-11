@@ -33,11 +33,6 @@ variable "desired_count" {
   default = 1
 }
 
-# variable "app_image_tag" {
-#   type    = string
-#   default = "latest-main"
-# }
-
 variable "app_config" {
   type = object({
     name                  = optional(string, "web")
@@ -83,69 +78,6 @@ variable "sidecar_config" {
   default = null
 }
 
-# variable "with_logger" {
-#   type    = bool
-#   default = true
-# }
-
-# variable "logger_secrets" {
-#   type        = list(string)
-#   default     = []
-#   description = "keys of secrets stored in the aws secrets manager required for the logger"
-# }
-
-# variable "logger_mount_points" {
-#   type = list(object({
-#     sourceVolume : string
-#     containerPath : string
-#   }))
-#   default = null
-# }
-
-# variable "logger_log_group_name" {
-#   type    = string
-#   default = null
-# }
-
-# variable "logger_protocol" {
-#   type    = string
-#   default = "tcp"
-# }
-
-# variable "logger_name" {
-#   type    = string
-#   default = "logger"
-# }
-
-# variable "logger_ecr_repo_name" {
-#   type        = string
-#   default     = null
-#   description = "Required if logger_image_name is null."
-# }
-
-# variable "logger_container_port" {
-#   type    = string
-#   default = 4318
-# }
-
-
-# variable "logger_image_tag" {
-#   type    = string
-#   default = null
-# }
-
-# variable "app_image_name" {
-#   type        = string
-#   default     = null
-#   description = "Docker image name of the app container. Required if ecr_repo_name is null."
-# }
-
-# variable "logger_image_name" {
-#   type        = string
-#   default     = null
-#   description = "Required if logger_ecr_repo_name is null."
-# }
-
 variable "cpu" {
   type    = number
   default = 256
@@ -155,18 +87,6 @@ variable "memory" {
   type    = number
   default = 512
 }
-
-# # TODO: Refactor all the variables relevant to apps and logs to one variables
-# variable "ecr_repo_name" {
-#   type        = string
-#   default     = null
-#   description = "Required if app_image_name is null."
-# }
-
-# variable "container_name" {
-#   type    = string
-#   default = "web"
-# }
 
 variable "volume_name" {
   type    = string
@@ -178,39 +98,6 @@ variable "container_definitions_file_name" {
   default     = "web"
   description = "container definitions file name to be used."
 }
-
-# variable "app_container_port" {
-#   type    = number
-#   default = 3000
-# }
-
-# variable "log_path" {
-#   type        = string
-#   default     = "log"
-#   description = "path in the apps which store the log"
-# }
-
-# variable "environment_variables" {
-#   type    = map(string)
-#   default = {}
-# }
-
-# variable "secrets" {
-#   type        = list(string)
-#   default     = []
-#   description = "keys of secrets stored in the aws secrets manager required for the app"
-# }
-
-# variable "commands" {
-#   type = list(string)
-#   default = [
-#     "bundle",
-#     "exec",
-#     "puma",
-#     "-C",
-#     "config/puma.rb"
-#   ]
-# }
 
 variable "secrets_alias" {
   type    = string
