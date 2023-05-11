@@ -1,8 +1,3 @@
-locals {
-  name = var.cluster_name != null ? var.cluster_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
-}
-
-
 data "aws_ecs_cluster" "main" {
   cluster_name = local.name
 }
@@ -40,7 +35,7 @@ data "aws_security_group" "ecs" {
 }
 
 resource "aws_ecs_service" "main" {
-  name            = var.container_name
+  name            = var.app_config.name
   cluster         = data.aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.main.arn
   desired_count   = var.desired_count
@@ -59,8 +54,8 @@ resource "aws_ecs_service" "main" {
   dynamic "load_balancer" {
     for_each = var.with_load_balancer ? [{
       target_group_arn = data.aws_lb_target_group.ecs.arn,
-      container_name   = var.container_name,
-      container_port   = var.app_container_port
+      container_name   = var.app_config.name,
+      container_port   = var.app_config.container_port
     }] : []
     content {
       target_group_arn = load_balancer.value.target_group_arn
@@ -74,7 +69,7 @@ resource "aws_ecs_service" "main" {
   }
 
   tags = {
-    Name        = var.container_name
+    Name        = var.app_config.name
     Project     = var.project
     Environment = var.environment
   }

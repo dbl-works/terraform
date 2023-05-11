@@ -1,5 +1,5 @@
 {
-    "name": "${CONTAINER_NAME}",
+    "name": "${NAME}",
     "image": "${IMAGE_NAME}:${IMAGE_TAG}",
     "portMappings": ${APP_PORT_MAPPINGS},
     "essential": true,
@@ -16,7 +16,7 @@
             "awslogs-create-group": "true",
             "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}",
             "awslogs-region": "${REGION}",
-            "awslogs-stream-prefix": "${CONTAINER_NAME}",
+            "awslogs-stream-prefix": "${NAME}",
             "mode": "${ECS_FARGATE_LOG_MODE}"
         }
     }

@@ -33,24 +33,43 @@ variable "desired_count" {
   default = 1
 }
 
-variable "app_image_tag" {
-  type    = string
-  default = "latest-main"
-}
+# variable "app_image_tag" {
+#   type    = string
+#   default = "latest-main"
+# }
 
 variable "app_config" {
   type = object({
-    image_tag = optional(string, "latest-main")
+    name                  = optional(string, "web")
+    image_tag             = optional(string, "latest-main")
+    image_name            = optional(string, null)     #  Docker image name of the app container. Required if ecr_repo_name is null.
+    secrets               = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the app
+    ecr_repo_name         = optional(string, null)     # Required if image_name is null.
+    container_port        = optional(number, 3000)
+    environment_variables = optional(map(string), {})
+    commands = optional(list(string), [
+      "bundle",
+      "exec",
+      "puma",
+      "-C",
+      "config/puma.rb"
+    ])
+    mount_points = optional(
+      list(object({
+        sourceVolume : string
+        containerPath : string
+      }))
+    , null)
   })
 }
 
 variable "sidecar_config" {
   type = object({
     name           = optional(string, "logger")
-    secrets        = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the logger
+    secrets        = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the sidecar
     image_tag      = optional(string, null)     # If it is null, it would be set as the app image tag
-    image_name     = optional(string, null)     # Required if logger_ecr_repo_name is null.
-    ecr_repo_name  = optional(string, null)     # Required if logger_image_name is null.
+    image_name     = optional(string, null)     # Required if ecr_repo_name is null.
+    ecr_repo_name  = optional(string, null)     # Required if image_name is null.
     container_port = optional(number, 4318)
     protocol       = optional(string, "tcp")
     log_group_name = optional(string, null) # would be set as /ecs/${var.project}-${var.environment} if null
@@ -60,8 +79,6 @@ variable "sidecar_config" {
         containerPath : string
       }))
     , null)
-    volume_name = string
-    logPath     = optional(string, "log")
   })
   default = null
 }
@@ -117,11 +134,11 @@ variable "sidecar_config" {
 #   default = null
 # }
 
-variable "app_image_name" {
-  type        = string
-  default     = null
-  description = "Docker image name of the app container. Required if ecr_repo_name is null."
-}
+# variable "app_image_name" {
+#   type        = string
+#   default     = null
+#   description = "Docker image name of the app container. Required if ecr_repo_name is null."
+# }
 
 # variable "logger_image_name" {
 #   type        = string
@@ -139,61 +156,61 @@ variable "memory" {
   default = 512
 }
 
-# TODO: Refactor all the variables relevant to apps and logs to one variables
-variable "ecr_repo_name" {
-  type        = string
-  default     = null
-  description = "Required if app_image_name is null."
-}
+# # TODO: Refactor all the variables relevant to apps and logs to one variables
+# variable "ecr_repo_name" {
+#   type        = string
+#   default     = null
+#   description = "Required if app_image_name is null."
+# }
 
-variable "container_name" {
-  type    = string
-  default = "web"
-}
+# variable "container_name" {
+#   type    = string
+#   default = "web"
+# }
 
 variable "volume_name" {
   type    = string
   default = null
 }
 
-variable "service_json_file_name" {
+variable "container_definitions_file_name" {
   type        = string
   default     = "web"
-  description = "service json file name to be used."
+  description = "container definitions file name to be used."
 }
 
-variable "app_container_port" {
-  type    = number
-  default = 3000
-}
+# variable "app_container_port" {
+#   type    = number
+#   default = 3000
+# }
 
-variable "log_path" {
-  type        = string
-  default     = "log"
-  description = "path in the apps which store the log"
-}
+# variable "log_path" {
+#   type        = string
+#   default     = "log"
+#   description = "path in the apps which store the log"
+# }
 
-variable "environment_variables" {
-  type    = map(string)
-  default = {}
-}
+# variable "environment_variables" {
+#   type    = map(string)
+#   default = {}
+# }
 
-variable "secrets" {
-  type        = list(string)
-  default     = []
-  description = "keys of secrets stored in the aws secrets manager required for the app"
-}
+# variable "secrets" {
+#   type        = list(string)
+#   default     = []
+#   description = "keys of secrets stored in the aws secrets manager required for the app"
+# }
 
-variable "commands" {
-  type = list(string)
-  default = [
-    "bundle",
-    "exec",
-    "puma",
-    "-C",
-    "config/puma.rb"
-  ]
-}
+# variable "commands" {
+#   type = list(string)
+#   default = [
+#     "bundle",
+#     "exec",
+#     "puma",
+#     "-C",
+#     "config/puma.rb"
+#   ]
+# }
 
 variable "secrets_alias" {
   type    = string

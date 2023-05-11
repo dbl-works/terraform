@@ -3,8 +3,8 @@
   "image": "${IMAGE_NAME}:${IMAGE_TAG}",
   "portMappings": [
     {
-        "containerPort": ${LOGGER_CONTAINER_PORT},
-        "hostPort": ${LOGGER_CONTAINER_PORT},
+        "containerPort": ${CONTAINER_PORT},
+        "hostPort": ${CONTAINER_PORT},
         "protocol": "${PROTOCOL}"
     }
   ],
