@@ -56,3 +56,9 @@ variable "script_env" {
   type    = map(any)
   default = {}
 }
+
+variable "sync_frequency" {
+  type        = number
+  default     = 60 // min
+  description = "The supported values are: 5, 15, 30, 60, 120, 180, 360, 480, 720, 1440."
+}
