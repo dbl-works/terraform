@@ -59,12 +59,12 @@ locals {
     NAME           = config.name
     PROTOCOL       = config.protocol
     REGION         = local.region
-    SECRETS_LIST = [
-      for secret_name in config.secrets : jsonencode({
+    SECRETS_LIST = jsonencode([
+      for secret_name in config.secrets : {
         name : secret_name,
         valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
-      })
-    ]
+      }
+    ])
   })]
 
   container_definitions = [for definition in flatten([local.app_container_definitions, local.sidecar_container_definitions]) : jsondecode(definition) if definition != null]
