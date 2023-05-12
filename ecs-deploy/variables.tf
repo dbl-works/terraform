@@ -59,7 +59,7 @@ variable "app_config" {
 }
 
 variable "sidecar_config" {
-  type = object({
+  type = list(object({
     name           = optional(string, "logger")
     secrets        = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the sidecar
     image_tag      = optional(string, null)     # If it is null, it would be set as the app image tag
@@ -72,9 +72,9 @@ variable "sidecar_config" {
         sourceVolume : string
         containerPath : string
       }))
-    , null)
-  })
-  default = null
+    , [])
+  }))
+  default = []
 }
 
 variable "cpu" {

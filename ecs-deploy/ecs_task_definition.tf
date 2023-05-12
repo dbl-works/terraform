@@ -32,9 +32,9 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_cloudwatch_log_group" "ecs_sidecar" {
-  count = try(var.sidecar_config.name, null) == null ? 0 : 1
+  count = length(var.sidecar_config)
 
-  name              = local.sidecar_log_group_name
+  name              = "/${var.sidecar_config[count.index].name}/${local.name}"
   retention_in_days = var.cloudwatch_logs_retention_in_days
 
   tags = {

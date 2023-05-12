@@ -6,11 +6,10 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 locals {
-  name                   = var.cluster_name != null ? var.cluster_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
-  sidecar_log_group_name = try(var.sidecar_config.name, null) == null ? "" : "/${var.sidecar_config.name}/${local.name}"
-  account_id             = data.aws_caller_identity.current.account_id
-  region                 = data.aws_region.current.name
-  image_name             = var.app_config.image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.app_config.ecr_repo_name}" : var.app_config.image_name
+  name       = var.cluster_name != null ? var.cluster_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+  account_id = data.aws_caller_identity.current.account_id
+  region     = data.aws_region.current.name
+  image_name = var.app_config.image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.app_config.ecr_repo_name}" : var.app_config.image_name
 
   environment_variables = flatten([
     for name, value in var.app_config.environment_variables : { name : name, value : value }
@@ -21,23 +20,13 @@ locals {
       valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
     }
   ]
-  sidecar_secrets = try(var.sidecar_config.secrets, null) == null ? [] : [
-    for secret_name in var.sidecar_config.secrets : {
-      name : secret_name,
-      valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
-    }
-  ]
-
   app_port_mappings = try(var.app_config.container_port, null) == null ? [] : [{
     containerPort : var.app_config.container_port,
     hostPort : var.app_config.container_port,
     protocol : "tcp"
   }]
 
-  sidecar_image_name   = try(var.sidecar_config.image_name, null) == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.sidecar_config.ecr_repo_name}" : var.sidecar_config.image_name
-  mount_points         = try(var.app_config.mount_points, null) == null ? [] : var.app_config.mount_points
-  sidecar_mount_points = try(var.sidecar_config.mount_points, null) == null ? [] : var.sidecar_config.mount_points
-
+  mount_points = try(var.app_config.mount_points, null) == null ? [] : var.app_config.mount_points
   depends_on = var.sidecar_config == null ? [] : [
     {
       containerName : var.sidecar_config.name,
@@ -63,17 +52,22 @@ locals {
     SECRETS_LIST          = jsonencode(local.secrets)
   })
 
-  sidecar_container_definitions = var.sidecar_config == null ? null : templatefile("${path.module}/task-definitions/sidecar.json", {
-    CONTAINER_PORT = var.sidecar_config.container_port
-    IMAGE_NAME     = local.sidecar_image_name
-    IMAGE_TAG      = try(var.sidecar_config.image_tag == null) == null ? var.app_config.image_tag : var.app_config.image_tag
-    LOG_GROUP_NAME = local.sidecar_log_group_name
-    MOUNT_POINTS   = jsonencode(local.sidecar_mount_points)
-    NAME           = var.sidecar_config.name
-    PROTOCOL       = var.sidecar_config.protocol
+  sidecar_container_definitions = [for config in var.sidecar_config : templatefile("${path.module}/task-definitions/sidecar.json", {
+    CONTAINER_PORT = config.container_port
+    IMAGE_NAME     = try(config.image_name, null) == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${config.ecr_repo_name}" : config.image_name
+    IMAGE_TAG      = try(config.image_tag == null) == null ? var.app_config.image_tag : config.image_tag
+    LOG_GROUP_NAME = "/${config.name}/${local.name}"
+    MOUNT_POINTS   = jsonencode(config.mount_points)
+    NAME           = config.name
+    PROTOCOL       = config.protocol
     REGION         = local.region
-    SECRETS_LIST   = jsonencode(local.sidecar_secrets)
-  })
+    SECRETS_LIST = [
+      for secret_name in config.secrets : jsonencode({
+        name : secret_name,
+        valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
+      })
+    ]
+  })]
 
-  container_definitions = [for definition in [local.app_container_definitions, local.sidecar_container_definitions] : jsondecode(definition) if definition != null]
+  container_definitions = [for definition in flatten([local.app_container_definitions, local.sidecar_container_definitions]) : jsondecode(definition) if definition != null]
 }
