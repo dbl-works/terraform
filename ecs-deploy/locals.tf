@@ -27,12 +27,10 @@ locals {
   }]
 
   mount_points = try(var.app_config.mount_points, null) == null ? [] : var.app_config.mount_points
-  depends_on = var.sidecar_config == null ? [] : [
-    {
-      containerName : var.sidecar_config.name,
-      condition : "START"
-    }
-  ]
+  depends_on = [for config in var.sidecar_config : {
+    containerName : config.name,
+    condition : "START"
+  }]
 
   task_definition_name = "${var.project}-${var.app_config.name}-${var.environment}"
 
