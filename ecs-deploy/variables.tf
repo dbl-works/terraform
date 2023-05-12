@@ -67,7 +67,6 @@ variable "sidecar_config" {
     ecr_repo_name  = optional(string, null)     # Required if image_name is null.
     container_port = optional(number, 4318)
     protocol       = optional(string, "tcp")
-    log_group_name = optional(string, null) # would be set as /ecs/${var.project}-${var.environment} if null
     mount_points = optional(
       list(object({
         sourceVolume : string
