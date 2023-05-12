@@ -6,10 +6,11 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 locals {
-  name       = var.cluster_name != null ? var.cluster_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
-  account_id = data.aws_caller_identity.current.account_id
-  region     = data.aws_region.current.name
-  image_name = var.app_config.image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.app_config.ecr_repo_name}" : var.app_config.image_name
+  name                   = var.cluster_name != null ? var.cluster_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+  sidecar_log_group_name = try(var.sidecar_config.name, null) == null ? "" : "/${var.sidecar_config.name}/${local.name}"
+  account_id             = data.aws_caller_identity.current.account_id
+  region                 = data.aws_region.current.name
+  image_name             = var.app_config.image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.app_config.ecr_repo_name}" : var.app_config.image_name
 
   environment_variables = flatten([
     for name, value in var.app_config.environment_variables : { name : name, value : value }
@@ -66,7 +67,7 @@ locals {
     CONTAINER_PORT = var.sidecar_config.container_port
     IMAGE_NAME     = local.sidecar_image_name
     IMAGE_TAG      = try(var.sidecar_config.image_tag == null) == null ? var.app_config.image_tag : var.app_config.image_tag
-    LOG_GROUP_NAME = try(var.sidecar_config.log_group_name, null) == null ? "/ecs/${var.project}-${var.environment}" : var.sidecar_config.log_group_name
+    LOG_GROUP_NAME = local.sidecar_log_group_name
     MOUNT_POINTS   = jsonencode(local.sidecar_mount_points)
     NAME           = var.sidecar_config.name
     PROTOCOL       = var.sidecar_config.protocol
