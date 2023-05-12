@@ -26,3 +26,16 @@ resource "aws_ecs_task_definition" "main" {
     Environment = var.environment
   }
 }
+
+resource "aws_cloudwatch_log_group" "ecs_sidecar" {
+  count = try(var.sidecar_config.name, null) == null ? 0 : 1
+
+  name              = "/${var.sidecar_config.name}/${local.name}"
+  retention_in_days = var.cloudwatch_logs_retention_in_days
+
+  tags = {
+    Name        = local.name
+    Project     = var.project
+    Environment = var.environment
+  }
+}
