@@ -459,6 +459,7 @@ resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = local.name
 
   dashboard_body = jsonencode({
+    "periodOverride" : "inherit", # defaults to auto, which means periods auto-adjust depending on the time range of the dashboard
     "widgets" : flatten(concat(
       local.alb_performance_metrics,
       local.elasticache_performance_metrics,
