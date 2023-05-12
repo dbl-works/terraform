@@ -26,8 +26,8 @@ locals {
           "view" : "singleValue",
           "sparkline" : true,
           "stat" : "Sum",
-          "period" : 1,
-          "unit" : "Minutes",
+          "period" : 60,
+          "unit" : "Seconds",
           "metrics" : [
             ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", name, { "label" : name }]
           ],
