@@ -25,6 +25,10 @@ resource "aws_ecs_task_definition" "main" {
     Project     = var.project
     Environment = var.environment
   }
+
+  depends_on = [
+    aws_cloudwatch_log_group.ecs_sidecar
+  ]
 }
 
 resource "aws_cloudwatch_log_group" "ecs_sidecar" {
