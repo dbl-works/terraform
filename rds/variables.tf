@@ -18,6 +18,11 @@ variable "publicly_accessible" {
   default = false
 }
 
+variable "parameter_group_name" {
+  type    = string
+  default = null
+}
+
 variable "multi_az" {
   type    = bool
   default = false

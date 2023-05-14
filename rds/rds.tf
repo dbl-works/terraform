@@ -18,7 +18,7 @@ resource "aws_db_instance" "main" {
   username                            = var.is_read_replica ? null : var.username                                                         # credentials of the master DB are used
   password                            = var.is_read_replica ? null : var.password                                                         # credentials of the master DB are used
   iam_database_authentication_enabled = true
-  parameter_group_name                = local.parameter_group_name # 13, 14, or default for the choosen engine version
+  parameter_group_name                = var.parameter_group_name != null ? var.parameter_group_name : local.parameter_group_name # 13, 14, or default for the choosen engine version
   apply_immediately                   = true
   multi_az                            = var.multi_az
   publicly_accessible                 = var.publicly_accessible
