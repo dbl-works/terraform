@@ -6,6 +6,7 @@ locals {
 }
 
 resource "aws_db_instance" "main" {
+  allow_major_version_upgrade         = true
   db_subnet_group_name                = aws_db_subnet_group.main.name
   allocated_storage                   = var.allocated_storage
   storage_type                        = "gp2"
