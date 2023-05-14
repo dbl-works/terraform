@@ -1,7 +1,8 @@
 locals {
   major_engine_version      = split(".", var.engine_version)[0]
   final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}-${formatdate("DD-MM-YY-hhmm", timestamp())}"
-  parameter_group_name      = local.major_engine_version == "14" ? aws_db_parameter_group.postgres14.name : local.major_engine_version == "13" ? aws_db_parameter_group.postgres13.name : "default.postgres${local.major_engine_version}"
+  # @NOTE: `"default.postgres${local.major_engine_version}"` does not exist for e.g. postgres15 eventhough, postges 15 is generally available
+  parameter_group_name = local.major_engine_version == "14" ? aws_db_parameter_group.postgres14.name : local.major_engine_version == "13" ? aws_db_parameter_group.postgres13.name : null
 }
 
 resource "aws_db_instance" "main" {
