@@ -59,6 +59,8 @@ resource "aws_db_instance" "main" {
       engine_version, # AWS will auto-update minor version changes
       db_name,        # if you didn't use this before it would re-create your RDS instance
       snapshot_identifier,
+      username,
+      password,
     ]
   }
 }
