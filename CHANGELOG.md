@@ -16,10 +16,13 @@ This project does not follow SemVer, since modules are independent of each other
 ### iam/iam-for-humans/human-policies
 - Allow user to create MFA device under any name [#204](https://github.com/dbl-works/terraform/pull/204)
 
+### cloudwatch
+- forcing the dashboard to always respect the configured period regardless of the time range chosen [#212](https://github.com/dbl-works/terraform/pull/212)
+
 ### ecs-deploy
 - :warning: breaking change: this was previously named `ecs_service` which was inconsistent with all other module names and didn't communicate its usage in the name
-- :warning: breaking change: add/remove/modify variable names
-- allow user to add multiple sidecar task definitions
+- Allow granting access to secrets to the sidecar container [#199](https://github.com/dbl-works/terraform/pull/199)
+- :warning: breaking change: add/remove/modify variable names, allow user to add multiple sidecar task definitions [#214](https://github.com/dbl-works/terraform/pull/214)
 
 ### fivetran/connectors
 - fix bug in aws_iam_role_policy_attachment
@@ -33,8 +36,15 @@ This project does not follow SemVer, since modules are independent of each other
 ### iam/iam-for-deploy-bot
 - add permissions to manage logs
 
+### iam/iam-for-humans
+- fix dependency of resource creation
+
 ### rds
+- fix db username in rds-connect:db policy [#208](https://github.com/dbl-works/terraform/pull/208)
 - remove timestamp from final_snapshot_identifier so rds is not force updated in every deployment
+
+### stack/setup
+- allow creating a certificate for replicas in different regions [#197](https://github.com/dbl-works/terraform/pull/197)
 
 ## [v2023.03.30]
 
