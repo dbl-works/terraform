@@ -1,9 +1,11 @@
 locals {
   major_engine_version      = split(".", var.engine_version)[0]
   final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}"
+  parameter_group_name      = var.parameter_group_name == null ? aws_db_parameter_group.current[0].name : var.parameter_group_name
 }
 
 resource "aws_db_instance" "main" {
+  allow_major_version_upgrade         = true
   db_subnet_group_name                = aws_db_subnet_group.main.name
   allocated_storage                   = var.allocated_storage
   storage_type                        = "gp2"
@@ -15,7 +17,7 @@ resource "aws_db_instance" "main" {
   username                            = var.is_read_replica ? null : var.username                                                         # credentials of the master DB are used
   password                            = var.is_read_replica ? null : var.password                                                         # credentials of the master DB are used
   iam_database_authentication_enabled = true
-  parameter_group_name                = local.major_engine_version == "14" ? aws_db_parameter_group.postgres14.name : aws_db_parameter_group.postgres13.name
+  parameter_group_name                = local.parameter_group_name
   apply_immediately                   = true
   multi_az                            = var.multi_az
   publicly_accessible                 = var.publicly_accessible
@@ -56,6 +58,8 @@ resource "aws_db_instance" "main" {
       engine_version, # AWS will auto-update minor version changes
       db_name,        # if you didn't use this before it would re-create your RDS instance
       snapshot_identifier,
+      username,
+      password,
     ]
   }
 }

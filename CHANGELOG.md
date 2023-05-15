@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## [Unreleased]
+### RDS
+- new optional variable for `parameter_group_name`, #213
+- parameter group is now created dynamically depending on the engine version (instead of hardcoding version 13 and 14), #213
+- allow major version upgrades, #213
+- ignore changes to username/password to not trigger a re-creation when the password is rotated, #213
+
 ### aws-transfer
 - Add AWS transfer family module[#198](https://github.com/dbl-works/terraform/pull/198)
 
