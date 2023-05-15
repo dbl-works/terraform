@@ -18,9 +18,23 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### ecs-deploy
 - :warning: breaking change: this was previously named `ecs_service` which was inconsistent with all other module names and didn't communicate its usage in the name
+- :warning: breaking change: add/remove/modify variable names
+- allow user to add multiple sidecar task definitions
+
+### fivetran/connectors
+- fix bug in aws_iam_role_policy_attachment
+
+### fivetran/connectors/lambda
+- Add sync_frequency as variable
 
 ### slack-chatbot
 - deleted this module; it was WIP/broken and a more modular approach is found ins `slack/*` modules
+
+### iam/iam-for-deploy-bot
+- add permissions to manage logs
+
+### rds
+- remove timestamp from final_snapshot_identifier so rds is not force updated in every deployment
 
 ## [v2023.03.30]
 
