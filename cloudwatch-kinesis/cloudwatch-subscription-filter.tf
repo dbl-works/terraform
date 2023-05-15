@@ -1,5 +1,5 @@
 resource "aws_iam_role" "subscription_filter" {
-  name = "subscription-filter-to-firehose-${local.name}"
+  name = "subscription-filter-to-firehose-${local.name}${var.regional ? "-${var.region}" : ""}"
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -16,7 +16,7 @@ resource "aws_iam_role" "subscription_filter" {
 }
 
 resource "aws_iam_policy" "subscription_filter" {
-  name = "subscription-filter-to-firehose-${local.name}"
+  name = "subscription-filter-to-firehose-${local.name}${var.regional ? "-${var.region}" : ""}"
 
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -42,7 +42,7 @@ resource "aws_iam_role_policy_attachment" "subscription_filter" {
 resource "aws_cloudwatch_log_subscription_filter" "subscription_filter" {
   name            = local.name
   role_arn        = aws_iam_role.subscription_filter.arn
-  filter_pattern  = ""
+  filter_pattern  = var.subscription_filter_pattern
   log_group_name  = var.subscription_log_group_name
   destination_arn = aws_kinesis_firehose_delivery_stream.main.arn
 }

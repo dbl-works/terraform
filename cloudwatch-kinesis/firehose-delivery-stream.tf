@@ -1,6 +1,6 @@
 # https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html#FirehoseExample
 resource "aws_iam_role" "kinesis" {
-  name = "kinesis-${local.name}"
+  name = "kinesis-${local.name}${var.regional ? "-${var.region}" : ""}"
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -62,7 +62,7 @@ locals {
 }
 
 resource "aws_iam_policy" "kinesis" {
-  name = "kinesis-policy-${local.name}"
+  name = "kinesis-policy-${local.name}${var.regional ? "-${var.region}" : ""}"
 
   policy = jsonencode({
     "Version" : "2012-10-17",
