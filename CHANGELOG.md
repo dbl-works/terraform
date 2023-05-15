@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
-## [Unreleased]
+## [v2023.05.15]
 ### RDS
 - new optional variable for `parameter_group_name`, #213
 - parameter group is now created dynamically depending on the engine version (instead of hardcoding version 13 and 14), #213
