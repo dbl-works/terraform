@@ -34,6 +34,7 @@ module "db" {
   name                   = null # defaults to "${var.project}-${var.environment}", may need to be unique per region
   snapshot_identifier    = "" # crate from snapshot
   allow_from_cidr_blocks = []
+  parameter_group_name   = null # the module will create a custom parameter group if this is not set
 
   # when creating a read-replica
   master_db_instance_arn = null  # ARN of the master database
