@@ -22,6 +22,11 @@ This project does not follow SemVer, since modules are independent of each other
 ### slack-chatbot
 - deleted this module; it was WIP/broken and a more modular approach is found ins `slack/*` modules
 
+### cloudwatch-kinesis
+- Added a new module to send cloudwatch logs to kinesis firehose delivery stream [#206](https://github.com/dbl-works/terraform/pull/206), [#211](https://github.com/dbl-works/terraform/pull/211), [#215](https://github.com/dbl-works/terraform/pull/215)
+
+
+
 ## [v2023.03.30]
 
 ### global-accelerator
