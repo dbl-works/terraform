@@ -52,6 +52,11 @@ This project does not follow SemVer, since modules are independent of each other
 ### stack/setup
 - allow creating a certificate for replicas in different regions [#197](https://github.com/dbl-works/terraform/pull/197)
 
+### cloudwatch-kinesis
+- Added a new module to send cloudwatch logs to kinesis firehose delivery stream [#206](https://github.com/dbl-works/terraform/pull/206), [#211](https://github.com/dbl-works/terraform/pull/211), [#215](https://github.com/dbl-works/terraform/pull/215)
+
+
+
 ## [v2023.03.30]
 
 ### global-accelerator

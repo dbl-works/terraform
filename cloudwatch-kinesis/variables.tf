@@ -7,6 +7,11 @@ variable "project" {
 }
 
 # Regional allows clusters with the same name to be in multiple regions
+variable "regional" {
+  type    = bool
+  default = false
+}
+
 variable "region" {
   type    = string
   default = "eu-central-1"
@@ -42,9 +47,9 @@ variable "s3_configuration" {
     buffering_interval = optional(number, 1800) # Buffer incoming data for the specified period of time, in seconds, before delivering it to the s3 bucket.
     enable_cloudwatch  = optional(bool, false)
     compression_format = optional(string, "GZIP")
-    kms_arn    = optional(string, null)
+    kms_arn            = optional(string, null)
     processors = optional(map(list(object({
-      parameter_name = string
+      parameter_name  = string
       parameter_value = string
     }))), null)
     # processors = {
@@ -81,4 +86,9 @@ variable "s3_error_output_prefix" {
 variable "enable_dynamic_partitioning" {
   type    = bool
   default = false
+}
+
+variable "subscription_filter_pattern" {
+  type    = string
+  default = ""
 }
