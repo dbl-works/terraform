@@ -131,7 +131,8 @@ resource "aws_iam_policy" "deploy-bot-extra-access" {
           "ecs:ListTasks",
           "ecs:DescribeTaskDefinition",
           "elasticloadbalancing:Describe*",
-          "iam:GetRole"
+          "iam:GetRole",
+          "logs:*",
         ],
         "Resource" : [
           "*"

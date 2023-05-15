@@ -10,7 +10,7 @@ data "archive_file" "zip" {
 
 resource "aws_lambda_function" "main" {
   function_name = local.function_name
-  description   = "Collect AWS Cloudwatch Metrics"
+  description   = "Lambda function which connects to fivetran service"
   role          = var.lambda_role_arn
 
   filename = data.archive_file.zip.output_path

@@ -54,7 +54,6 @@ module "fivetran" {
     ## If you would like to deploy the lambda connector to region other than the default aws region, please refer
     ## to the example below.
     aws_region_code        = data.aws_region.current.name
-    policy_arns_for_lambda = ["arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"]
     script_env             = {
       RESOURCES_DATA = {
         projectName      = "facebook"
@@ -70,7 +69,7 @@ module "fivetran" {
   lambda_settings = {
     lambda_role_arn = "arn:aws:iam::123456789:role/fivetran_lambda" # optional
     lambda_role_name = "fivetran_lambda" # optional
-    fivetran_aws_account_id ="834469178297" # optional
+    policy_arns_for_lambda = ["arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"]
   } # optional
 }
 

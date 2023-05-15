@@ -33,26 +33,48 @@ variable "desired_count" {
   default = 1
 }
 
-variable "app_image_tag" {
-  type    = string
-  default = "latest-main"
+variable "app_config" {
+  type = object({
+    name                  = optional(string, "web")
+    image_tag             = optional(string, "latest-main")
+    image_name            = optional(string, null)     #  Docker image name of the app container. Required if ecr_repo_name is null.
+    secrets               = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the app
+    ecr_repo_name         = optional(string, null)     # Required if image_name is null.
+    container_port        = optional(number, 3000)
+    environment_variables = optional(map(string), {})
+    commands = optional(list(string), [
+      "bundle",
+      "exec",
+      "puma",
+      "-C",
+      "config/puma.rb"
+    ])
+    mount_points = optional(
+      list(object({
+        sourceVolume : string
+        containerPath : string
+      }))
+    , null)
+  })
 }
 
-variable "logger_image_tag" {
-  type    = string
-  default = null
-}
-
-variable "app_image_name" {
-  type        = string
-  default     = null
-  description = "Docker image name of the app container. Required if ecr_repo_name is null."
-}
-
-variable "logger_image_name" {
-  type        = string
-  default     = null
-  description = "Required if logger_ecr_repo_name is null."
+variable "sidecar_config" {
+  type = list(object({
+    name           = optional(string, "logger")
+    secrets        = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the sidecar
+    image_tag      = optional(string, null)     # If it is null, it would be set as the app image tag
+    image_name     = optional(string, null)     # Required if ecr_repo_name is null.
+    ecr_repo_name  = optional(string, null)     # Required if image_name is null.
+    container_port = optional(number, 4318)
+    protocol       = optional(string, "tcp")
+    mount_points = optional(
+      list(object({
+        sourceVolume : string
+        containerPath : string
+      }))
+    , [])
+  }))
+  default = []
 }
 
 variable "cpu" {
@@ -65,76 +87,15 @@ variable "memory" {
   default = 512
 }
 
-variable "ecr_repo_name" {
-  type        = string
-  default     = null
-  description = "Required if app_image_name is null."
-}
-
-variable "container_name" {
-  type    = string
-  default = "web"
-}
-
 variable "volume_name" {
   type    = string
-  default = "log"
+  default = null
 }
 
-variable "service_json_file_name" {
+variable "container_definitions_file_name" {
   type        = string
   default     = "web"
-  description = "service json file name to be used."
-}
-
-variable "logger_ecr_repo_name" {
-  type        = string
-  default     = null
-  description = "Required if logger_image_name is null."
-}
-
-variable "logger_container_port" {
-  type    = string
-  default = 4318
-}
-
-variable "app_container_port" {
-  type    = number
-  default = 3000
-}
-
-variable "log_path" {
-  type        = string
-  default     = "log"
-  description = "path in the apps which store the log"
-}
-
-variable "environment_variables" {
-  type    = map(string)
-  default = {}
-}
-
-variable "secrets" {
-  type        = list(string)
-  default     = []
-  description = "keys of secrets stored in the aws secrets manager required for the app"
-}
-
-variable "logger_secrets" {
-  type        = list(string)
-  default     = []
-  description = "keys of secrets stored in the aws secrets manager required for the logger"
-}
-
-variable "commands" {
-  type = list(string)
-  default = [
-    "bundle",
-    "exec",
-    "puma",
-    "-C",
-    "config/puma.rb"
-  ]
+  description = "container definitions file name to be used."
 }
 
 variable "secrets_alias" {
@@ -147,12 +108,12 @@ variable "load_balancer_target_group_name" {
   default = null
 }
 
-variable "with_logger" {
+variable "with_load_balancer" {
   type    = bool
   default = true
 }
 
-variable "with_load_balancer" {
-  type    = bool
-  default = true
+variable "cloudwatch_logs_retention_in_days" {
+  type    = number
+  default = 7
 }

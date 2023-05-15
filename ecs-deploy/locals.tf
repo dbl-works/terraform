@@ -6,76 +6,66 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 locals {
+  name       = var.cluster_name != null ? var.cluster_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+  account_id = data.aws_caller_identity.current.account_id
+  region     = data.aws_region.current.name
+  image_name = var.app_config.image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.app_config.ecr_repo_name}" : var.app_config.image_name
+
   environment_variables = flatten([
-    for name, value in var.environment_variables : { name : name, value : value }
+    for name, value in var.app_config.environment_variables : { name : name, value : value }
   ])
   secrets = [
-    for secret_name in var.secrets : {
+    for secret_name in var.app_config.secrets : {
       name : secret_name,
       valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
     }
   ]
-  logger_secrets = [
-    for secret_name in var.logger_secrets : {
-      name : secret_name,
-      valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
-    }
-  ]
-
-  app_port_mappings = var.app_container_port == null ? [] : [{
-    containerPort : var.app_container_port,
-    hostPort : var.app_container_port,
+  app_port_mappings = try(var.app_config.container_port, null) == null ? [] : [{
+    containerPort : var.app_config.container_port,
+    hostPort : var.app_config.container_port,
     protocol : "tcp"
   }]
-  account_id        = data.aws_caller_identity.current.account_id
-  region            = data.aws_region.current.name
-  image_name        = var.app_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.app_image_name
-  logger_image_name = var.with_logger && var.logger_image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.logger_ecr_repo_name}" : var.logger_image_name
-  mount_points = var.with_logger ? [
-    {
-      sourceVolume : var.volume_name,
-      containerPath : "/app/${var.log_path}"
-    }
-  ] : []
-  depends_on = var.with_logger ? [
-    {
-      containerName : "logger",
-      condition : "START"
-    }
-  ] : []
 
-  task_definition_name = "${var.project}-${var.container_name}-${var.environment}"
-  app_container_definitions = templatefile("${path.module}/task-definitions/${var.service_json_file_name}.json", {
-    APP_PORT_MAPPINGS     = jsonencode(local.app_port_mappings)
-    COMMANDS              = jsonencode(var.commands)
-    CONTAINER_NAME        = var.container_name
-    ECR_REPO_NAME         = var.ecr_repo_name
+  mount_points = try(var.app_config.mount_points, null) == null ? [] : var.app_config.mount_points
+  depends_on = [for config in var.sidecar_config : {
+    containerName : config.name,
+    condition : "START"
+  }]
+
+  task_definition_name = "${var.project}-${var.app_config.name}-${var.environment}"
+
+  app_container_definitions = templatefile("${path.module}/task-definitions/${var.container_definitions_file_name}.json", {
+    COMMANDS              = jsonencode(var.app_config.commands)
+    DEPENDS_ON            = jsonencode(local.depends_on)
+    ECS_FARGATE_LOG_MODE  = var.ecs_fargate_log_mode
     ENVIRONMENT           = var.environment
     ENVIRONMENT_VARIABLES = jsonencode(local.environment_variables)
     IMAGE_NAME            = local.image_name
-    IMAGE_TAG             = var.app_image_tag
-    LOG_PATH              = var.log_path
+    IMAGE_TAG             = var.app_config.image_tag
+    MOUNT_POINTS          = jsonencode(local.mount_points)
+    NAME                  = var.app_config.name
+    PORT_MAPPINGS         = jsonencode(local.app_port_mappings)
     PROJECT               = var.project
     REGION                = data.aws_region.current.name
     SECRETS_LIST          = jsonencode(local.secrets)
-    VOLUME_NAME           = var.volume_name
-    DEPENDS_ON            = jsonencode(local.depends_on)
-    MOUNT_POINTS          = jsonencode(local.mount_points)
-    ECS_FARGATE_LOG_MODE  = var.ecs_fargate_log_mode
   })
 
-  logger_container_definitions = var.with_logger ? templatefile("${path.module}/task-definitions/logger.json", {
-    ENVIRONMENT           = var.environment
-    IMAGE_NAME            = local.logger_image_name
-    IMAGE_TAG             = var.logger_image_tag == null ? var.app_image_tag : var.logger_image_tag
-    LOG_PATH              = var.log_path
-    LOGGER_CONTAINER_PORT = var.logger_container_port
-    LOGGER_IMAGE_NAME     = local.logger_image_name
-    SECRETS_LIST          = jsonencode(local.logger_secrets)
-    PROJECT               = var.project
-    REGION                = local.region
-    VOLUME_NAME           = var.volume_name
-  }) : null
+  sidecar_container_definitions = [for config in var.sidecar_config : templatefile("${path.module}/task-definitions/sidecar.json", {
+    CONTAINER_PORT = config.container_port
+    IMAGE_NAME     = try(config.image_name, null) == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${config.ecr_repo_name}" : config.image_name
+    IMAGE_TAG      = try(config.image_tag == null) == null ? var.app_config.image_tag : config.image_tag
+    LOG_GROUP_NAME = "/${config.name}/${local.name}"
+    MOUNT_POINTS   = jsonencode(config.mount_points)
+    NAME           = config.name
+    PROTOCOL       = config.protocol
+    REGION         = local.region
+    SECRETS_LIST = jsonencode([
+      for secret_name in config.secrets : {
+        name : secret_name,
+        valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
+      }
+    ])
+  })]
 
-  container_definitions = [for definition in [local.app_container_definitions, local.logger_container_definitions] : jsondecode(definition) if definition != null]
+  container_definitions = [for definition in flatten([local.app_container_definitions, local.sidecar_container_definitions]) : jsondecode(definition) if definition != null]
 }

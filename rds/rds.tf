@@ -1,6 +1,6 @@
 locals {
   major_engine_version      = split(".", var.engine_version)[0]
-  final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}-${formatdate("DD-MM-YY-hhmm", timestamp())}"
+  final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}"
   parameter_group_name      = var.parameter_group_name == null ? aws_db_parameter_group.current[0].name : var.parameter_group_name
 }
 
