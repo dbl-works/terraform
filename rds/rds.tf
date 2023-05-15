@@ -1,8 +1,7 @@
 locals {
   major_engine_version      = split(".", var.engine_version)[0]
   final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}-${formatdate("DD-MM-YY-hhmm", timestamp())}"
-  # @NOTE: `"default.postgres${local.major_engine_version}"` does not exist for e.g. postgres15 eventhough, postges 15 is generally available
-  parameter_group_name = local.major_engine_version == "14" ? aws_db_parameter_group.postgres14.name : local.major_engine_version == "13" ? aws_db_parameter_group.postgres13.name : null
+  parameter_group_name      = var.parameter_group_name == null ? aws_db_parameter_group.current[0].name : var.parameter_group_name
 }
 
 resource "aws_db_instance" "main" {
@@ -18,7 +17,7 @@ resource "aws_db_instance" "main" {
   username                            = var.is_read_replica ? null : var.username                                                         # credentials of the master DB are used
   password                            = var.is_read_replica ? null : var.password                                                         # credentials of the master DB are used
   iam_database_authentication_enabled = true
-  parameter_group_name                = var.parameter_group_name != null ? var.parameter_group_name : local.parameter_group_name # 13, 14, or default for the choosen engine version
+  parameter_group_name                = local.parameter_group_name
   apply_immediately                   = true
   multi_az                            = var.multi_az
   publicly_accessible                 = var.publicly_accessible
