@@ -40,7 +40,7 @@ variable "app_config" {
     image_name            = optional(string, null)     #  Docker image name of the app container. Required if ecr_repo_name is null.
     secrets               = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the app
     ecr_repo_name         = optional(string, null)     # Required if image_name is null.
-    container_port        = optional(number, 3000)
+    container_port        = optional(number, null)
     environment_variables = optional(map(string), {})
     commands = optional(list(string), [
       "bundle",
@@ -65,7 +65,7 @@ variable "sidecar_config" {
     image_tag      = optional(string, null)     # If it is null, it would be set as the app image tag
     image_name     = optional(string, null)     # Required if ecr_repo_name is null.
     ecr_repo_name  = optional(string, null)     # Required if image_name is null.
-    container_port = optional(number, 4318)
+    container_port = optional(number, null)
     protocol       = optional(string, "tcp")
     mount_points = optional(
       list(object({
