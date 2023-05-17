@@ -32,6 +32,11 @@ variable "allow_internal_traffic_to_ports" {
   default = []
 }
 
+variable "allow_alb_traffic_to_ports" {
+  type    = list(string)
+  default = []
+}
+
 # Public subnets are where forwarders run, such as a bastion, NAT or proxy
 variable "subnet_public_ids" { type = list(string) }
 

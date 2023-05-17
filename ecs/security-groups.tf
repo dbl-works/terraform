@@ -77,6 +77,16 @@ resource "aws_security_group_rule" "ecs-lb-3000" {
   source_security_group_id = aws_security_group.alb.id
 }
 
+resource "aws_security_group_rule" "lb" {
+  for_each                 = toset(var.allow_alb_traffic_to_ports)
+  type                     = "ingress"
+  from_port                = each.key
+  to_port                  = each.key
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.ecs.id
+  source_security_group_id = aws_security_group.alb.id
+}
+
 resource "aws_security_group_rule" "ecs-ssh" {
   count             = length(var.allowlisted_ssh_ips) > 0 ? 1 : 0
   type              = "ingress"
