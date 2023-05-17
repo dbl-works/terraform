@@ -52,7 +52,7 @@ resource "aws_alb_listener_certificate" "https" {
 resource "aws_lb_listener_rule" "main" {
   count = length(var.alb_listener_rule)
 
-  listener_arn = aws_lb_listener.https.arn
+  listener_arn = aws_alb_listener.https.arn
   priority     = var.alb_listener_rule[count.index].priority
 
   action {
