@@ -7,6 +7,28 @@ Create a compute cluster for hosting docker based apps.
 ## Usage
 
 ```terraform
+resource "aws_alb_target_group" "facebook" {
+  name        = "${local.project}-${local.environment}-facebook"
+  port        = 5000
+  protocol    = "HTTP"
+  vpc_id      = module.vpc.id
+  target_type = "ip"
+
+  health_check {
+    path                = "/livez"
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    timeout             = 25
+    interval            = 30
+    matcher             = "200,301,302,401,403,404"
+  }
+
+  tags = {
+    Project     = local.project
+    Environment = local.environment
+  }
+}
+
 module "ecs" {
   source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.05"
 
@@ -29,6 +51,16 @@ module "ecs" {
   ]
 
   allow_internal_traffic_to_ports = []
+  allow_alb_traffic_to_ports = [5000]
+  alb_listener_rule = [
+    {
+      priority         = 1
+      type             = "forward"
+      target_group_arn = aws_alb_target_group.facebook.arn
+      path_pattern     = ["/facebook/*"]
+      host_header      = []
+    }
+  ]
 
   allowlisted_ssh_ips = [
     local.cidr_block,

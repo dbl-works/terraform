@@ -20,6 +20,28 @@ This is our stack convention which brings all modules together, including:
 2. Add the following block to your terraform configurations
 
 ```terraform
+resource "aws_alb_target_group" "facebook" {
+  name        = "${local.project}-${local.environment}-facebook"
+  port        = 5000
+  protocol    = "HTTP"
+  vpc_id      = module.vpc.id
+  target_type = "ip"
+
+  health_check {
+    path                = "/livez"
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    timeout             = 25
+    interval            = 30
+    matcher             = "200,301,302,401,403,404"
+  }
+
+  tags = {
+    Project     = local.project
+    Environment = local.environment
+  }
+}
+
 module "stack" {
   source = "github.com/dbl-works/terraform//stack/app?ref=v2022.05.18"
 
@@ -120,6 +142,16 @@ module "stack" {
 
   # ECS
   allow_internal_traffic_to_ports = []
+  allow_alb_traffic_to_ports = [5000]
+  alb_listener_rule = [
+    {
+      priority         = 1
+      type             = "forward"
+      target_group_arn = aws_alb_target_group.facebook.arn
+      path_pattern     = ["/facebook/*"]
+      host_header      = []
+    }
+  ]
   allowlisted_ssh_ips             = []
   # ECS access has been given to the private S3 bucket created in the stack module
   grant_read_access_to_s3_arns    = []

@@ -36,5 +36,7 @@ module "ecs-deploy" {
   volume_name            = "log"
   with_logger            = false
   desired_count          = 2
+
+  aws_lb_target_group_arn = "arn::"
 }
 ```

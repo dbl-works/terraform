@@ -34,7 +34,6 @@ module "ecs" {
   allow_alb_traffic_to_ports      = var.allow_alb_traffic_to_ports
   alb_listener_rule               = var.alb_listener_rule
 
-
   allowlisted_ssh_ips = distinct(flatten(concat([
     var.allowlisted_ssh_ips,
     var.vpc_cidr_block
