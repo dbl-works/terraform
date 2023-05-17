@@ -69,14 +69,4 @@ resource "aws_lb_listener_rule" "main" {
       }
     }
   }
-
-  dynamic "condition" {
-    for_each = [var.alb_listener_rule[count.index].host_header]
-
-    content {
-      host_header {
-        values = condition.value
-      }
-    }
-  }
 }

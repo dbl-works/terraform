@@ -158,6 +158,5 @@ variable "alb_listener_rule" {
     type             = string
     target_group_arn = string
     path_pattern     = optional(list(string), [])
-    host_header      = optional(list(string), [])
   }))
 }
