@@ -63,16 +63,20 @@ resource "aws_lb_listener_rule" "main" {
   dynamic "condition" {
     for_each = [var.alb_listener_rule[count.index].path_pattern]
 
-    path_pattern {
-      values = condition.value
+    content {
+      path_pattern {
+        values = condition.value
+      }
     }
   }
 
   dynamic "condition" {
     for_each = [var.alb_listener_rule[count.index].host_header]
 
-    path_pattern {
-      values = condition.value
+    content {
+      host_header {
+        values = condition.value
+      }
     }
   }
 }
