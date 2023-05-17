@@ -164,4 +164,5 @@ variable "alb_listener_rule" {
     target_group_arn = string
     path_pattern     = optional(list(string), [])
   }))
+  default = []
 }
