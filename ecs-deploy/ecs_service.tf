@@ -52,11 +52,11 @@ resource "aws_ecs_service" "main" {
 
   locals {
     # There are 3 possibilities here:
-    # 1. Load balancer is needed but no load balancer configuration is passed in => Use the default ecs load balancer
-    # 2. Load balancer is needed and load balancer configuration is passed in => Use the load balancer configuration
+    # 1. Load balancer is needed but no target group arn is passed in => Use the default ecs target group
+    # 2. Load balancer is needed and target group arn is passed in => Use the aws_lb_target_group_arn
     # 3. Load balancer is not needed => Don't configure load balancer
-    load_balancers = var.with_load_balancer ? length(var.load_balancers) > 0 ? var.load_balancers : [{
-      target_group_arn = data.aws_lb_target_group.ecs.arn,
+    load_balancers = var.with_load_balancer ? [{
+      target_group_arn = var.aws_lb_target_group_arn == null ? data.aws_lb_target_group.ecs.arn : aws_lb_target_group_arn
       container_name   = var.app_config.name,
       container_port   = var.app_config.container_port
     }] : []
