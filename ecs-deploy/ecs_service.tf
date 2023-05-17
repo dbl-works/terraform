@@ -50,13 +50,22 @@ resource "aws_ecs_service" "main" {
     assign_public_ip = true
   }
 
-  # not required if you don't want to use a load balancer, e.g. for Sidekiq
-  dynamic "load_balancer" {
-    for_each = var.with_load_balancer ? [{
+  locals {
+    # There are 3 possibilities here:
+    # 1. Load balancer is needed but no load balancer configuration is passed in => Use the default ecs load balancer
+    # 2. Load balancer is needed and load balancer configuration is passed in => Use the load balancer configuration
+    # 3. Load balancer is not needed => Don't configure load balancer
+    load_balancers = var.with_load_balancer ? length(var.load_balancers) > 0 ? var.load_balancers : [{
       target_group_arn = data.aws_lb_target_group.ecs.arn,
       container_name   = var.app_config.name,
       container_port   = var.app_config.container_port
     }] : []
+  }
+
+  # not required if you don't want to use a load balancer, e.g. for Sidekiq
+  dynamic "load_balancer" {
+    for_each = local.load_balancer
+
     content {
       target_group_arn = load_balancer.value.target_group_arn
       container_name   = load_balancer.value.container_name

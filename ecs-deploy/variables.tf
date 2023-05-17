@@ -117,3 +117,11 @@ variable "cloudwatch_logs_retention_in_days" {
   type    = number
   default = 7
 }
+
+variable "load_balancers" {
+  type = list(object({
+    target_group_arn = string
+    container_name   = string
+    container_port   = number
+  }))
+}
