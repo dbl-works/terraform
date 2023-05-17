@@ -48,3 +48,23 @@ resource "aws_alb_listener_certificate" "https" {
   listener_arn    = aws_alb_listener.https.arn
   certificate_arn = each.value.arn
 }
+
+resource "aws_lb_listener_rule" "main" {
+  count = length(var.alb_listener_rule)
+
+  listener_arn = aws_lb_listener.https.arn
+  priority     = var.alb_listener_rule[count.index].priority
+
+  action {
+    type             = var.alb_listener_rule[count.index].type
+    target_group_arn = var.alb_listener_rule[count.index].target_group_arn
+  }
+
+  condition {
+    for_each = [var.alb_listener_rule[count.index].path_pattern]
+
+    path_pattern {
+      values = condition.value
+    }
+  }
+}

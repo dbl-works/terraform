@@ -35,8 +35,6 @@ resource "aws_security_group_rule" "lb-https" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-
-
 # ECS cluster should only be able to receive traffic to container ports from the ALB
 resource "aws_security_group" "ecs" {
   vpc_id = var.vpc_id

@@ -140,3 +140,13 @@ variable "cloudwatch_logs_retention_in_days" {
   type    = number
   default = 90
 }
+
+variable "alb_listener_rule" {
+  type = list(object({
+    priority         = string
+    type             = string
+    target_group_arn = string
+    path_pattern     = list(string)
+    host_header      = list(string)
+  }))
+}
