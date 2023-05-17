@@ -56,7 +56,7 @@ resource "aws_ecs_service" "main" {
     # 2. Load balancer is needed and target group arn is passed in => Use the aws_lb_target_group_arn
     # 3. Load balancer is not needed => Don't configure load balancer
     load_balancers = var.with_load_balancer ? [{
-      target_group_arn = var.aws_lb_target_group_arn == null ? data.aws_lb_target_group.ecs.arn : aws_lb_target_group_arn
+      target_group_arn = var.aws_lb_target_group_arn == null ? data.aws_lb_target_group.ecs.arn : var.aws_lb_target_group_arn
       container_name   = var.app_config.name,
       container_port   = var.app_config.container_port
     }] : []
