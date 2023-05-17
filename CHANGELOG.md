@@ -9,6 +9,13 @@ This project does not follow SemVer, since modules are independent of each other
 ## Unreleased
 ### ecs-deploy
 - Set app and sidecar default container port to null
+- Add aws_lb_target_group_arn to allow user to configure the load_balancer block [#216](https://github.com/dbl-works/terraform/pull/216)
+
+### ecs
+- add alb_listener_rule and allow_alb_traffic_to_ports options [#216](https://github.com/dbl-works/terraform/pull/216)
+
+### stack/app
+- add alb_listener_rule and allow_alb_traffic_to_ports options [#216](https://github.com/dbl-works/terraform/pull/216)
 
 ## [v2023.05.15]
 ### RDS
