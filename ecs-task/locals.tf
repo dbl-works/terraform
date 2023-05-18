@@ -12,4 +12,7 @@ locals {
       valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
     }
   ]
+  environment_variables = flatten([
+    for name, value in var.environment_variables : { name : name, value : value }
+  ])
 }
