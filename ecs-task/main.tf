@@ -1,5 +1,5 @@
 data "aws_iam_role" "main" {
-  name = var.aws_iam_role_name != null ? "ecs-task-execution-${var.project}-${var.environment}" : var.aws_iam_role_name
+  name = var.aws_iam_role_name == null ? "ecs-task-execution-${var.project}-${var.environment}" : var.aws_iam_role_name
 }
 
 resource "aws_ecs_task_definition" "task" {
