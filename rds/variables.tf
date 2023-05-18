@@ -104,6 +104,11 @@ variable "final_snapshot_identifier" {
   default = null
 }
 
+variable "identifier" {
+  type    = string
+  default = null
+}
+
 locals {
   name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
 }

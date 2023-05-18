@@ -207,6 +207,12 @@ variable "rds_name" {
   type    = string
   default = null
 }
+
+variable "rds_identifier" {
+  type    = string
+  default = null
+}
+
 # set the key for the master DB to multi-region if you have read replicas in other regions
 variable "rds_multi_region_kms_key" {
   type    = bool
