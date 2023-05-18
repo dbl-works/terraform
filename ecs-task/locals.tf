@@ -5,7 +5,7 @@ data "aws_secretsmanager_secret" "app" {
 locals {
   region = data.aws_region.current.name
   container_definitions = templatefile("${path.module}/task-definitions/main.json", {
-    COMMANDS              = jsonencode(var.app_config.commands)
+    COMMANDS              = jsonencode(var.commands)
     ECS_FARGATE_LOG_MODE  = var.ecs_fargate_log_mode
     ENVIRONMENT_VARIABLES = jsonencode(local.environment_variables)
     IMAGE_NAME            = var.image_name

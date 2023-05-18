@@ -1,9 +1,5 @@
-locals {
-  name = var.cluster_name != null ? var.cluster_name : "${var.project}-${var.environment}${var.regional ? "-${local.region}" : ""}"
-}
-
 data "aws_iam_role" "main" {
-  name = "ecs-task-execution-${local.name}"
+  name = var.aws_iam_role_name != null ? "ecs-task-execution-${var.project}-${var.environment}" : var.aws_iam_role_name
 }
 
 resource "aws_ecs_task_definition" "task" {
