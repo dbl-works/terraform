@@ -58,7 +58,7 @@ variable "ecs_fargate_log_mode" {
 }
 
 variable "enable_cloudwatch_log" {
-  type    = boolean
+  type    = bool
   default = false
 }
 
