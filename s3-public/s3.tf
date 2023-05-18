@@ -13,6 +13,23 @@ resource "aws_s3_bucket_acl" "main-bucket-data-acl" {
   acl    = "public-read"
 }
 
+resource "aws_s3_bucket_ownership_controls" "example" {
+  bucket = module.s3.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "example" {
+  bucket = module.s3.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+
 # Move data to a cheaper storage class after a period of time
 resource "aws_s3_bucket_lifecycle_configuration" "main-bucket-lifecycle-rule" {
   bucket = module.s3.id
