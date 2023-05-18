@@ -14,6 +14,11 @@ variable "commands" {
   type = list(string)
 }
 
+variable "environment_variables" {
+  type = map(string)
+  default = {}
+}
+
 variable "image_name" {
   type = string
 }
@@ -45,4 +50,9 @@ variable "secrets_alias" {
 variable "secrets" {
   type    = list(string)
   default = []
+}
+
+variable "ecs_fargate_log_mode" {
+  type    = string
+  default = "non-blocking"
 }

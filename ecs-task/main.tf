@@ -3,7 +3,7 @@ data "aws_iam_role" "main" {
 }
 
 resource "aws_ecs_task_definition" "task" {
-  family                   = "${project}-${var.environment}-task-${var.name}"
+  family                   = "${var.project}-${var.environment}-task-${var.name}"
   container_definitions    = jsonencode(local.container_definitions)
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
