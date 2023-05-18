@@ -28,9 +28,15 @@ resource "aws_s3_bucket_ownership_controls" "main" {
 resource "aws_s3_bucket_public_access_block" "main" {
   bucket = module.s3.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
+  # If it is set to true, it will:
+  # PUT Bucket acl and PUT Object acl calls will fail if the specified ACL allows public access.
+  # PUT Object calls will fail if the request includes an object ACL.
+  block_public_acls = false
+  # Reject calls to PUT Bucket policy if the specified bucket policy allows public access.
+  block_public_policy = false
+  # Ignore public ACLs on this bucket and any objects that it contains.
+  ignore_public_acls = false
+  # Only the bucket owner and AWS Services can access this buckets if it has a public policy.
   restrict_public_buckets = false
 }
 
