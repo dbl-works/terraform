@@ -15,7 +15,7 @@ variable "commands" {
 }
 
 variable "environment_variables" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }
 
@@ -55,4 +55,14 @@ variable "secrets" {
 variable "ecs_fargate_log_mode" {
   type    = string
   default = "non-blocking"
+}
+
+variable "enable_cloudwatch_log" {
+  type    = boolean
+  default = false
+}
+
+variable "cloudwatch_logs_retention_in_days" {
+  type    = number
+  default = 14
 }

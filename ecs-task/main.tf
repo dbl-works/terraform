@@ -24,3 +24,16 @@ resource "aws_ecs_task_definition" "task" {
   task_role_arn            = data.aws_iam_role.main.arn
   execution_role_arn       = data.aws_iam_role.main.arn
 }
+
+resource "aws_cloudwatch_log_group" "tasks" {
+  count = var.enable_cloudwatch_log ? 1 : 0
+
+  name              = "/ecs/${var.project}-${var.environment}/task"
+  retention_in_days = var.cloudwatch_logs_retention_in_days
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-task"
+    Project     = var.project
+    Environment = var.environment
+  }
+}

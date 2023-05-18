@@ -10,7 +10,7 @@
         "logDriver": "awslogs",
         "options": {
             "awslogs-create-group": "true",
-            "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}/task/${NAME}",
+            "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}/task",
             "awslogs-region": "${REGION}",
             "awslogs-stream-prefix": "${NAME}",
             "mode": "${ECS_FARGATE_LOG_MODE}"
