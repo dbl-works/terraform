@@ -4,7 +4,7 @@ data "aws_iam_role" "main" {
 
 resource "aws_ecs_task_definition" "task" {
   family = "${var.project}-${var.environment}-task-${var.name}"
-  container_definitions = templatefile("${path.module}/task-definitions/main.json", {
+  container_definitions = jsonencode(templatefile("${path.module}/task-definitions/main.json", {
     COMMANDS              = jsonencode(var.commands)
     ECS_FARGATE_LOG_MODE  = var.ecs_fargate_log_mode
     ENVIRONMENT_VARIABLES = jsonencode(var.environment_variables)
@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "task" {
     ENVIRONMENT           = var.environment
     REGION                = local.region
     SECRETS_LIST          = jsonencode(local.secrets)
-  })
+  }))
 
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
