@@ -20,7 +20,13 @@ variable "environment_variables" {
 }
 
 variable "image_name" {
-  type = string
+  type    = string
+  default = null
+}
+
+variable "ecr_repo_name" {
+  type    = string
+  default = null
 }
 
 variable "image_tag" {

@@ -8,13 +8,14 @@ resource "aws_ecs_task_definition" "task" {
     COMMANDS              = jsonencode(var.commands)
     ECS_FARGATE_LOG_MODE  = var.ecs_fargate_log_mode
     ENVIRONMENT_VARIABLES = jsonencode(local.environment_variables)
-    IMAGE_NAME            = var.image_name
+    IMAGE_NAME            = local.image_name
     IMAGE_TAG             = var.image_tag
     NAME                  = var.name
     PROJECT               = var.project
     ENVIRONMENT           = var.environment
     REGION                = local.region
     SECRETS_LIST          = jsonencode(local.secrets)
+    # TODO: Passing in log group name
   })
 
   requires_compatibilities = ["FARGATE"]
