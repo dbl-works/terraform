@@ -17,5 +17,6 @@ locals {
   environment_variables = flatten([
     for name, value in var.environment_variables : { name : name, value : value }
   ])
-  image_name = var.image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.image_name
+  image_name                = var.image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.image_name
+  cloudwatch_log_group_name = "/ecs/${var.project}-${var.environment}/task"
 }
