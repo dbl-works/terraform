@@ -7,7 +7,7 @@ variable "environment" {
 }
 
 variable "log_group_name" {
-  type = string
+  type    = string
   default = null
 }
 
