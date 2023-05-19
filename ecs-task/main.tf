@@ -1,5 +1,6 @@
 data "aws_iam_role" "main" {
-  name = var.aws_iam_role_name == null ? "ecs-task-execution-${var.project}-${var.environment}" : var.aws_iam_role_name
+  name           = var.aws_iam_role_name == null ? "ecs-task-execution-${var.project}-${var.environment}" : var.aws_iam_role_name
+  log_group_name = var.log_group_name == null ? "${var.project}-${var.environment}" : var.log_group_name
 }
 
 resource "aws_ecs_task_definition" "task" {
@@ -33,7 +34,7 @@ resource "aws_cloudwatch_log_group" "tasks" {
   retention_in_days = var.cloudwatch_logs_retention_in_days
 
   tags = {
-    Name        = "${var.project}-${var.environment}-task"
+    Name        = "${local.log_group_name}-task"
     Project     = var.project
     Environment = var.environment
   }
