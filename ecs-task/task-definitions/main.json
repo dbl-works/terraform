@@ -12,6 +12,7 @@
             "awslogs-create-group": "true",
             "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}/task",
             "awslogs-region": "${REGION}",
+            "awslogs-stream-prefix": "ecs/${PROJECT}-${ENVIRONMENT}/task",
             "mode": "${ECS_FARGATE_LOG_MODE}"
         }
     }
