@@ -19,6 +19,7 @@ jobs:
           - ecr
           - ecs
           - ecs-deploy
+          - ecs-task
           - elasticache
           - fivetran
           - fivetran/connectors/google_analytics

@@ -53,7 +53,7 @@ variable "aws_iam_role_name" {
   default = null
 }
 
-variable "secrets_name" {
+variable "secret_name" {
   type    = string
   default = null
 }
