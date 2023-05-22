@@ -35,7 +35,7 @@ module "ecs" {
   project            = local.project
   environment        = local.environment
   vpc_id             = module.vpc.id
-  subnet_public_ids  = module.vpc.subnet_private_ids
+  subnet_public_ids  = module.vpc.subnet_public_ids
 
   # optional
   secrets_arns                = []
