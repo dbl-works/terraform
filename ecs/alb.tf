@@ -50,18 +50,18 @@ resource "aws_alb_listener_certificate" "https" {
 }
 
 resource "aws_lb_listener_rule" "main" {
-  count = length(var.alb_listener_rule)
+  for_each = { for idx, rule in var.alb_listener_rule : idx => rule }
 
   listener_arn = aws_alb_listener.https.arn
-  priority     = var.alb_listener_rule[count.index].priority
+  priority     = each.value.priority
 
   action {
-    type             = var.alb_listener_rule[count.index].type
-    target_group_arn = var.alb_listener_rule[count.index].target_group_arn
+    type             = each.value.type
+    target_group_arn = each.value.target_group_arn
   }
 
   dynamic "condition" {
-    for_each = [var.alb_listener_rule[count.index].path_pattern]
+    for_each = [each.value.path_pattern]
 
     content {
       path_pattern {
