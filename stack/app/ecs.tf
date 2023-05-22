@@ -6,10 +6,10 @@ data "aws_acm_certificate" "default" {
 module "ecs" {
   source = "../../ecs"
 
-  project            = var.project
-  environment        = var.environment
-  vpc_id             = module.vpc.id
-  subnet_public_ids  = module.vpc.subnet_public_ids
+  project           = var.project
+  environment       = var.environment
+  vpc_id            = module.vpc.id
+  subnet_public_ids = module.vpc.subnet_public_ids
   secrets_arns = flatten([
     data.aws_secretsmanager_secret.app.arn,
     var.secret_arns
