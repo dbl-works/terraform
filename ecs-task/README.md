@@ -1,6 +1,6 @@
 # Terraform Module: ECS task
 
-A repository for storing built docker images.
+The instantiation of a task definition within a cluster.
 
 ```
 locals {
