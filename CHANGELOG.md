@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### ecs-task
+- Add new ecs task module
+
 ### rds
 - Add identifier as variable [#218](https://github.com/dbl-works/terraform/pull/218)
 
@@ -46,6 +49,7 @@ This project does not follow SemVer, since modules are independent of each other
 - :warning: breaking change: this was previously named `ecs_service` which was inconsistent with all other module names and didn't communicate its usage in the name
 - Allow granting access to secrets to the sidecar container [#199](https://github.com/dbl-works/terraform/pull/199)
 - :warning: breaking change: add/remove/modify variable names, allow user to add multiple sidecar task definitions [#214](https://github.com/dbl-works/terraform/pull/214)
+- Set app and sidecar default container port to null
 
 ### fivetran/connectors
 - fix bug in aws_iam_role_policy_attachment
