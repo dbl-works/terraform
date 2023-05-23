@@ -143,7 +143,7 @@ module "stack" {
   # ECS
   allow_internal_traffic_to_ports = []
   allow_alb_traffic_to_ports = [5000]
-  alb_listener_rule = [
+  alb_listener_rules = [
     {
       priority         = 1
       type             = "forward"

@@ -157,7 +157,7 @@ variable "cloudwatch_logs_retention_in_days" {
   default = 90
 }
 
-variable "alb_listener_rule" {
+variable "alb_listener_rules" {
   type = list(object({
     priority         = string
     type             = string

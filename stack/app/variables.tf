@@ -296,7 +296,7 @@ variable "allow_alb_traffic_to_ports" {
   default = []
 }
 
-variable "alb_listener_rule" {
+variable "alb_listener_rules" {
   type = list(object({
     priority         = string
     type             = string
