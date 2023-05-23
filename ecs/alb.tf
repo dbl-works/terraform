@@ -50,7 +50,7 @@ resource "aws_alb_listener_certificate" "https" {
 }
 
 resource "aws_lb_listener_rule" "main" {
-  for_each = { for idx, rule in var.alb_listener_rule : idx => rule }
+  for_each = { for idx, rule in var.alb_listener_rules : idx => rule }
 
   listener_arn = aws_alb_listener.https.arn
   priority     = each.value.priority
