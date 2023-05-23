@@ -1,7 +1,8 @@
 # Terraform Module: ECS task
 
-The instantiation of a task definition within a cluster.
+The task definition used for running a task within a cluster.
 
+### Setting up task definition in ECS
 ```
 locals {
   service = "facebook"
@@ -66,4 +67,30 @@ module "ecs-task" {
   enable_cloudwatch_log = each.key == "1" # We only create the cloudwatch log group once
   secret_name           = "${local.project}/${local.service}/${local.environment}"
 }
+```
+
+### CirlceCI
+After deploying task definition to ECS, you can run the task in CircleCI using the aws-ecs packages
+
+_NOTE: The run-task step would not check for errors after successful deployment of the task_
+```
+# .circleci/config.yml
+
+orbs:
+  aws-cli: circleci/aws-cli@3.1.4
+  aws-ecs: circleci/aws-ecs@3.2
+
+commands:
+  run-some_task-staging:
+    resource_class: small
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - aws-cli/install
+      - aws-ecs/run-task:
+          cluster: <project>-<environment>
+          security-group-ids: sg-xxx
+          subnet-ids: subnet-1, subnet-2, subnet-3
+          task-definition: <project>-<environment>-task-<task-name>
+          assign-public-ip: ENABLED
 ```
