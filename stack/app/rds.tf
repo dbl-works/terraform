@@ -43,6 +43,7 @@ module "rds" {
   is_read_replica           = var.rds_is_read_replica
   regional                  = var.regional
   name                      = var.rds_name
+  identifier                = var.rds_identifier
   allow_from_cidr_blocks    = var.rds_allow_from_cidr_blocks
   subnet_group_name         = var.rds_subnet_group_name
   delete_automated_backups  = var.rds_delete_automated_backups

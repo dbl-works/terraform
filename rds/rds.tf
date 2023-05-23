@@ -12,7 +12,7 @@ resource "aws_db_instance" "main" {
   engine                              = var.is_read_replica ? null : "postgres"
   engine_version                      = var.is_read_replica ? null : local.major_engine_version # Use major version only to allow AWS to update the minor/patch version automatically
   instance_class                      = var.instance_class
-  identifier                          = "${var.project}-${var.environment}${var.is_read_replica ? "-read-replica" : ""}"
+  identifier                          = var.identifier == null ? "${var.project}-${var.environment}${var.is_read_replica ? "-read-replica" : ""}" : var.identifier
   db_name                             = var.is_read_replica ? null : replace("${var.project}_${var.environment}", "/[^0-9A-Za-z_]/", "_") # name of the initial database
   username                            = var.is_read_replica ? null : var.username                                                         # credentials of the master DB are used
   password                            = var.is_read_replica ? null : var.password                                                         # credentials of the master DB are used
