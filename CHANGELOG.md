@@ -10,6 +10,15 @@ This project does not follow SemVer, since modules are independent of each other
 ### ecs-task
 - Add new ecs task module
 
+### rds
+- Add identifier as variable [#218](https://github.com/dbl-works/terraform/pull/218)
+
+### s3-public
+- Add public bucket configuration to avoid ACCESS DENIED error. [#218](https://github.com/dbl-works/terraform/pull/218)
+
+### ecs-deploy
+- Set app and sidecar default container port to null
+
 ## [v2023.05.15]
 ### RDS
 - new optional variable for `parameter_group_name`, #213
