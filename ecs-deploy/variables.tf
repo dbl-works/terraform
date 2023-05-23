@@ -117,3 +117,8 @@ variable "cloudwatch_logs_retention_in_days" {
   type    = number
   default = 7
 }
+
+variable "aws_lb_target_group_arn" {
+  type    = string
+  default = null
+}

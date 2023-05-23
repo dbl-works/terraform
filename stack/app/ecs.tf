@@ -6,11 +6,10 @@ data "aws_acm_certificate" "default" {
 module "ecs" {
   source = "../../ecs"
 
-  project            = var.project
-  environment        = var.environment
-  vpc_id             = module.vpc.id
-  subnet_private_ids = module.vpc.subnet_private_ids
-  subnet_public_ids  = module.vpc.subnet_public_ids
+  project           = var.project
+  environment       = var.environment
+  vpc_id            = module.vpc.id
+  subnet_public_ids = module.vpc.subnet_public_ids
   secrets_arns = flatten([
     data.aws_secretsmanager_secret.app.arn,
     var.secret_arns
@@ -31,6 +30,8 @@ module "ecs" {
   region                      = var.region   # used for e.g CloudWatch metrics
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
+  allow_alb_traffic_to_ports      = var.allow_alb_traffic_to_ports
+  alb_listener_rules              = var.alb_listener_rules
 
   allowlisted_ssh_ips = distinct(flatten(concat([
     var.allowlisted_ssh_ips,

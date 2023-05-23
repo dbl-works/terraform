@@ -48,3 +48,25 @@ resource "aws_alb_listener_certificate" "https" {
   listener_arn    = aws_alb_listener.https.arn
   certificate_arn = each.value.arn
 }
+
+resource "aws_lb_listener_rule" "main" {
+  for_each = { for idx, rule in var.alb_listener_rules : idx => rule }
+
+  listener_arn = aws_alb_listener.https.arn
+  priority     = each.value.priority
+
+  action {
+    type             = each.value.type
+    target_group_arn = each.value.target_group_arn
+  }
+
+  dynamic "condition" {
+    for_each = [each.value.path_pattern]
+
+    content {
+      path_pattern {
+        values = condition.value
+      }
+    }
+  }
+}

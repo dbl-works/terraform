@@ -35,8 +35,6 @@ resource "aws_security_group_rule" "lb-https" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-
-
 # ECS cluster should only be able to receive traffic to container ports from the ALB
 resource "aws_security_group" "ecs" {
   vpc_id = var.vpc_id
@@ -74,6 +72,16 @@ resource "aws_security_group_rule" "ecs-lb-3000" {
   type                     = "ingress"
   from_port                = 3000
   to_port                  = 3000
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.ecs.id
+  source_security_group_id = aws_security_group.alb.id
+}
+
+resource "aws_security_group_rule" "lb" {
+  for_each                 = toset(var.allow_alb_traffic_to_ports)
+  type                     = "ingress"
+  from_port                = each.key
+  to_port                  = each.key
   protocol                 = "tcp"
   security_group_id        = aws_security_group.ecs.id
   source_security_group_id = aws_security_group.alb.id

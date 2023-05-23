@@ -1,6 +1,14 @@
-variable "environment" {}
-variable "project" {}
-variable "vpc_id" {}
+variable "environment" {
+  type = string
+}
+
+variable "project" {
+  type = string
+}
+
+variable "vpc_id" {
+  type = string
+}
 
 # A custom name overrides the default {project}-{environment} convention
 variable "name" {
@@ -24,8 +32,10 @@ variable "allow_internal_traffic_to_ports" {
   default = []
 }
 
-# Private IPs are where the app containers run
-variable "subnet_private_ids" { type = list(string) }
+variable "allow_alb_traffic_to_ports" {
+  type    = list(string)
+  default = []
+}
 
 # Public subnets are where forwarders run, such as a bastion, NAT or proxy
 variable "subnet_public_ids" { type = list(string) }
@@ -42,7 +52,9 @@ variable "kms_key_arns" {
 
 # Sets the certficate for https traffic into the cluster
 # If not passed, no SSL endpoint will be setup
-variable "certificate_arn" {}
+variable "certificate_arn" {
+  type = string
+}
 
 variable "additional_certificate_arns" {
   description = "Additional certificates to add to the load balancer"
@@ -68,18 +80,22 @@ variable "health_check_path" {
 }
 
 variable "grant_read_access_to_s3_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_write_access_to_s3_arns" {
   default = []
+  type    = list(string)
 }
 
 variable "grant_read_access_to_sqs_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_write_access_to_sqs_arns" {
+  type    = list(string)
   default = []
 }
 
@@ -139,4 +155,14 @@ variable "autoscale_metrics_map" {
 variable "cloudwatch_logs_retention_in_days" {
   type    = number
   default = 90
+}
+
+variable "alb_listener_rules" {
+  type = list(object({
+    priority         = string
+    type             = string
+    target_group_arn = string
+    path_pattern     = optional(list(string), [])
+  }))
+  default = []
 }

@@ -297,6 +297,22 @@ variable "allow_internal_traffic_to_ports" {
   default = []
 }
 
+variable "allow_alb_traffic_to_ports" {
+  type    = list(string)
+  default = []
+}
+
+variable "alb_listener_rules" {
+  type = list(object({
+    priority         = string
+    type             = string
+    target_group_arn = string
+    path_pattern     = optional(list(string), [])
+  }))
+  default = []
+}
+
+
 variable "ecs_name" {
   type    = string
   default = null
@@ -308,18 +324,22 @@ variable "allowlisted_ssh_ips" {
 }
 
 variable "grant_read_access_to_s3_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_write_access_to_s3_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_write_access_to_sqs_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_read_access_to_sqs_arns" {
+  type    = list(string)
   default = []
 }
 
@@ -338,6 +358,7 @@ variable "additional_certificate_arns" {
 }
 
 variable "secret_arns" {
+  type        = list(string)
   description = "arns of the secret manager that ECS can access"
   default     = []
 }
