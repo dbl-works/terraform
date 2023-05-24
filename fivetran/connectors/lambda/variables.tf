@@ -47,9 +47,10 @@ variable "environment" {
   description = "connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)"
 }
 
-variable "destination_schema_name" {
-  type    = string
-  default = null
+variable "connector_name" {
+  type        = string
+  description = "connector name shown on Fivetran UI. If not specified, it will be the combination of (service_name)_(project)_(env)_(aws_region_code)"
+  default     = null
 }
 
 variable "script_env" {
