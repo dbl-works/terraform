@@ -1,5 +1,5 @@
 locals {
-  function_name = replace(join("_", compact([var.service_name, var.project, var.environment, var.aws_region_code])), "/-/", "_")
+  function_name = var.lambda_name == null ? replace(join("_", compact([var.service_name, var.project, var.environment, var.aws_region_code])), "/-/", "_") : var.lambda_name
 }
 
 data "archive_file" "zip" {
