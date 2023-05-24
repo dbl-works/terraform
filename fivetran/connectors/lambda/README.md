@@ -79,7 +79,6 @@ module "lambda_connector" {
   environment             = "staging"           # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
 
   # optional
-  destination_schema_name = "destination_schema_table_name"
   lambda_name             = "special-lambda-name"
   service_name            = "lambda"                           # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
   aws_region_code         = "us-east-1"                        # lambda's aws region

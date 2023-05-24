@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 ### fivetran/connectors/lambda
-- Add destination_schema_name as variable. [#220](https://github.com/dbl-works/terraform/pull/220)
+- Add lambda_name as variable. [#220](https://github.com/dbl-works/terraform/pull/220)
 
 ### ecs-task
 - Add new ecs task module
