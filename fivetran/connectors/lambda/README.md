@@ -79,6 +79,7 @@ module "lambda_connector" {
   environment             = "staging"           # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
 
   # optional
+  lambda_name             = "special-lambda-name"
   service_name            = "lambda"                           # connector name shown on Fivetran UI, i.e. (service_name)_(project)_(env)_(aws_region_code)
   aws_region_code         = "us-east-1"                        # lambda's aws region
   lambda_role_arn         = module.lambda_role.lambda_role_arn # Lambda role created for connecting the fivetran and lambda. Reuse the same role if you already have it created.
