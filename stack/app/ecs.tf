@@ -68,7 +68,7 @@ module "cloudwatch" {
   project                   = var.project
   environment               = var.environment
   cluster_names             = distinct(concat([module.ecs.ecs_cluster_name], var.cloudwatch_cluster_names))
-  database_identifiers      = distinct(concat([module.rds.database_identifier], var.cloudwatch_database_identifiers))
+  database_identifiers      = distinct(concat([module.rds[0].database_identifier], var.cloudwatch_database_identifiers))
   alb_arn_suffixes          = distinct(concat([module.ecs.alb_arn_suffix], var.cloudwatch_alb_arn_suffixes))
   elasticache_cluster_names = var.skip_elasticache ? [] : distinct(concat([module.elasticache[0].cluster_name], var.cloudwatch_elasticache_names))
 

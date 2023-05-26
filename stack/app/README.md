@@ -118,6 +118,7 @@ module "stack" {
   kms_deletion_window_in_days = 30
 
   # RDS
+  skip_rds               = false # a replicated stack might not need a DB
   rds_instance_class     = "db.t3.micro"
   rds_engine_version     = "13"
   rds_allocated_storage  = 100

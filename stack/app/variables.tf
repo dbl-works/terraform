@@ -203,6 +203,11 @@ variable "elasticache_automatic_failover_enabled" {
 # =============== Elasticache ================ #
 
 # =============== RDS ================ #
+variable "skip_rds" {
+  type    = bool
+  default = false
+}
+
 variable "rds_name" {
   type    = string
   default = null

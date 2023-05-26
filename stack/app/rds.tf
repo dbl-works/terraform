@@ -1,6 +1,6 @@
 module "rds-kms-key" {
   source = "../../kms-key"
-  count  = var.rds_master_db_kms_key_arn == null ? 1 : 0
+  count  = (var.rds_master_db_kms_key_arn != null || var.skip_rds) ? 0 : 1
 
   # Required
   environment = var.environment
@@ -15,6 +15,7 @@ module "rds-kms-key" {
 
 module "rds" {
   source = "../../rds"
+  count  = var.skip_rds ? 0 : 1
 
   depends_on = [
     module.ecs

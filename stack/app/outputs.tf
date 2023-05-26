@@ -1,9 +1,9 @@
 output "database_url" {
-  value = module.rds.database_url
+  value = var.skip_rds ? "" : module.rds[0].database_url
 }
 
 output "database_arn" {
-  value = module.rds.database_arn
+  value = var.skip_rds ? "" : module.rds[0].database_arn
 }
 
 output "redis_url" {
@@ -46,15 +46,15 @@ output "nlb_target_group_ecs_arn" {
 
 # When launching a stack with a read replica
 output "accept_status-requester" {
-  value = var.rds_is_read_replica ? join("", module.vpc-peering.*.accept_status-requester) : "VPC peering not enabled."
+  value = (var.rds_is_read_replica && !var.skip_rds) ? join("", module.vpc-peering.*.accept_status-requester) : "VPC peering not enabled."
 }
 
 output "accept_status-accepter" {
-  value = var.rds_is_read_replica ? join("", module.vpc-peering.*.accept_status-accepter) : "VPC peering not enabled."
+  value = (var.rds_is_read_replica && !var.skip_rds) ? join("", module.vpc-peering.*.accept_status-accepter) : "VPC peering not enabled."
 }
 
 output "rds_kms_key_arn" {
-  value = var.rds_master_db_kms_key_arn == null ? join("", module.rds-kms-key.*.arn) : "KMS ARN only printed for the master DB to be passed to each replica."
+  value = (var.rds_master_db_kms_key_arn != null || var.skip_rds) ? "KMS ARN only printed for the master DB to be passed to each replica." : join("", module.rds-kms-key.*.arn)
 }
 
 output "ecs_cluster_name" {
