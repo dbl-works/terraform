@@ -118,10 +118,12 @@ module "stack" {
   kms_deletion_window_in_days = 30
 
   # RDS
-  rds_instance_class     = "db.t3.micro"
-  rds_engine_version     = "13"
-  rds_allocated_storage  = 100
-  rds_multi_az           = true
+  skip_rds                = false # a replicated stack might not need a DB
+  rds_skip_final_snapshot = false
+  rds_instance_class      = "db.t3.micro"
+  rds_engine_version      = "13"
+  rds_allocated_storage   = 100
+  rds_multi_az            = true
 
   ## set these, if you want to create a read-replica instead of a master DB
   ## the master-instance-arn MUST be the ARN of the DB, if the master DB is in
