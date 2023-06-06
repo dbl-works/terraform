@@ -146,7 +146,7 @@ variable "autoscale_metrics_map" {
       threshold_up   = optional(number, null) # Threshold of which ECS should start to scale up. If null, would not be included in the scale up alarm
       threshold_down = optional(number, null) # Threshold of which ECS should start to scale down. If null, would not be included in the scale down alarm
       namespace      = optional(string, "AWS/ECS")
-      dimensions     = optional(map(string), {})
+      dimensions     = optional(map(string), null)
     }))
   }))
   default = {}
