@@ -41,7 +41,7 @@ resource "aws_s3_bucket_acl" "main-bucket-data-acl" {
 
   depends_on = [
     aws_s3_bucket_ownership_controls.main,
-    aws_s3_bucket_public_access_block.main
+    aws_s3_bucket_public_access_block.block-all-access
   ]
 }
 
