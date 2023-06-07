@@ -52,7 +52,6 @@ resource "aws_s3_bucket_ownership_controls" "main" {
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
-  depends_on = [aws_s3_bucket_acl.main-bucket-data-acl]
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "main-bucket-sse-configuration" {
