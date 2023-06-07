@@ -38,6 +38,11 @@ resource "aws_s3_bucket_cors_configuration" "main-bucket-cors-configuration" {
 resource "aws_s3_bucket_acl" "main-bucket-data-acl" {
   bucket = module.s3.id
   acl    = "private"
+
+  depends_on = [
+    aws_s3_bucket_ownership_controls.main,
+    aws_s3_bucket_public_access_block.main
+  ]
 }
 
 # https://aws.amazon.com/about-aws/whats-new/2021/11/amazon-s3-object-ownership-simplify-access-management-data-s3/
