@@ -13,6 +13,12 @@ This project does not follow SemVer, since modules are independent of each other
 ### ecs-task
 - Add new ecs task module
 
+### ecs-deploy
+- Ignore desired_count after the aws_ecs_service creation. [#223](https://github.com/dbl-works/terraform/pull/223)
+
+### ecs-autoscaling
+- Fix the default value of autoscale_metrics -> dimensions. [#222](https://github.com/dbl-works/terraform/pull/222)
+
 ### rds
 - Add identifier as variable [#218](https://github.com/dbl-works/terraform/pull/218)
 

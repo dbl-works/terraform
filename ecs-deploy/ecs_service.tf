@@ -82,4 +82,10 @@ resource "aws_ecs_service" "main" {
     Project     = var.project
     Environment = var.environment
   }
+
+  lifecycle {
+    ignore_changes = [
+      desired_count # We should not care about the desired count after the first deployment
+    ]
+  }
 }
