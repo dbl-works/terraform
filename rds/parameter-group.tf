@@ -6,7 +6,7 @@ resource "aws_db_parameter_group" "current" {
 
   parameter {
     name  = "log_statement"
-    value = "ddl" # Logs all data definition language (DDL) statements, such as CREATE, ALTER, DROP, and so on.
+    value = "none" # Logs nothing
   }
   parameter {
     name  = "log_min_duration_statement"
