@@ -21,6 +21,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### rds
 - Add identifier as variable [#218](https://github.com/dbl-works/terraform/pull/218)
+- Set log_statement to none [#227](https://github.com/dbl-works/terraform/pull/227)
 
 ### s3-public
 - Add public bucket configuration to avoid ACCESS DENIED error. [#218](https://github.com/dbl-works/terraform/pull/218)
