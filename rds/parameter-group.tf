@@ -6,12 +6,17 @@ resource "aws_db_parameter_group" "current" {
 
   parameter {
     name  = "log_statement"
-    value = "all"
+    value = "ddl" # Logs all data definition language (DDL) statements, such as CREATE, ALTER, DROP, and so on.
   }
   parameter {
     name  = "log_min_duration_statement"
     value = "0"
   }
+  parameter {
+    name  = "rds.log_retention_period"
+    value = 4320 # in minutes, must be between 1440-10080 (1-7 days)
+  }
+
   parameter {
     name  = "rds.force_ssl"
     value = 1
