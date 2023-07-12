@@ -29,7 +29,7 @@ locals {
   }] : []
 }
 
-data "aws_subnets" "public" {
+data "aws_subnets" "selected" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.main.id]
@@ -37,7 +37,7 @@ data "aws_subnets" "public" {
   filter {
     name = "tag:Name"
     values = [
-      "${var.project}-${var.environment}-public-*",
+      "${var.project}-${var.environment}-${var.subnet_type}-*",
     ]
   }
 }
@@ -54,12 +54,12 @@ resource "aws_ecs_service" "main" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets = data.aws_subnets.public.ids
+    subnets = data.aws_subnets.selected.ids
 
     security_groups = [
       data.aws_security_group.ecs.id
     ]
-    assign_public_ip = true
+    assign_public_ip = var.subnet_type == "public"
   }
 
   # not required if you don't want to use a load balancer, e.g. for Sidekiq

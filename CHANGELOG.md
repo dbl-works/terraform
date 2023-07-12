@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### ecs-deploy
+- Allow ecs service to be deployed to private subnets. [#228](https://github.com/dbl-works/terraform/pull/228)
+
 ### fivetran/connectors/lambda
 - Add lambda_name as variable. [#220](https://github.com/dbl-works/terraform/pull/220)
 

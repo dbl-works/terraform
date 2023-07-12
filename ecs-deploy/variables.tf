@@ -13,6 +13,15 @@ variable "project" {
   type = string
 }
 
+variable "subnet_type" {
+  type    = string
+  default = "public"
+  validation {
+    condition     = contains(["public", "private"], var.subnet_type)
+    error_message = "subnet_type must be either public or private"
+  }
+}
+
 variable "cluster_name" {
   type        = string
   default     = null
