@@ -29,7 +29,7 @@ locals {
   }] : []
 }
 
-data "aws_subnets" "public" {
+data "aws_subnets" "selected" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.main.id]
@@ -37,20 +37,7 @@ data "aws_subnets" "public" {
   filter {
     name = "tag:Name"
     values = [
-      "${var.project}-${var.environment}-public-*",
-    ]
-  }
-}
-
-data "aws_subnets" "private" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.main.id]
-  }
-  filter {
-    name = "tag:Name"
-    values = [
-      "${var.project}-${var.environment}-private-*",
+      "${var.project}-${var.environment}-${var.subnet_type}-*",
     ]
   }
 }
@@ -67,7 +54,7 @@ resource "aws_ecs_service" "main" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets = var.subnet_type == "public" ? data.aws_subnets.public.ids : data.aws_subnets.private.ids
+    subnets = data.aws_subnets.selected.ids
 
     security_groups = [
       data.aws_security_group.ecs.id
