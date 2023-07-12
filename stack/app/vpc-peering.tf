@@ -14,7 +14,7 @@ module "vpc-peering" {
   requester_vpc_id     = module.vpc.id
   requester_cidr_block = var.vpc_cidr_block
   requester_nat_route_table_ids = flatten(concat(
-    module.nat.aws_route_table_ids,
+    module.nat[*].aws_route_table_ids,
     module.vpc.route_table_ids,
 
   ))
