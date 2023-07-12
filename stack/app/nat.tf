@@ -1,6 +1,4 @@
 module "nat" {
-  count = length(var.public_ips) > 0 ? 1 : 0
-
   source             = "../../nat"
   project            = var.project
   environment        = var.environment
