@@ -4,7 +4,7 @@ Create a compute cluster for hosting docker based apps.
 
 ## Notes
 
-The `idle_timeout` is set to 60 seconds. Make sure that your webserver's keep-alive timeout is set to 60 seconds (or more) to prevent the load balancer from keeping connections open to that the server has already closed.
+The `idle_timeout` is set to 60 seconds. Ensure that your webserver's keep-alive timeout is set to 60 seconds (or more) to prevent the load balancer from keeping connections open to the already closed server.
 
 When using Rails with Puma, the default timeout is 20 seconds. This can be changed by setting the `persistent_timeout` option in `config/puma.rb`.
 
