@@ -26,7 +26,7 @@ module "elasticache" {
   major_version              = 7
   minor_version              = 0
   cluster_mode               = true
-  transit_encryption_enabled = true # changing this requires re-creation of the cluster
+  transit_encryption_enabled = true # changing this requires re-creation of the cluster, NOTE: use `rediss://` as the protocol in your application when TLS is enabled
   data_tiering_enabled       = false # only available for "r6gd" node types (see warning below)
   multi_az_enabled           = true # requires at least 1 replica
   maxmemory_policy           = "noeviction" # Allowed values: volatile-lru,allkeys-lru,volatile-lfu,allkeys-lfu,volatile-random,allkeys-random,volatile-ttl,noeviction
