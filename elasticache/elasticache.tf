@@ -81,7 +81,7 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
   }
 }
 
-local {
+locals {
   # the format is different for different major Redis versions, see: https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheParameterGroup.html
   family = "redis${var.major_version == 6 ? "6.x" : "7"}"
 
