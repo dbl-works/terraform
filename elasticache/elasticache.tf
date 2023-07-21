@@ -7,7 +7,7 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
   num_cache_clusters          = var.node_count
   preferred_cache_cluster_azs = var.availability_zones
   parameter_group_name        = var.parameter_group_name == null ? aws_elasticache_parameter_group.main[0].id : var.parameter_group_name
-  engine_version              = var.engine_version
+  engine_version              = "${var.major_version}.x"
   port                        = 6379
   subnet_group_name           = aws_elasticache_subnet_group.main.name
   at_rest_encryption_enabled  = true
@@ -49,7 +49,7 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
   engine                     = "redis"
   node_type                  = var.node_type
   parameter_group_name       = var.parameter_group_name == null ? aws_elasticache_parameter_group.main[0].id : var.parameter_group_name
-  engine_version             = var.engine_version
+  engine_version             = "${var.major_version}.x"
   port                       = 6379
   subnet_group_name          = aws_elasticache_subnet_group.main.name
   at_rest_encryption_enabled = true
@@ -81,12 +81,17 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
   }
 }
 
+local {
+  # the format is different for different major Redis versions, see: https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheParameterGroup.html
+  family = "redis${var.major_version == 6 ? "6.x" : "7"}"
+
+}
+
 resource "aws_elasticache_parameter_group" "main" {
   count = var.parameter_group_name == null ? 1 : 0
 
-  name = local.cluster_name
-  # format: "redis6.x"
-  family = "redis${var.engine_version}"
+  name   = local.cluster_name
+  family = local.family
 
   parameter {
     name  = "maxmemory-policy"

@@ -34,9 +34,13 @@ variable "parameter_group_name" {
   default = null
 }
 
-variable "engine_version" {
-  type    = string
-  default = "7.x"
+variable "major_version" {
+  type    = number
+  default = 7
+  validation {
+    condition     = var.major_version >= 6 && var.major_version <= 7
+    error_message = "major_version must be 6 or 7"
+  }
 }
 
 variable "snapshot_retention_limit" {

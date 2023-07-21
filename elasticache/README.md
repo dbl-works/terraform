@@ -23,7 +23,7 @@ module "elasticache" {
   # optional
   name                 = null # pass e.g. "sidekiq" to append this to all names when you launch a 2nd Redis cluster for Sidekiq (see below)
   node_type            = "cache.t3.micro"
-  engine_version       = "6.x"
+  major_version        = 7
   cluster_mode         = true
   data_tiering_enabled = false # only available for "r6gd" node types (see warning below)
   multi_az_enabled     = true # requires at least 1 replica
