@@ -36,7 +36,7 @@ variable "parameter_group_name" {
 
 variable "engine_version" {
   type    = string
-  default = "6.x"
+  default = "7.x"
 }
 
 variable "snapshot_retention_limit" {
