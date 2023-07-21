@@ -131,3 +131,10 @@ variable "aws_lb_target_group_arn" {
   type    = string
   default = null
 }
+
+variable "deployment_circuit_breaker" {
+  type = object({
+    enable   = optional(bool, true)
+    rollback = optional(bool, true)
+  })
+}
