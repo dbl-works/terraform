@@ -31,7 +31,7 @@ module "elasticache" {
 
   # To enable cluster mode, use a parameter group that has cluster mode enabled.
   # The default parameter groups provided by AWS end with ".cluster.on", for example default.redis6.x.cluster.on.
-  parameter_group_name = "default.redis6.x" # if omitted, a custom parameter group will be created by this module. Must be omitted for `maxmemory_policy` to be effective.
+  parameter_group_name = null # e.g. "default.redis7.x", if omitted (default), a custom parameter group will be created by this module. Must be omitted for `maxmemory_policy` to be effective.
 
   # Number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them.
   # If the value of snapshot_retention_limit is set to zero (0), backups are turned off.
