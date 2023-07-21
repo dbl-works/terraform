@@ -6,7 +6,7 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
   node_type                   = var.node_type
   num_cache_clusters          = var.node_count
   preferred_cache_cluster_azs = var.availability_zones
-  parameter_group_name        = var.parameter_group_name != null ? var.parameter_group_name : aws_elasticache_parameter_group.main[0].id
+  parameter_group_name        = var.parameter_group_name == null ? aws_elasticache_parameter_group.main[0].id : var.parameter_group_name
   engine_version              = var.engine_version
   port                        = 6379
   subnet_group_name           = aws_elasticache_subnet_group.main.name
@@ -48,7 +48,7 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
   description                = "Collection of Redis (clusters mode) for ${var.project}-${var.environment}"
   engine                     = "redis"
   node_type                  = var.node_type
-  parameter_group_name       = var.parameter_group_name != null ? var.parameter_group_name : aws_elasticache_parameter_group.main[0].id
+  parameter_group_name       = var.parameter_group_name == null ? aws_elasticache_parameter_group.main[0].id : var.parameter_group_name
   engine_version             = var.engine_version
   port                       = 6379
   subnet_group_name          = aws_elasticache_subnet_group.main.name
@@ -82,7 +82,7 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
 }
 
 resource "aws_elasticache_parameter_group" "main" {
-  count = var.parameter_group_name == null ? 0 : 1
+  count = var.parameter_group_name == null ? 1 : 0
 
   name = local.cluster_name
   # format: "redis6.x"
