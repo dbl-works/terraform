@@ -8,6 +8,10 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 ### ecs-deploy
+- Add deployment_circuit_breaker options [#230](https://github.com/dbl-works/terraform/pull/230)
+
+## [v2023.07.19]
+### ecs-deploy
 - Allow ecs service to be deployed to private subnets. [#228](https://github.com/dbl-works/terraform/pull/228)
 
 ### fivetran/connectors/lambda
@@ -35,6 +39,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### ecs
 - add alb_listener_rule and allow_alb_traffic_to_ports options, remove subnet_private_ids since it is not used [#216](https://github.com/dbl-works/terraform/pull/216)
+- Set Load Balancer keep alive timeout to 60 seconds [#229](https://github.com/dbl-works/terraform/pull/229)
 
 ### stack/app
 - add alb_listener_rule and allow_alb_traffic_to_ports options [#216](https://github.com/dbl-works/terraform/pull/216)

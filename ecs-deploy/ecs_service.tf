@@ -53,6 +53,11 @@ resource "aws_ecs_service" "main" {
   desired_count   = var.desired_count
   launch_type     = "FARGATE"
 
+  deployment_circuit_breaker {
+    enable   = var.deployment_circuit_breaker.enable
+    rollback = var.deployment_circuit_breaker.rollback
+  }
+
   network_configuration {
     subnets = data.aws_subnets.selected.ids
 
