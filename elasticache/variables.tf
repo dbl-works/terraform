@@ -43,6 +43,15 @@ variable "major_version" {
   }
 }
 
+variable "minor_version" {
+  type    = number
+  default = 0
+  validation {
+    condition     = var.minor_version >= 0
+    error_message = "minor_version must be between 0 or higher"
+  }
+}
+
 variable "snapshot_retention_limit" {
   type    = number
   default = 0

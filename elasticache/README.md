@@ -24,6 +24,7 @@ module "elasticache" {
   name                       = null # pass e.g. "sidekiq" to append this to all names when you launch a 2nd Redis cluster for Sidekiq (see below)
   node_type                  = "cache.t3.micro"
   major_version              = 7
+  minor_version              = 0
   cluster_mode               = true
   transit_encryption_enabled = true # changing this requires re-creation of the cluster
   data_tiering_enabled       = false # only available for "r6gd" node types (see warning below)
