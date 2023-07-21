@@ -21,13 +21,14 @@ module "elasticache" {
   node_count = 1
 
   # optional
-  name                 = null # pass e.g. "sidekiq" to append this to all names when you launch a 2nd Redis cluster for Sidekiq (see below)
-  node_type            = "cache.t3.micro"
-  major_version        = 7
-  cluster_mode         = true
-  data_tiering_enabled = false # only available for "r6gd" node types (see warning below)
-  multi_az_enabled     = true # requires at least 1 replica
-  maxmemory_policy     = "noeviction" # Allowed values: volatile-lru,allkeys-lru,volatile-lfu,allkeys-lfu,volatile-random,allkeys-random,volatile-ttl,noeviction
+  name                       = null # pass e.g. "sidekiq" to append this to all names when you launch a 2nd Redis cluster for Sidekiq (see below)
+  node_type                  = "cache.t3.micro"
+  major_version              = 7
+  cluster_mode               = true
+  transit_encryption_enabled = true # changing this requires re-creation of the cluster
+  data_tiering_enabled       = false # only available for "r6gd" node types (see warning below)
+  multi_az_enabled           = true # requires at least 1 replica
+  maxmemory_policy           = "noeviction" # Allowed values: volatile-lru,allkeys-lru,volatile-lfu,allkeys-lfu,volatile-random,allkeys-random,volatile-ttl,noeviction
 
   # To enable cluster mode, use a parameter group that has cluster mode enabled.
   # The default parameter groups provided by AWS end with ".cluster.on", for example default.redis6.x.cluster.on.

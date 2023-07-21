@@ -11,7 +11,7 @@ This project does not follow SemVer, since modules are independent of each other
 - Add deployment_circuit_breaker options [#230](https://github.com/dbl-works/terraform/pull/230)
 
 ### elasticache
-- Enable `encryption-in-transit` by default [#231](https://github.com/dbl-works/terraform/pull/231)
+- Enable `encryption-in-transit` by default, :warning: requires re-creation of the cluster (you can thus opt-out) [#231](https://github.com/dbl-works/terraform/pull/231)
 - Change default Redis version from `6` to `7` [#231](https://github.com/dbl-works/terraform/pull/231)
 
 ## [v2023.07.19]

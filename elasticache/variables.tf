@@ -65,6 +65,12 @@ variable "cluster_mode" {
   default = true
 }
 
+variable "transit_encryption_enabled" {
+  type        = bool
+  default     = true
+  description = ":warning: changing this from `false` to `true` requires a re-creation of the cluster"
+}
+
 variable "multi_az_enabled" {
   type    = bool
   default = true
