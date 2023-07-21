@@ -11,6 +11,7 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
   port                        = 6379
   subnet_group_name           = aws_elasticache_subnet_group.main.name
   at_rest_encryption_enabled  = true
+  transit_encryption_enabled  = true
   kms_key_id                  = var.kms_key_arn
   snapshot_retention_limit    = var.snapshot_retention_limit
   # When you change an attribute, such as engine_version,
@@ -53,6 +54,7 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
   port                       = 6379
   subnet_group_name          = aws_elasticache_subnet_group.main.name
   at_rest_encryption_enabled = true
+  transit_encryption_enabled = true
   kms_key_id                 = var.kms_key_arn
   snapshot_retention_limit   = var.snapshot_retention_limit
   apply_immediately          = true
@@ -101,10 +103,5 @@ resource "aws_elasticache_parameter_group" "main" {
   parameter {
     name  = "cluster-enabled"
     value = var.cluster_mode ? "yes" : "no"
-  }
-
-  parameter {
-    name  = "transit-encryption-enabled"
-    value = true
   }
 }
