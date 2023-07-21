@@ -82,8 +82,9 @@ variable "name" {
 }
 
 variable "maxmemory_policy" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "Only effective, when NOT passing a custom parameter group name"
 }
 
 locals {

@@ -2,8 +2,6 @@
 
 A repository for setting up an elasticache cluster.
 
-
-
 ## Usage
 
 ```terraform
@@ -33,7 +31,7 @@ module "elasticache" {
 
   # To enable cluster mode, use a parameter group that has cluster mode enabled.
   # The default parameter groups provided by AWS end with ".cluster.on", for example default.redis6.x.cluster.on.
-  parameter_group_name = "default.redis6.x"
+  parameter_group_name = "default.redis6.x" # if omitted, a custom parameter group will be created by this module. Must be omitted for `maxmemory_policy` to be effective.
 
   # Number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them.
   # If the value of snapshot_retention_limit is set to zero (0), backups are turned off.
@@ -46,12 +44,13 @@ module "elasticache" {
 }
 ```
 
-
 Sidekiq does not work with cluster mode. The recommended setup is to have:
+
 * one Redis cluster (cluster-mode on) for caching
 * one Redis cluster (cluster-mode off) for Sidekiq
 
 :warning: If the node type is from the `r6gd` family, be aware that availability is limited to the following regions:
+
 * us-east-2, us-east-1
 * us-west-2, us-west-1, eu-west-1
 * eu-central-1
@@ -63,8 +62,6 @@ Sidekiq does not work with cluster mode. The recommended setup is to have:
 
 As of July 2022. Also, you **must** use Reds `6.2` or later.
 
-
-
 ## Outputs
 
-- `endpoint`
+* `endpoint`
