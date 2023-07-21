@@ -137,4 +137,5 @@ variable "deployment_circuit_breaker" {
     enable   = optional(bool, true)
     rollback = optional(bool, true)
   })
+  default = {}
 }
