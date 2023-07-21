@@ -26,4 +26,9 @@ resource "aws_lambda_function" "main" {
     Project     = var.project
     Environment = var.environment
   }
+
+  depends_on = [
+    # NOTE: Cloudwatch log group have to be created before the lambda so we can create it before AWS does
+    aws_cloudwatch_log_group.lambda
+  ]
 }
