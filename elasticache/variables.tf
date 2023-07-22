@@ -31,12 +31,25 @@ variable "node_count" {
 
 variable "parameter_group_name" {
   type    = string
-  default = "default.redis6.x"
+  default = null
 }
 
-variable "engine_version" {
-  type    = string
-  default = "6.x"
+variable "major_version" {
+  type    = number
+  default = 7
+  validation {
+    condition     = var.major_version >= 6 && var.major_version <= 7
+    error_message = "major_version must be 6 or 7"
+  }
+}
+
+variable "minor_version" {
+  type    = number
+  default = 0
+  validation {
+    condition     = var.minor_version >= 0
+    error_message = "minor_version must be between 0 or higher"
+  }
 }
 
 variable "snapshot_retention_limit" {
@@ -61,6 +74,12 @@ variable "cluster_mode" {
   default = true
 }
 
+variable "transit_encryption_enabled" {
+  type        = bool
+  default     = true
+  description = ":warning: changing this from `false` to `true` requires a re-creation of the cluster"
+}
+
 variable "multi_az_enabled" {
   type    = bool
   default = true
@@ -82,8 +101,9 @@ variable "name" {
 }
 
 variable "maxmemory_policy" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "Only effective, when NOT passing a custom parameter group name"
 }
 
 locals {
