@@ -139,6 +139,12 @@ variable "skip_elasticache" {
   default = false
 }
 
+variable "elasticache_transit_encryption_enabled" {
+  type        = bool
+  default     = true
+  description = ":warning: changing this from `false` to `true` requires a re-creation of the cluster"
+}
+
 variable "elasticache_name" {
   type    = string
   default = null
@@ -309,12 +315,6 @@ variable "keep_alive_timeout" {
     condition     = var.keep_alive_timeout >= 60 && var.keep_alive_timeout <= 4000
     error_message = "keep_alive_timeout must be between 60 and 4000"
   }
-}
-
-variable "transit_encryption_enabled" {
-  type        = bool
-  default     = true
-  description = ":warning: changing this from `false` to `true` requires a re-creation of the cluster"
 }
 
 variable "allow_alb_traffic_to_ports" {
