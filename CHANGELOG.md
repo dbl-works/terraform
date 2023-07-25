@@ -16,6 +16,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### ECS
 - make keep alive timeout configurable, and fix default for NLB as well (previously only fixed for ALB). [#232](https://github.com/dbl-works/terraform/pull/232)
+- pass through the keep alive timeout to the `stack` module. [#233](https://github.com/dbl-works/terraform/pull/232)
 
 ## [v2023.07.19]
 ### ecs-deploy
