@@ -302,6 +302,15 @@ variable "allow_internal_traffic_to_ports" {
   default = []
 }
 
+variable "keep_alive_timeout" {
+  type    = number
+  default = 60
+  validation {
+    condition     = var.keep_alive_timeout >= 60 && var.keep_alive_timeout <= 4000
+    error_message = "keep_alive_timeout must be between 60 and 4000"
+  }
+}
+
 variable "allow_alb_traffic_to_ports" {
   type    = list(string)
   default = []
