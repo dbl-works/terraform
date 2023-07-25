@@ -311,6 +311,12 @@ variable "keep_alive_timeout" {
   }
 }
 
+variable "transit_encryption_enabled" {
+  type        = bool
+  default     = true
+  description = ":warning: changing this from `false` to `true` requires a re-creation of the cluster"
+}
+
 variable "allow_alb_traffic_to_ports" {
   type    = list(string)
   default = []

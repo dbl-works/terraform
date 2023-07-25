@@ -22,9 +22,10 @@ module "elasticache" {
   multi_az_enabled           = var.elasticache_multi_az_enabled
   automatic_failover_enabled = var.elasticache_automatic_failover_enabled
 
-  replicas_per_node_group = var.elasticache_replicas_per_node_group
-  shard_count             = var.elasticache_shards_per_replication_group
-  parameter_group_name    = var.elasticache_parameter_group_name
-  cluster_mode            = var.elasticache_cluster_mode
-  maxmemory_policy        = var.elasticache_maxmemory_policy == null ? (var.elasticache_cluster_mode ? null : "noeviction") : var.elasticache_maxmemory_policy
+  replicas_per_node_group    = var.elasticache_replicas_per_node_group
+  shard_count                = var.elasticache_shards_per_replication_group
+  parameter_group_name       = var.elasticache_parameter_group_name
+  cluster_mode               = var.elasticache_cluster_mode
+  maxmemory_policy           = var.elasticache_maxmemory_policy == null ? (var.elasticache_cluster_mode ? null : "noeviction") : var.elasticache_maxmemory_policy
+  transit_encryption_enabled = var.transit_encryption_enabled
 }
