@@ -47,6 +47,7 @@ module "ecs" {
   health_check_path           = "/healthz"
   certificate_arn             = module.ssl-certificate.arn # requires a `certificate` module to be created separately
   regional                    = true
+  keep_alive_timeout          = 60
   additional_certificate_arns = [
     {
       name = "my-second-domain.test"

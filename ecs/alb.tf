@@ -6,7 +6,7 @@ resource "aws_alb" "alb" {
     aws_security_group.alb.id,
   ]
   enable_http2 = "true"
-  idle_timeout = 60 # The time in seconds that the connection is allowed to be idle.
+  idle_timeout = var.keep_alive_timeout # The time in seconds that the connection is allowed to be idle.
   tags = {
     Name        = "${var.project}-${var.environment}"
     Project     = var.project
