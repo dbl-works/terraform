@@ -3,7 +3,7 @@ resource "aws_lb" "nlb" {
   name               = "${local.name}-nlb"
   load_balancer_type = "network"
   subnets            = var.subnet_public_ids
-  idle_timeout       = 600
+  idle_timeout       = var.keep_alive_timeout
   tags = {
     Name        = "${local.name}-nlb"
     Project     = var.project
