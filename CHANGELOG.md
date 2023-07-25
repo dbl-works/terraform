@@ -14,6 +14,9 @@ This project does not follow SemVer, since modules are independent of each other
 - Enable `encryption-in-transit` by default, :warning: requires re-creation of the cluster (you can thus opt-out) [#231](https://github.com/dbl-works/terraform/pull/231)
 - Change default Redis version from `6` to `7` [#231](https://github.com/dbl-works/terraform/pull/231)
 
+### ECS
+- make keep alive timeout configurable, and fix default for NLB as well (previously only fixed for ALB). [#232](https://github.com/dbl-works/terraform/pull/232)
+
 ## [v2023.07.19]
 ### ecs-deploy
 - Allow ecs service to be deployed to private subnets. [#228](https://github.com/dbl-works/terraform/pull/228)
