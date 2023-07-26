@@ -257,6 +257,7 @@ module "stack" {
   elasticache_cluster_mode                  = false
   elasticache_automatic_failover_enabled    = true
   elasticache_node_count                    = 1
+  elasticache_transit_encryption_enabled    = true # changing this force a replacement of the elasticache cluster
 
   # vpc
   vpc_cidr_block     = "10.0.0.0/16"
