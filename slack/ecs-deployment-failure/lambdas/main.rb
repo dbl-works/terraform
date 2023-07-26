@@ -34,7 +34,8 @@ def post_to_slack(resource_name, region, reason)
   )
   request.body = payload(resource_name, region, reason).to_json
 
-  http.request(request)
+  response = http.request(request)
+  puts "[INFO] Response: #{response.body}"
 end
 
 def payload(resource_name, region, reason)
@@ -51,15 +52,15 @@ def payload(resource_name, region, reason)
       {
         "type": 'section',
         "text": {
-          "type": 'plain_text',
-          "text": "Resource: #{resource_name}",
+          "type": 'mrkdwn',
+          "text": "*Resource*: #{resource_name}",
           "emoji": true
         }
       },
       {
         "type": 'section',
         "text": {
-          "type": 'plain_text',
+          "type": 'mrkdwn',
           "text": "Region: #{region}",
           "emoji": true
         }
@@ -67,18 +68,24 @@ def payload(resource_name, region, reason)
       {
         "type": 'section',
         "text": {
-          "type": 'plain_text',
+          "type": 'mrkdwn',
           "text": "Reason: #{reason}",
           "emoji": true
         }
-      },
+      }
+    ],
+    "attachments": [
       {
-        "type": 'section',
-        "text": {
-          "type": 'plain_text',
-          "text": "url: #{ecs_url(resource_name, region)}",
-          "emoji": true
-        }
+        "fallback": "Button to #{ecs_url(resource_name, region)}",
+        "actions": [
+          {
+            "type": 'button',
+            "name": 'log_button',
+            "text": 'View Deployment',
+            "url": ecs_url(resource_name, region),
+            "style": 'primary'
+          }
+        ]
       }
     ]
   }
