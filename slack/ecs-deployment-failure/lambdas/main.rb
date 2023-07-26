@@ -44,7 +44,7 @@ def payload(resource_name, region, reason)
         "type": 'header',
         "text": {
           "type": 'plain_text',
-          "text": ':warning: Deployment Failrue',
+          "text": ':warning: Deployment Failure',
           "emoji": true
         }
       },
@@ -73,18 +73,12 @@ def payload(resource_name, region, reason)
         }
       },
       {
-        "type": 'actions',
-        "elements": [
-          {
-            "type": 'button',
-            "text": {
-              "type": 'plain_text',
-              "text": 'View logs',
-              "emoji": true
-            },
-            "value": ecs_url(resource_name, region)
-          }
-        ]
+        "type": 'section',
+        "text": {
+          "type": 'plain_text',
+          "text": "url: #{ecs_url(resource_name, region)}",
+          "emoji": true
+        }
       }
     ]
   }
