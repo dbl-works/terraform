@@ -82,10 +82,15 @@ def payload(resource_name, region, reason)
               "text": 'View logs',
               "emoji": true
             },
-            "value": 'click_me_123'
+            "value": ecs_url(resource_name, region)
           }
         ]
       }
     ]
   }
+end
+
+def ecs_url(resource_name, region)
+  _, cluster_name, service_name = resource_name.split('/')
+  "https://#{region}.console.aws.amazon.com/ecs/v2/clusters/#{cluster_name}/services/#{service_name}/deployment?region=#{region}"
 end
