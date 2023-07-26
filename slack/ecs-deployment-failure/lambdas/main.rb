@@ -97,5 +97,5 @@ def payload(cluster_name, service_name, region, reason)
 end
 
 def ecs_url(cluster_name, service_name, region)
-  "https://#{region}.console.aws.amazon.com/ecs/v2/clusters/#{cluster_name}/services/#{service_name}/deployment?region=#{region}"
+  "https://#{region}.console.aws.amazon.com/ecs/v2/clusters/#{cluster_name}/services/#{service_name}/deployments?region=#{region}"
 end
