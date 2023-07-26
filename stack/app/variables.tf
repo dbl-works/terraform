@@ -139,6 +139,12 @@ variable "skip_elasticache" {
   default = false
 }
 
+variable "elasticache_transit_encryption_enabled" {
+  type        = bool
+  default     = true
+  description = ":warning: changing this from `false` to `true` requires a re-creation of the cluster"
+}
+
 variable "elasticache_name" {
   type    = string
   default = null
