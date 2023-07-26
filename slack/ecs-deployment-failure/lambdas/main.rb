@@ -32,41 +32,57 @@ def post_to_slack(resource_name, region, reason)
     uri.path,
     { 'Content-Type' => 'application/json' }
   )
-  request.body = payload.to_json
+  request.body = payload(resource_name, region, reason).to_json
 
   http.request(request)
 end
 
-def payload
+def payload(resource_name, region, reason)
   {
     "blocks": [
       {
-        "type": "header",
+        "type": 'header',
         "text": {
-          "type": "plain_text",
-          "text": ":warning: Deployment Failrue",
+          "type": 'plain_text',
+          "text": ':warning: Deployment Failrue',
           "emoji": true
         }
       },
       {
-        "type": "section",
+        "type": 'section',
         "text": {
-          "type": "plain_text",
-          "text": "Resource in region",
+          "type": 'plain_text',
+          "text": "Resource: #{resource_name}",
           "emoji": true
         }
       },
       {
-        "type": "actions",
+        "type": 'section',
+        "text": {
+          "type": 'plain_text',
+          "text": "Region: #{region}",
+          "emoji": true
+        }
+      },
+      {
+        "type": 'section',
+        "text": {
+          "type": 'plain_text',
+          "text": "Reason: #{reason}",
+          "emoji": true
+        }
+      },
+      {
+        "type": 'actions',
         "elements": [
           {
-            "type": "button",
+            "type": 'button',
             "text": {
-              "type": "plain_text",
-              "text": "View logs",
+              "type": 'plain_text',
+              "text": 'View logs',
               "emoji": true
             },
-            "value": "click_me_123"
+            "value": 'click_me_123'
           }
         ]
       }
