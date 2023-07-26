@@ -13,15 +13,16 @@ def handler(event:, context:)
   resource_name = event.fetch('resources').join(',')
   region = event.fetch('region')
   reason = event.fetch('detail').fetch('reason')
+  _, cluster_name, service_name = resource_name.split('/')
 
-  post_to_slack(resource_name, region, reason)
+  post_to_slack(cluster_name, service_name, region, reason)
 end
 
 def deployment_failure?(event_name)
   event_name == FAILURE_EVENT_NAME
 end
 
-def post_to_slack(resource_name, region, reason)
+def post_to_slack(cluster_name, service_name, region, reason)
   webhook_url = ENV['SLACK_WEBHOOK_URL']
   uri = URI(webhook_url)
 
@@ -32,13 +33,13 @@ def post_to_slack(resource_name, region, reason)
     uri.path,
     { 'Content-Type' => 'application/json' }
   )
-  request.body = payload(resource_name, region, reason).to_json
+  request.body = payload(cluster_name, service_name, region, reason).to_json
 
   response = http.request(request)
   puts "[INFO] Response: #{response.body}"
 end
 
-def payload(resource_name, region, reason)
+def payload(cluster_name, service_name, region, reason)
   {
     "blocks": [
       {
@@ -53,36 +54,40 @@ def payload(resource_name, region, reason)
         "type": 'section',
         "text": {
           "type": 'mrkdwn',
-          "text": "*Resource*: #{resource_name}",
-          "emoji": true
+          "text": "*Cluster*: #{cluster_name}"
         }
       },
       {
         "type": 'section',
         "text": {
           "type": 'mrkdwn',
-          "text": "Region: #{region}",
-          "emoji": true
+          "text": "*Service*: #{service_name}"
         }
       },
       {
         "type": 'section',
         "text": {
           "type": 'mrkdwn',
-          "text": "Reason: #{reason}",
-          "emoji": true
+          "text": "*Region*: #{region}"
+        }
+      },
+      {
+        "type": 'section',
+        "text": {
+          "type": 'mrkdwn',
+          "text": "*Reason*: #{reason}"
         }
       }
     ],
     "attachments": [
       {
-        "fallback": "Button to #{ecs_url(resource_name, region)}",
+        "fallback": "Button to #{ecs_url(cluster_name, service_name, region)}",
         "actions": [
           {
             "type": 'button',
             "name": 'log_button',
             "text": 'View Deployment',
-            "url": ecs_url(resource_name, region),
+            "url": ecs_url(cluster_name, service_name, region),
             "style": 'primary'
           }
         ]
@@ -91,7 +96,6 @@ def payload(resource_name, region, reason)
   }
 end
 
-def ecs_url(resource_name, region)
-  _, cluster_name, service_name = resource_name.split('/')
+def ecs_url(cluster_name, service_name, region)
   "https://#{region}.console.aws.amazon.com/ecs/v2/clusters/#{cluster_name}/services/#{service_name}/deployment?region=#{region}"
 end
