@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### slack/ecs-deployment-failure
+- New module which send a message to Slack when the deployment is a failure.
+
 ### ecs-deploy
 - Add deployment_circuit_breaker options [#230](https://github.com/dbl-works/terraform/pull/230)
 
