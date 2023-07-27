@@ -1,7 +1,7 @@
 require 'json'
 require 'net/http'
 
-FAILURE_EVENT_NAME = 'SERVICE_DEPLOYMENT_FAILED'.freeze
+FAILED_EVENT = 'SERVICE_DEPLOYMENT_FAILED'.freeze
 
 def handler(event:, context:)
   puts "[INFO] #{event}"
