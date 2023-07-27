@@ -5,7 +5,6 @@ FAILED_EVENT = 'SERVICE_DEPLOYMENT_FAILED'.freeze
 
 def handler(event:, context:)
   puts "[INFO] #{event}"
-  puts "[INFO] Context: #{context}"
   event_name = event.fetch('detail').fetch('eventName')
   return unless event_name == FAILED_EVENT
 
