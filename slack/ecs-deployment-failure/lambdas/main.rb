@@ -23,8 +23,7 @@ def deployment_failure?(event_name)
 end
 
 def post_to_slack(cluster_name, service_name, region, reason)
-  webhook_url = ENV['SLACK_WEBHOOK_URL']
-  uri = URI(webhook_url)
+  uri = URI(ENV.fetch('SLACK_WEBHOOK_URL'))
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
   request = Net::HTTP::Post.new(
