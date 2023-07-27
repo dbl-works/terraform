@@ -76,7 +76,7 @@ def payload(cluster_name, service_name, region, reason)
     ],
     "attachments": [
       {
-        "fallback": "Button to #{ecs_url(cluster_name, service_name, region)}",
+        "fallback": "Link to the AWS Console",
         "actions": [
           {
             "type": 'button',

@@ -1,6 +1,6 @@
 # Terraform Module: Slack message for ECS Deployment Failure
 
-Post a message to Slack when the deployment is a failure. ECS Service need to enable the [deployment circuit breaker](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-circuit-breaker.html) in order to trigger the slack message.
+Post a message to Slack when a deployment to AWS ECS has failed. The ECS Service needs to enable the [deployment circuit breaker](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-circuit-breaker.html) in order to trigger the slack message.
 
 ## Usage
 
@@ -14,9 +14,9 @@ module "ecs_deployment_failure" {
   slack_webhook_url = "https://hooks.slack.com/services/xxxxxxxxx/xxxxxxxxxxx/yyyyyyyyyyyyyyyyyyyyyyyy"
 
   # Optional
-  runtime = "ruby2.7" # Only can use ruby 3.2 after bumping the aws version to >5
+  runtime = "ruby2.7" # Ruby 3.2 requires Terraform version 5, but some modules aren't ready for Terraform v5 yet (e.g. S3)
   timeout = 10 # timeout for lambda function
-  memory_size = 1024 # memory size for lambda function
+  memory_size = 128 # memory size for lambda function
 }
 ```
 
