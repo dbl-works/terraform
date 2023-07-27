@@ -7,7 +7,6 @@ def handler(event:, context:)
   puts "[INFO] #{event}"
   puts "[INFO] Context: #{context}"
   event_name = event.fetch('detail').fetch('eventName')
-
   return unless deployment_failure?(event_name)
 
   resource_name = event.fetch('resources').join(',')
