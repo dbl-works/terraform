@@ -32,7 +32,7 @@ resource "aws_lambda_function" "main" {
   }
 
   depends_on = [
-    # NOTE: Cloudwatch log group have to be created before the lambda so we can create it before AWS does
+    # NOTE: The Cloudwatch log group has to be created before the lambda so we can create it before AWS does
     aws_cloudwatch_log_group.lambda
   ]
 }
