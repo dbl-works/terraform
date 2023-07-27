@@ -12,8 +12,7 @@ def handler(event:)
   region = event.fetch('region')
   reason = event.fetch('detail').fetch('reason')
   _, cluster_name, service_name = resource_name.split('/')
-  puts "[INFO] Cluster Name: #{cluster_name}"
-  puts "[INFO] Service Name: #{service_name}"
+  puts "[INFO] Cluster Name: #{cluster_name}, Service Name: #{service_name}, Region: #{region}, Reason: #{reason}"
 
   response = post_to_slack(cluster_name, service_name, region, reason)
   puts "[INFO] Response: #{response.body}"
