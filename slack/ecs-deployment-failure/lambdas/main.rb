@@ -3,7 +3,7 @@ require 'net/http'
 
 FAILED_EVENT = 'SERVICE_DEPLOYMENT_FAILED'.freeze
 
-def handler(event:)
+def handler(event:, context:)
   puts "[INFO] #{event}"
   event_name = event.fetch('detail').fetch('eventName')
   return unless event_name == FAILED_EVENT
