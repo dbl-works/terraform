@@ -11,7 +11,6 @@ variable "runtime" {
   default = "ruby3.2"
 }
 
-
 variable "timeout" {
   type    = number
   default = 10

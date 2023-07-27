@@ -15,7 +15,8 @@ def handler(event:, context:)
   reason = event.fetch('detail').fetch('reason')
   _, cluster_name, service_name = resource_name.split('/')
 
-  post_to_slack(cluster_name, service_name, region, reason)
+  response = post_to_slack(cluster_name, service_name, region, reason)
+  puts "[INFO] Response: #{response.body}"
 end
 
 def deployment_failure?(event_name)
@@ -25,18 +26,14 @@ end
 def post_to_slack(cluster_name, service_name, region, reason)
   webhook_url = ENV['SLACK_WEBHOOK_URL']
   uri = URI(webhook_url)
-
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
-
   request = Net::HTTP::Post.new(
     uri.path,
     { 'Content-Type' => 'application/json' }
   )
   request.body = payload(cluster_name, service_name, region, reason).to_json
-
-  response = http.request(request)
-  puts "[INFO] Response: #{response.body}"
+  http.request(request)
 end
 
 def payload(cluster_name, service_name, region, reason)
