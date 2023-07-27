@@ -18,7 +18,7 @@ variable "timeout" {
 
 variable "memory_size" {
   type    = number
-  default = 1024
+  default = 128
 }
 
 variable "slack_webhook_url" {
