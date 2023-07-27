@@ -28,6 +28,7 @@ module "ecs" {
   regional                    = var.regional
   name                        = var.ecs_name # custom name when convention exceeds 32 chars
   region                      = var.region   # used for e.g CloudWatch metrics
+  keep_alive_timeout          = var.keep_alive_timeout
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
   allow_alb_traffic_to_ports      = var.allow_alb_traffic_to_ports
