@@ -1,11 +1,13 @@
 variable "subnet_ids" {
   type        = list(string)
   description = "Subnets the lambdas are allowed to use to access resources in the VPC."
+  default     = []
 }
 
 variable "security_group_ids" {
   type        = list(string)
   description = "To allow or deny specific access to resources in the VPC."
+  default     = []
 }
 
 variable "project" {
@@ -68,4 +70,13 @@ variable "memory_size" {
 variable "lambda_policy_json" {
   type    = string
   default = null
+}
+
+variable "environment_variables" {
+  # type = {
+  #   ENV_1 : "abc"
+  #   ENV_2 : []
+  # }
+  type    = map(any)
+  default = {}
 }

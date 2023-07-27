@@ -17,6 +17,10 @@ resource "aws_lambda_function" "main" {
   memory_size      = var.memory_size
   layers           = var.aws_lambda_layer_arns
 
+  environment {
+    variables = var.environment_variables
+  }
+
   vpc_config {
     subnet_ids         = var.subnet_ids
     security_group_ids = var.security_group_ids
@@ -26,4 +30,9 @@ resource "aws_lambda_function" "main" {
     Project     = var.project
     Environment = var.environment
   }
+
+  depends_on = [
+    # NOTE: The Cloudwatch log group has to be created before the lambda so we can create it before AWS does
+    aws_cloudwatch_log_group.lambda
+  ]
 }
