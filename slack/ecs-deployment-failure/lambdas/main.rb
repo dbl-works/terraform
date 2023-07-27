@@ -3,7 +3,7 @@ require 'net/http'
 
 FAILED_EVENT = 'SERVICE_DEPLOYMENT_FAILED'.freeze
 
-def handler(event:, context:)
+def handler(event:)
   puts "[INFO] #{event}"
   event_name = event.fetch('detail').fetch('eventName')
   return unless event_name == FAILED_EVENT
@@ -12,6 +12,8 @@ def handler(event:, context:)
   region = event.fetch('region')
   reason = event.fetch('detail').fetch('reason')
   _, cluster_name, service_name = resource_name.split('/')
+  puts "[INFO] Cluster Name: #{cluster_name}"
+  puts "[INFO] Service Name: #{service_name}"
 
   response = post_to_slack(cluster_name, service_name, region, reason)
   puts "[INFO] Response: #{response.body}"
@@ -75,7 +77,7 @@ def payload(cluster_name, service_name, region, reason)
     ],
     "attachments": [
       {
-        "fallback": "Link to the AWS Console",
+        "fallback": 'Link to the AWS Console',
         "actions": [
           {
             "type": 'button',
