@@ -80,3 +80,9 @@ variable "environment_variables" {
   type    = map(any)
   default = {}
 }
+
+variable "role_arn" {
+  type        = string
+  default     = null
+  description = "(Optional) If null, a new lambda role will be created"
+}
