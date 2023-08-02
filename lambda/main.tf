@@ -4,10 +4,9 @@ data "archive_file" "zip" {
   output_path = "${path.module}/dist/${var.function_name}.zip"
 }
 
-
 resource "aws_lambda_function" "main" {
   function_name = var.function_name
-  role          = var.role_arn ? var.role_arn : aws_iam_role[0].main.arn
+  role          = var.lambda_role_name == null ? aws_iam_role.main[0].arn : data.aws_iam_role.main.arn
 
   filename         = data.archive_file.zip.output_path
   source_code_hash = data.archive_file.zip.output_base64sha256 # Used to trigger updates
