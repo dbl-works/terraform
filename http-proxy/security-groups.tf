@@ -2,11 +2,15 @@ resource "aws_security_group" "main" {
   name   = "${var.project}-${var.environment}-httpproxy"
   vpc_id = var.vpc_id
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = -1
-    cidr_blocks = ["0.0.0.0/0"]
+  #
+  dynamic "egress" {
+    for_each = var.egress_rules
+    content {
+      from_port   = egress.value.port
+      to_port     = egress.value.port
+      protocol    = egress.value.protocol
+      cidr_blocks = egress.value.cidr_blocks
+    }
   }
 
   lifecycle {
@@ -19,6 +23,7 @@ resource "aws_security_group" "main" {
   }
 }
 
+# this is required for the application to connect to the proxy
 resource "aws_security_group_rule" "ingress-tcp-8888-vpc" {
   type              = "ingress"
   from_port         = 8888
