@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### HTTP Proxy
+- New module to launch a tiny-proxy based HTTP proxy instance to allow an application server to assume a static IP address for outgoing traffic, e.g. when using a third-party API that requires a static IP address. For a robust and scaleable solution, consider using a NAT Gateway instead.
 
 ## [v2023.07.27]
 ### slack/ecs-deployment-failure
