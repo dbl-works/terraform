@@ -2,7 +2,6 @@ resource "aws_security_group" "main" {
   name   = "${var.project}-${var.environment}-httpproxy"
   vpc_id = var.vpc_id
 
-  #
   dynamic "egress" {
     for_each = var.egress_rules
     content {
