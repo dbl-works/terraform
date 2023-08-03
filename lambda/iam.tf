@@ -3,7 +3,7 @@ locals {
 }
 
 data "aws_iam_role" "main" {
-  name = var.lambda_role_name
+  name = var.lambda_role_name == null ? aws_iam_role.main[0].name : var.lambda_role_name
 }
 
 data "aws_iam_policy_document" "combined" {
