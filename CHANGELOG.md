@@ -10,6 +10,9 @@ This project does not follow SemVer, since modules are independent of each other
 ### lambda
 - Add lambda_role_arn variables [#236](https://github.com/dbl-works/terraform/pull/236)
 
+### HTTP Proxy
+- New module to launch a tiny-proxy based HTTP proxy instance to allow an application server to assume a static IP address for outgoing traffic, e.g. when using a third-party API that requires a static IP address. For a robust and scaleable solution, consider using a NAT Gateway instead.
+
 ## [v2023.07.27]
 ### slack/ecs-deployment-failure
 - New module which send a message to Slack when the deployment is a failure.
