@@ -26,5 +26,5 @@ resource "aws_instance" "main" {
 
 resource "aws_eip_association" "main" {
   instance_id   = aws_instance.main.id
-  allocation_id = local.eip
+  allocation_id = data.aws_eip.main.id
 }

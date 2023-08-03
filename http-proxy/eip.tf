@@ -8,6 +8,6 @@ resource "aws_eip" "main" {
   }
 }
 
-locals {
-  eip = var.eip == null ? aws_eip.main[0].public_ip : var.eip
+data "aws_eip" "main" {
+  public_ip = var.eip == null ? aws_eip.main[0].public_ip : var.eip
 }
