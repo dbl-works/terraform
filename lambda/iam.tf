@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "dummy" {
 resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
   count = var.lambda_role_name == null ? 1 : 0
 
-  role       = var.lambda_role_name == null ? aws_iam_role.main[0].name : var.lambda_role_name
+  role       = data.aws_iam_role.main.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
@@ -69,6 +69,6 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole" {
   count = var.lambda_role_name == null ? 1 : 0
 
-  role       = var.lambda_role_name == null ? aws_iam_role.main[0].name : var.lambda_role_name
+  role       = data.aws_iam_role.main.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
