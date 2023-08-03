@@ -47,6 +47,7 @@ jobs:
           - script/database-roles
           - secrets
           - slack/chatbot
+          - slack/ecs-deployment-failure
           - slack/sentry
           - slack/sns
           - snowflake/cloud

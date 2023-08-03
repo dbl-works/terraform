@@ -2,6 +2,10 @@ locals {
   secret_and_kms_policy_json = length(var.secrets_and_kms_arns) > 0 ? data.aws_iam_policy_document.main.json : data.aws_iam_policy_document.dummy.json
 }
 
+data "aws_iam_role" "main" {
+  name = var.lambda_role_name == null ? aws_iam_role.main[0].name : var.lambda_role_name
+}
+
 data "aws_iam_policy_document" "combined" {
   source_policy_documents = concat(
     [local.secret_and_kms_policy_json],
@@ -10,6 +14,7 @@ data "aws_iam_policy_document" "combined" {
 }
 
 resource "aws_iam_role" "main" {
+  count              = var.lambda_role_name == null ? 1 : 0
   name               = "${var.project}-${var.environment}-${var.function_name}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_document.json
 
@@ -53,13 +58,17 @@ data "aws_iam_policy_document" "dummy" {
 # For deploying into a VPC
 # AWSLambdaVPCAccessExecutionRole grants permissions to manage ENIs within an Amazon VPC and write to CloudWatch Logs.
 resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
-  role       = aws_iam_role.main.name
+  count = var.lambda_role_name == null ? 1 : 0
+
+  role       = data.aws_iam_role.main.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 # For logging
 # AWSLambdaBasicExecutionRole grants permissions to upload logs to CloudWatch.
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole" {
-  role       = aws_iam_role.main.name
+  count = var.lambda_role_name == null ? 1 : 0
+
+  role       = data.aws_iam_role.main.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
