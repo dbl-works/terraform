@@ -13,13 +13,13 @@ module "http-proxy" {
   project          = "dbl-works"
   environment      = "production"
   public_subnet_id = "subnet-1234567890"
-  ami_id           = "ami-0502e817a62226e03" # ubuntu 20.04 which has a free quota
   vpc_id           = "vpc-1234567890"
   cidr_block       = "123.123.123.123/32" # of the VPC in which your application server is running
 
   # optional
   eip           = "12.34.5.678" # if omitted, a new EIP is allocated
   instance_type = "t3.micro"
-  ssh_enabled   = false # switch this to "true" for the initial configuration, but keep it "false" for production
+  ssh_enabled   = false                   # switch this to "true" for the initial configuration, but keep it "false" for production
+  ami_id        = "ami-0502e817a62226e03" # ubuntu 20.04 which has a free quota
 }
 ```
