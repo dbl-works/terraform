@@ -1,7 +1,7 @@
 resource "aws_instance" "main" {
   ami                         = var.ami_id
   subnet_id                   = var.public_subnet_id
-  key_name                    = "${var.project}-${var.environment}-httpproxy"
+  key_name                    = aws_key_pair.main.key_name
   instance_type               = var.instance_type
   associate_public_ip_address = true
   monitoring                  = true
@@ -18,7 +18,7 @@ resource "aws_instance" "main" {
   }
 
   tags = {
-    Name        = "${var.project}-${var.environment}"
+    Name        = "${var.project}-${var.environment}-httpproxy"
     Project     = var.project
     Environment = var.environment
   }

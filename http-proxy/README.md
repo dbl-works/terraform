@@ -6,6 +6,8 @@ Launches a tiny-proxy based HTTP proxy instance to allow an application server t
 
 ## Usage
 
+Before launching this resouce, create a key-pair; read the [docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
+
 ```terraform
 module "http-proxy" {
   source = "github.com/dbl-works/terraform//http-proxy?ref=v2021.08.24"
@@ -15,6 +17,7 @@ module "http-proxy" {
   public_subnet_id = "subnet-1234567890"
   vpc_id           = "vpc-1234567890"
   cidr_block       = "123.123.123.123/32" # of the VPC in which your application server is running
+  public_key       = "ssh-rsa xxx" # SSH key used for the initial set up
 
   # optional
   eip           = "12.34.5.678" # if omitted, a new EIP is allocated

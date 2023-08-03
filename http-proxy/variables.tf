@@ -8,6 +8,11 @@ variable "environment" {
   description = "Name of the environment, used for tagging."
 }
 
+variable "public_key" {
+  type        = string
+  description = "SSH public key used for the initial setup."
+}
+
 variable "public_subnet_id" {
   type        = string
   description = "ID of the public subnet in which the instance will be placed."
