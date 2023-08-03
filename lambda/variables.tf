@@ -86,3 +86,8 @@ variable "lambda_role_name" {
   default     = null
   description = "(Optional) AWS IAM role name used by the lambda. If null, a new lambda role will be created"
 }
+
+variable "attach_execution_role_policy" {
+  type    = bool
+  default = true
+}

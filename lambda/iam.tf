@@ -58,6 +58,8 @@ data "aws_iam_policy_document" "dummy" {
 # For deploying into a VPC
 # AWSLambdaVPCAccessExecutionRole grants permissions to manage ENIs within an Amazon VPC and write to CloudWatch Logs.
 resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
+  count = var.attach_execution_role_policy ? 1 : 0
+
   role       = var.lambda_role_name == null ? aws_iam_role.main[0].name : var.lambda_role_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
@@ -65,6 +67,8 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
 # For logging
 # AWSLambdaBasicExecutionRole grants permissions to upload logs to CloudWatch.
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole" {
+  count = var.attach_execution_role_policy ? 1 : 0
+
   role       = var.lambda_role_name == null ? aws_iam_role.main[0].name : var.lambda_role_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
