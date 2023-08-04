@@ -86,22 +86,10 @@ variable "sidecar_config" {
   default = []
 }
 
-variable "security_group_id" {
-  type        = string
-  default     = null
-  description = "required for a microservice task"
-}
-
 variable "service_registry_arn" {
   type        = string
   default     = null
   description = "required for a microservice task"
-}
-
-variable "subnets" {
-  type        = list(string)
-  description = "required for a microservice task"
-  default     = []
 }
 
 variable "cpu" {

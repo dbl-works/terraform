@@ -50,8 +50,8 @@ locals {
     SECRETS_LIST          = jsonencode(local.secrets)
     CONTAINER_NAME        = var.app_config.name
     CONTAINER_PORT        = var.app_config.container_port
-    SECURITY_GROUP_ID     = var.security_group_id
-    SUBNETS               = jsonencode(var.subnets)
+    SECURITY_GROUP_ID     = data.aws_security_group.ecs.id
+    SUBNETS               = jsonencode(data.aws_subnets.selected.ids)
     SERVICE_REGISTRY_ARN  = var.service_registry_arn
   })
 
