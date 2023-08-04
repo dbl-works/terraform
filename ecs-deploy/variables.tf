@@ -89,7 +89,13 @@ variable "sidecar_config" {
 variable "service_registry_arn" {
   type        = string
   default     = null
-  description = "required for a microservice task"
+  description = "required for service discovery"
+}
+
+variable "aws_service_discovery_http_namespace_arn" {
+  type        = string
+  default     = null
+  description = "required for service discovery"
 }
 
 variable "cpu" {

@@ -71,6 +71,17 @@ resource "aws_ecs_service" "main" {
     registry_arn = var.service_registry_arn
   }
 
+  service_connect_configuration {
+    publish_cloud_map_service {
+      service_name = var.app_config.name
+      namespace_id = var.aws_service_discovery_http_namespace_arn
+    }
+    client_connect_options {
+      enabled        = true
+      container_port = var.app_config.container_port
+    }
+  }
+
   # not required if you don't want to use a load balancer, e.g. for Sidekiq
   dynamic "load_balancer" {
     for_each = local.load_balancers
