@@ -92,7 +92,7 @@ variable "service_registry_arn" {
   description = "required for service discovery"
 }
 
-variable "aws_service_discovery_http_namespace_arn" {
+variable "service_discovery_http_namespace_arn" {
   type        = string
   default     = null
   description = "required for service discovery"

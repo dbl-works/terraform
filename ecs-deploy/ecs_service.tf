@@ -73,7 +73,7 @@ resource "aws_ecs_service" "main" {
 
   service_connect_configuration {
     enabled   = true
-    namespace = var.aws_service_discovery_http_namespace_arn
+    namespace = var.service_discovery_http_namespace_arn
 
     service {
       port_name      = var.app_config.name
