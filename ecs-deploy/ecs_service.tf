@@ -76,7 +76,8 @@ resource "aws_ecs_service" "main" {
     namespace = var.aws_service_discovery_http_namespace_arn
 
     service {
-      port_name = var.app_config.name
+      port_name      = var.app_config.name
+      discovery_name = var.app_config.name
 
       client_alias {
         port     = var.app_config.container_port
