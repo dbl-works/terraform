@@ -1,0 +1,43 @@
+{
+    "name": "${NAME}",
+    "image": "${IMAGE_NAME}:${IMAGE_TAG}",
+    "portMappings": ${PORT_MAPPINGS},
+    "essential": true,
+    "command": ${COMMANDS},
+    "environment": ${ENVIRONMENT_VARIABLES},
+    "mountPoints": ${MOUNT_POINTS},
+    "volumesFrom": [],
+    "secrets": ${SECRETS_LIST},
+    "dependsOn": ${DEPENDS_ON},
+    "readonlyRootFilesystem": false,
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-create-group": "true",
+            "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}",
+            "awslogs-region": "${REGION}",
+            "awslogs-stream-prefix": "${NAME}",
+            "mode": "${ECS_FARGATE_LOG_MODE}"
+        }
+    },
+    "networkMode": "awsvpc",
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "${SUBNET_ID_1}",
+                "${SUBNET_ID_2}"
+            ],
+            "securityGroups": [
+                "${SECURITY_GROUP_ID}"
+            ],
+            "assignPublicIp": "DISABLED"
+        },
+        "serviceRegistries": [
+            {
+                "registryArn": "${SERVICE_REGISTRY_ARN}",
+                "containerName": "${CONTAINER_NAME}",
+                "containerPort": ${CONTAINER_PORT}
+            }
+        ]
+    }
+}
