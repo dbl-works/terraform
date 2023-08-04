@@ -50,6 +50,9 @@ locals {
     SECRETS_LIST          = jsonencode(local.secrets)
     CONTAINER_NAME        = var.app_config.name
     CONTAINER_PORT        = var.app_config.container_port
+    SECURITY_GROUP_ID     = var.security_group_id
+    SUBNETS               = var.subnets
+    SERVICE_REGISTRY_ARN  = var.service_registry_arn
   })
 
   sidecar_container_definitions = [for config in var.sidecar_config : templatefile("${path.module}/task-definitions/sidecar.json", {

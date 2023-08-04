@@ -23,10 +23,7 @@
     "networkMode": "awsvpc",
     "networkConfiguration": {
         "awsvpcConfiguration": {
-            "subnets": [
-                "${SUBNET_ID_1}",
-                "${SUBNET_ID_2}"
-            ],
+            "subnets": "${SUBNETS}",
             "securityGroups": [
                 "${SECURITY_GROUP_ID}"
             ],
