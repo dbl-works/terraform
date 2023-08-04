@@ -67,6 +67,12 @@ resource "aws_ecs_service" "main" {
     assign_public_ip = var.subnet_type == "public"
   }
 
+  service_registries {
+    registry_arn   = var.service_registry_arn
+    container_name = var.app_config.name
+    container_port = var.app_config.container_port
+  }
+
   # not required if you don't want to use a load balancer, e.g. for Sidekiq
   dynamic "load_balancer" {
     for_each = local.load_balancers

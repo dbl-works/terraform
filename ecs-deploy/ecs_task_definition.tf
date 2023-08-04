@@ -18,6 +18,12 @@ resource "aws_ecs_task_definition" "main" {
     }
   }
 
+  service_registries {
+    registry_arn   = var.service_registry_arn
+    container_name = var.app_config.name
+    container_port = var.app_config.container_port
+  }
+
   tags = {
     Name        = local.task_definition_name
     Project     = var.project
