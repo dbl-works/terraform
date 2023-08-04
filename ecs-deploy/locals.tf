@@ -34,8 +34,7 @@ locals {
 
   task_definition_name = "${var.project}-${var.app_config.name}-${var.environment}"
 
-  # app_container_definitions = templatefile("${path.module}/task-definitions/${var.container_definitions_file_name}.json", {
-  app_container_definitions = templatefile("${path.module}/task-definitions/web-microservice.json", {
+  app_container_definitions = templatefile("${path.module}/task-definitions/${var.container_definitions_file_name}.json", {
     COMMANDS              = jsonencode(var.app_config.commands)
     DEPENDS_ON            = jsonencode(local.depends_on)
     ECS_FARGATE_LOG_MODE  = var.ecs_fargate_log_mode
