@@ -23,6 +23,7 @@ locals {
   app_port_mappings = try(var.app_config.container_port, null) == null ? [] : [{
     containerPort : var.app_config.container_port,
     hostPort : var.app_config.container_port,
+    name : var.app_config.name,
     protocol : "tcp",
   }]
 
