@@ -32,7 +32,7 @@
         "serviceRegistries": [
             {
                 "registryArn": "${SERVICE_REGISTRY_ARN}",
-                "containerName": "${CONTAINER_NAME}",
+                "containerName": "${NAME}",
                 "containerPort": ${CONTAINER_PORT}
             }
         ]

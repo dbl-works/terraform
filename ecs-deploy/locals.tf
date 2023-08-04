@@ -48,7 +48,6 @@ locals {
     PROJECT               = var.project
     REGION                = data.aws_region.current.name
     SECRETS_LIST          = jsonencode(local.secrets)
-    CONTAINER_NAME        = var.app_config.name
     CONTAINER_PORT        = var.app_config.container_port
     SECURITY_GROUP_ID     = data.aws_security_group.ecs.id
     SUBNETS               = jsonencode(data.aws_subnets.selected.ids)
