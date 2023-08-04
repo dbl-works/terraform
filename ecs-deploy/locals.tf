@@ -23,7 +23,8 @@ locals {
   app_port_mappings = try(var.app_config.container_port, null) == null ? [] : [{
     containerPort : var.app_config.container_port,
     hostPort : var.app_config.container_port,
-    protocol : "tcp"
+    protocol : "tcp",
+    mode : "alb"
   }]
 
   mount_points = try(var.app_config.mount_points, null) == null ? [] : var.app_config.mount_points
