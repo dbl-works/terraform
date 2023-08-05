@@ -68,7 +68,8 @@ resource "aws_ecs_service" "main" {
     for_each = aws_service_discovery_service.main
 
     content {
-      registry_arn = var.service_registry_arn
+      registry_arn = service_registries.value.arn
+      # port, container_name, and container_port are already declared in the task-definition
     }
   }
 
