@@ -68,7 +68,7 @@ resource "aws_ecs_service" "main" {
   }
 
   dynamic "service_registries" {
-    count = var.service_registry_arn == null ? 0 : 1
+    for_each = var.service_registry_arn == null ? [] : [{}]
 
     content {
       registry_arn = var.service_registry_arn
@@ -76,7 +76,7 @@ resource "aws_ecs_service" "main" {
   }
 
   dynamic "service_connect_configuration" {
-    count = var.service_discovery_http_namespace_arn == null ? 0 : 1
+    for_each = var.service_discovery_http_namespace_arn == null ? [] : [{}]
 
     content {
       enabled   = true
