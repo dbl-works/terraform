@@ -86,16 +86,14 @@ variable "sidecar_config" {
   default = []
 }
 
-variable "service_registry_arn" {
+variable "service_discovery_namespace_id" {
   type        = string
   default     = null
   description = "required for service discovery"
 }
 
-variable "service_discovery_http_namespace_arn" {
-  type        = string
-  default     = null
-  description = "required for service discovery"
+locals {
+  service_discovery_enabled = var.service_discovery_namespace_id != null
 }
 
 variable "cpu" {

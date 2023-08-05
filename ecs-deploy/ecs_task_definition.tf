@@ -27,6 +27,10 @@ resource "aws_ecs_task_definition" "main" {
   depends_on = [
     aws_cloudwatch_log_group.ecs_sidecar
   ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_cloudwatch_log_group" "ecs_sidecar" {
