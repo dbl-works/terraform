@@ -67,11 +67,15 @@ resource "aws_ecs_service" "main" {
     assign_public_ip = var.subnet_type == "public"
   }
 
-  service_registries {
+  dynamic "service_registries" {
+    count = var.service_registry_arn == null ? 0 : 1
+
     registry_arn = var.service_registry_arn
   }
 
-  service_connect_configuration {
+  dynamic "service_connect_configuration" {
+    count = var.service_discovery_http_namespace_arn == null ? 0 : 1
+
     enabled   = true
     namespace = var.service_discovery_http_namespace_arn
 
