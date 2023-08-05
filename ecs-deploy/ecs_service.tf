@@ -73,25 +73,6 @@ resource "aws_ecs_service" "main" {
     }
   }
 
-  # dynamic "service_connect_configuration" {
-  #   for_each = var.service_discovery_http_namespace_arn == null ? [] : [{}]
-
-  #   content {
-  #     enabled   = true
-  #     namespace = var.service_discovery_http_namespace_arn
-
-  #     service {
-  #       port_name = var.app_config.name
-  #       # discovery_name = var.app_config.name
-
-  #       client_alias {
-  #         port     = var.app_config.container_port
-  #         dns_name = "${var.app_config.name}.local"
-  #       }
-  #     }
-  #   }
-  # }
-
   # not required if you don't want to use a load balancer, e.g. for Sidekiq
   dynamic "load_balancer" {
     for_each = local.load_balancers
