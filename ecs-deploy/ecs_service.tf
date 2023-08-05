@@ -122,7 +122,7 @@ resource "aws_ecs_service" "main" {
 resource "aws_service_discovery_service" "main" {
   count = local.service_discovery_enabled ? 1 : 0
 
-  name = "${var.project}-${var.environment}-${var.app_config.name}"
+  name = var.app_config.name
 
   dns_config {
     namespace_id = var.service_discovery_namespace_id
