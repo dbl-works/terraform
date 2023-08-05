@@ -82,15 +82,15 @@ resource "aws_ecs_service" "main" {
       enabled   = true
       namespace = var.service_discovery_http_namespace_arn
 
-      service {
-        port_name      = var.app_config.name
-        discovery_name = var.app_config.name
+      # service {
+      #   port_name      = var.app_config.name
+      #   discovery_name = var.app_config.name
 
-        client_alias {
-          port     = var.app_config.container_port
-          dns_name = "${var.app_config.name}.local"
-        }
-      }
+      #   client_alias {
+      #     port     = var.app_config.container_port
+      #     dns_name = "${var.app_config.name}.local"
+      #   }
+      # }
     }
   }
 
