@@ -70,22 +70,26 @@ resource "aws_ecs_service" "main" {
   dynamic "service_registries" {
     count = var.service_registry_arn == null ? 0 : 1
 
-    registry_arn = var.service_registry_arn
+    content {
+      registry_arn = var.service_registry_arn
+    }
   }
 
   dynamic "service_connect_configuration" {
     count = var.service_discovery_http_namespace_arn == null ? 0 : 1
 
-    enabled   = true
-    namespace = var.service_discovery_http_namespace_arn
+    content {
+      enabled   = true
+      namespace = var.service_discovery_http_namespace_arn
 
-    service {
-      port_name      = var.app_config.name
-      discovery_name = var.app_config.name
+      service {
+        port_name      = var.app_config.name
+        discovery_name = var.app_config.name
 
-      client_alias {
-        port     = var.app_config.container_port
-        dns_name = "${var.app_config.name}.local"
+        client_alias {
+          port     = var.app_config.container_port
+          dns_name = "${var.app_config.name}.local"
+        }
       }
     }
   }
