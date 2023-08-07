@@ -175,3 +175,8 @@ variable "alb_listener_rules" {
   }))
   default = []
 }
+
+variable "service_discovery_enabled" {
+  type    = bool
+  default = true
+}

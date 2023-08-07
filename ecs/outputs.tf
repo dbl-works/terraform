@@ -35,3 +35,7 @@ output "alb_arn_suffix" {
 output "ecs_cluster_name" {
   value = aws_ecs_cluster.main.name
 }
+
+output "service_discovery_namespace_id" {
+  value = aws_service_discovery_private_dns_namespace.main[0].id
+}

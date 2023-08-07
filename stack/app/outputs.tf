@@ -89,3 +89,7 @@ output "dnssec_key_type" {
 output "dnssec_public_key" {
   value = module.cloudflare[*].dnssec_public_key
 }
+
+output "service_discovery_namespace_id" {
+  value = module.ecs.service_discovery_namespace_id
+}
