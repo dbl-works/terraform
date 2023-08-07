@@ -37,5 +37,5 @@ output "ecs_cluster_name" {
 }
 
 output "service_discovery_namespace_id" {
-  value = aws_service_discovery_private_dns_namespace.main.id
+  value = aws_service_discovery_private_dns_namespace.main[0].id
 }
