@@ -59,12 +59,18 @@ resource "aws_ecs_service" "main" {
   }
 
   network_configuration {
-    subnets = data.aws_subnets.selected.ids
-
-    security_groups = [
-      data.aws_security_group.ecs.id
-    ]
+    subnets          = data.aws_subnets.selected.ids
+    security_groups  = [data.aws_security_group.ecs.id]
     assign_public_ip = var.subnet_type == "public"
+  }
+
+  dynamic "service_registries" {
+    for_each = aws_service_discovery_service.main
+
+    content {
+      registry_arn = service_registries.value.arn
+      # port, container_name, and container_port are already declared in the task-definition
+    }
   }
 
   # not required if you don't want to use a load balancer, e.g. for Sidekiq
@@ -78,9 +84,7 @@ resource "aws_ecs_service" "main" {
     }
   }
 
-  deployment_controller {
-    type = "ECS"
-  }
+  deployment_controller { type = "ECS" }
 
   tags = {
     Name        = var.app_config.name
@@ -92,5 +96,32 @@ resource "aws_ecs_service" "main" {
     ignore_changes = [
       desired_count # We should not care about the desired count after the first deployment
     ]
+  }
+}
+
+
+resource "aws_service_discovery_service" "main" {
+  count = local.service_discovery_enabled ? 1 : 0
+
+  name = var.app_config.name
+
+  dns_config {
+    namespace_id = var.service_discovery_namespace_id
+
+    dns_records {
+      ttl  = 10 # time in seconds that DNS resolvers cache the settings for this record
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE" # one of MULTIVALUE or WEIGHTED
+  }
+
+  health_check_custom_config {
+    failure_threshold = 2 # number between 1 and 10; number of 30 second intervals to wait before declaring failure
+  }
+
+  tags = {
+    Project     = var.project
+    Environment = var.environment
   }
 }
