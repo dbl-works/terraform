@@ -58,6 +58,7 @@ module "ecs" {
   autoscale_params                  = var.autoscale_params
   autoscale_metrics_map             = var.autoscale_metrics_map
   cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
+  service_discovery_enabled         = var.service_discovery_enabled
 }
 
 module "cloudwatch" {

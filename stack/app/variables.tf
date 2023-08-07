@@ -332,7 +332,6 @@ variable "alb_listener_rules" {
   default = []
 }
 
-
 variable "ecs_name" {
   type    = string
   default = null
@@ -427,6 +426,11 @@ variable "autoscale_metrics_map" {
     }))
   }))
   default = {}
+}
+
+variable "service_discovery_enabled" {
+  type    = bool
+  default = true
 }
 
 # =============== ECS ================ #
