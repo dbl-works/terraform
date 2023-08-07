@@ -66,3 +66,29 @@ variable "ssh_enabled" {
   default     = false
   description = "Enable SSH for the initial configuration of the instance, then disable it again."
 }
+
+variable "egress_rules" {
+  description = "List of objects representing egress rules"
+  type = list(object({
+    port        = number
+    protocol    = optional(string, "tcp")
+    cidr_blocks = optional(list(string), ["0.0.0.0/0"])
+  }))
+  default = [
+    {
+      port        = 22
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      port        = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      port        = 443
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+  ]
+}
