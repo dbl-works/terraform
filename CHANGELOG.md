@@ -19,9 +19,12 @@ This project does not follow SemVer, since modules are independent of each other
 ### stack/app
 - Add service_discovery_enabled as variables. [#240](https://github.com/dbl-works/terraform/pull/240)
 
+### iam/iam-for-deploy-bot
+- add permissions to manage service discovery [#241](https://github.com/dbl-works/terraform/pull/241)
+
 ## [v2023.07.27]
 ### slack/ecs-deployment-failure
-- New module which send a message to Slack when the deployment is a failure.
+- New module which send a message to Slack when the deployment is a failure. [#235](https://github.com/dbl-works/terraform/pull/235)
 
 ### ecs-deploy
 - Add deployment_circuit_breaker options [#230](https://github.com/dbl-works/terraform/pull/230)
