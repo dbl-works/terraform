@@ -183,7 +183,7 @@ resource "aws_iam_group_policy_attachment" "deploy-bot-s3-access" {
   policy_arn = aws_iam_policy.deploy-bot-s3-full-access.arn
 }
 
-resource "aws_iam_group_policy_attachment" "service_discovery_access" {
+resource "aws_iam_group_policy_attachment" "service-discovery-access" {
   group      = aws_iam_group.deploy-bot-deploy-access.name
   policy_arn = aws_iam_policy.service-discovery-access.arn
 }
