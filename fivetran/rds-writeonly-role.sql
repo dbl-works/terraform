@@ -17,6 +17,7 @@ $$
     EXECUTE format('GRANT USAGE ON SCHEMA public TO %s_%s_writeonly_fivetran;', project, environment);
     FOREACH table_name IN ARRAY allowed_tables
       LOOP
+        EXECUTE format('GRANT ALTER ON TABLE %s TO %s_%s_writeonly_fivetran', table_name, project, environment);
         EXECUTE format('GRANT CREATE, UPDATE ON TABLE %s TO %s_%s_writeonly_fivetran', table_name, project,
                        environment);
       END LOOP;
