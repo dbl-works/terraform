@@ -18,6 +18,7 @@ END IF;
     EXECUTE format('ALTER ROLE %s_%s_writeonly_fivetran WITH LOGIN ENCRYPTED PASSWORD ''%s'';', project, environment,
                    password);
     EXECUTE format('GRANT USAGE ON SCHEMA public TO %s_%s_writeonly_fivetran;', project, environment);
+    EXECUTE format('REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM %s_%s_writeonly_fivetran;', project, environment);
     FOREACH table_name IN ARRAY allowed_tables
       LOOP
         EXECUTE format('GRANT INSERT, SELECT, UPDATE, DELETE, ALTER ON TABLE %s TO %s_%s_writeonly_fivetran', table_name, project, environment);
