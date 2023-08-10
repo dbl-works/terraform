@@ -11,7 +11,10 @@ $$
       ];
     password       varchar   := 'my-super-secret-password';
   BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = format('%s_%s_writeonly_fivetran', project, environment))
+THEN
     EXECUTE format('CREATE ROLE %s_%s_writeonly_fivetran;', project, environment);
+END IF;
     EXECUTE format('ALTER ROLE %s_%s_writeonly_fivetran WITH LOGIN ENCRYPTED PASSWORD ''%s'';', project, environment,
                    password);
     EXECUTE format('GRANT USAGE ON SCHEMA public TO %s_%s_writeonly_fivetran;', project, environment);
