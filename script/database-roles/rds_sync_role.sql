@@ -28,8 +28,11 @@ $$
                    environment, app_name);
     FOREACH table_name IN ARRAY allowed_tables
       LOOP
-        -- Grant the role access to the table
-        EXECUTE format('GRANT INSERT, SELECT, UPDATE, DELETE, ALTER ON TABLE %s TO %s_%s_sync_%s',
+        -- Grant the role access to modify table data
+        EXECUTE format('GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE %s TO %s_%s_sync_%s',
+                       table_name, project, environment, app_name);
+        -- Grant the role access to modify the table structure (e.g. Fivetran needs to be able to add columns)
+        EXECUTE format('ALTER TABLE %s OWNER TO %s_%s_sync_%s',
                        table_name, project, environment, app_name);
       END LOOP;
     -- Let the role create temporary tables
@@ -40,3 +43,11 @@ $$
     EXECUTE format('GRANT CREATE ON SCHEMA public TO %s_%s_sync_%s;', project, environment, app_name);
   END
 $$;
+
+-- check if role was created
+SELECT
+	rolname
+FROM
+	pg_roles
+WHERE
+	rolname LIKE '%_sync_%';
