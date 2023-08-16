@@ -104,6 +104,10 @@ variable "maxmemory_policy" {
   type        = string
   default     = null
   description = "Only effective, when NOT passing a custom parameter group name"
+  validation {
+    condition     = var.maxmemory_policy == null || contains(["volatile-lru", "allkeys-lru", "volatile-lfu", "allkeys-lfu", "volatile-random", "allkeys-random", "volatile-ttl", "noeviction"], var.maxmemory_policy)
+    error_message = "maxmemory_policy must be one of volatile-lru, allkeys-lru, volatile-lfu, allkeys-lfu, volatile-random, allkeys-random, volatile-ttl, noeviction"
+  }
 }
 
 locals {
