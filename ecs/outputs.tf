@@ -37,5 +37,5 @@ output "ecs_cluster_name" {
 }
 
 output "service_discovery_namespace_id" {
-  value = service_discovery_enabled ? aws_service_discovery_private_dns_namespace.main[0].id : "Service discovery not enabled."
+  value = var.service_discovery_enabled ? aws_service_discovery_private_dns_namespace.main[0].id : "Service discovery not enabled."
 }
