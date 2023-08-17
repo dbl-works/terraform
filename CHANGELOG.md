@@ -18,6 +18,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### stack/app
 - Add service_discovery_enabled as variables. [#240](https://github.com/dbl-works/terraform/pull/240)
+- Add elasticache major and minor version to the module. [#245](https://github.com/dbl-works/terraform/pull/245)
 
 ### iam/iam-for-deploy-bot
 - add permissions to manage service discovery [#241](https://github.com/dbl-works/terraform/pull/241)
