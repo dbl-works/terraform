@@ -155,6 +155,24 @@ variable "elasticache_node_type" {
   default = "cache.t3.micro"
 }
 
+variable "elasticache_major_version" {
+  type    = number
+  default = 7
+  validation {
+    condition     = var.elasticache_major_version >= 6 && var.elasticache_major_version <= 7
+    error_message = "elasticache major_version must be 6 or 7"
+  }
+}
+
+variable "elasticache_minor_version" {
+  type    = number
+  default = 0
+  validation {
+    condition     = var.elasticache_minor_version >= 0
+    error_message = "elasticache minor_version must be between 0 or higher"
+  }
+}
+
 variable "elasticache_node_count" {
   type    = number
   default = 1
@@ -162,7 +180,7 @@ variable "elasticache_node_count" {
 
 variable "elasticache_parameter_group_name" {
   type    = string
-  default = "default.redis6.x.cluster.on"
+  default = "default.redis7.cluster.on"
 }
 
 variable "elasticache_replicas_per_node_group" {
