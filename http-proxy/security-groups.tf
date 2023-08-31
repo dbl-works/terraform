@@ -32,14 +32,26 @@ resource "aws_security_group_rule" "ingress-tcp-8888-vpc" {
   security_group_id = aws_security_group.main.id
 }
 
-# enable this only for the configuration of the proxy
+# required to SSH into the machine to configure it or perform maintenance work
 resource "aws_security_group_rule" "ingress-tcp-22-public" {
-  count = var.ssh_enabled ? 1 : 0
+  count = var.maintenance_mode ? 1 : 0
 
   type              = "ingress"
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.main.id
+}
+
+# required to e.g. download updates or install packages
+resource "aws_security_group_rule" "egress-public-internet" {
+  count = var.maintenance_mode ? 1 : 0
+
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.main.id
 }

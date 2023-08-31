@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### HTTP Proxy
+- renamed `ssh_enabled` to `maintenance_mode` to better reflect its purpose
+- `maintenance_mode` now allows outbound traffic from all of the internet to e.g. update and install packages
+
+## [v2023.08.31]
 ### lambda
 - Add lambda_role_arn variables [#236](https://github.com/dbl-works/terraform/pull/236)
 

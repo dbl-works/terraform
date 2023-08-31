@@ -61,10 +61,10 @@ variable "instance_type" {
   default = "t3.micro"
 }
 
-variable "ssh_enabled" {
+variable "maintenance_mode" {
   type        = bool
   default     = false
-  description = "Enable SSH for the initial configuration of the instance, then disable it again."
+  description = "Enables SSH access and allows outgoing traffic to the entire internet for configuration and maintenance purposes. Keep disabled for production."
 }
 
 variable "egress_rules" {
