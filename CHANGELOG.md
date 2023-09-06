@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### rds
+- Add max_allocated_storage to rds. [#249](https://github.com/dbl-works/terraform/pull/249)
+
 ### lambda
 - Add lambda_role_arn variables [#236](https://github.com/dbl-works/terraform/pull/236)
 
@@ -19,6 +22,7 @@ This project does not follow SemVer, since modules are independent of each other
 ### stack/app
 - Add service_discovery_enabled as variables. [#240](https://github.com/dbl-works/terraform/pull/240)
 - Add elasticache major and minor version to the module. [#245](https://github.com/dbl-works/terraform/pull/245)
+- Add rds_max_allocated_storage to rds. [#249](https://github.com/dbl-works/terraform/pull/249)
 
 ### iam/iam-for-deploy-bot
 - add permissions to manage service discovery [#241](https://github.com/dbl-works/terraform/pull/241)
