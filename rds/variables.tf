@@ -12,7 +12,12 @@ variable "engine_version" {
   type    = string
 }
 variable "allocated_storage" { default = 100 }
-variable "max_allocated_storage" { default = 200 }
+
+variable "max_allocated_storage" {
+  type        = number
+  default     = 0
+  description = "When configured, the upper limit to which Amazon RDS can automatically scale the storage of the DB instance. Must be greater than or equal to allocated_storage or 0 to disable Storage Autoscaling."
+}
 
 variable "publicly_accessible" {
   type    = bool

@@ -296,8 +296,9 @@ variable "rds_allocated_storage" {
 }
 
 variable "rds_max_allocated_storage" {
-  type    = number
-  default = 200
+  type        = number
+  default     = 0
+  description = "When configured, the upper limit to which Amazon RDS can automatically scale the storage of the DB instance. Must be greater than or equal to allocated_storage or 0 to disable Storage Autoscaling."
 }
 
 variable "rds_allow_from_cidr_blocks" {
