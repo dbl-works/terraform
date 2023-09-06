@@ -8,6 +8,7 @@ resource "aws_db_instance" "main" {
   allow_major_version_upgrade         = true
   db_subnet_group_name                = aws_db_subnet_group.main.name
   allocated_storage                   = var.allocated_storage
+  max_allocated_storage               = var.max_allocated_storage
   storage_type                        = "gp2"
   engine                              = var.is_read_replica ? null : "postgres"
   engine_version                      = var.is_read_replica ? null : local.major_engine_version # Use major version only to allow AWS to update the minor/patch version automatically

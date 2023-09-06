@@ -259,34 +259,47 @@ variable "rds_master_db_vpc_cidr_block" {
   default = null
   type    = string
 }
+
 variable "rds_master_db_region" {
   type    = string
   default = null
 }
+
 variable "rds_master_db_vpc_id" {
   type    = string
   default = null
 }
+
 variable "rds_master_db_kms_key_arn" {
   type    = string
   default = null
 }
+
 variable "rds_master_nat_route_table_ids" {
   type    = list(string)
   default = []
 }
+
 variable "rds_instance_class" {
   type    = string
   default = "db.t3.micro"
 }
+
 variable "rds_engine_version" {
   type    = string
   default = "13"
 }
+
 variable "rds_allocated_storage" {
   type    = number
   default = 100
 }
+
+variable "rds_max_allocated_storage" {
+  type    = number
+  default = 200
+}
+
 variable "rds_allow_from_cidr_blocks" {
   type    = list(string)
   default = []
