@@ -19,8 +19,7 @@
       "options": {
           "awslogs-create-group": "true",
           "awslogs-group": "${LOG_GROUP_NAME}",
-          "awslogs-region": "${REGION}",
-          "awslogs-stream-prefix": "${NAME}"
+          "awslogs-region": "${REGION}"
       }
   }
 }
