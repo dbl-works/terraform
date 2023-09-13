@@ -181,7 +181,7 @@ variable "service_discovery_enabled" {
   default = true
 }
 
-variable "cluster_service_group" {
+variable "monitored_service_groups" {
   type        = list(string)
   default     = ["service:web"]
   description = "ECS service groups that we would like to monitor when a container reaches a STOPPED state."

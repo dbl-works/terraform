@@ -11,7 +11,7 @@ resource "aws_cloudwatch_event_rule" "stopped_container" {
     # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_cwet2.html
     detail = {
       "clusterArn" = [aws_ecs_cluster.main.arn],
-      "group"      = var.cluster_service_group,
+      "group"      = var.monitored_service_groups,
       "lastStatus" = [
         "STOPPED"
       ],
