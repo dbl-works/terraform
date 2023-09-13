@@ -23,6 +23,7 @@ module "ecs" {
 
   # optional
   health_check_path           = var.health_check_path
+  health_check_options        = var.health_check_options
   certificate_arn             = var.certificate_arn == null ? data.aws_acm_certificate.default.arn : var.certificate_arn
   additional_certificate_arns = var.additional_certificate_arns
   regional                    = var.regional
