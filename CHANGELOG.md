@@ -12,10 +12,10 @@ This project does not follow SemVer, since modules are independent of each other
 - `maintenance_mode` now allows outbound traffic from all of the internet to e.g. update and install packages
 
 ### stack/app
-- Add health_check_options
+- Add health_check_options [#253](https://github.com/dbl-works/terraform/pull/253)
 
 ### ecs
-- Add health_check_options
+- Add health_check_options [#253](https://github.com/dbl-works/terraform/pull/253)
 
 ## [v2023.08.31]
 ### lambda
