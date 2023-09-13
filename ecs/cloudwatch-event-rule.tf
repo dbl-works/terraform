@@ -1,5 +1,5 @@
 locals {
-  cloudwatch_event_rule_name = "${local.project}-${local.environment}-stopped_container"
+  cloudwatch_event_rule_name = "${var.project}-${var.environment}-stopped_container"
 }
 
 resource "aws_cloudwatch_event_rule" "stopped_container" {
