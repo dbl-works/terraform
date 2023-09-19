@@ -186,7 +186,7 @@ variable "monitored_service_groups" {
   default     = ["service:web"]
   description = "ECS service groups that we would like to monitor when a container reaches a STOPPED state."
 }
-  
+
 variable "health_check_options" {
   type = object({
     healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.
