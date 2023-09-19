@@ -73,22 +73,26 @@ variable "egress_rules" {
     port        = number
     protocol    = optional(string, "tcp")
     cidr_blocks = optional(list(string), ["0.0.0.0/0"])
+    description = optional(string, "custom rule of the application")
   }))
   default = [
     {
       port        = 22
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
+      description = "SSH access"
     },
     {
       port        = 80
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
+      description = "general HTTP access"
     },
     {
       port        = 443
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
+      description = "general HTTPS access"
     },
   ]
 }

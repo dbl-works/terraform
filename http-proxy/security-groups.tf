@@ -9,6 +9,7 @@ resource "aws_security_group" "main" {
       to_port     = egress.value.port
       protocol    = egress.value.protocol
       cidr_blocks = egress.value.cidr_blocks
+      description = egress.value.description
     }
   }
 
