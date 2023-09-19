@@ -42,6 +42,7 @@ resource "aws_security_group_rule" "ingress-tcp-22-public" {
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.main.id
+  description       = "For maintenance_mode to allow SSH access"
 }
 
 # required to e.g. download updates or install packages
@@ -54,4 +55,5 @@ resource "aws_security_group_rule" "egress-public-internet" {
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.main.id
+  description       = "For maintenance_mode to allow access to the public internet"
 }
