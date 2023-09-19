@@ -6,10 +6,9 @@ resource "aws_instance" "main" {
   associate_public_ip_address = true
   monitoring                  = true
 
-  vpc_security_group_ids = flatten([
-    var.vpc_security_group_ids,
+  vpc_security_group_ids = [
     aws_security_group.main.id,
-  ])
+  ]
 
   root_block_device {
     delete_on_termination = true
