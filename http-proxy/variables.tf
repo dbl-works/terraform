@@ -92,3 +92,9 @@ variable "egress_rules" {
     },
   ]
 }
+
+variable "vpc_security_group_ids" {
+  type        = list(string)
+  description = "List of security group IDs to add to the instance."
+  default     = []
+}
