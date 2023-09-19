@@ -181,6 +181,12 @@ variable "service_discovery_enabled" {
   default = true
 }
 
+variable "monitored_service_groups" {
+  type        = list(string)
+  default     = ["service:web"]
+  description = "ECS service groups to monitor STOPPED containers."
+}
+
 variable "health_check_options" {
   type = object({
     healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.

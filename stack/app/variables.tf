@@ -338,6 +338,12 @@ variable "allow_internal_traffic_to_ports" {
   default = []
 }
 
+variable "monitored_service_groups" {
+  type        = list(string)
+  default     = ["service:web"]
+  description = "ECS service groups to monitor STOPPED containers."
+}
+
 variable "keep_alive_timeout" {
   type    = number
   default = 60
