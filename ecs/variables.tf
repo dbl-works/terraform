@@ -184,7 +184,7 @@ variable "service_discovery_enabled" {
 variable "monitored_service_groups" {
   type        = list(string)
   default     = ["service:web"]
-  description = "ECS service groups that we would like to monitor when a container reaches a STOPPED state."
+  description = "ECS service groups to monitor STOPPED containers."
 }
 
 variable "health_check_options" {
