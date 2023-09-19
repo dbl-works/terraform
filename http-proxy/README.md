@@ -75,7 +75,7 @@ Prepare your local ENV
 ⚠️ ensure that the password does not contain special chars, as this breaks tinyproxy.
 
 ```shell
-export PATH_TO_SSH_KEY="/~/.ssh/http_proxy_ed25519"
+export PATH_TO_SSH_KEY="~/.ssh/http_proxy_ed25519"
 export SSH_USER="ubuntu"
 export SERVER_HOST="YOUR_EIP"
 export BASIC_AUTH_PASSWORD="CHOOSE_A_SECURE_PASSWORD"

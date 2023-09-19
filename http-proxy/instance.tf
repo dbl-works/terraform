@@ -7,7 +7,7 @@ resource "aws_instance" "main" {
   monitoring                  = true
 
   vpc_security_group_ids = [
-    aws_security_group.main.id
+    aws_security_group.main.id,
   ]
 
   root_block_device {
