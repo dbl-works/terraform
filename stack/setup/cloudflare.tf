@@ -33,3 +33,39 @@ resource "aws_acm_certificate_validation" "default" {
   certificate_arn         = aws_acm_certificate.main[0].arn
   validation_record_fqdns = cloudflare_record.validation.*.hostname
 }
+
+resource "cloudflare_ruleset" "clickjacking" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  name        = "clickjacking"
+  description = "example magic transit ruleset description"
+  kind        = "root"
+  phase       = "magic_transit"
+
+  rules {
+    action      = "allow"
+    expression  = "tcp.dstport in { 32768..65535 }"
+    description = "Allow TCP Ephemeral Ports"
+  }
+}
+
+resource "cloudflare_ruleset" "clickjacking" {
+  zone_id     = data.cloudflare_zone.default.id
+  name        = "Clickjacking"
+  description = "Prevent clickjacking"
+  kind        = "zone"
+  phase       = "http_response_headers_transform"
+
+  rules {
+    action = "rewrite"
+    action_parameters {
+      headers {
+        name      = "X-Frame-Options"
+        operation = "set"
+        value     = "SAMEORIGIN"
+      }
+    }
+    expression  = "true"
+    description = "Clickjacking"
+    enabled     = true
+  }
+}
