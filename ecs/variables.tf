@@ -76,10 +76,11 @@ variable "additional_certificate_arns" {
 }
 
 # CIDR blocks to allow traffic from
-# Setting this will enable NLB traffic
+# Setting this will enable traffic via SSH
 variable "allowlisted_ssh_ips" {
-  type    = list(string)
-  default = []
+  type        = list(string)
+  default     = []
+  description = "IPs/CIDR blocks to allow SSH traffic from. Omitting this will disallow any traffic via TCP port 22."
 }
 
 # This is where the load balancer will send health check requests to the app containers

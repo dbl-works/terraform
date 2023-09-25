@@ -2,16 +2,13 @@
 output "alb_dns_name" {
   value = aws_alb.alb.dns_name
 }
-output "nlb_dns_name" {
-  value = length(aws_lb.nlb) > 0 ? aws_lb.nlb[0].dns_name : null
-}
 
 # Target groups, for use in deployments
 output "alb_target_group_ecs_arn" {
   value = aws_alb_target_group.ecs.arn
 }
 output "nlb_target_group_ecs_arn" {
-  value = length(aws_lb.nlb) > 0 ? aws_lb_target_group.ssh[0].arn : null
+  value = length(aws_lb_target_group.ssh) > 0 ? aws_lb_target_group.ssh[0].arn : null
 }
 
 # Security groups, for linking with other resources
