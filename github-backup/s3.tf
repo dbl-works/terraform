@@ -3,8 +3,8 @@ module "s3-main" {
 
   # Required
   environment = var.environment
-  project     = var.project
-  bucket_name = "${var.project}-${var.environment}-github-backup"
+  project     = var.github_org
+  bucket_name = "${var.github_org}-${var.environment}-github-backup"
 
   # Optional
   policy_allow_listing_all_buckets = false # Do not allow listing this bucket to reglar users

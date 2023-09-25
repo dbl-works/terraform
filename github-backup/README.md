@@ -13,10 +13,12 @@ module "github-backup" {
   source = "github.com/dbl-works/terraform//github-backup?ref=v2021.07.05"
 
   github_organization = "dbl-works"
-  s3_bucket_name      = "dbl-works-github-backup"
 
   # optional
-  interval_value = 1
-  interval_unit  = "hours"
+  environment        = "production" # typically, there is no "staging" for repos.
+  interval_value     = 1
+  interval_unit      = "hours"
+  ruby_major_version = "2"
+  timeout            = 900 # Lambda timeout in seconds
 }
 ```

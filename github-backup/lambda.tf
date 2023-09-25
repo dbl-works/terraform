@@ -3,15 +3,16 @@ module "lambda" {
 
   # Required
   environment   = var.environment
-  project       = var.project
+  project       = var.github_org
   source_dir    = "./src"
-  function_name = "call"
+  function_name = local.name
   runtime       = var.ruby_major_version == "3" ? "ruby3.2" : "ruby2.7"
   timeout       = var.timeout
   memory_size   = var.memory_size
 
   # Optional
   policy_allow_listing_all_buckets = false # Do not allow listing this bucket to reglar users
+  handler                          = "main.call"
 
   secrets_and_kms_arns = [
     module.secrets.arn,
