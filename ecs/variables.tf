@@ -169,6 +169,7 @@ variable "cloudwatch_logs_retention_in_days" {
 
 variable "alb_listener_rules" {
   type = list(object({
+    name             = string
     priority         = string
     type             = string
     target_group_arn = string

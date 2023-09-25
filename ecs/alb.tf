@@ -1,12 +1,17 @@
+#
 # Main load balancer for user facing traffic
+#
 resource "aws_alb" "alb" {
   name    = local.name
   subnets = var.subnet_public_ids
+
   security_groups = [
     aws_security_group.alb.id,
   ]
+
   enable_http2 = "true"
   idle_timeout = var.keep_alive_timeout # The time in seconds that the connection is allowed to be idle.
+
   tags = {
     Name        = "${var.project}-${var.environment}"
     Project     = var.project
@@ -14,6 +19,9 @@ resource "aws_alb" "alb" {
   }
 }
 
+#
+# Listeners
+#
 resource "aws_alb_listener" "http" {
   load_balancer_arn = aws_alb.alb.id
   port              = "80"
@@ -27,6 +35,12 @@ resource "aws_alb_listener" "http" {
       status_code = "HTTP_301"
     }
   }
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-http"
+    Project     = var.project
+    Environment = var.environment
+  }
 }
 
 resource "aws_alb_listener" "https" {
@@ -39,16 +53,36 @@ resource "aws_alb_listener" "https" {
     target_group_arn = aws_alb_target_group.ecs.arn
     type             = "forward"
   }
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-https"
+    Project     = var.project
+    Environment = var.environment
+  }
 }
 
-# Using SNI to attach multiple certificates to the same load balancer
-resource "aws_alb_listener_certificate" "https" {
-  for_each = { for cert in var.additional_certificate_arns : cert.name => cert }
+resource "aws_lb_listener" "ssh" {
+  count = length(var.allowlisted_ssh_ips) > 0 ? 1 : 0
 
-  listener_arn    = aws_alb_listener.https.arn
-  certificate_arn = each.value.arn
+  load_balancer_arn = aws_alb.alb.id
+  port              = "22"
+  protocol          = "TCP"
+
+  default_action {
+    target_group_arn = aws_lb_target_group.ssh[count.index].arn
+    type             = "forward"
+  }
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-ssh"
+    Project     = var.project
+    Environment = var.environment
+  }
 }
 
+#
+# Custom listeners rules
+#
 resource "aws_lb_listener_rule" "main" {
   for_each = { for idx, rule in var.alb_listener_rules : idx => rule }
 
@@ -69,4 +103,23 @@ resource "aws_lb_listener_rule" "main" {
       }
     }
   }
+
+  tags = {
+    Name        = each.value.name
+    Project     = var.project
+    Environment = var.environment
+  }
+}
+
+
+#
+# Other resources
+#
+
+# Using SNI to attach multiple certificates to the same load balancer
+resource "aws_alb_listener_certificate" "https" {
+  for_each = { for cert in var.additional_certificate_arns : cert.name => cert }
+
+  listener_arn    = aws_alb_listener.https.arn
+  certificate_arn = each.value.arn
 }
