@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_event_rule" "main" {
-  name                = local.name
+  name                = "${var.github_org}-${var.environment}-github-backup"
   schedule_expression = "rate(${var.interval_value} ${var.interval_unit})"
 }
 

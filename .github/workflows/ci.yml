@@ -24,6 +24,7 @@ jobs:
           - fivetran
           - fivetran/connectors/google_analytics
           - fivetran/connectors/lambda
+          - github-backup
           - global-accelerator
           - http-proxy
           - iam/iam-for-deploy-bot
