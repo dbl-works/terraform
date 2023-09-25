@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
+## Unreleased
+### Secrets
+* Passing in a `kms_key_id` is now optional. If omitted, a new key is created
+
+## Github Backup
+* New module that allows backing up all repositories in an organization to an S3 bucket
+
+##
+
 ## [v2023.09.25]
 ### cloudflare
 - Prevent clickjacking. [#257](https://github.com/dbl-works/terraform/pull/257)
