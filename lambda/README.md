@@ -9,14 +9,14 @@ Used for managing lambda functions.
 module "lambda" {
   source = "github.com/dbl-works/terraform//lambda?ref=main"
 
-  project         = "dbl"
-  environment     = "production"
-  source_dir = "Path to the directory containing the lambda function code."
+  project     = "dbl"
+  environment = "production"
+  source_dir  = "Path to the directory containing the lambda function code."
 
   # optional
-  handler = "index.handler"
-  timeout       = 10
-  memory_size   = 1024
+  handler     = "index.handler"
+  timeout     = 10
+  memory_size = 1024
 
   # Subnets the lambdas are allowed to use to access resources in the VPC.
   subnet_ids = [
