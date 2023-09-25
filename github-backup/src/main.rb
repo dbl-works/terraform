@@ -36,6 +36,8 @@ def call(event:, context:)
 
   # find a sample "repo" object at: github-backup/src/sample_response_repo.json
   repos.each do |repo|
+    next if repo.fetch('fork', false) # forks are usually just some public gems, not our own code
+
     # Fetch repo data
     uri = URI("https://api.github.com/repos/#{github_org}/#{repo.fetch('name')}/zipball/#{repo.fetch('default_branch')}")
     response = http_request(uri, github_token)
