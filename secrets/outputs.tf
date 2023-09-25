@@ -9,3 +9,13 @@ output "arn" {
   description = "AWS secrets manager AWS resources name"
   value       = aws_secretsmanager_secret.main.arn
 }
+
+output "kms_key_id" {
+  description = "AWS secrets manager KMS key ID"
+  value       = var.kms_key_id == null ? module.kms-key.id : var.kms_key_id
+}
+
+output "kms_key_arn" {
+  description = "AWS secrets manager KMS key ARN"
+  value       = var.kms_key_id == null ? module.kms-key.arn : null
+}
