@@ -360,6 +360,7 @@ variable "allow_alb_traffic_to_ports" {
 
 variable "alb_listener_rules" {
   type = list(object({
+    name             = string
     priority         = string
     type             = string
     target_group_arn = string
