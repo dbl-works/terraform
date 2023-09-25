@@ -39,7 +39,7 @@ module "cloudflare" {
   source = "github.com/dbl-works/terraform//cloudflare?ref=v2022.05.26"
 
   domain                 = "example.com"
-  nlb_dns_name           = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
+  alb_dns_name           = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
   cdn_worker_script_name = "serve-cdn"
   app_worker_script_name = "serve-app"
 
