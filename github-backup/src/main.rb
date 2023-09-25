@@ -28,7 +28,7 @@ def call(event:, context:)
 
   uri = URI("https://api.github.com/orgs/#{github_org}/repos")
   response = http_request(uri, github_token)
-  raise "Failed to fetch repos: #{response.error}" unless response.code == '200'
+  raise "Failed to fetch repos: #{response.error}" unless response.code == HTTP_OK
 
   repos = JSON.parse(response.body)
 
