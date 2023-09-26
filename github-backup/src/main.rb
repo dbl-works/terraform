@@ -17,6 +17,8 @@ def http_request(uri, token)
 end
 
 def uri_to_next_page(response)
+  return unless response.code == HTTP_OK
+
   # "<https://api.github.com/organizations/XXX/repos?page=2>; rel=\"next\", <https://api.github.com/organizations/XXX/repos?page=4>; rel=\"last\""
   link_header = response.header.fetch('link', nil)
   return unless link_header
@@ -45,20 +47,15 @@ def call(event:, context:)
 
   repos = JSON.parse(response.body)
 
-
-  uri_to_next_page = uri_to_next_page(response)
   iterator = 0
-  while uri_to_next_page
+  while uri_to_next_page(response)
     break if iterator >= PAGINATION_MAX_PAGES
     iterator += 1
-    raise 'Failed to find link to next page' unless uri_to_next_page
-
-    uri = URI(uri_to_next_page)
+    uri = URI(uri_to_next_page(response))
     response = http_request(uri, github_token)
     raise "Failed to fetch repos: #{response.body}" unless response.code == HTTP_OK
 
     repos.concat(JSON.parse(response.body))
-    uri_to_next_page = uri_to_next_page(response)
   end
 
   repos.uniq!
