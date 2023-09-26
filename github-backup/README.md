@@ -14,12 +14,12 @@ You should generate the token from a bot-account, not any personal account. Ensu
 module "github-backup" {
   source = "github.com/dbl-works/terraform//github-backup?ref=v2021.07.05"
 
-  github_organization = "dbl-works"
+  github_org = "dbl-works"
 
   # optional
   environment        = "production" # typically, there is no "staging" for repos.
   interval_value     = 1
-  interval_unit      = "hours"
+  interval_unit      = "hour"
   ruby_major_version = "2"
   timeout            = 900 # Lambda timeout in seconds
 }
