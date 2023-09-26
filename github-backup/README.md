@@ -22,5 +22,6 @@ module "github-backup" {
   interval_unit      = "hour"
   ruby_major_version = "2"
   timeout            = 900 # Lambda timeout in seconds
+  memory_size        = 2048 # Lambda memory in MB
 }
 ```
