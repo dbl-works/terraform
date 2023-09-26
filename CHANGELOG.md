@@ -13,6 +13,9 @@ This project does not follow SemVer, since modules are independent of each other
 ### Github Backup
 * New module that allows backing up all repositories in an organization to an S3 bucket
 
+### Lambda
+* Rename lambda role
+
 ## [v2023.09.25]
 ### cloudflare
 - Prevent clickjacking. [#257](https://github.com/dbl-works/terraform/pull/257)
