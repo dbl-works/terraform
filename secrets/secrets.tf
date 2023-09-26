@@ -5,10 +5,10 @@ module "kms-key" {
 
   count = var.kms_key_id == null ? 1 : 0
 
-  environment = var.project
+  environment = var.environment
   project     = var.project
   alias       = var.application
-  description = "Used for ecrypting secrets for ${var.application}."
+  description = "Used for encrypting secrets for ${var.application}."
 
   # Optional
   deletion_window_in_days = 30

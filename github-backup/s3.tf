@@ -7,5 +7,5 @@ module "s3-main" {
   bucket_name = "${var.github_org}-${var.environment}-github-backup"
 
   # Optional
-  policy_allow_listing_all_buckets = false # Do not allow listing this bucket to reglar users
+  policy_allow_listing_all_buckets = false # Do not allow listing this bucket to regular users
 }

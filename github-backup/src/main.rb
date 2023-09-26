@@ -19,7 +19,7 @@ def call(event:, context:)
   s3_bucket = ENV.fetch('S3_BUCKET')
   secret_id = ENV.fetch('SECRET_ID')
   github_org = ENV.fetch('GITHUB_ORG')
-  region = ENV.fetch('AWS_REGION', 'eu-central-1') # we should have this from AWS automagically
+  region = ENV.fetch('AWS_REGION', 'eu-central-1') # we should have this from AWS automatically
 
   secretsmanager = Aws::SecretsManager::Client.new(region: region)
   secret = secretsmanager.get_secret_value(secret_id: secret_id)
