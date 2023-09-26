@@ -28,7 +28,7 @@ def call(event:, context:)
 
   uri = URI("https://api.github.com/orgs/#{github_org}/repos")
   response = http_request(uri, github_token)
-  raise "Failed to fetch repos: #{response.error}" unless response.code == HTTP_OK
+  raise "Failed to fetch repos: #{response.body}" unless response.code == HTTP_OK
 
   repos = JSON.parse(response.body)
 
@@ -36,18 +36,19 @@ def call(event:, context:)
 
   # find a sample "repo" object at: github-backup/src/sample_response_repo.json
   repos.each do |repo|
+    next if repo.fetch('size') == 0 # empty repos can't be zipped & downloaded
     next if repo.fetch('fork', false) # forks are usually just some public gems, not our own code
 
     # Fetch repo data
     uri = URI("https://api.github.com/repos/#{github_org}/#{repo.fetch('name')}/zipball/#{repo.fetch('default_branch')}")
     response = http_request(uri, github_token)
-    raise "Failed to fetch repo #{repo.fetch('name')}: #{response.error}" unless response.code == HTTP_REDIRECT
+    raise "Failed to fetch repo #{repo.fetch('name')}: #{response.body}" unless response.code == HTTP_REDIRECT
 
     # Download the repo zip file
     redirect_url = response.header.fetch('Location')
     uri = URI(redirect_url)
     response = http_request(uri, github_token)
-    raise "Failed to fetch repo #{repo.fetch('name')}: #{response.error}" unless response.code == HTTP_OK
+    raise "Failed to fetch repo #{repo.fetch('name')}: #{response.body}" unless response.code == HTTP_OK
 
     # StringIO allows us to stream the file, which is more memory-efficient for large files
     zip_content = StringIO.new(response.body)

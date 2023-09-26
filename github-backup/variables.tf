@@ -22,7 +22,7 @@ variable "timeout" {
 }
 
 variable "memory_size" {
-  default     = 512
+  default     = 2048
   type        = number
   description = "Amount of memory in MB allocated to the Lambda"
 }
