@@ -112,3 +112,15 @@ variable "identifier" {
 locals {
   name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
 }
+
+variable "log_min_duration_statement" {
+  type        = number
+  default     = 3000
+  description = "Used to log SQL statements that run longer than a specified duration of time (in ms)."
+}
+
+variable "log_retention_period" {
+  type        = number
+  default     = 4320
+  description = "Controls how long automatic RDS log files are retained before being deleted (in min, must be between 1440-10080 (1-7 days)."
+}
