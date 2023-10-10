@@ -17,11 +17,6 @@ variable "is_multi_region_trail" {
   default = true
 }
 
-variable "logging_account_id" {
-  type        = string
-  description = "The AWS Account which will store the log."
-}
-
 variable "enable_management_cloudtrail" {
   type    = string
   default = true
@@ -42,8 +37,4 @@ variable "s3_bucket_arn_for_data_cloudtrail" {
 variable "log_retention_days" {
   type    = number
   default = 14
-}
-
-variable "destination_s3_arn" {
-  type = string
 }

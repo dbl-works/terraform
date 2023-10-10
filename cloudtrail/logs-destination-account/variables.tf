@@ -6,12 +6,7 @@ variable "environment" {
   type = string
 }
 
-variable "cloudtrail_roles" {
-  type        = list(string)
-  description = "Roles"
-}
-
 variable "logging_account_ids" {
   type        = list(string)
-  description = ""
+  description = "The AWS Account ID(s) which produce the cloudtrail logs"
 }

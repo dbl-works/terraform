@@ -11,8 +11,24 @@ This Terraform module allows you to easily create and configure AWS CloudTrail r
 ## Usage
 
 ```terraform
+# log-destination Account
+provider "aws" {
+  region  = var.region
+  profile = "log-destination"
+  alias   = "log-destination"
+}
+
+# Logging Account
+provider "aws" {
+  region  = var.region
+  profile = "logging"
+  alias   = "logging"
+}
+
 # In logging account
 module "logging-account" {
+  provider = aws.logging
+
   source = "github.com/dbl-works/terraform//cloudtrail/logging-account"
 
   environment = local.environment
@@ -21,13 +37,20 @@ module "logging-account" {
   is_multi_region_trail = true
   enable_management_cloudtrail = true
   enable_data_cloudtrail = true
+  s3_bucket_arn_for_data_cloudtrail = [
+    "arn:aws:s3:::bucket_name/important_s3_bucket",
+    "arn:aws:s3:::bucket_name/second-important_s3_bucket/prefix",
+  ]
+  log_retention_days = 21
 }
 
 module "logs-destination-account" {
+  provider = aws.log-destination
+
   source = "github.com/dbl-works/terraform//cloudtrail/logs-destination-account"
 
   environment = local.environment
   organization_name = "test-organization"
-  cloudtrail_roles = []
+  logging_account_ids = []
 }
 ```
