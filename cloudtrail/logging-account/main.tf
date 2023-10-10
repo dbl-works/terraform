@@ -1,7 +1,10 @@
 locals {
-  management_cloudtrail_name = "${var.organization_name}-management-logs"
-  data_cloudtrail_name       = "${var.organization_name}-data-logs"
+  management_cloudtrail_name = "${var.organization_name}-management-cloudtrail-logs"
+  data_cloudtrail_name       = "${var.organization_name}-data-cloudtrail-logs"
+  cloudtrail_name            = "${var.organization_name}-cloudtrail-logs"
 }
+
+data "aws_region" "current" {}
 
 # Although CloudTrail provides 90 days of event history information for management events in the CloudTrail console without creating a trail,
 # it is not a permanent record, and it does not provide information about all possible types of events.
@@ -77,14 +80,18 @@ resource "aws_cloudwatch_log_group" "main" {
 
 # This CloudWatch Group is used for storing CloudTrail logs.
 resource "aws_cloudwatch_log_group" "cloudtrail" {
-  name              = var.cloudwatch_log_group_name
+  name              = aws_cloudwatch_log_group.main.name
   retention_in_days = var.log_retention_days
   kms_key_id        = module.cloudtrail-kms.id
-  tags              = var.tags
+  tags = {
+    Name        = aws_cloudwatch_log_group.main.name
+    Project     = var.organization_name
+    Environment = var.environment
+  }
 }
 
 resource "aws_iam_role" "cloudtrail_role" {
-  name = "cloudtrail-role"
+  name = "${var.organization_name}-cloudtrail-role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -100,56 +107,9 @@ resource "aws_iam_role" "cloudtrail_role" {
   })
 }
 
-// NOTE:
 resource "aws_iam_role_policy_attachment" "cloudtrail_role_policy" {
+  // TODO: Allowing cloudtrail access is sufficient
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
   role       = aws_iam_role.cloudtrail_role.name
 }
 
-
-data "aws_iam_policy_document" "example" {
-  statement {
-    sid    = "AWSCloudTrailAclCheck"
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["cloudtrail.amazonaws.com"]
-    }
-
-    actions   = ["s3:GetBucketAcl"]
-    resources = [aws_s3_bucket.example.arn]
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceArn"
-      values   = ["arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/example"]
-    }
-  }
-
-  statement {
-    sid    = "AWSCloudTrailWrite"
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["cloudtrail.amazonaws.com"]
-    }
-
-    actions = ["s3:PutObject"]
-    # TODO
-    resources = ["${aws_s3_bucket.example.arn}/prefix/AWSLogs/${data.aws_caller_identity.current.account_id}/*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-acl"
-      values   = ["bucket-owner-full-control"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceArn"
-      values   = ["arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/example"]
-    }
-  }
-}
-
-data "aws_region" "current" {}

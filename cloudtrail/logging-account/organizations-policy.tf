@@ -20,5 +20,6 @@ data "aws_iam_policy_document" "scp_policy" {
 
 resource "aws_organizations_policy_attachment" "default" {
   policy_id = aws_organizations_policy.scp_policy.id
+  # The unique identifier (ID) of the root, organizational unit, or account number that you want to attach the policy to.
   target_id = data.aws_caller_identity.current.account_id
 }

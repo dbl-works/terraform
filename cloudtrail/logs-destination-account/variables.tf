@@ -7,5 +7,11 @@ variable "environment" {
 }
 
 variable "cloudtrail_roles" {
-  type = list(string)
+  type        = list(string)
+  description = "Roles"
+}
+
+variable "logging_account_ids" {
+  type        = list(string)
+  description = ""
 }

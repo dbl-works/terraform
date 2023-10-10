@@ -7,8 +7,9 @@ variable "organization_name" {
 }
 
 variable "is_organization_trail" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Whether the trail is an AWS Organizations trail. Organization trails log events for the master account and all member accounts. Can only be created in the organization master account."
 }
 
 variable "is_multi_region_trail" {
@@ -17,12 +18,8 @@ variable "is_multi_region_trail" {
 }
 
 variable "logging_account_id" {
-  type = string
-}
-
-variable "target_id" {
   type        = string
-  description = "The unique identifier (ID) of the root, organizational unit, or account number that you want to attach the policy to."
+  description = "The AWS Account which will store the log."
 }
 
 variable "enable_management_cloudtrail" {
@@ -34,4 +31,13 @@ variable "enable_data_cloudtrail" {
   type        = string
   default     = false
   description = "Data events can generate a large volume of logs, especially with frequently accessed resources like S3. Enable it only if you think it is essential to you."
+}
+
+variable "log_retention_days" {
+  type    = number
+  default = 14
+}
+
+variable "destination_s3_arn" {
+  type = string
 }

@@ -20,14 +20,17 @@ resource "aws_s3_bucket_policy" "allow_access_from_cloudtrail_only" {
 data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
   statement {
     sid     = "AllowCloudtrailWrite"
+    effect  = "Allow"
     actions = ["s3:PutObject"]
-    resources = [
-      "${module.s3-cloudtrail.arn}/*",
-    ]
+    resources = flatten([
+      for account_id in var.logging_account_ids : [
+        "${module.s3-cloudtrail.arn}/prefix/AWSLogs/${account_id}/*"
+      ]
+    ])
 
     principals {
-      type        = "AWS"
-      identifiers = var.cloudtrail_roles
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
     }
 
     condition {
@@ -39,12 +42,18 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceArn"
-      values   = ["arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/example"]
+      values = flatten([
+        for account_id in var.logging_account_ids : [
+          "arn:*:cloudtrail:*:${account_id}:trail/*"
+        ]
+      ])
     }
   }
 
   statement {
-    sid = "AllowCloudtrailACLCheck"
+    sid    = "AllowCloudtrailACLCheck"
+    effect = "Allow"
+
     principals {
       type        = "Service"
       identifiers = ["cloudtrail.amazonaws.com"]
@@ -62,9 +71,11 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
       test     = "StringEquals"
       variable = "aws:SourceArn"
       # AWS has different partitions for public cloud, China regions, and the AWS GovCloud (US) regions.
-      values   = ["arn:${data.aws_partition.current.partition}:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/example"]
+      values = flatten([
+        for account_id in var.logging_account_ids : [
+          "arn:*:cloudtrail:*:${account_id}:trail/*"
+        ]
+      ])
     }
   }
 }
-
-data "aws_partition" "current" {}
