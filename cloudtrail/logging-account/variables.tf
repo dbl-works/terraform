@@ -33,6 +33,12 @@ variable "enable_data_cloudtrail" {
   description = "Data events can generate a large volume of logs, especially with frequently accessed resources like S3. Enable it only if you think it is essential to you."
 }
 
+variable "s3_bucket_arn_for_data_cloudtrail" {
+  type        = list(string)
+  default     = []
+  description = "The ARN of the AWS S3 bucket for which CloudTrail data events (s3 bucket object deletion) will be captured."
+}
+
 variable "log_retention_days" {
   type    = number
   default = 14

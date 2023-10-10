@@ -4,7 +4,7 @@ locals {
   cloudtrail_name            = "${var.organization_name}-cloudtrail-logs"
 }
 
-data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
 
 # Although CloudTrail provides 90 days of event history information for management events in the CloudTrail console without creating a trail,
 # it is not a permanent record, and it does not provide information about all possible types of events.
@@ -54,16 +54,32 @@ resource "aws_cloudtrail" "data" {
   s3_bucket_name                = module.cloudtrail-s3.id
   s3_key_prefix                 = "data"
 
-  event_selector {
-
-  }
-
   advanced_event_selector {
-    name = "Log all data events"
+    name = "Log Delete* events for one S3 bucket"
 
     field_selector {
       field  = "eventCategory"
       equals = ["Data"]
+    }
+
+    field_selector {
+      field       = "eventName"
+      starts_with = ["Delete"]
+    }
+
+    field_selector {
+      field  = "resources.ARN"
+      equals = var.s3_bucket_arn_for_data_cloudtrail
+    }
+
+    field_selector {
+      field  = "readOnly"
+      equals = ["false"]
+    }
+
+    field_selector {
+      field  = "resources.type"
+      equals = ["AWS::S3::Object"]
     }
   }
 
@@ -98,18 +114,40 @@ resource "aws_iam_role" "cloudtrail_role" {
       {
         "Effect" : "Allow",
         "Principal" : {
-          "AWS" : "arn:aws:iam::${var.logging_account_id}:root",
+          "AWS" : "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
           "Service" : "cloudtrail.amazonaws.com"
         },
         "Action" : "sts:AssumeRole",
       }
     ]
   })
+
+  tags = {
+    Name        = "${var.organization_name}-cloudtrail-role"
+    Project     = var.organization_name
+    Environment = var.environment
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "cloudtrail_role_policy" {
-  // TODO: Allowing cloudtrail access is sufficient
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  policy_arn = aws_iam_policy.cloudtrail_role_policy.arn
   role       = aws_iam_role.cloudtrail_role.name
 }
 
+
+resource "aws_iam_policy" "cloudtrail_role_policy" {
+  name   = "${var.organization_name}-cloudtrail-role-policy"
+  path   = "/"
+  policy = data.aws_iam_policy_document.cloudtrail_role_policy.json
+}
+
+data "aws_iam_policy_document" "cloudtrail_role_policy" {
+  statement {
+    sid = "AllowCloudtrailAccess"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = "*"
+  }
+}
