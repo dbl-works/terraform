@@ -25,6 +25,10 @@ provider "aws" {
   alias   = "logging"
 }
 
+data "aws_caller_identity" "current" {
+  provider = aws.logging
+}
+
 # In logging account
 module "logging-account" {
   provider = aws.logging
@@ -51,6 +55,6 @@ module "logs-destination-account" {
 
   environment = local.environment
   organization_name = "test-organization"
-  logging_account_ids = []
+  logging_account_ids = [data.aws_caller_identity.current.account_id]
 }
 ```
