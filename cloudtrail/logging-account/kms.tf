@@ -1,5 +1,5 @@
 module "cloudtrail-kms" {
-  source = "../kms-key"
+  source = "../../kms-key"
 
   # Required
   environment = var.environment

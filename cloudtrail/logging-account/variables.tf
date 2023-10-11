@@ -28,6 +28,11 @@ variable "enable_data_cloudtrail" {
   description = "Data events can generate a large volume of logs, especially with frequently accessed resources like S3. Enable it only if you think it is essential to you."
 }
 
+variable "cloudtrail_s3_bucket_name" {
+  type        = string
+  description = "The name of the AWS S3 bucket for which CloudTrail will store the logs in"
+}
+
 variable "s3_bucket_arn_for_data_cloudtrail" {
   type        = list(string)
   default     = []

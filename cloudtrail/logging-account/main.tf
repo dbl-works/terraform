@@ -20,7 +20,7 @@ resource "aws_cloudtrail" "management" {
   is_multi_region_trail         = var.is_multi_region_trail
   is_organization_trail         = var.is_organization_trail
   kms_key_id                    = module.cloudtrail-kms.id
-  s3_bucket_name                = module.cloudtrail-s3.id
+  s3_bucket_name                = var.cloudtrail_s3_bucket_name
   s3_key_prefix                 = "management"
 
   advanced_event_selector {
@@ -51,7 +51,7 @@ resource "aws_cloudtrail" "data" {
   is_multi_region_trail         = var.is_multi_region_trail
   is_organization_trail         = var.is_organization_trail
   kms_key_id                    = module.cloudtrail-kms.id
-  s3_bucket_name                = module.cloudtrail-s3.id
+  s3_bucket_name                = var.cloudtrail_s3_bucket_name
   s3_key_prefix                 = "data"
 
   advanced_event_selector {
@@ -148,6 +148,6 @@ data "aws_iam_policy_document" "cloudtrail_role_policy" {
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
-    resources = "*"
+    resources = ["*"]
   }
 }

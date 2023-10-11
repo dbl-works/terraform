@@ -3,7 +3,7 @@ locals {
 }
 
 module "s3-cloudtrail" {
-  source = "../s3-private"
+  source = "../../s3-private"
 
   # Required
   environment = var.environment

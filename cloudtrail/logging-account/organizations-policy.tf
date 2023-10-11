@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 resource "aws_organizations_policy" "scp_policy" {
   name        = "scp_cloudtrail"
   description = "This SCP prevents users or roles in any affected account from disabling a CloudTrail log, either directly as a command or through the console. "
