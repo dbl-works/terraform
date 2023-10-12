@@ -19,9 +19,8 @@ resource "aws_cloudtrail" "management" {
   include_global_service_events = true
   is_multi_region_trail         = var.is_multi_region_trail
   is_organization_trail         = var.is_organization_trail
-  kms_key_id                    = module.cloudtrail-kms.id
-  s3_bucket_name                = var.cloudtrail_s3_bucket_name
-  s3_key_prefix                 = "management"
+  # kms_key_id                    = module.cloudtrail-kms.arn
+  s3_bucket_name = var.cloudtrail_s3_bucket_name
 
   advanced_event_selector {
     name = "Log readOnly and writeOnly management events"
@@ -50,9 +49,8 @@ resource "aws_cloudtrail" "data" {
   include_global_service_events = true
   is_multi_region_trail         = var.is_multi_region_trail
   is_organization_trail         = var.is_organization_trail
-  kms_key_id                    = module.cloudtrail-kms.id
-  s3_bucket_name                = var.cloudtrail_s3_bucket_name
-  s3_key_prefix                 = "data"
+  # kms_key_id                    = module.cloudtrail-kms.id
+  s3_bucket_name = var.cloudtrail_s3_bucket_name
 
   advanced_event_selector {
     name = "Log Delete* events for one S3 bucket"
@@ -90,17 +88,13 @@ resource "aws_cloudtrail" "data" {
   }
 }
 
+# This CloudWatch Group is used for storing CloudTrail logs.
 resource "aws_cloudwatch_log_group" "main" {
   name = local.cloudtrail_name
-}
 
-# This CloudWatch Group is used for storing CloudTrail logs.
-resource "aws_cloudwatch_log_group" "cloudtrail" {
-  name              = aws_cloudwatch_log_group.main.name
   retention_in_days = var.log_retention_days
-  kms_key_id        = module.cloudtrail-kms.id
   tags = {
-    Name        = aws_cloudwatch_log_group.main.name
+    Name        = local.cloudtrail_name
     Project     = var.organization_name
     Environment = var.environment
   }
@@ -149,5 +143,15 @@ data "aws_iam_policy_document" "cloudtrail_role_policy" {
       "logs:PutLogEvents"
     ]
     resources = ["*"]
+  }
+
+  statement {
+    sid = "AllowS3KMSKeyAccess"
+    actions = [
+      "kms:GenerateDataKey*",
+    ]
+    resources = [
+      var.cloudtrail_s3_kms_arn,
+    ]
   }
 }

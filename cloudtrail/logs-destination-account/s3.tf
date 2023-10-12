@@ -2,6 +2,8 @@ locals {
   cloudtrail_s3_bucket_name = "${var.organization_name}-cloudtrail"
 }
 
+data "aws_region" "current" {}
+
 module "s3-cloudtrail" {
   source = "../../s3-private"
 
@@ -22,11 +24,9 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
     sid     = "AllowCloudtrailWrite"
     effect  = "Allow"
     actions = ["s3:PutObject"]
-    resources = flatten([
-      for account_id in var.logging_account_ids : [
-        "${module.s3-cloudtrail.arn}/prefix/AWSLogs/${account_id}/*"
-      ]
-    ])
+    resources = [
+      "${module.s3-cloudtrail.arn}/AWSLogs/*",
+    ]
 
     principals {
       type        = "Service"
@@ -41,12 +41,8 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
 
     condition {
       test     = "StringEquals"
-      variable = "aws:SourceArn"
-      values = flatten([
-        for account_id in var.logging_account_ids : [
-          "arn:*:cloudtrail:*:${account_id}:trail/*"
-        ]
-      ])
+      variable = "aws:SourceAccount"
+      values   = var.logging_account_ids
     }
   }
 
@@ -69,13 +65,8 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
 
     condition {
       test     = "StringEquals"
-      variable = "aws:SourceArn"
-      # AWS has different partitions for public cloud, China regions, and the AWS GovCloud (US) regions.
-      values = flatten([
-        for account_id in var.logging_account_ids : [
-          "arn:*:cloudtrail:*:${account_id}:trail/*"
-        ]
-      ])
+      variable = "aws:SourceAccount"
+      values   = var.logging_account_ids
     }
   }
 }

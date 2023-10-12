@@ -11,6 +11,7 @@ module "logging-account" {
   enable_data_cloudtrail            = var.enable_data_cloudtrail
   s3_bucket_arn_for_data_cloudtrail = var.s3_bucket_arn_for_data_cloudtrail
   cloudtrail_s3_bucket_name         = module.logs-destination-account.s3_bucket_name
+  cloudtrail_s3_kms_arn             = module.logs-destination-account.s3_kms_arn
 }
 
 module "logs-destination-account" {

@@ -8,5 +8,5 @@ variable "environment" {
 
 variable "logging_account_ids" {
   type        = list(string)
-  description = "The AWS Account ID(s) which produce the cloudtrail logs"
+  description = "The AWS Account IDs which will be sent the cloudtrail logs to the cloudtrail S3 bucket."
 }

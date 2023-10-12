@@ -33,6 +33,11 @@ variable "cloudtrail_s3_bucket_name" {
   description = "The name of the AWS S3 bucket for which CloudTrail will store the logs in"
 }
 
+variable "cloudtrail_s3_kms_arn" {
+  type        = string
+  description = "The KMS key used to encrypt the AWS S3 bucket for which CloudTrail will store the logs in"
+}
+
 variable "s3_bucket_arn_for_data_cloudtrail" {
   type        = list(string)
   default     = []
