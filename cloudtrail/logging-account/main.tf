@@ -19,7 +19,6 @@ resource "aws_cloudtrail" "management" {
   include_global_service_events = true
   is_multi_region_trail         = var.is_multi_region_trail
   is_organization_trail         = var.is_organization_trail
-  # kms_key_id                    = module.cloudtrail-kms.arn
   s3_bucket_name = var.cloudtrail_s3_bucket_name
 
   advanced_event_selector {
@@ -49,7 +48,6 @@ resource "aws_cloudtrail" "data" {
   include_global_service_events = true
   is_multi_region_trail         = var.is_multi_region_trail
   is_organization_trail         = var.is_organization_trail
-  # kms_key_id                    = module.cloudtrail-kms.id
   s3_bucket_name = var.cloudtrail_s3_bucket_name
 
   advanced_event_selector {
