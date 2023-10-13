@@ -330,7 +330,7 @@ variable "rds_log_retention_period" {
   description = "Controls how long automatic RDS log files are retained before being deleted (in min, must be between 1440-10080 (1-7 days)."
 
   validation {
-    condition     = var.log_retention_period >= 1440 && var.log_retention_period <= 10080
+    condition     = var.rds_log_retention_period >= 1440 && var.rds_log_retention_period <= 10080
     error_message = "Log retention period must be between 1440-10080 (1-7 days)."
   }
 }
@@ -342,7 +342,7 @@ variable "rds_log_min_error_statement" {
 
 
   validation {
-    condition     = contains(["debug5", "debug4", "debug3", "debug2", "debug1", "info", "notice", "warning", "error", "log", "fatal", "panic"], var.log_min_error_statement)
+    condition     = contains(["debug5", "debug4", "debug3", "debug2", "debug1", "info", "notice", "warning", "error", "log", "fatal", "panic"], var.rds_log_min_error_statement)
     error_message = "The valid values are [debug5, debug4, debug3, debug2, debug1, info, notice, warning, error, log, fatal, panic]"
   }
 }
