@@ -20,6 +20,11 @@ resource "aws_db_parameter_group" "current" {
   }
 
   parameter {
+    name  = "log_min_error_statement"
+    value = var.log_min_error_statement
+  }
+
+  parameter {
     name  = "rds.force_ssl"
     value = 1
   }
