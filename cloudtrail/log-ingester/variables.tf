@@ -6,7 +6,7 @@ variable "environment" {
   type = string
 }
 
-variable "logging_account_ids" {
+variable "log_producer_account_ids" {
   type        = list(string)
   description = "The AWS Account IDs which will be sent the cloudtrail logs to the cloudtrail S3 bucket."
 }

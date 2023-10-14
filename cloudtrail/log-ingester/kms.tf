@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = flatten([for account_id in var.logging_account_ids : ["arn:aws:iam::${account_id}:root"]])
+      identifiers = flatten([for account_id in var.log_producer_account_ids : ["arn:aws:iam::${account_id}:root"]])
     }
 
     actions   = ["kms:GenerateDataKey*", "kms:Decrypt"]
@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = flatten([for account_id in var.logging_account_ids : ["arn:aws:iam::${account_id}:root"]])
+      identifiers = flatten([for account_id in var.log_producer_account_ids : ["arn:aws:iam::${account_id}:root"]])
     }
 
     actions = [
@@ -71,7 +71,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
     condition {
       test     = "StringLike"
       variable = "kms:EncryptionContext:aws:cloudtrail:arn"
-      values   = flatten([for account_id in var.logging_account_ids : ["arn:aws:cloudtrail:*:${account_id}:trail/*"]])
+      values   = flatten([for account_id in var.log_producer_account_ids : ["arn:aws:cloudtrail:*:${account_id}:trail/*"]])
     }
   }
 }
