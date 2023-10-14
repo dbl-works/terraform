@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 module "logging-account" {
-  source = "../../cloudtrail/logging-account"
+  source = "../../cloudtrail/log-producer"
 
   environment                       = var.environment
   organization_name                 = var.organization_name
@@ -15,7 +15,7 @@ module "logging-account" {
 }
 
 module "logs-destination-account" {
-  source = "../../cloudtrail/logs-destination-account"
+  source = "../../cloudtrail/log-ingester"
 
   environment         = var.environment
   organization_name   = var.organization_name
