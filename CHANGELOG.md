@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+
+## [v2023.10.15]
 ### rds
 - Add log_min_duration_statement, log_retention_period variables, log_min_error_statement. [#263](https://github.com/dbl-works/terraform/pull/263)
 
