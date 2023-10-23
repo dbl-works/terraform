@@ -28,7 +28,9 @@ data "aws_caller_identity" "current" {
 }
 
 module "log-producer" {
-  provider = aws.log-producer
+  providers = {
+    aws = aws.log-producer
+  }
 
   source = "github.com/dbl-works/terraform//cloudtrail/logging-account"
 
@@ -48,7 +50,9 @@ module "log-producer" {
 }
 
 module "log-ingester" {
-  provider = aws.log-ingester
+  providers = {
+    aws = aws.log-ingester
+  }
 
   source = "github.com/dbl-works/terraform//cloudtrail/log-ingester"
 
