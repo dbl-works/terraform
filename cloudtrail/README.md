@@ -1,6 +1,6 @@
 # Terraform Module: Cloudtrail
 
-This Terraform module allows you to easily create and configure AWS CloudTrail resources. AWS CloudTrail is a service that records API calls made on your AWS account and delivers log files to an Amazon S3 bucket for analysis, compliance, and security auditing.
+This Terraform module allows you to create and configure AWS CloudTrail resources. AWS CloudTrail is a service that records API calls made on your AWS account and delivers log files to an Amazon S3 bucket for analysis, compliance, and security auditing.
 
 ## Features
 
