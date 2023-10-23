@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = var.logging_account_ids
+      values   = var.log_producer_account_ids
     }
   }
 
@@ -66,7 +66,7 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
     condition {
       test     = "StringEquals"
       variable = "aws:SourceAccount"
-      values   = var.logging_account_ids
+      values   = var.log_producer_account_ids
     }
   }
 }
