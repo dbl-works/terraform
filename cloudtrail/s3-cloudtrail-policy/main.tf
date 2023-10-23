@@ -1,20 +1,5 @@
-locals {
-  cloudtrail_s3_bucket_name = "${var.organization_name}-cloudtrail"
-  cloudtrail_account_ids    = flatten([var.log_producer_account_ids, data.aws_caller_identity.current.account_id])
-}
-
-data "aws_region" "current" {}
-
-module "s3-cloudtrail" {
-  source = "../../s3-private"
-
-  # Required
-  environment = var.environment
-  project     = var.organization_name
-  bucket_name = local.cloudtrail_s3_bucket_name
-}
 resource "aws_s3_bucket_policy" "allow_access_from_cloudtrail_only" {
-  bucket = module.s3-cloudtrail.bucket_name
+  bucket = var.cloudtrail_s3_bucket_name
   policy = data.aws_iam_policy_document.allow_access_from_cloudtrail_only.json
 }
 
@@ -25,7 +10,7 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
     effect  = "Allow"
     actions = ["s3:PutObject"]
     resources = [
-      "${module.s3-cloudtrail.arn}/AWSLogs/*",
+      "arn:aws:s3:::${var.cloudtrail_s3_bucket_name}/AWSLogs/*",
     ]
 
     principals {
@@ -40,10 +25,9 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
     }
 
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "aws:SourceArn"
-      values   = flatten([for account_id in local.cloudtrail_account_ids : ["arn:aws:cloudtrail:*:${account_id}:trail/*"]])
-
+      values   = var.cloudtrail_arns
     }
   }
 
@@ -61,13 +45,13 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
     ]
 
     resources = [
-      module.s3-cloudtrail.arn
+      "arn:aws:s3:::${var.cloudtrail_s3_bucket_name}"
     ]
 
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "aws:SourceArn"
-      values   = flatten([for account_id in local.cloudtrail_account_ids : ["arn:aws:cloudtrail:*:${account_id}:trail/*"]])
+      values   = var.cloudtrail_arns
     }
   }
 }
