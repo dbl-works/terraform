@@ -46,7 +46,7 @@ module "log-producer" {
     "arn:aws:s3:::bucket_name/important_s3_bucket",
     "arn:aws:s3:::bucket_name/second-important_s3_bucket/prefix",
   ]
-  log_retention_days = 21
+  log_retention_days = 14
 }
 
 module "log-ingester" {
