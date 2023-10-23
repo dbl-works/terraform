@@ -11,27 +11,24 @@ This Terraform module allows you to create and configure AWS CloudTrail resource
 ## Usage
 
 ```terraform
-# log-destination Account
 provider "aws" {
   region  = var.region
-  profile = "log-destination"
-  alias   = "log-destination"
+  profile = "log-ingester"
+  alias   = "log-ingester"
 }
 
-# Logging Account
 provider "aws" {
   region  = var.region
-  profile = "logging"
-  alias   = "logging"
+  profile = "log-producer"
+  alias   = "log-producer"
 }
 
 data "aws_caller_identity" "current" {
-  provider = aws.logging
+  provider = aws.log-producer
 }
 
-# In logging account
-module "logging-account" {
-  provider = aws.logging
+module "log-producer" {
+  provider = aws.log-producer
 
   source = "github.com/dbl-works/terraform//cloudtrail/logging-account"
 
@@ -41,6 +38,8 @@ module "logging-account" {
   is_multi_region_trail = true
   enable_management_cloudtrail = true
   enable_data_cloudtrail = true
+  cloudtrail_s3_bucket_name = "cloudtrail-for-test-organization"
+  cloudtrail_s3_kms_arn = "arn:aws:kms:eu-central-1:xxxxxxxxxxxx:key/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
   s3_bucket_arn_for_data_cloudtrail = [
     "arn:aws:s3:::bucket_name/important_s3_bucket",
     "arn:aws:s3:::bucket_name/second-important_s3_bucket/prefix",
@@ -48,13 +47,13 @@ module "logging-account" {
   log_retention_days = 21
 }
 
-module "logs-destination-account" {
-  provider = aws.log-destination
+module "log-ingester" {
+  provider = aws.log-ingester
 
-  source = "github.com/dbl-works/terraform//cloudtrail/logs-destination-account"
+  source = "github.com/dbl-works/terraform//cloudtrail/log-ingester"
 
   environment = local.environment
   organization_name = "test-organization"
-  logging_account_ids = [data.aws_caller_identity.current.account_id]
+  log_producer_account_ids = [data.aws_caller_identity.current.account_id]
 }
 ```
