@@ -7,6 +7,7 @@ This Terraform module allows you to create and configure AWS CloudTrail resource
 - Create a new CloudTrail trail.
 - Configure the trail with your desired settings.
 - Define the S3 bucket where CloudTrail log files will be stored.
+- Define SCP policy
 
 ## Usage
 
@@ -74,7 +75,6 @@ module "s3-cloudtrail-policy" {
 
   source = "github.com/dbl-works/terraform//cloudtrail/s3-cloudtrail-policy"
 
-  # Best practice is to never attach SCPs to the root of your organization. Instead, create an Organizational Unit (OU) underneath root and attach policies there.
   cloudtrail_s3_bucket_name = module.log-ingester.s3_bucket_name
   cloudtrail_arns = module.log-producer.cloudtrail_arns
 }
@@ -91,4 +91,8 @@ module "scp" {
 }
 ```
 
-#### Enable SCP Policy
+### Enable SCP Policy
+
+- Before applying the cloudtrail-scp module, ensure that you have enabled the Service Control Policy (SCP).
+
+  - To enable SCP, navigate to AWS Organizations > Policies > Service Control Policies, then click on "Enable Service Control Policies."
