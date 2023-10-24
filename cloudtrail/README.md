@@ -44,6 +44,9 @@ module "log-ingester" {
   environment = local.environment
   organization_name = "test-organization"
   log_producer_account_ids = [data.aws_caller_identity.log_producer.account_id]
+
+  # Optional
+  enable_cloudtrail = true
 }
 
 module "log-producer" {
