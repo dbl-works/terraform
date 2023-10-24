@@ -10,6 +10,13 @@ This project does not follow SemVer, since modules are independent of each other
 ### Cloudtrail
 * New module which allows the creation of management and data cloudtrail
 
+## [v2023.10.15]
+### rds
+- Add log_min_duration_statement, log_retention_period variables, log_min_error_statement. [#263](https://github.com/dbl-works/terraform/pull/263)
+
+### stack/app
+- Add rds_log_min_duration_statement, rds_log_retention_period variables, rds_log_min_error_statement. [#263](https://github.com/dbl-works/terraform/pull/263)
+
 ### Secrets
 * Passing in a `kms_key_id` is now optional. If omitted, a new key is created
 
