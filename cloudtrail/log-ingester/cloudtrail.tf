@@ -15,13 +15,16 @@ resource "aws_cloudtrail" "management" {
   kms_key_id                    = module.s3-cloudtrail.kms-key-arn
   s3_bucket_name                = module.s3-cloudtrail.bucket_name
 
-  advanced_event_selector {
-    name = "Log readOnly and writeOnly management events"
-
-    field_selector {
-      field  = "eventCategory"
-      equals = ["Management"]
-    }
+  event_selector {
+    read_write_type           = "All"
+    include_management_events = true
+    exclude_management_event_sources = [
+      # AWS KMS actions such as Encrypt, Decrypt, and GenerateDataKey typically generate a large volume (more than 99%) of events.
+      "kms.amazonaws.com",
+      # CloudTrail captures all API calls for Data API as events, including calls from the Amazon RDS console and from code calls to the Data API operations
+      # However, the Data API can generate a large number of events,
+      "rdsdata.amazonaws.com"
+    ]
   }
 
   tags = {
