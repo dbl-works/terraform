@@ -55,7 +55,7 @@ module "log-producer" {
 
   environment = local.environment
   organization_name = "test-organization"
-  is_organization_trail = true
+  is_organization_trail = false
   is_multi_region_trail = true
   enable_management_cloudtrail = true
   enable_data_cloudtrail = true
