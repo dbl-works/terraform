@@ -31,6 +31,10 @@ module "secrets" {
   # Optional
   application = each.key
   description = each.value.description
+
+  depends_on = [
+    module.secrets-kms-key
+  ]
 }
 
 
