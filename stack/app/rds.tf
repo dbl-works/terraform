@@ -53,4 +53,5 @@ module "rds" {
   log_min_duration_statement = var.rds_log_min_duration_statement
   log_retention_period       = var.rds_log_retention_period
   log_min_error_statement    = var.rds_log_min_error_statement
+  ca_cert_identifier         = var.rds_ca_cert_identifier
 }
