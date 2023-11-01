@@ -9,7 +9,6 @@ This project does not follow SemVer, since modules are independent of each other
 ## Unreleased
 ### script/database-roles
 - DB username is retrieved from the AWS secret manager. [#268](https://github.com/dbl-works/terraform/pull/268)
-=======
 ### rds
 - Add ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
 
