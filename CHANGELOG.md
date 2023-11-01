@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### script/database-roles
+- DB username is retrieved from the AWS secret manager. [#268](https://github.com/dbl-works/terraform/pull/268)
+
 ### rds
 - Add ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
 
