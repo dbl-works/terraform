@@ -6,6 +6,11 @@ variable "kms_key_arn" {}
 variable "project" {}
 variable "environment" {}
 
+variable "ca_cert_identifier" {
+  default = "rds-ca-rsa2048-g1"
+  type    = string
+}
+
 variable "instance_class" { default = "db.t3.micro" }
 variable "engine_version" {
   default = "14"

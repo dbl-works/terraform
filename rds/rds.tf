@@ -36,6 +36,7 @@ resource "aws_db_instance" "main" {
   delete_automated_backups        = var.delete_automated_backups
   skip_final_snapshot             = var.skip_final_snapshot
   final_snapshot_identifier       = var.is_read_replica ? null : (var.final_snapshot_identifier == null ? local.final_snapshot_identifier : var.final_snapshot_identifier)
+  ca_cert_identifier              = var.ca_cert_identifier
 
   enabled_cloudwatch_logs_exports = [
     "postgresql",

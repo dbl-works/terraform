@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### rds
+- Add ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
+
+### stack/app
+- Add rds_ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
 
 ## [v2023.10.15]
 ### rds
