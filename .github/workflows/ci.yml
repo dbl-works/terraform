@@ -86,6 +86,8 @@ jobs:
             }
           EOF
 
+          cat versions.tf
+
       - name: init
         run: |
           cd ${{ matrix.module }}
