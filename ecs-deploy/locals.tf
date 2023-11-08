@@ -36,20 +36,19 @@ locals {
   task_definition_name = "${var.project}-${var.app_config.name}-${var.environment}"
 
   app_container_definitions = templatefile("${path.module}/task-definitions/${var.container_definitions_file_name}.json", {
-    COMMANDS               = jsonencode(var.app_config.commands)
-    DEPENDS_ON             = jsonencode(local.depends_on)
-    ECS_FARGATE_LOG_MODE   = var.ecs_fargate_log_mode
-    ENVIRONMENT            = var.environment
-    ENVIRONMENT_VARIABLES  = jsonencode(local.environment_variables)
-    IMAGE_NAME             = local.image_name
-    IMAGE_TAG              = var.app_config.image_tag
-    MOUNT_POINTS           = jsonencode(local.mount_points)
-    NAME                   = var.app_config.name
-    PORT_MAPPINGS          = jsonencode(local.app_port_mappings)
-    PROJECT                = var.project
-    REGION                 = data.aws_region.current.name
-    SECRETS_LIST           = jsonencode(local.secrets)
-    EPHEMERAL_STORAGE_SIZE = var.ephemeral_storage_size
+    COMMANDS              = jsonencode(var.app_config.commands)
+    DEPENDS_ON            = jsonencode(local.depends_on)
+    ECS_FARGATE_LOG_MODE  = var.ecs_fargate_log_mode
+    ENVIRONMENT           = var.environment
+    ENVIRONMENT_VARIABLES = jsonencode(local.environment_variables)
+    IMAGE_NAME            = local.image_name
+    IMAGE_TAG             = var.app_config.image_tag
+    MOUNT_POINTS          = jsonencode(local.mount_points)
+    NAME                  = var.app_config.name
+    PORT_MAPPINGS         = jsonencode(local.app_port_mappings)
+    PROJECT               = var.project
+    REGION                = data.aws_region.current.name
+    SECRETS_LIST          = jsonencode(local.secrets)
   })
 
   sidecar_container_definitions = [for config in var.sidecar_config : templatefile("${path.module}/task-definitions/sidecar.json", {

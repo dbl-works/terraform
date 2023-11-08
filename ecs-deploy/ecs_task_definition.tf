@@ -8,6 +8,10 @@ resource "aws_ecs_task_definition" "main" {
   cpu                      = var.cpu
   memory                   = var.memory
 
+  ephemeral_storage {
+    size_in_gib = var.ephemeral_storage_size_in_gib
+  }
+
   dynamic "volume" {
     for_each = var.volume_name == null ? [] : [{
       name = var.volume_name
