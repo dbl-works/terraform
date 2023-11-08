@@ -69,14 +69,22 @@ jobs:
       - name: Set AWS Provider Version
         run: |
           cd ${{ matrix.module }}
-          # Check if the AWS provider version is specified and update or insert accordingly
-          if grep -q 'version\s*=\s*"[^"]*"' *.tf; then
-            # Version is specified, so replace it
-            sed -i "s/version\s*=\s*\"[^\"]*\"/version = \"${{ matrix.aws-version }}\"/g" *.tf
-          else
-            # Version is not specified, so add it
-            sed -i "/provider \"aws\"/a\  version = \"${{ matrix.aws-version }}\"" *.tf
+          FILE=versions.tf
+          if test -f "$FILE"; then
+            echo "$FILE exists."
+            rm versions.tf
           fi
+          cat > versions.tf <<EOF
+            terraform {
+              required_providers {
+                aws = {
+                  source  = "hashicorp/aws"
+                  version = "${{ matrix.aws-version }}"
+                }
+              }
+              required_version = ">= 1.0"
+            }
+          EOF
 
       - name: init
         run: |
