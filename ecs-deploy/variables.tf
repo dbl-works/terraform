@@ -42,7 +42,7 @@ variable "ephemeral_storage_size_in_gib" {
   default = null
 
   validation {
-    condition     = var.ephemeral_storage_size_in_gib == null || var.ephemeral_storage_size_in_gib >= 21 && var.ephemeral_storage_size_in_gib <= 200
+    condition     = var.ephemeral_storage_size_in_gib == null || (var.ephemeral_storage_size_in_gib >= 21 && var.ephemeral_storage_size_in_gib <= 200)
     error_message = "ephemeral_storage_size_in_gib must omitted to default to 20, or set to be between 21 and 200 (GiB)"
   }
 }
