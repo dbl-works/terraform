@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "main" {
 
   dynamic "ephemeral_storage" {
     # in terraform, we cannot set the size to the default value, but must at least set it to 21
-    # henc we omit this if the default is chosen.
+    # hence we omit this if the default is chosen.
     for_each = var.ephemeral_storage_size_in_gib == 20 ? [] : [{
       size_in_gib = var.ephemeral_storage_size_in_gib
     }]
