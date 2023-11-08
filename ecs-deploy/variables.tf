@@ -37,6 +37,15 @@ variable "ecs_fargate_log_mode" {
   default = "non-blocking"
 }
 
+variable "ephemeral_storage_size" {
+  type    = number
+  default = 20
+  validation {
+    condition     = var.ephemeral_storage_size >= 20 && var.ephemeral_storage_size <= 200
+    error_message = "ephemeral_storage_size must be between 20 and 200 (GiB)"
+  }
+}
+
 variable "desired_count" {
   type    = number
   default = 1
