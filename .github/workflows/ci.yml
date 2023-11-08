@@ -93,8 +93,8 @@ jobs:
           cd ${{ matrix.module }}
           terraform init
           FILE=versions-backup.tf
+          rm versions.tf
           if test -f "$FILE"; then
-            rm versions.tf
             mv versions-backup.tf versions.tf
           fi
 
