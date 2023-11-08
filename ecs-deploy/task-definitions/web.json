@@ -11,7 +11,7 @@
     "dependsOn": ${DEPENDS_ON},
     "readonlyRootFilesystem": false,
     "ephemeralStorage": {
-        "sizeInGiB": ${EPHEMERAL_STORAGE_SIZE},
+        "sizeInGiB": ${EPHEMERAL_STORAGE_SIZE}
     },
     "logConfiguration": {
         "logDriver": "awslogs",
