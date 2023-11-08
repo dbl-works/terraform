@@ -71,7 +71,7 @@ jobs:
           cd ${{ matrix.module }}
           FILE=versions.tf
           if test -f "$FILE"; then
-            mv $FILE versions-backup.tf
+            mv $FILE versions-backup.md
             echo "$FILE exists."
           fi
           cat > $FILE <<EOF
@@ -95,7 +95,7 @@ jobs:
           FILE=versions-backup.tf
           rm versions.tf
           if test -f "$FILE"; then
-            mv versions-backup.tf versions.tf
+            mv versions-backup.md versions.tf
           fi
 
       - name: validate
