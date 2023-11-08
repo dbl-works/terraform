@@ -344,11 +344,16 @@ variable "rds_log_min_error_statement" {
   default     = "panic"
   description = "Controls which SQL statements that cause an error condition are recorded in the server log."
 
-
   validation {
     condition     = contains(["debug5", "debug4", "debug3", "debug2", "debug1", "info", "notice", "warning", "error", "log", "fatal", "panic"], var.rds_log_min_error_statement)
     error_message = "The valid values are [debug5, debug4, debug3, debug2, debug1, info, notice, warning, error, log, fatal, panic]"
   }
+}
+
+variable "rds_ca_cert_identifier" {
+  default     = "rds-ca-rsa2048-g1"
+  type        = string
+  description = "The identifier of the CA certificate for the DB instance."
 }
 # =============== RDS ================ #
 

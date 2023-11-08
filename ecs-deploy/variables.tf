@@ -37,6 +37,16 @@ variable "ecs_fargate_log_mode" {
   default = "non-blocking"
 }
 
+variable "ephemeral_storage_size_in_gib" {
+  type    = number
+  default = 20 # 20 is the default of AWS Fargate
+
+  validation {
+    condition     = var.ephemeral_storage_size_in_gib == 20 || (var.ephemeral_storage_size_in_gib >= 21 && var.ephemeral_storage_size_in_gib <= 200)
+    error_message = "ephemeral_storage_size_in_gib must omitted to default to 20, or set to be between 21 and 200 (GiB)"
+  }
+}
+
 variable "desired_count" {
   type    = number
   default = 1
