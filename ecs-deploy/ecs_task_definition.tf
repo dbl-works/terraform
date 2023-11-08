@@ -8,6 +8,18 @@ resource "aws_ecs_task_definition" "main" {
   cpu                      = var.cpu
   memory                   = var.memory
 
+  dynamic "ephemeral_storage" {
+    # in terraform, we cannot set the size to the default value, but must at least set it to 21
+    # hence we omit this if the default is chosen.
+    for_each = var.ephemeral_storage_size_in_gib == 20 ? [] : [{
+      size_in_gib = var.ephemeral_storage_size_in_gib
+    }]
+
+    content {
+      size_in_gib = ephemeral_storage.value.size_in_gib
+    }
+  }
+
   dynamic "volume" {
     for_each = var.volume_name == null ? [] : [{
       name = var.volume_name
