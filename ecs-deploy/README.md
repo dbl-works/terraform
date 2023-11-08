@@ -13,10 +13,12 @@ module "ecs-deploy" {
   ecr_repo_name        = "facebook"
 
   # Optional
-  cpu                     = 256
-  memory                  = 512
-  desired_count           = 2
-  with_load_balancer      = true
+  cpu                           = 256
+  memory                        = 512
+  desired_count                 = 2
+  with_load_balancer            = true
+  ephemeral_storage_size_in_gib = 20   # available disk size for the task, 20-200 GiB
+
   app_config = {
     name                  = "facebook"
     image_tag             = "v1.0"
