@@ -58,11 +58,25 @@ jobs:
           - vpc-peering
           - vpn
           - xray
+        aws-version: ["~> 4.0", "~> 5.0"] # Add this line to include AWS provider versions
+
       fail-fast: false
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set AWS Provider Version
+        run: |
+          cd ${{ matrix.module }}
+          # Check if the AWS provider version is specified and update or insert accordingly
+          if grep -q 'version\s*=\s*"[^"]*"' *.tf; then
+            # Version is specified, so replace it
+            sed -i "s/version\s*=\s*\"[^\"]*\"/version = \"${{ matrix.aws-version }}\"/g" *.tf
+          else
+            # Version is not specified, so add it
+            sed -i "/provider \"aws\"/a\  version = \"${{ matrix.aws-version }}\"" *.tf
+          fi
 
       - name: init
         run: |
