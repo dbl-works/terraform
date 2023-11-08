@@ -70,11 +70,12 @@ jobs:
         run: |
           cd ${{ matrix.module }}
           FILE=versions.tf
+          mv $FILE versions-backup.tf
           if test -f "$FILE"; then
             echo "$FILE exists."
-            rm versions.tf
+            rm $FILE
           fi
-          cat > versions.tf <<EOF
+          cat > $FILE <<EOF
             terraform {
               required_providers {
                 aws = {
@@ -86,12 +87,13 @@ jobs:
             }
           EOF
 
-          cat versions.tf
+          cat $FILE
 
       - name: init
         run: |
           cd ${{ matrix.module }}
           terraform init
+          mv versions-backup.tf $FILE
 
       - name: validate
         run: |
