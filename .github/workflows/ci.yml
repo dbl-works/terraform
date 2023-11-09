@@ -87,6 +87,7 @@ jobs:
             required_version = ">= 1.0"
           }
           EOF
+          fi
 
           cat $FILE
 
