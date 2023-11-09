@@ -92,7 +92,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
   # Use this when the destination is s3
   dynamic "extended_s3_configuration" {
-    for_each = var.s3_configuration != null && contains(["s3", "extended_s3"], var.kinesis_destination) ? [var.s3_configuration] : []
+    for_each = var.s3_configuration != null && var.kinesis_destination == "s3" ? [var.s3_configuration] : []
 
     content {
       role_arn           = aws_iam_role.kinesis.arn
