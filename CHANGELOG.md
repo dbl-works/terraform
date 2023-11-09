@@ -8,6 +8,19 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 
+## [v2023.11.08]
+### script/database-roles
+- DB username is retrieved from the AWS secret manager. [#268](https://github.com/dbl-works/terraform/pull/268)
+
+### rds
+- Add ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
+
+### stack/app
+- Add rds_ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
+
+### ECS-Task
+- allow setting the ephemeral disk size [#270](https://github.com/dbl-works/terraform/pull/270)
+
 ## [v2023.10.15]
 ### rds
 - Add log_min_duration_statement, log_retention_period variables, log_min_error_statement. [#263](https://github.com/dbl-works/terraform/pull/263)
