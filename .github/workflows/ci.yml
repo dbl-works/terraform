@@ -77,18 +77,19 @@ jobs:
             sed -i '/aws = {/,/}/ s/version = "[^"]*/version = "${{ matrix.aws-version }}/' versions.tf
 
             echo "$FILE exists."
-          fi
-          cat > $FILE <<EOF
-            terraform {
-              required_providers {
-                aws = {
-                  source  = "hashicorp/aws"
-                  version = "${{ matrix.aws-version }}"
+          else
+            cat > $FILE <<EOF
+              terraform {
+                required_providers {
+                  aws = {
+                    source  = "hashicorp/aws"
+                    version = "${{ matrix.aws-version }}"
+                  }
                 }
+                required_version = ">= 1.0"
               }
-              required_version = ">= 1.0"
-            }
-          EOF
+            EOF
+          fi
 
           cat $FILE
 
