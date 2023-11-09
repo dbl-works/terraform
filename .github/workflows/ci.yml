@@ -61,7 +61,7 @@ jobs:
           - xray
         aws-version: ["~> 4.0", "~> 5.0"]
         exclude:
-          - module: 'cloudwatch-kinesis' # Replace with the actual module that does not support ~> 4.0
+          - module: 'cloudwatch-kinesis'
             aws-version: "~> 4.0"
       fail-fast: false
 
