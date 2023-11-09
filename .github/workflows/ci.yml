@@ -14,6 +14,7 @@ jobs:
           - certificate
           - cloudflare
           - cloudwatch
+          - cloudwatch-kinesis
           - cloudwatch-snowflake
           - cognito
           - ecr
@@ -58,11 +59,40 @@ jobs:
           - vpc-peering
           - vpn
           - xray
+        aws-version: ["~> 4.0", "~> 5.0"]
+        exclude:
+          - module: 'cloudwatch-kinesis'
+            aws-version: "~> 4.0"
       fail-fast: false
+
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      - name: Set AWS Provider Version
+        run: |
+          cd ${{ matrix.module }}
+          FILE=versions.tf
+          if test -f "$FILE"; then
+            sed -i '/aws = {/,/}/ s/version = "[^"]*/version = "${{ matrix.aws-version }}/' $FILE
+
+            echo "$FILE exists."
+          else
+            cat > $FILE <<EOF
+          terraform {
+            required_providers {
+              aws = {
+                source  = "hashicorp/aws"
+                version = "${{ matrix.aws-version }}"
+              }
+            }
+            required_version = ">= 1.0"
+          }
+          EOF
+          fi
+
+          cat $FILE
 
       - name: init
         run: |
