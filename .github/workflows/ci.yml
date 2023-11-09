@@ -72,24 +72,21 @@ jobs:
           cd ${{ matrix.module }}
           FILE=versions.tf
           if test -f "$FILE"; then
-            mv $FILE versions-backup.md
-            cp versions-backup.md versions.tf
-            sed -i '/aws = {/,/}/ s/version = "[^"]*/version = "${{ matrix.aws-version }}/' versions.tf
+            sed -i '/aws = {/,/}/ s/version = "[^"]*/version = "${{ matrix.aws-version }}/' $FILE
 
             echo "$FILE exists."
           else
             cat > $FILE <<EOF
-              terraform {
-                required_providers {
-                  aws = {
-                    source  = "hashicorp/aws"
-                    version = "${{ matrix.aws-version }}"
-                  }
-                }
-                required_version = ">= 1.0"
+          terraform {
+            required_providers {
+              aws = {
+                source  = "hashicorp/aws"
+                version = "${{ matrix.aws-version }}"
               }
-            EOF
-          fi
+            }
+            required_version = ">= 1.0"
+          }
+          EOF
 
           cat $FILE
 
@@ -97,11 +94,6 @@ jobs:
         run: |
           cd ${{ matrix.module }}
           terraform init
-          FILE=versions-backup.md
-          rm versions.tf
-          if test -f "$FILE"; then
-            mv versions-backup.md versions.tf
-          fi
 
       - name: validate
         run: |
