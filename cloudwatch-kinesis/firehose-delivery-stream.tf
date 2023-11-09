@@ -153,7 +153,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
 
       # Use this when the destination is not s3 but we want to backup using s3
       dynamic "s3_configuration" {
-        for_each = var.s3_configuration != null && !contains(["s3", "extended_s3"], var.kinesis_destination) ? [var.s3_configuration] : []
+        for_each = var.s3_configuration != null ? [var.s3_configuration] : []
 
         content {
           role_arn           = aws_iam_role.kinesis.arn
