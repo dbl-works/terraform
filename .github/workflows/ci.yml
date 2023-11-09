@@ -59,7 +59,7 @@ jobs:
           - vpc-peering
           - vpn
           - xray
-        aws-version: ["~> 4.0", "~> 5.0"] # Add this line to include AWS provider versions
+        aws-version: ["~> 4.0", "~> 5.0"]
 
       fail-fast: false
     runs-on: ubuntu-latest
@@ -73,6 +73,9 @@ jobs:
           FILE=versions.tf
           if test -f "$FILE"; then
             mv $FILE versions-backup.md
+            cp versions-backup.md versions.tf
+            sed -i '/aws = {/,/}/ s/version = "[^"]*/version = "${{ matrix.aws-version }}/' versions.tf
+
             echo "$FILE exists."
           fi
           cat > $FILE <<EOF
@@ -93,7 +96,7 @@ jobs:
         run: |
           cd ${{ matrix.module }}
           terraform init
-          FILE=versions-backup.tf
+          FILE=versions-backup.md
           rm versions.tf
           if test -f "$FILE"; then
             mv versions-backup.md versions.tf
