@@ -194,7 +194,7 @@ variable "health_check_options" {
     timeout             = optional(number, 30) # The amount of time, in seconds, during which no response means a failed health check. For Application Load Balancers, the range is 2 to 120 seconds.
     interval            = optional(number, 60) # The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds.
     matcher             = optional(string, "200,204")
-    protocol            = optional(string, "https")
+    protocol            = optional(string, "HTTPS")
   })
   default = {}
 }
