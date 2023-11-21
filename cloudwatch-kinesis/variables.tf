@@ -25,6 +25,11 @@ variable "cloudwatch_logs_retention_in_days" {
 variable "kinesis_destination" {
   type    = string
   default = "http_endpoint"
+
+  validation {
+    condition     = contains(["s3", "http_endpoint"], var.kinesis_destination)
+    error_message = "kinesis_destination must be either s3 or http_endpoint"
+  }
 }
 
 variable "http_endpoint_configuration" {

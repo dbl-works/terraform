@@ -90,39 +90,15 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
   name        = var.kinesis_stream_name == null ? local.name : var.kinesis_stream_name
   destination = var.http_endpoint_configuration == null ? var.kinesis_destination : "http_endpoint"
 
-  # Use this when the destination is not s3 but we want to backup using s3
-  dynamic "s3_configuration" {
-    for_each = var.s3_configuration != null && !contains(["s3", "extended_s3"], var.kinesis_destination) ? [var.s3_configuration] : []
-
-    content {
-      role_arn           = aws_iam_role.kinesis.arn
-      bucket_arn         = s3_configuration.value.s3_bucket_arn
-      buffer_size        = s3_configuration.value.buffering_size     # in MB
-      buffer_interval    = s3_configuration.value.buffering_interval # in seconds
-      compression_format = s3_configuration.value.compression_format
-
-      # https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html
-      # Sample: myPrefix/result=!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd} => myPrefix/result=processing-failed/2018/08/03
-      prefix              = local.s3_output_prefix
-      error_output_prefix = local.s3_error_output_prefix
-
-      cloudwatch_logging_options {
-        enabled         = s3_configuration.value.enable_cloudwatch
-        log_group_name  = local.log_group_name
-        log_stream_name = "s3"
-      }
-    }
-  }
-
   # Use this when the destination is s3
   dynamic "extended_s3_configuration" {
-    for_each = var.s3_configuration != null && contains(["s3", "extended_s3"], var.kinesis_destination) ? [var.s3_configuration] : []
+    for_each = var.s3_configuration != null && var.kinesis_destination == "s3" ? [var.s3_configuration] : []
 
     content {
       role_arn           = aws_iam_role.kinesis.arn
       bucket_arn         = extended_s3_configuration.value.s3_bucket_arn
-      buffer_size        = extended_s3_configuration.value.buffering_size     # in MB
-      buffer_interval    = extended_s3_configuration.value.buffering_interval # in seconds
+      buffering_size     = extended_s3_configuration.value.buffering_size     # in MB
+      buffering_interval = extended_s3_configuration.value.buffering_interval # in seconds
       compression_format = extended_s3_configuration.value.compression_format
 
       # https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html
@@ -174,6 +150,30 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
       buffering_interval = http_endpoint_configuration.value.buffering_interval
       role_arn           = aws_iam_role.kinesis.arn
       s3_backup_mode     = http_endpoint_configuration.value.s3_backup_mode
+
+      # Use this when the destination is not s3 but we want to backup using s3
+      dynamic "s3_configuration" {
+        for_each = var.s3_configuration != null ? [var.s3_configuration] : []
+
+        content {
+          role_arn           = aws_iam_role.kinesis.arn
+          bucket_arn         = s3_configuration.value.s3_bucket_arn
+          buffering_size     = s3_configuration.value.buffering_size     # in MB
+          buffering_interval = s3_configuration.value.buffering_interval # in seconds
+          compression_format = s3_configuration.value.compression_format
+
+          # https://docs.aws.amazon.com/firehose/latest/dev/s3-prefixes.html
+          # Sample: myPrefix/result=!{firehose:error-output-type}/!{timestamp:yyyy/MM/dd} => myPrefix/result=processing-failed/2018/08/03
+          prefix              = local.s3_output_prefix
+          error_output_prefix = local.s3_error_output_prefix
+
+          cloudwatch_logging_options {
+            enabled         = s3_configuration.value.enable_cloudwatch
+            log_group_name  = local.log_group_name
+            log_stream_name = "s3"
+          }
+        }
+      }
 
       cloudwatch_logging_options {
         enabled         = http_endpoint_configuration.value.enable_cloudwatch

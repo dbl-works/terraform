@@ -10,6 +10,13 @@ This project does not follow SemVer, since modules are independent of each other
 ### Cloudtrail
 * New module which allows the creation of management and data cloudtrail
 
+### hashicorp/aws
+- Upgrade to v5. [#271](https://github.com/dbl-works/terraform/pull/271)
+
+### cloudwatch-kinesis
+- hashicorp/aws: Drop support for v4 and add support for v5.[#271](https://github.com/dbl-works/terraform/pull/271)
+
+
 ## [v2023.11.08]
 ### script/database-roles
 - DB username is retrieved from the AWS secret manager. [#268](https://github.com/dbl-works/terraform/pull/268)
