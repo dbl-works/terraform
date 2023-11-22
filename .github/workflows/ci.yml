@@ -13,7 +13,7 @@ jobs:
           - aws-transfer/iam-role
           - certificate
           - cloudflare
-          - cloudtrail/cloudtrail-scp
+          - cloudtrail/cloudtrail-protection-scp
           - cloudtrail/log-ingestor
           - cloudtrail/log-producer
           - cloudwatch
