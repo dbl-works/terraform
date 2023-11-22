@@ -502,8 +502,19 @@ variable "service_discovery_enabled" {
   type    = bool
   default = true
 }
-
 # =============== ECS ================ #
+
+# =============== Cloudtrail ================ #
+variable "s3_bucket_arn_for_data_cloudtrail" {
+  type    = list(string)
+  default = []
+}
+
+variable "enable_data_cloudtrail" {
+  type    = bool
+  default = false
+}
+# =============== Cloudtrail ================ #
 
 # =============== Cloudwatch ================ #
 variable "cloudwatch_dashboard_view" {

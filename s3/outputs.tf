@@ -17,3 +17,7 @@ output "bucket_region" {
 output "kms_arn" {
   value = length(module.kms_key) > 0 ? module.kms_key[0].arn : null
 }
+
+output "kms_id" {
+  value = length(module.kms_key) > 0 ? module.kms_key[0].id : null
+}
