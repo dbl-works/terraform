@@ -1,7 +1,7 @@
 locals {
-  management_cloudtrail_name = "protected--management-cloudtrail-logs"
-  data_cloudtrail_name       = "protected--data-cloudtrail-logs"
-  cloudtrail_name            = "protected--cloudtrail-logs"
+  management_cloudtrail_name = "protected-management-cloudtrail-logs"
+  data_cloudtrail_name       = "protected-data-cloudtrail-logs"
+  cloudtrail_name            = "protected-cloudtrail-logs"
 }
 
 data "aws_caller_identity" "current" {}
