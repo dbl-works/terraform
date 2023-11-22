@@ -7,7 +7,7 @@ This Terraform module allows you to create and configure AWS CloudTrail resource
 - Create a new CloudTrail trail.
 - Configure the trail with your desired settings.
 - Define the S3 bucket where CloudTrail log files will be stored.
-- Define SCP policy
+- Define SCP policy to restrict users from modifying or deleting CloudTrail logs.
 
 ## Usage
 

@@ -1,9 +1,9 @@
 variable "cloudtrail_s3_bucket_name" {
   type        = string
-  description = "The name of the AWS S3 bucket for which CloudTrail will store the logs in"
+  description = "Specifies the S3 bucket where CloudTrail logs are to be stored ('log-ingestor')."
 }
 
 variable "cloudtrail_arns" {
   type        = list(string)
-  description = "The cloudtrail arns in the log producer accounts"
+  description = "List of ARNs for CloudTrail trails in the log-producer accounts that will send logs to the specified S3 bucket."
 }
