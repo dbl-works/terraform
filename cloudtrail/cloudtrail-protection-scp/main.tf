@@ -16,12 +16,12 @@ data "aws_iam_policy_document" "cloudtrail_protection_scp" {
       "cloudtrail:UpdateTrail",
     ]
 
-    # this ensures we only protect logs that are ingested by the log ingestor account
-    # which allows to have additional trails within a single log-producer account that are not protected
+    # This ensures we lock down only trails we set up using these modules
+    # This allows to e.g. manually add (and then remove) trails for testing
     condition {
       test     = "StringLike"
       variable = "cloudtrail:trailarn"
-      values   = ["arn:aws:cloudtrail:*:${var.log_ingestor_account_id}:trail/*"]
+      values   = ["arn:aws:cloudtrail:*:trail/protected-*"]
     }
   }
 }

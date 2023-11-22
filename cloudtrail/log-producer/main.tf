@@ -1,7 +1,7 @@
 locals {
-  management_cloudtrail_name = "${var.organization_name}-management-cloudtrail-logs"
-  data_cloudtrail_name       = "${var.organization_name}-data-cloudtrail-logs"
-  cloudtrail_name            = "${var.organization_name}-cloudtrail-logs"
+  management_cloudtrail_name = "protected-${var.organization_name}-management-cloudtrail-logs"
+  data_cloudtrail_name       = "protected-${var.organization_name}-data-cloudtrail-logs"
+  cloudtrail_name            = "protected-${var.organization_name}-cloudtrail-logs"
 }
 
 data "aws_caller_identity" "current" {}
