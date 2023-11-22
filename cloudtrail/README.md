@@ -82,12 +82,12 @@ module "s3-cloudtrail-policy" {
   cloudtrail_arns = module.log-producer.cloudtrail_arns
 }
 
-module "scp" {
+module "cloudtrail_protection_scp" {
   providers = {
     aws = aws.management-account
   }
 
-  source = "github.com/dbl-works/terraform//cloudtrail/cloudtrail-scp"
+  source = "github.com/dbl-works/terraform//cloudtrail/cloudtrail-protection-scp"
 
   # Best practice is to never attach SCPs to the root of your organization. Instead, create an Organizational Unit (OU) underneath root and attach policies there.
   target_ids = [data.aws_caller_identity.log_producer.account_id]
@@ -96,6 +96,6 @@ module "scp" {
 
 ### Enable SCP Policy
 
-- Before applying the cloudtrail-scp module, ensure that you have enabled the Service Control Policy (SCP).
+- Before applying the cloudtrail-protection-scp module, ensure that you have enabled the Service Control Policy (SCP).
 
   - To enable SCP, navigate to AWS Organizations > Policies > Service Control Policies, then click on "Enable Service Control Policies."
