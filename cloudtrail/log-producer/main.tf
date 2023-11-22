@@ -1,7 +1,7 @@
 locals {
-  management_cloudtrail_name = "protected-management-cloudtrail-logs"
-  data_cloudtrail_name       = "protected-data-cloudtrail-logs"
-  cloudtrail_name            = "protected-cloudtrail-logs"
+  management_cloudtrail_name = "management-cloudtrail-logs"
+  data_cloudtrail_name       = "data-cloudtrail-logs"
+  cloudtrail_name            = "cloudtrail-logs"
 }
 
 data "aws_caller_identity" "current" {}
@@ -35,9 +35,10 @@ resource "aws_cloudtrail" "management" {
   }
 
   tags = {
-    Name        = local.management_cloudtrail_name
-    Project     = var.project
-    Environment = var.environment
+    Name           = local.management_cloudtrail_name
+    Project        = var.project
+    Environment    = var.environment
+    ProtectedTrail = "true"
   }
 }
 
@@ -85,9 +86,10 @@ resource "aws_cloudtrail" "data" {
   }
 
   tags = {
-    Name        = local.data_cloudtrail_name
-    Project     = var.project
-    Environment = var.environment
+    Name           = local.data_cloudtrail_name
+    Project        = var.project
+    Environment    = var.environment
+    ProtectedTrail = "true"
   }
 }
 

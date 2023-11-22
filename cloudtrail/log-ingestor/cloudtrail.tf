@@ -1,5 +1,5 @@
 locals {
-  cloudtrail_name = "protected-cloudtrail-logs"
+  cloudtrail_name = "cloudtrail-logs"
 }
 
 # https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-receive-logs-from-multiple-accounts.html
@@ -28,9 +28,10 @@ resource "aws_cloudtrail" "management" {
   }
 
   tags = {
-    Name        = local.cloudtrail_name
-    Project     = var.project
-    Environment = var.environment
+    Name           = local.cloudtrail_name
+    Project        = var.project
+    Environment    = var.environment
+    ProtectedTrail = "true"
   }
 
   depends_on = [aws_s3_bucket_policy.allow_access_from_cloudtrail_only]
