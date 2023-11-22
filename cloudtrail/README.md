@@ -14,8 +14,8 @@ This Terraform module allows you to create and configure AWS CloudTrail resource
 ```terraform
 provider "aws" {
   region  = var.region
-  profile = "log-ingester"
-  alias   = "log-ingester"
+  profile = "log-ingestor"
+  alias   = "log-ingestor"
 }
 
 provider "aws" {
@@ -34,12 +34,12 @@ data "aws_caller_identity" "log_producer" {
   provider = aws.log-producer
 }
 
-module "log-ingester" {
+module "log-ingestor" {
   providers = {
-    aws = aws.log-ingester
+    aws = aws.log-ingestor
   }
 
-  source = "github.com/dbl-works/terraform//cloudtrail/log-ingester"
+  source = "github.com/dbl-works/terraform//cloudtrail/log-ingestor"
 
   environment = local.environment
   organization_name = "test-organization"
@@ -62,8 +62,8 @@ module "log-producer" {
   is_multi_region_trail = true
   enable_management_cloudtrail = true
   enable_data_cloudtrail = true
-  cloudtrail_s3_bucket_name = module.log-ingester.s3_bucket_name
-  cloudtrail_s3_kms_arn = module.log-ingester.s3_kms_arn
+  cloudtrail_s3_bucket_name = module.log-ingestor.s3_bucket_name
+  cloudtrail_s3_kms_arn = module.log-ingestor.s3_kms_arn
   s3_bucket_arn_for_data_cloudtrail = [
     "arn:aws:s3:::bucket_name/important_s3_bucket",
     "arn:aws:s3:::bucket_name/second-important_s3_bucket/prefix",
@@ -73,12 +73,12 @@ module "log-producer" {
 
 module "s3-cloudtrail-policy" {
   providers = {
-    aws = aws.log-ingester
+    aws = aws.log-ingestor
   }
 
   source = "github.com/dbl-works/terraform//cloudtrail/s3-cloudtrail-policy"
 
-  cloudtrail_s3_bucket_name = module.log-ingester.s3_bucket_name
+  cloudtrail_s3_bucket_name = module.log-ingestor.s3_bucket_name
   cloudtrail_arns = module.log-producer.cloudtrail_arns
 }
 

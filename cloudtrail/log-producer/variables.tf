@@ -1,5 +1,5 @@
 # NOTE: the "master AWS account" refers to the management account that has the ability to manage certain aspects of all other accounts within the organization, including setting up organization-wide services like AWS CloudTrail for logging.
-#       This is not necessarily the log-ingester account, which likely should be its own account.
+#       This is not necessarily the log-ingestor account, which likely should be its own account.
 
 variable "environment" {
   type        = string
@@ -36,7 +36,7 @@ variable "enable_data_cloudtrail" {
 
 variable "cloudtrail_s3_bucket_name" {
   type        = string
-  description = "Designates the S3 bucket name where CloudTrail logs are stored ('log-ingester')."
+  description = "Designates the S3 bucket name where CloudTrail logs are stored ('log-ingestor')."
 }
 
 variable "cloudtrail_s3_kms_arn" {

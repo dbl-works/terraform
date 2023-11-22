@@ -14,7 +14,7 @@ jobs:
           - certificate
           - cloudflare
           - cloudtrail/cloudtrail-scp
-          - cloudtrail/log-ingester
+          - cloudtrail/log-ingestor
           - cloudtrail/log-producer
           - cloudwatch
           - cloudwatch-kinesis

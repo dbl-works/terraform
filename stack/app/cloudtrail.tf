@@ -10,12 +10,12 @@ module "log-producer" {
   enable_management_cloudtrail      = true
   enable_data_cloudtrail            = var.enable_data_cloudtrail
   s3_bucket_arn_for_data_cloudtrail = var.s3_bucket_arn_for_data_cloudtrail
-  cloudtrail_s3_bucket_name         = module.log-ingester.s3_bucket_name
-  cloudtrail_s3_kms_arn             = module.log-ingester.s3_kms_arn
+  cloudtrail_s3_bucket_name         = module.log-ingestor.s3_bucket_name
+  cloudtrail_s3_kms_arn             = module.log-ingestor.s3_kms_arn
 }
 
-module "log-ingester" {
-  source = "../../cloudtrail/log-ingester"
+module "log-ingestor" {
+  source = "../../cloudtrail/log-ingestor"
 
   environment              = var.environment
   organization_name        = var.organization_name
@@ -25,6 +25,6 @@ module "log-ingester" {
 module "s3-cloudtrail-policy" {
   source = "../../cloudtrail/s3-cloudtrail-policy"
 
-  cloudtrail_s3_bucket_name = module.log-ingester.s3_bucket_name
+  cloudtrail_s3_bucket_name = module.log-ingestor.s3_bucket_name
   cloudtrail_arns           = module.log-producer.cloudtrail_arns
 }

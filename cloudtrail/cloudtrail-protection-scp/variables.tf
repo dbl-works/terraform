@@ -3,7 +3,7 @@ variable "scp_target_account_ids" {
   type        = list(string)
 }
 
-variable "log_ingester_account_id" {
+variable "log_ingestor_account_id" {
   description = "The AWS Account ID of the account that will ingest CloudTrail logs."
   type        = string
 }

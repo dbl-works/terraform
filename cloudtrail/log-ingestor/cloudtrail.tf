@@ -3,7 +3,7 @@ locals {
 }
 
 # https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-receive-logs-from-multiple-accounts.html
-# The aws cloudtrail for the ingester account has to be created before the cloudtrail event in producer account
+# The aws cloudtrail for the ingestor account has to be created before the cloudtrail event in producer account
 resource "aws_cloudtrail" "management" {
   count = var.enable_cloudtrail ? 1 : 0
 
