@@ -42,7 +42,7 @@ module "log-ingestor" {
   source = "github.com/dbl-works/terraform//cloudtrail/log-ingestor"
 
   environment = local.environment
-  organization_name = "test-organization"
+  project = "test-organization"
   log_producer_account_ids = [data.aws_caller_identity.log_producer.account_id]
 
   # Optional
@@ -57,7 +57,7 @@ module "log-producer" {
   source = "github.com/dbl-works/terraform//cloudtrail/logging-account"
 
   environment = local.environment
-  organization_name = "test-organization"
+  project = "test-organization"
   is_organization_trail = false
   is_multi_region_trail = true
   enable_management_cloudtrail = true
