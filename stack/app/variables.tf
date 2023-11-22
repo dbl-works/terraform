@@ -2,10 +2,6 @@ variable "environment" {
   type = string
 }
 
-variable "organization_name" {
-  type = string
-}
-
 variable "project" {
   type = string
 }

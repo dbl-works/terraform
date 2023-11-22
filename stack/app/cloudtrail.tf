@@ -4,7 +4,7 @@ module "log-producer" {
   source = "../../cloudtrail/log-producer"
 
   environment                       = var.environment
-  organization_name                 = var.organization_name
+  project                           = var.project
   is_organization_trail             = false
   is_multi_region_trail             = true
   enable_management_cloudtrail      = true
@@ -18,7 +18,7 @@ module "log-ingestor" {
   source = "../../cloudtrail/log-ingestor"
 
   environment              = var.environment
-  organization_name        = var.organization_name
+  project                  = var.project
   log_producer_account_ids = [data.aws_caller_identity.current.account_id]
 }
 
