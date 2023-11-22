@@ -6,8 +6,9 @@ variable "environment" {
   description = "Specify the deployment environment, such as 'prod' for production or 'dev' for development. This is used for tagging resources."
 }
 
-variable "organization_name" {
-  type = string
+variable "project" {
+  type        = string
+  description = "Specify the project name. This is used for tagging resources."
 }
 
 variable "is_organization_trail" {

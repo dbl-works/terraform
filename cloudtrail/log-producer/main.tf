@@ -1,7 +1,7 @@
 locals {
-  management_cloudtrail_name = "protected-${var.organization_name}-management-cloudtrail-logs"
-  data_cloudtrail_name       = "protected-${var.organization_name}-data-cloudtrail-logs"
-  cloudtrail_name            = "protected-${var.organization_name}-cloudtrail-logs"
+  management_cloudtrail_name = "protected--management-cloudtrail-logs"
+  data_cloudtrail_name       = "protected--data-cloudtrail-logs"
+  cloudtrail_name            = "protected--cloudtrail-logs"
 }
 
 data "aws_caller_identity" "current" {}
@@ -36,7 +36,7 @@ resource "aws_cloudtrail" "management" {
 
   tags = {
     Name        = local.management_cloudtrail_name
-    Project     = var.organization_name
+    Project     = var.project
     Environment = var.environment
   }
 }
@@ -86,7 +86,7 @@ resource "aws_cloudtrail" "data" {
 
   tags = {
     Name        = local.data_cloudtrail_name
-    Project     = var.organization_name
+    Project     = var.project
     Environment = var.environment
   }
 }
@@ -98,13 +98,13 @@ resource "aws_cloudwatch_log_group" "main" {
   retention_in_days = var.log_retention_days
   tags = {
     Name        = local.cloudtrail_name
-    Project     = var.organization_name
+    Project     = var.project
     Environment = var.environment
   }
 }
 
 resource "aws_iam_role" "cloudtrail_role" {
-  name = "${var.organization_name}-cloudtrail-role"
+  name = "${var.project}-cloudtrail-role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -120,8 +120,8 @@ resource "aws_iam_role" "cloudtrail_role" {
   })
 
   tags = {
-    Name        = "${var.organization_name}-cloudtrail-role"
-    Project     = var.organization_name
+    Name        = "${var.project}-cloudtrail-role"
+    Project     = var.project
     Environment = var.environment
   }
 }
@@ -133,7 +133,7 @@ resource "aws_iam_role_policy_attachment" "cloudtrail_role_policy" {
 
 
 resource "aws_iam_policy" "cloudtrail_role_policy" {
-  name   = "${var.organization_name}-cloudtrail-role-policy"
+  name   = "${var.project}-cloudtrail-role-policy"
   path   = "/"
   policy = data.aws_iam_policy_document.cloudtrail_role_policy.json
 }

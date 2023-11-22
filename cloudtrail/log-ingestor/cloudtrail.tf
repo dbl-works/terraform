@@ -1,5 +1,5 @@
 locals {
-  cloudtrail_name = "protected-${var.organization_name}-cloudtrail-logs"
+  cloudtrail_name = "protected--cloudtrail-logs"
 }
 
 # https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-receive-logs-from-multiple-accounts.html
@@ -29,7 +29,7 @@ resource "aws_cloudtrail" "management" {
 
   tags = {
     Name        = local.cloudtrail_name
-    Project     = var.organization_name
+    Project     = var.project
     Environment = var.environment
   }
 

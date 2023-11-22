@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "cloudtrail_protection_scp" {
     condition {
       test     = "StringLike"
       variable = "cloudtrail:trailarn"
-      values   = ["arn:aws:cloudtrail:*:trail/protected-*"]
+      values   = ["arn:aws:cloudtrail:*:trail/protected--*"]
     }
   }
 }

@@ -1,9 +1,11 @@
-variable "organization_name" {
-  type = string
+variable "project" {
+  type        = string
+  description = "value of the project tag"
 }
 
 variable "environment" {
-  type = string
+  type        = string
+  description = "value of the environment tag"
 }
 
 variable "enable_cloudtrail" {
