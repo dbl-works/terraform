@@ -97,5 +97,5 @@ module "cloudtrail_protection_scp" {
 ### Enable SCP Policy
 
 - Before applying the cloudtrail-protection-scp module, ensure that you have enabled the Service Control Policy (SCP).
-
-  - To enable SCP, navigate to AWS Organizations > Policies > Service Control Policies, then click on "Enable Service Control Policies."
+- To enable SCP, navigate to AWS Organizations > Policies > Service Control Policies, then click on "Enable Service Control Policies."
+  https://us-east-1.console.aws.amazon.com/organizations/v2/home/policies
