@@ -15,6 +15,15 @@ data "aws_iam_policy_document" "cloudtrail_protection_scp" {
       "cloudtrail:StopLogging",
       "cloudtrail:UpdateTrail",
     ]
+
+    # this ensures we only protect logs that are ingested by the log ingester account
+    # which allows to have additional trails within a single log-producer account that are not protected
+    condition {
+      test     = "StringLike"
+      variable = "cloudtrail:trailarn"
+      values   = ["arn:aws:cloudtrail:*:${var.log_ingester_account_id}:trail/*"]
+    }
+  }
 }
 
 resource "aws_organizations_policy_attachment" "default" {
