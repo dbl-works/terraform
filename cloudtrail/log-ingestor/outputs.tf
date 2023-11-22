@@ -4,11 +4,7 @@ output "s3_bucket_name" {
 }
 
 output "s3_bucket_arn" {
-  value = module.s3-cloudtrail.bucket_arn
-}
-
-output "s3_bucket_region" {
-  value = data.aws_region.current.name
+  value = module.s3-cloudtrail.arn
 }
 
 # KMS information
