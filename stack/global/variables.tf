@@ -19,3 +19,14 @@ variable "global_accelerator_config" {
   })
   default = null
 }
+
+variable "sentry_config" {
+  type = map(object({
+    organization_name    = string
+    slack_workspace_name = string
+    platform             = optional(string, "ruby-rails")
+    sentry_teams         = optional(list(string), null)
+    frequency            = optional(number, 30)
+  }))
+  default = {}
+}
