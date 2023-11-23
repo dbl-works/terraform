@@ -54,4 +54,6 @@ module "rds" {
   log_retention_period       = var.rds_log_retention_period
   log_min_error_statement    = var.rds_log_min_error_statement
   ca_cert_identifier         = var.rds_ca_cert_identifier
+  max_allocated_storage      = var.rds_max_allocated_storage
+  backup_retention_period    = var.rds_backup_retention_period
 }

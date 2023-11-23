@@ -297,6 +297,16 @@ variable "rds_subnet_group_name" {
   default = null
 }
 
+variable "rds_backup_retention_period" {
+  default = 7
+  type    = number
+}
+
+variable "rds_max_allocated_storage" {
+  type    = number
+  default = 0
+}
+
 variable "rds_multi_az" {
   type        = bool
   description = "if no value is passed, multi-az will be set to true if the environment is production"
