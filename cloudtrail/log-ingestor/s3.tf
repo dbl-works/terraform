@@ -1,6 +1,6 @@
 locals {
-  cloudtrail_s3_bucket_name = "${var.project}-cloudtrail"
-  cloudtrail_account_ids    = flatten([var.log_producer_account_ids, data.aws_caller_identity.current.account_id])
+  cloudtrail_target_bucket_name = "${var.project}-cloudtrail"
+  cloudtrail_account_ids        = flatten([var.log_producer_account_ids, data.aws_caller_identity.current.account_id])
 }
 
 data "aws_region" "current" {}
@@ -11,7 +11,7 @@ module "s3-cloudtrail" {
   # Required
   environment = var.environment
   project     = var.project
-  bucket_name = local.cloudtrail_s3_bucket_name
+  bucket_name = local.cloudtrail_target_bucket_name
 }
 resource "aws_s3_bucket_policy" "allow_access_from_cloudtrail_only" {
   bucket = module.s3-cloudtrail.bucket_name
