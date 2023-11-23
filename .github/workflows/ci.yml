@@ -22,7 +22,8 @@ jobs:
           - cognito
           - ecr
           - ecs
-          - ecs-deploy
+          - ecs-deploy/service
+          - ecs-deploy/cluster
           - ecs-task
           - elasticache
           - fivetran

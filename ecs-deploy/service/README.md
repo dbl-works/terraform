@@ -6,7 +6,7 @@ Deploy ECS services with Terraform.
 
 ```terraform
 module "ecs-deploy" {
-  source = "github.com/dbl-works/terraform//ecs-deploy?ref=main"
+  source = "github.com/dbl-works/terraform//ecs-deploy/service?ref=main"
 
   project              = local.project
   environment          = local.environment
