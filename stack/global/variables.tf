@@ -65,3 +65,27 @@ variable "github_backup_config" {
   })
   default = null
 }
+
+variable "users" {
+  type = map(object({
+    iam            = string
+    github         = string
+    name           = string
+    groups         = list(string)
+    project_access = map(any)
+  }))
+  default = {}
+}
+
+variable "environment_tags_for_taggable_resources" {
+  type    = list(string)
+  default = []
+}
+
+variable "iam_cross_account_config" {
+  type = object({
+    origin_aws_account_id = string
+    assume_role_name      = string
+  })
+  default = null
+}
