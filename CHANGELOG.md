@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### ecs-deploy/cluster
+* New module for deploying a set of ecs services
+
+### ecs-deploy/service
+* Rename the module
+
 ### Cloudtrail
 * New module which allows the creation of management and data cloudtrail
 
