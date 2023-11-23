@@ -7,6 +7,7 @@ This includes:
 - Container Orchestration (ECS) and Container Registry (ECR) as well as all networking requied to run the containers (e.g. Load Balancer, VPC, Subnets, Security Groups, ...)
 - DNS and CDN via Cloudflare and S3 for the frontend
 - IAM Roles and Policies for the backend to access other AWS services
+- Various supporting resources such as CloudTrail, GitHub backups, alerts, etc.
 
 ## Usage
 
@@ -27,6 +28,7 @@ This launches resources required only once per Project. It includes the followin
 - Billing alerts
 - automated regular backup of code from GitHub
 - central buckets for: logging, terraform state, backups, etc.
+- CloudTrail (optional)
 
 ### Stack Setup
 
