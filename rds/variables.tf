@@ -16,7 +16,7 @@ variable "engine_version" {
   default = "14"
   type    = string
 }
-variable "allocated_storage" { default = 100 }
+variable "allocated_storage" { default = 10 }
 
 variable "publicly_accessible" {
   type    = bool
