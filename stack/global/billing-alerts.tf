@@ -5,7 +5,7 @@ resource "aws_cloudwatch_metric_alarm" "account_billing_alarm" {
   evaluation_periods  = 1
   metric_name         = "EstimatedCharges"
   namespace           = "AWS/Billing"
-  period              = var.period_for_billing_alert # 8 hours
+  period              = var.period_for_billing_alert
   statistic           = "Maximum"
   threshold           = var.monthly_billing_threshold
   alarm_actions       = [module.slack-sns.arn]
