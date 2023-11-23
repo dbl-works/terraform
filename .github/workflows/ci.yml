@@ -110,6 +110,7 @@ jobs:
           # the stack/app module must have a provider block because the sub-module "vpc-peering" requires a non-standard "provider
           # see: https://github.com/hashicorp/terraform/issues/28490
           if [[ "${{ matrix.module }}" == "stack/app" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> vpc-peering.tf; fi
+          if [[ "${{ matrix.module }}" == "stack/global" ]]; then echo "provider \"aws\" { alias = \"us-east-1\" }" >> versions.tf; fi
           if [[ "${{ matrix.module }}" == "vpc-peering" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> main.tf; fi
           terraform validate
 
