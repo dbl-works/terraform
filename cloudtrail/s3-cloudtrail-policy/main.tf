@@ -1,5 +1,5 @@
 resource "aws_s3_bucket_policy" "allow_access_from_cloudtrail_only" {
-  bucket = var.cloudtrail_s3_bucket_name
+  bucket = var.cloudtrail_target_bucket_name
   policy = data.aws_iam_policy_document.allow_access_from_cloudtrail_only.json
 }
 
@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
     effect  = "Allow"
     actions = ["s3:PutObject"]
     resources = [
-      "arn:aws:s3:::${var.cloudtrail_s3_bucket_name}/AWSLogs/*",
+      "arn:aws:s3:::${var.cloudtrail_target_bucket_name}/AWSLogs/*",
     ]
 
     principals {
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.cloudtrail_s3_bucket_name}"
+      "arn:aws:s3:::${var.cloudtrail_target_bucket_name}"
     ]
 
     condition {

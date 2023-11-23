@@ -19,8 +19,8 @@ resource "aws_cloudtrail" "management" {
   include_global_service_events = true
   is_multi_region_trail         = var.is_multi_region_trail
   is_organization_trail         = var.is_organization_trail
-  kms_key_id                    = var.cloudtrail_s3_kms_arn
-  s3_bucket_name                = var.cloudtrail_s3_bucket_name
+  kms_key_id                    = var.cloudtrail_target_bucket_kms_arn
+  s3_bucket_name                = var.cloudtrail_target_bucket_name
 
   event_selector {
     read_write_type           = "All"
@@ -53,8 +53,8 @@ resource "aws_cloudtrail" "data" {
   include_global_service_events = true
   is_multi_region_trail         = var.is_multi_region_trail
   is_organization_trail         = var.is_organization_trail
-  kms_key_id                    = var.cloudtrail_s3_kms_arn
-  s3_bucket_name                = var.cloudtrail_s3_bucket_name
+  kms_key_id                    = var.cloudtrail_target_bucket_kms_arn
+  s3_bucket_name                = var.cloudtrail_target_bucket_name
 
   advanced_event_selector {
     name = "Log Delete* events for one S3 bucket"
@@ -156,7 +156,7 @@ data "aws_iam_policy_document" "cloudtrail_role_policy" {
       "kms:GenerateDataKey*",
     ]
     resources = [
-      var.cloudtrail_s3_kms_arn,
+      var.cloudtrail_target_bucket_kms_arn,
     ]
   }
 }

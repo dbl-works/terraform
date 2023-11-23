@@ -62,8 +62,8 @@ module "log-producer" {
   is_multi_region_trail = true
   enable_management_cloudtrail = true
   enable_data_cloudtrail = true
-  cloudtrail_s3_bucket_name = module.log-ingestor.s3_bucket_name
-  cloudtrail_s3_kms_arn = module.log-ingestor.s3_kms_arn
+  cloudtrail_target_bucket_name = module.log-ingestor.s3_bucket_name
+  cloudtrail_target_bucket_kms_arn = module.log-ingestor.s3_kms_arn
   s3_bucket_arns_for_data_cloudtrail = [
     "arn:aws:s3:::bucket_name/important_s3_bucket",
     "arn:aws:s3:::bucket_name/second-important_s3_bucket/prefix",
@@ -78,7 +78,7 @@ module "s3-cloudtrail-policy" {
 
   source = "github.com/dbl-works/terraform//cloudtrail/s3-cloudtrail-policy"
 
-  cloudtrail_s3_bucket_name = module.log-ingestor.s3_bucket_name
+  cloudtrail_target_bucket_name = module.log-ingestor.s3_bucket_name
   cloudtrail_arns = module.log-producer.cloudtrail_arns
 }
 
