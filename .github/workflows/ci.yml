@@ -58,6 +58,7 @@ jobs:
           - slack/sns
           - snowflake/cloud
           - stack/app
+          - stack/global
           - stack/setup
           - vpc
           - vpc-peering
