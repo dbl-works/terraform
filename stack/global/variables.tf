@@ -3,7 +3,8 @@ variable "project" {
 }
 
 variable "environment" {
-  type = string
+  type    = string
+  default = "global"
 }
 
 variable "global_accelerator_config" {
@@ -49,6 +50,18 @@ variable "chatbot_config" {
   type = object({
     slack_channel_id   = string
     slack_workspace_id = string
+  })
+  default = null
+}
+
+variable "github_backup_config" {
+  type = object({
+    github_org         = string
+    interval_value     = optional(number, 1)
+    interval_unit      = optional(string, "hour")
+    ruby_major_version = optional(string, "3")
+    timeout            = optional(number, 900)
+    memory_size        = optional(number, 2048)
   })
   default = null
 }
