@@ -89,3 +89,11 @@ variable "iam_cross_account_config" {
   })
   default = null
 }
+
+variable "cloudtrail_config" {
+  type = object({
+    s3_bucket_arns_for_data_cloudtrail = optional(list(string), [])
+    enable_data_cloudtrail             = optional(bool, false)
+  })
+  default = null
+}
