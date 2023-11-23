@@ -1,4 +1,4 @@
-variable "cloudtrail_s3_bucket_name" {
+variable "cloudtrail_target_bucket_name" {
   type        = string
   description = "Specifies the S3 bucket where CloudTrail logs are to be stored ('log-ingestor')."
 }

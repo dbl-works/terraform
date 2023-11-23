@@ -35,17 +35,17 @@ variable "enable_data_cloudtrail" {
   description = "Toggle to enable logging of data events like S3 object-level operations; note that this can result in high log volume."
 }
 
-variable "cloudtrail_s3_bucket_name" {
+variable "cloudtrail_target_bucket_name" {
   type        = string
-  description = "Designates the S3 bucket name where CloudTrail logs are stored ('log-ingestor')."
+  description = "Designates the S3 bucket where CloudTrail logs are stored (hosted in the 'log-ingestor' account)."
 }
 
-variable "cloudtrail_s3_kms_arn" {
+variable "cloudtrail_target_bucket_kms_arn" {
   type        = string
   description = "Provides the ARN of the KMS key for encrypting CloudTrail logs stored in the specified S3 bucket."
 }
 
-variable "s3_bucket_arn_for_data_cloudtrail" {
+variable "s3_bucket_arns_for_data_cloudtrail" {
   type        = list(string)
   default     = []
   description = "Lists the S3 bucket ARNs for which data event logging (like object-level operations) is enabled in CloudTrail."
