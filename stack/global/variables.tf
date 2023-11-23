@@ -97,3 +97,20 @@ variable "cloudtrail_config" {
   })
   default = null
 }
+
+variable "private_buckets_list" {
+  default = []
+  type = set(object({
+    bucket_name                     = string
+    versioning                      = bool
+    primary_storage_class_retention = number
+    kms_deletion_window_in_days     = optional(number, 30)
+    region                          = optional(string, null)
+    regional                        = optional(bool, false)
+    replicas = optional(list(object({
+      bucket_arn = string
+      kms_arn    = string
+      region     = string
+    })), [])
+  }))
+}
