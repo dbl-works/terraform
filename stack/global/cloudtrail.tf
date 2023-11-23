@@ -9,8 +9,8 @@ module "log-producer" {
   is_organization_trail              = false
   is_multi_region_trail              = true
   enable_management_cloudtrail       = true
-  enable_data_cloudtrail             = var.cloudtrail_config.s3_bucket_arns_for_data_cloudtrail
-  s3_bucket_arns_for_data_cloudtrail = var.cloudtrail_config.enable_data_cloudtrail
+  enable_data_cloudtrail             = var.cloudtrail_config.enable_data_cloudtrail
+  s3_bucket_arns_for_data_cloudtrail = var.cloudtrail_config.s3_bucket_arns_for_data_cloudtrail
   cloudtrail_target_bucket_name      = module.log-ingestor.s3_bucket_name
   cloudtrail_target_bucket_kms_arn   = module.log-ingestor.s3_kms_arn
 }
