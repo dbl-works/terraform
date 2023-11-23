@@ -505,7 +505,7 @@ variable "service_discovery_enabled" {
 # =============== ECS ================ #
 
 # =============== Cloudtrail ================ #
-variable "s3_bucket_arn_for_data_cloudtrail" {
+variable "s3_bucket_arns_for_data_cloudtrail" {
   type    = list(string)
   default = []
 }

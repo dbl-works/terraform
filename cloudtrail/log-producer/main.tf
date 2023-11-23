@@ -71,7 +71,7 @@ resource "aws_cloudtrail" "data" {
 
     field_selector {
       field  = "resources.ARN"
-      equals = var.s3_bucket_arn_for_data_cloudtrail
+      equals = var.s3_bucket_arns_for_data_cloudtrail
     }
 
     field_selector {

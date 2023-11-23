@@ -64,7 +64,7 @@ module "log-producer" {
   enable_data_cloudtrail = true
   cloudtrail_s3_bucket_name = module.log-ingestor.s3_bucket_name
   cloudtrail_s3_kms_arn = module.log-ingestor.s3_kms_arn
-  s3_bucket_arn_for_data_cloudtrail = [
+  s3_bucket_arns_for_data_cloudtrail = [
     "arn:aws:s3:::bucket_name/important_s3_bucket",
     "arn:aws:s3:::bucket_name/second-important_s3_bucket/prefix",
   ]
