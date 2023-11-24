@@ -130,4 +130,5 @@ variable "private_buckets_list" {
       region     = string
     })), [])
   }))
+  description = "S3 private buckets that are required globally, such as buckets used for storing Terraform state files or centralized log storage."
 }

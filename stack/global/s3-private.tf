@@ -1,3 +1,5 @@
+# Designed specifically for private buckets that require global accessibility,
+# such as buckets used for storing Terraform state files or centralized log storage.
 module "global-buckets" {
   source = "../../s3-private"
 
