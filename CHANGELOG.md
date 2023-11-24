@@ -7,11 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### stack/global
+* New module for deploying resources required only once per project. [#273](https://github.com/dbl-works/terraform/pull/273)
+
+### rds
+* update default value for backup_retention_period, max_allocated_storage, and allocated_storage. [#274](https://github.com/dbl-works/terraform/pull/274)
+
 ### ecs-deploy/cluster
-* New module for deploying a set of ecs services
+* New module for deploying a set of ecs services. [#272](https://github.com/dbl-works/terraform/pull/272)
 
 ### ecs-deploy/service
-* Rename the module
+* Rename the module. [#272](https://github.com/dbl-works/terraform/pull/272)
 
 ### Cloudtrail
 * New module which allows the creation of management and data cloudtrail
