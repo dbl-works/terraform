@@ -285,7 +285,7 @@ variable "rds_engine_version" {
 }
 variable "rds_allocated_storage" {
   type    = number
-  default = 100
+  default = 10
 }
 variable "rds_allow_from_cidr_blocks" {
   type    = list(string)
@@ -295,6 +295,16 @@ variable "rds_allow_from_cidr_blocks" {
 variable "rds_subnet_group_name" {
   type    = string
   default = null
+}
+
+variable "rds_backup_retention_period" {
+  default = 7
+  type    = number
+}
+
+variable "rds_storage_autoscaling_upper_limit" {
+  type    = number
+  default = 20
 }
 
 variable "rds_multi_az" {

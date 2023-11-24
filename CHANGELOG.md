@@ -10,6 +10,9 @@ This project does not follow SemVer, since modules are independent of each other
 ### stack/global
 * New module for deploying resources required only once per project. [#273](https://github.com/dbl-works/terraform/pull/273)
 
+### rds
+* update default value for backup_retention_period, max_allocated_storage, and allocated_storage. [#274](https://github.com/dbl-works/terraform/pull/274)
+
 ### ecs-deploy/cluster
 * New module for deploying a set of ecs services. [#272](https://github.com/dbl-works/terraform/pull/272)
 
