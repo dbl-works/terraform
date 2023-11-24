@@ -1,14 +1,6 @@
-require 'aws-sdk-ecr'
 require 'json'
 require 'net/http'
 require 'uri'
-require 'logger'
-
-def logger
-  logger = Logger.new($stdout)
-  logger.level = Logger::INFO
-  @logger ||= logger
-end
 
 def get_properties(finding_counts)
   if finding_counts['CRITICAL'] != 0
@@ -41,7 +33,7 @@ def build_slack_message(event)
         'fallback' => 'AmazonECR Image Scan Findings Description.',
         'color' => text_properties['color'],
         'title' => "#{text_properties['icon']} #{repository_name}:#{detail['image-tags'][0]}",
-        'title_link' => "https://console.aws.amazon.com/ecr/repositories/#{repository_name}/_/image/#{detail['image-digest']}/scan-results?region=#{region}",
+        'title_link' => "https://#{region}.console.aws.amazon.com/ecr/repositories/#{repository_name}/_/image/#{detail['image-digest']}/scan-results?region=#{region}",
         'text' => "Image Scan Completed at #{event['time']}",
         'fields' => severity_list.map { |k, v| { 'title' => k.capitalize, 'value' => v, 'short' => true } }
       }
@@ -83,8 +75,8 @@ def lambda_handler(event:, context:)
     Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
       http.request(req)
     end
-    logger.info('Message posted.')
+    puts('Message posted.')
   rescue StandardError => e
-    logger.error("Request failed: #{e.message}")
+    puts("Request failed: #{e.message}")
   end
 end
