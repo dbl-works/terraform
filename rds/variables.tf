@@ -21,7 +21,10 @@ variable "engine_version" {
   default = "14"
   type    = string
 }
-variable "allocated_storage" { default = 10 }
+variable "allocated_storage" {
+  type    = number
+  default = 10
+}
 
 variable "max_allocated_storage" {
   type    = number
