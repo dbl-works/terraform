@@ -18,6 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "account_billing_alarm" {
 
 module "slack-sns" {
   providers = {
+    # NOTE: Billing metric data is only stored in the US East (N. Virginia) Region
     aws = aws.us-east-1
   }
 
