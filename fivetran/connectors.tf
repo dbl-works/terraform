@@ -76,7 +76,7 @@ module "lambda_connector" {
 }
 
 resource "aws_iam_role_policy_attachment" "fivetran_policy_for_lambda" {
-  count      = lookup(var.lambda_settings, "lambda_role_name", null) ? length(var.lambda_settings.policy_arns_for_lambda) : 0
+  count      = lookup(var.lambda_settings, "lambda_role_name", null) == null ? 0 : length(var.lambda_settings.policy_arns_for_lambda)
   role       = var.lambda_settings.lambda_role_name
   policy_arn = var.lambda_settings.policy_arns_for_lambda[count.index]
 }

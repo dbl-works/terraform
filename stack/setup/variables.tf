@@ -20,6 +20,11 @@ variable "is_read_replica_on_same_domain" {
   default = false
 }
 
+variable "is_read_replica_on_same_domain_and_same_region" {
+  type    = bool
+  default = false
+}
+
 variable "eips_nat_count" {
   type    = number
   default = 0

@@ -48,9 +48,10 @@ module "stack-setup" {
   domain             = "example.com"
 
   # Optional
-  add_wildcard_subdomains        = true
-  alternative_domains            = []
-  is_read_replica_on_same_domain = false # skips cloudflare
+  add_wildcard_subdomains                        = true
+  alternative_domains                            = []
+  is_read_replica_on_same_domain                 = false # skips cloudflare
+  is_read_replica_on_same_domain_and_same_region = false # skips certificate (you need a certificate if the replica is in a different geo region)
 
   # KMS
   kms_deletion_window_in_days = 30

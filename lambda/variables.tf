@@ -67,7 +67,22 @@ variable "memory_size" {
   default     = 128
 }
 
+variable "lambda_policy_json" {
+  type    = string
+  default = null
+}
+
 variable "environment_variables" {
+  # type = {
+  #   ENV_1 : "abc"
+  #   ENV_2 : []
+  # }
   type    = map(any)
   default = {}
+}
+
+variable "lambda_role_name" {
+  type        = string
+  default     = null
+  description = "(Optional) AWS IAM role name used by the lambda. If null, a new lambda role will be created"
 }

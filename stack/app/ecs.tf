@@ -6,11 +6,10 @@ data "aws_acm_certificate" "default" {
 module "ecs" {
   source = "../../ecs"
 
-  project            = var.project
-  environment        = var.environment
-  vpc_id             = module.vpc.id
-  subnet_private_ids = module.vpc.subnet_private_ids
-  subnet_public_ids  = module.vpc.subnet_public_ids
+  project           = var.project
+  environment       = var.environment
+  vpc_id            = module.vpc.id
+  subnet_public_ids = module.vpc.subnet_public_ids
   secrets_arns = flatten([
     data.aws_secretsmanager_secret.app.arn,
     var.secret_arns
@@ -24,13 +23,18 @@ module "ecs" {
 
   # optional
   health_check_path           = var.health_check_path
+  health_check_options        = var.health_check_options
   certificate_arn             = var.certificate_arn == null ? data.aws_acm_certificate.default.arn : var.certificate_arn
   additional_certificate_arns = var.additional_certificate_arns
   regional                    = var.regional
   name                        = var.ecs_name # custom name when convention exceeds 32 chars
   region                      = var.region   # used for e.g CloudWatch metrics
+  keep_alive_timeout          = var.keep_alive_timeout
+  monitored_service_groups    = var.monitored_service_groups
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
+  allow_alb_traffic_to_ports      = var.allow_alb_traffic_to_ports
+  alb_listener_rules              = var.alb_listener_rules
 
   allowlisted_ssh_ips = distinct(flatten(concat([
     var.allowlisted_ssh_ips,
@@ -56,6 +60,7 @@ module "ecs" {
   autoscale_params                  = var.autoscale_params
   autoscale_metrics_map             = var.autoscale_metrics_map
   cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
+  service_discovery_enabled         = var.service_discovery_enabled
 }
 
 module "cloudwatch" {
@@ -67,7 +72,7 @@ module "cloudwatch" {
   project                   = var.project
   environment               = var.environment
   cluster_names             = distinct(concat([module.ecs.ecs_cluster_name], var.cloudwatch_cluster_names))
-  database_identifiers      = distinct(concat([module.rds.database_identifier], var.cloudwatch_database_identifiers))
+  database_identifiers      = var.skip_rds ? [] : distinct(concat([module.rds[0].database_identifier], var.cloudwatch_database_identifiers))
   alb_arn_suffixes          = distinct(concat([module.ecs.alb_arn_suffix], var.cloudwatch_alb_arn_suffixes))
   elasticache_cluster_names = var.skip_elasticache ? [] : distinct(concat([module.elasticache[0].cluster_name], var.cloudwatch_elasticache_names))
 

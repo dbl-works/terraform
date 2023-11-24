@@ -6,11 +6,192 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
-## [Unreleased]
+## Unreleased
+### ecs-deploy/cluster
+* New module for deploying a set of ecs services
+
+### ecs-deploy/service
+* Rename the module
+
+### Cloudtrail
+* New module which allows the creation of management and data cloudtrail
+
+### hashicorp/aws
+- Upgrade to v5. [#271](https://github.com/dbl-works/terraform/pull/271)
+
+### cloudwatch-kinesis
+- hashicorp/aws: Drop support for v4 and add support for v5.[#271](https://github.com/dbl-works/terraform/pull/271)
+
+
+## [v2023.11.08]
+### script/database-roles
+- DB username is retrieved from the AWS secret manager. [#268](https://github.com/dbl-works/terraform/pull/268)
+
+### rds
+- Add ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
+
+### stack/app
+- Add rds_ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
+
+### ECS-Task
+- allow setting the ephemeral disk size [#270](https://github.com/dbl-works/terraform/pull/270)
+
+## [v2023.10.15]
+### rds
+- Add log_min_duration_statement, log_retention_period variables, log_min_error_statement. [#263](https://github.com/dbl-works/terraform/pull/263)
+
+### stack/app
+- Add rds_log_min_duration_statement, rds_log_retention_period variables, rds_log_min_error_statement. [#263](https://github.com/dbl-works/terraform/pull/263)
+
+### Secrets
+* Passing in a `kms_key_id` is now optional. If omitted, a new key is created
+
+### Github Backup
+* New module that allows backing up all repositories in an organization to an S3 bucket
+
+### Lambda
+* Rename lambda role
+
+## [v2023.09.25]
+### cloudflare
+- Prevent clickjacking. [#257](https://github.com/dbl-works/terraform/pull/257)
+
+### ecs
+- Add cloudwatch event rules to monitor the state changes of container tasks. [#252](https://github.com/dbl-works/terraform/pull/252)
+
+### HTTP Proxy
+- renamed `ssh_enabled` to `maintenance_mode` to better reflect its purpose
+- `maintenance_mode` now allows outbound traffic from all of the internet to e.g. update and install packages
+
+### stack/app
+- Add health_check_options [#253](https://github.com/dbl-works/terraform/pull/253)
+
+### ecs
+- Add health_check_options [#253](https://github.com/dbl-works/terraform/pull/253)
+
+## [v2023.08.31]
+### lambda
+- Add lambda_role_arn variables [#236](https://github.com/dbl-works/terraform/pull/236)
+
+### HTTP Proxy
+- New module to launch a tiny-proxy based HTTP proxy instance to allow an application server to assume a static IP address for outgoing traffic, e.g. when using a third-party API that requires a static IP address. For a robust and scaleable solution, consider using a NAT Gateway instead.
+
+### ecs
+- Add service_discovery_enabled as variables. [#240](https://github.com/dbl-works/terraform/pull/240)
+
+### stack/app
+- Add service_discovery_enabled as variables. [#240](https://github.com/dbl-works/terraform/pull/240)
+- Add elasticache major and minor version to the module. [#245](https://github.com/dbl-works/terraform/pull/245)
+
+### iam/iam-for-deploy-bot
+- add permissions to manage service discovery [#241](https://github.com/dbl-works/terraform/pull/241)
+
+## [v2023.07.27]
+### slack/ecs-deployment-failure
+- New module which send a message to Slack when the deployment is a failure. [#235](https://github.com/dbl-works/terraform/pull/235)
+
+### ecs-deploy
+- Add deployment_circuit_breaker options [#230](https://github.com/dbl-works/terraform/pull/230)
+
+### elasticache
+- Enable `encryption-in-transit` by default, :warning: requires re-creation of the cluster (you can thus opt-out) [#231](https://github.com/dbl-works/terraform/pull/231)
+- Change default Redis version from `6` to `7` [#231](https://github.com/dbl-works/terraform/pull/231)
+
+### ECS
+- make keep alive timeout configurable, and fix default for NLB as well (previously only fixed for ALB). [#232](https://github.com/dbl-works/terraform/pull/232)
+- pass through the keep alive timeout to the `stack` module. [#233](https://github.com/dbl-works/terraform/pull/232)
+
+### Stack
+- pass through the keep alive timeout to the `stack` module. [#234](https://github.com/dbl-works/terraform/pull/234)
+
+## [v2023.07.19]
+### ecs-deploy
+- Allow ecs service to be deployed to private subnets. [#228](https://github.com/dbl-works/terraform/pull/228)
+
+### fivetran/connectors/lambda
+- Add lambda_name as variable. [#220](https://github.com/dbl-works/terraform/pull/220)
+
+### ecs-task
+- Add new ecs task module
+
+### ecs-deploy
+- Ignore desired_count after the aws_ecs_service creation. [#223](https://github.com/dbl-works/terraform/pull/223)
+
+### ecs-autoscaling
+- Fix the default value of autoscale_metrics -> dimensions. [#222](https://github.com/dbl-works/terraform/pull/222)
+
+### rds
+- Add identifier as variable [#218](https://github.com/dbl-works/terraform/pull/218)
+- Set log_statement to none [#227](https://github.com/dbl-works/terraform/pull/227)
+
+### s3-public
+- Add public bucket configuration to avoid ACCESS DENIED error. [#218](https://github.com/dbl-works/terraform/pull/218)
+
+### ecs-deploy
+- Set app and sidecar default container port to null
+- Add aws_lb_target_group_arn to allow user to configure the load_balancer block [#216](https://github.com/dbl-works/terraform/pull/216)
+
+### ecs
+- add alb_listener_rule and allow_alb_traffic_to_ports options, remove subnet_private_ids since it is not used [#216](https://github.com/dbl-works/terraform/pull/216)
+- Set Load Balancer keep alive timeout to 60 seconds [#229](https://github.com/dbl-works/terraform/pull/229)
+
+### stack/app
+- add alb_listener_rule and allow_alb_traffic_to_ports options [#216](https://github.com/dbl-works/terraform/pull/216)
+
+## [v2023.05.15]
+### RDS
+- new optional variable for `parameter_group_name`, #213
+- parameter group is now created dynamically depending on the engine version (instead of hardcoding version 13 and 14), #213
+- allow major version upgrades, #213
+- ignore changes to username/password to not trigger a re-creation when the password is rotated, #213
+
+### aws-transfer
+- Add AWS transfer family module[#198](https://github.com/dbl-works/terraform/pull/198)
+
 ### iam/iam-policy-for-cross-account-access
 - Add IAM policy for cross account access [#195](https://github.com/dbl-works/terraform/pull/195)
 
+### iam/iam-for-humans/human-policies
+- Allow user to create MFA device under any name [#204](https://github.com/dbl-works/terraform/pull/204)
+
+### cloudwatch
+- forcing the dashboard to always respect the configured period regardless of the time range chosen [#212](https://github.com/dbl-works/terraform/pull/212)
+
+### ecs-deploy
+- :warning: breaking change: this was previously named `ecs_service` which was inconsistent with all other module names and didn't communicate its usage in the name
+- Allow granting access to secrets to the sidecar container [#199](https://github.com/dbl-works/terraform/pull/199)
+- :warning: breaking change: add/remove/modify variable names, allow user to add multiple sidecar task definitions [#214](https://github.com/dbl-works/terraform/pull/214)
+- Set app and sidecar default container port to null
+
+### fivetran/connectors
+- fix bug in aws_iam_role_policy_attachment
+
+### fivetran/connectors/lambda
+- Add sync_frequency as variable
+
+### slack-chatbot
+- deleted this module; it was WIP/broken and a more modular approach is found ins `slack/*` modules
+
+### iam/iam-for-deploy-bot
+- add permissions to manage logs
+
+### iam/iam-for-humans
+- fix dependency of resource creation
+
+### rds
+- fix db username in rds-connect:db policy [#208](https://github.com/dbl-works/terraform/pull/208)
+- remove timestamp from final_snapshot_identifier so rds is not force updated in every deployment
+
+### stack/setup
+- allow creating a certificate for replicas in different regions [#197](https://github.com/dbl-works/terraform/pull/197)
+
+### cloudwatch-kinesis
+- Added a new module to send cloudwatch logs to kinesis firehose delivery stream [#206](https://github.com/dbl-works/terraform/pull/206), [#211](https://github.com/dbl-works/terraform/pull/211), [#215](https://github.com/dbl-works/terraform/pull/215)
+
+
+
 ## [v2023.03.30]
+
 ### global-accelerator
 - Add `weight` to the load_balancers variables, defaulting to 128 [#194](https://github.com/dbl-works/terraform/pull/194)
 
@@ -38,7 +219,9 @@ This project does not follow SemVer, since modules are independent of each other
 - Create routes for public subnet [#179](https://github.com/dbl-works/terraform/pull/179)
 
 
+
 ## [v2023.03.06]
+
 ### iam/iam-policy-for-secrets
 - Added a new module to manage access to the secretsmaanger and kms based on project_access variables. [#175](https://github.com/dbl-works/terraform/pull/175)
 
@@ -71,7 +254,10 @@ This project does not follow SemVer, since modules are independent of each other
 - Add lifecycle policy rules. [#169](https://github.com/dbl-works/terraform/pull/169)
 - Add default lifecycle policy rules to keep at least 1 images on important branchs. [#172](https://github.com/dbl-works/terraform/pull/172)
 
+
+
 ## [v2022.12.12]
+
 ## Autoscaling/ECS
 - added new module to configure auto-scaling for ECS [#136](https://github.com/dbl-works/terraform/pull/136), [#140](https://github.com/dbl-works/terraform/pull/140), [#142](https://github.com/dbl-works/terraform/pull/142), [#143](https://github.com/dbl-works/terraform/pull/143)
 
@@ -95,6 +281,7 @@ This project does not follow SemVer, since modules are independent of each other
 - Add DB instructions to connect DB to Fivetran, [#125](https://github.com/dbl-works/terraform/pull/125)
 
 ## [v2022.09.30]
+
 ## Elasticache
 - set `cluster_mode`, `maxmemory_policy`, `elasticache_node_count`, `elasticache_automatic_failover_enabled` as variables instead of hardcore values.
 
@@ -104,7 +291,10 @@ This project does not follow SemVer, since modules are independent of each other
 ## RDS
 - set replacement of non-alphanumeric chars with underscore on RDS DBName value to avoid naming validation errors.
 
+
+
 ## [v2022.09.07]
+
 ## Elasticache
 - added `maxmemory_policy` as the optional options. Default value is `volatile-lru`
 
@@ -118,7 +308,10 @@ This project does not follow SemVer, since modules are independent of each other
 - add option to enable DB replication with new parameter `enable_replication` [#119](https://github.com/dbl-works/terraform/pull/119)
 - if `enable_replication` is changed on a running DB, the DB will need to be restarted manually
 
+
+
 ## [v2022.08.05]
+
 ## Elasticache
 - `multi_az_enabled` can now optionally be turned off
 
@@ -129,6 +322,8 @@ This project does not follow SemVer, since modules are independent of each other
 ## Stack
 - pass `multi_az_enabled` through to Elasticache
 - fix `allow_from_security_groups` to have a predictable length for terraform
+
+
 
 ## [v2022.08.03]
 

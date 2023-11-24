@@ -6,6 +6,11 @@ variable "kms_key_arn" {}
 variable "project" {}
 variable "environment" {}
 
+variable "ca_cert_identifier" {
+  default = "rds-ca-rsa2048-g1"
+  type    = string
+}
+
 variable "instance_class" { default = "db.t3.micro" }
 variable "engine_version" {
   default = "14"
@@ -16,6 +21,11 @@ variable "allocated_storage" { default = 100 }
 variable "publicly_accessible" {
   type    = bool
   default = false
+}
+
+variable "parameter_group_name" {
+  type    = string
+  default = null
 }
 
 variable "multi_az" {
@@ -99,7 +109,40 @@ variable "final_snapshot_identifier" {
   default = null
 }
 
+variable "identifier" {
+  type    = string
+  default = null
+}
+
 locals {
-  name             = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
-  name_underscored = var.name != null ? replace(var.name, "-", "_") : "${var.project}_${var.environment}${var.regional ? "_${var.region}" : ""}"
+  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+}
+
+variable "log_min_duration_statement" {
+  type        = number
+  default     = -1
+  description = "Used to log SQL statements that run longer than a specified duration of time (in ms)."
+}
+
+variable "log_retention_period" {
+  type        = number
+  default     = 1440
+  description = "Controls how long automatic RDS log files are retained before being deleted (in min, must be between 1440-10080 (1-7 days)."
+
+  validation {
+    condition     = var.log_retention_period >= 1440 && var.log_retention_period <= 10080
+    error_message = "Log retention period must be between 1440-10080 (1-7 days)."
+  }
+}
+
+variable "log_min_error_statement" {
+  type        = string
+  default     = "panic"
+  description = "Controls which SQL statements that cause an error condition are recorded in the server log."
+
+
+  validation {
+    condition     = contains(["debug5", "debug4", "debug3", "debug2", "debug1", "info", "notice", "warning", "error", "log", "fatal", "panic"], var.log_min_error_statement)
+    error_message = "The valid values are [debug5, debug4, debug3, debug2, debug1, info, notice, warning, error, log, fatal, panic]"
+  }
 }

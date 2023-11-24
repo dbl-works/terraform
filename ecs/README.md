@@ -2,26 +2,59 @@
 
 Create a compute cluster for hosting docker based apps.
 
+## Notes
 
+The `idle_timeout` is set to 60 seconds. Ensure that your webserver's keep-alive timeout is set to 60 seconds (or more) to prevent the load balancer from keeping connections open to the already closed server.
+
+When using Rails with Puma, the default timeout is 20 seconds. This can be changed by setting the `persistent_timeout` option in `config/puma.rb`.
 
 ## Usage
 
 ```terraform
+resource "aws_alb_target_group" "facebook" {
+  name        = "${local.project}-${local.environment}-facebook"
+  port        = 5000
+  protocol    = "HTTP"
+  vpc_id      = module.vpc.id
+  target_type = "ip"
+
+  health_check {
+    path                = "/livez"
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    timeout             = 25
+    interval            = 30
+    matcher             = "200,301,302,401,403,404"
+  }
+
+  tags = {
+    Project     = local.project
+    Environment = local.environment
+  }
+}
+
 module "ecs" {
   source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.05"
 
   project            = local.project
   environment        = local.environment
   vpc_id             = module.vpc.id
-  subnet_private_ids = module.vpc.subnet_private_ids
-  subnet_public_ids  = module.vpc.subnet_private_ids
+  subnet_public_ids  = module.vpc.subnet_public_ids
 
   # optional
   secrets_arns                = []
   kms_key_arns                = []
   health_check_path           = "/healthz"
+  health_check_options        = {
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    timeout             = 30
+    interval            = 60
+    matcher             = "200,204"
+  }
   certificate_arn             = module.ssl-certificate.arn # requires a `certificate` module to be created separately
   regional                    = true
+  keep_alive_timeout          = 60
   additional_certificate_arns = [
     {
       name = "my-second-domain.test"
@@ -30,6 +63,16 @@ module "ecs" {
   ]
 
   allow_internal_traffic_to_ports = []
+  allow_alb_traffic_to_ports = [5000]
+  alb_listener_rules = [
+    {
+      priority         = 1
+      type             = "forward"
+      target_group_arn = aws_alb_target_group.facebook.arn
+      path_pattern     = ["/facebook/*"]
+      host_header      = []
+    }
+  ]
 
   allowlisted_ssh_ips = [
     local.cidr_block,

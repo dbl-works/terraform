@@ -139,6 +139,12 @@ variable "skip_elasticache" {
   default = false
 }
 
+variable "elasticache_transit_encryption_enabled" {
+  type        = bool
+  default     = true
+  description = ":warning: changing this from `false` to `true` requires a re-creation of the cluster"
+}
+
 variable "elasticache_name" {
   type    = string
   default = null
@@ -149,6 +155,24 @@ variable "elasticache_node_type" {
   default = "cache.t3.micro"
 }
 
+variable "elasticache_major_version" {
+  type    = number
+  default = 7
+  validation {
+    condition     = var.elasticache_major_version >= 6 && var.elasticache_major_version <= 7
+    error_message = "elasticache major_version must be 6 or 7"
+  }
+}
+
+variable "elasticache_minor_version" {
+  type    = number
+  default = 0
+  validation {
+    condition     = var.elasticache_minor_version >= 0
+    error_message = "elasticache minor_version must be between 0 or higher"
+  }
+}
+
 variable "elasticache_node_count" {
   type    = number
   default = 1
@@ -156,7 +180,7 @@ variable "elasticache_node_count" {
 
 variable "elasticache_parameter_group_name" {
   type    = string
-  default = "default.redis6.x.cluster.on"
+  default = "default.redis7.cluster.on"
 }
 
 variable "elasticache_replicas_per_node_group" {
@@ -203,10 +227,21 @@ variable "elasticache_automatic_failover_enabled" {
 # =============== Elasticache ================ #
 
 # =============== RDS ================ #
+variable "skip_rds" {
+  type    = bool
+  default = false
+}
+
 variable "rds_name" {
   type    = string
   default = null
 }
+
+variable "rds_identifier" {
+  type    = string
+  default = null
+}
+
 # set the key for the master DB to multi-region if you have read replicas in other regions
 variable "rds_multi_region_kms_key" {
   type    = bool
@@ -282,12 +317,88 @@ variable "rds_final_snapshot_identifier" {
   type    = string
   default = null
 }
+
+variable "rds_log_min_duration_statement" {
+  type        = number
+  default     = -1
+  description = "Used to log SQL statements that run longer than a specified duration of time (in ms)."
+}
+
+variable "rds_log_retention_period" {
+  type        = number
+  default     = 1440
+  description = "Controls how long automatic RDS log files are retained before being deleted (in min, must be between 1440-10080 (1-7 days)."
+
+  validation {
+    condition     = var.rds_log_retention_period >= 1440 && var.rds_log_retention_period <= 10080
+    error_message = "Log retention period must be between 1440-10080 (1-7 days)."
+  }
+}
+
+variable "rds_log_min_error_statement" {
+  type        = string
+  default     = "panic"
+  description = "Controls which SQL statements that cause an error condition are recorded in the server log."
+
+  validation {
+    condition     = contains(["debug5", "debug4", "debug3", "debug2", "debug1", "info", "notice", "warning", "error", "log", "fatal", "panic"], var.rds_log_min_error_statement)
+    error_message = "The valid values are [debug5, debug4, debug3, debug2, debug1, info, notice, warning, error, log, fatal, panic]"
+  }
+}
+
+variable "rds_ca_cert_identifier" {
+  default     = "rds-ca-rsa2048-g1"
+  type        = string
+  description = "The identifier of the CA certificate for the DB instance."
+}
 # =============== RDS ================ #
 
 # =============== ECS ================ #
 variable "health_check_path" { default = "/livez" }
+
+variable "health_check_options" {
+  type = object({
+    healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.
+    unhealthy_threshold = optional(number, 5)  # The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold.
+    timeout             = optional(number, 30) # The amount of time, in seconds, during which no response means a failed health check. For Application Load Balancers, the range is 2 to 120 seconds.
+    interval            = optional(number, 60) # The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds.
+    matcher             = optional(string, "200,204")
+  })
+  default = {}
+}
+
 variable "allow_internal_traffic_to_ports" {
   type    = list(string)
+  default = []
+}
+
+variable "monitored_service_groups" {
+  type        = list(string)
+  default     = ["service:web"]
+  description = "ECS service groups to monitor STOPPED containers."
+}
+
+variable "keep_alive_timeout" {
+  type    = number
+  default = 60
+  validation {
+    condition     = var.keep_alive_timeout >= 60 && var.keep_alive_timeout <= 4000
+    error_message = "keep_alive_timeout must be between 60 and 4000"
+  }
+}
+
+variable "allow_alb_traffic_to_ports" {
+  type    = list(string)
+  default = []
+}
+
+variable "alb_listener_rules" {
+  type = list(object({
+    priority         = string
+    type             = string
+    target_group_arn = string
+    path_pattern     = optional(list(string), [])
+  }))
   default = []
 }
 
@@ -302,18 +413,22 @@ variable "allowlisted_ssh_ips" {
 }
 
 variable "grant_read_access_to_s3_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_write_access_to_s3_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_write_access_to_sqs_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_read_access_to_sqs_arns" {
+  type    = list(string)
   default = []
 }
 
@@ -332,6 +447,7 @@ variable "additional_certificate_arns" {
 }
 
 variable "secret_arns" {
+  type        = list(string)
   description = "arns of the secret manager that ECS can access"
   default     = []
 }
@@ -376,13 +492,29 @@ variable "autoscale_metrics_map" {
       threshold_up   = optional(number, null) # Threshold of which ECS should start to scale up. If null, would not be included in the scale up alarm
       threshold_down = optional(number, null) # Threshold of which ECS should start to scale down. If null, would not be included in the scale down alarm
       namespace      = optional(string, "AWS/ECS")
-      dimensions     = optional(map(string), {})
+      dimensions     = optional(map(string), null)
     }))
   }))
   default = {}
 }
 
+variable "service_discovery_enabled" {
+  type    = bool
+  default = true
+}
 # =============== ECS ================ #
+
+# =============== Cloudtrail ================ #
+variable "s3_bucket_arns_for_data_cloudtrail" {
+  type    = list(string)
+  default = []
+}
+
+variable "enable_data_cloudtrail" {
+  type    = bool
+  default = false
+}
+# =============== Cloudtrail ================ #
 
 # =============== Cloudwatch ================ #
 variable "cloudwatch_dashboard_view" {

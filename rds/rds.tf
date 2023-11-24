@@ -1,21 +1,23 @@
 locals {
   major_engine_version      = split(".", var.engine_version)[0]
-  final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}-${formatdate("DD-MM-YY-hhmm", timestamp())}"
+  final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}"
+  parameter_group_name      = var.parameter_group_name == null ? aws_db_parameter_group.current[0].name : var.parameter_group_name
 }
 
 resource "aws_db_instance" "main" {
+  allow_major_version_upgrade         = true
   db_subnet_group_name                = aws_db_subnet_group.main.name
   allocated_storage                   = var.allocated_storage
   storage_type                        = "gp2"
   engine                              = var.is_read_replica ? null : "postgres"
   engine_version                      = var.is_read_replica ? null : local.major_engine_version # Use major version only to allow AWS to update the minor/patch version automatically
   instance_class                      = var.instance_class
-  identifier                          = "${var.project}-${var.environment}${var.is_read_replica ? "-read-replica" : ""}"
+  identifier                          = var.identifier == null ? "${var.project}-${var.environment}${var.is_read_replica ? "-read-replica" : ""}" : var.identifier
   db_name                             = var.is_read_replica ? null : replace("${var.project}_${var.environment}", "/[^0-9A-Za-z_]/", "_") # name of the initial database
   username                            = var.is_read_replica ? null : var.username                                                         # credentials of the master DB are used
   password                            = var.is_read_replica ? null : var.password                                                         # credentials of the master DB are used
   iam_database_authentication_enabled = true
-  parameter_group_name                = local.major_engine_version == "14" ? aws_db_parameter_group.postgres14.name : aws_db_parameter_group.postgres13.name
+  parameter_group_name                = local.parameter_group_name
   apply_immediately                   = true
   multi_az                            = var.multi_az
   publicly_accessible                 = var.publicly_accessible
@@ -34,6 +36,7 @@ resource "aws_db_instance" "main" {
   delete_automated_backups        = var.delete_automated_backups
   skip_final_snapshot             = var.skip_final_snapshot
   final_snapshot_identifier       = var.is_read_replica ? null : (var.final_snapshot_identifier == null ? local.final_snapshot_identifier : var.final_snapshot_identifier)
+  ca_cert_identifier              = var.ca_cert_identifier
 
   enabled_cloudwatch_logs_exports = [
     "postgresql",
@@ -56,6 +59,8 @@ resource "aws_db_instance" "main" {
       engine_version, # AWS will auto-update minor version changes
       db_name,        # if you didn't use this before it would re-create your RDS instance
       snapshot_identifier,
+      username,
+      password,
     ]
   }
 }

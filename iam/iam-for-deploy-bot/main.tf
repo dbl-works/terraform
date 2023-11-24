@@ -5,7 +5,6 @@ resource "aws_iam_user" "user" {
   }
 }
 
-
 resource "aws_iam_user_group_membership" "memberships" {
   user   = "deploy-bot"
   groups = ["deploy-bot-deploy-access"]
@@ -13,8 +12,6 @@ resource "aws_iam_user_group_membership" "memberships" {
     aws_iam_group.deploy-bot-deploy-access,
   ]
 }
-
-
 
 resource "aws_iam_policy" "deploy-bot-ecr-full-access" {
   name        = "AmazonEC2ContainerRegistryFullAccess"
@@ -131,12 +128,32 @@ resource "aws_iam_policy" "deploy-bot-extra-access" {
           "ecs:ListTasks",
           "ecs:DescribeTaskDefinition",
           "elasticloadbalancing:Describe*",
-          "iam:GetRole"
+          "iam:GetRole",
+          "logs:*",
         ],
         "Resource" : [
           "*"
         ]
       }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "service-discovery-access" {
+  name        = "DeployBot_ServiceDiscoveryAccess"
+  path        = "/"
+  description = "Service Discovery Access"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "servicediscovery:TagResource",
+          "servicediscovery:ListTagsForResource",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
     ]
   })
 }
@@ -164,4 +181,9 @@ resource "aws_iam_group_policy_attachment" "deploy-bot-secrets-access" {
 resource "aws_iam_group_policy_attachment" "deploy-bot-s3-access" {
   group      = aws_iam_group.deploy-bot-deploy-access.name
   policy_arn = aws_iam_policy.deploy-bot-s3-full-access.arn
+}
+
+resource "aws_iam_group_policy_attachment" "service-discovery-access" {
+  group      = aws_iam_group.deploy-bot-deploy-access.name
+  policy_arn = aws_iam_policy.service-discovery-access.arn
 }

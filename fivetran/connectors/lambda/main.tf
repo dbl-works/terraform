@@ -1,5 +1,5 @@
 locals {
-  function_name = replace(join("_", compact([var.service_name, var.project, var.environment, var.aws_region_code])), "/-/", "_")
+  function_name = var.lambda_name == null ? replace(join("_", compact([var.service_name, var.project, var.environment, var.aws_region_code])), "/-/", "_") : var.lambda_name
 }
 
 data "archive_file" "zip" {
@@ -10,7 +10,7 @@ data "archive_file" "zip" {
 
 resource "aws_lambda_function" "main" {
   function_name = local.function_name
-  description   = "Collect AWS Cloudwatch Metrics"
+  description   = "Lambda function which connects to fivetran service"
   role          = var.lambda_role_arn
 
   filename = data.archive_file.zip.output_path

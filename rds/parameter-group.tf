@@ -1,14 +1,29 @@
-resource "aws_db_parameter_group" "postgres13" {
-  name   = "${local.name}-postgres13"
-  family = "postgres13"
+resource "aws_db_parameter_group" "current" {
+  count = var.parameter_group_name == null ? 1 : 0
+
+  name   = "${local.name}-postgres${local.major_engine_version}"
+  family = "postgres${local.major_engine_version}"
+
   parameter {
     name  = "log_statement"
-    value = "all"
+    value = "none" # Logs nothing
   }
+
   parameter {
     name  = "log_min_duration_statement"
-    value = "0"
+    value = var.log_min_duration_statement
   }
+
+  parameter {
+    name  = "rds.log_retention_period"
+    value = var.log_retention_period
+  }
+
+  parameter {
+    name  = "log_min_error_statement"
+    value = var.log_min_error_statement
+  }
+
   parameter {
     name  = "rds.force_ssl"
     value = 1
@@ -19,44 +34,7 @@ resource "aws_db_parameter_group" "postgres13" {
     value        = var.enable_replication ? 1 : 0
     apply_method = "pending-reboot"
   }
-  parameter {
-    name         = "wal_sender_timeout"
-    value        = var.enable_replication ? 0 : 60000 # default, 1 min
-    apply_method = "pending-reboot"
-  }
 
-  parameter {
-    name         = "wal_buffers"
-    value        = -1 # this should be default, but apparently its not on AWS RDS https://postgresqlco.nf/doc/en/param/wal_buffers/
-    apply_method = "pending-reboot"
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_db_parameter_group" "postgres14" {
-  name   = "${local.name}-postgres14"
-  family = "postgres14"
-  parameter {
-    name  = "log_statement"
-    value = "all"
-  }
-  parameter {
-    name  = "log_min_duration_statement"
-    value = "0"
-  }
-  parameter {
-    name  = "rds.force_ssl"
-    value = 1
-  }
-
-  parameter {
-    name         = "rds.logical_replication"
-    value        = var.enable_replication ? 1 : 0
-    apply_method = "pending-reboot"
-  }
   parameter {
     name         = "wal_sender_timeout"
     value        = var.enable_replication ? 0 : 60000 # default, 1 min

@@ -4,10 +4,9 @@ data "archive_file" "zip" {
   output_path = "${path.module}/dist/${var.function_name}.zip"
 }
 
-
 resource "aws_lambda_function" "main" {
   function_name = var.function_name
-  role          = aws_iam_role.main.arn
+  role          = data.aws_iam_role.main.arn
 
   filename         = data.archive_file.zip.output_path
   source_code_hash = data.archive_file.zip.output_base64sha256 # Used to trigger updates
@@ -30,4 +29,9 @@ resource "aws_lambda_function" "main" {
     Project     = var.project
     Environment = var.environment
   }
+
+  depends_on = [
+    # NOTE: The Cloudwatch log group has to be created before the lambda so we can create it before AWS does
+    aws_cloudwatch_log_group.lambda
+  ]
 }

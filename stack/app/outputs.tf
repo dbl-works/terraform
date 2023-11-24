@@ -1,9 +1,9 @@
 output "database_url" {
-  value = module.rds.database_url
+  value = var.skip_rds ? "" : module.rds[0].database_url
 }
 
 output "database_arn" {
-  value = module.rds.database_arn
+  value = var.skip_rds ? "" : module.rds[0].database_arn
 }
 
 output "redis_url" {
@@ -54,7 +54,7 @@ output "accept_status-accepter" {
 }
 
 output "rds_kms_key_arn" {
-  value = var.rds_master_db_kms_key_arn == null ? join("", module.rds-kms-key.*.arn) : "KMS ARN only printed for the master DB to be passed to each replica."
+  value = (var.rds_master_db_kms_key_arn != null || var.skip_rds) ? "KMS ARN only printed for the master DB to be passed to each replica." : join("", module.rds-kms-key.*.arn)
 }
 
 output "ecs_cluster_name" {
@@ -88,4 +88,8 @@ output "dnssec_key_type" {
 
 output "dnssec_public_key" {
   value = module.cloudflare[*].dnssec_public_key
+}
+
+output "service_discovery_namespace_id" {
+  value = module.ecs.service_discovery_namespace_id
 }

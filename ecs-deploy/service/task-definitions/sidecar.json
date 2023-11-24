@@ -1,0 +1,26 @@
+{
+  "name": "${NAME}",
+  "image": "${IMAGE_NAME}:${IMAGE_TAG}",
+  "portMappings": [
+    {
+        "containerPort": ${CONTAINER_PORT},
+        "hostPort": ${CONTAINER_PORT},
+        "protocol": "${PROTOCOL}"
+    }
+  ],
+  "essential": true,
+  "environment": [],
+  "mountPoints": ${MOUNT_POINTS},
+  "volumesFrom": [],
+  "secrets": ${SECRETS_LIST},
+  "readonlyRootFilesystem": false,
+  "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "${LOG_GROUP_NAME}",
+          "awslogs-region": "${REGION}",
+          "awslogs-stream-prefix": "${NAME}"
+      }
+  }
+}

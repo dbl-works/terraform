@@ -1,0 +1,20 @@
+[
+  {
+    "name": "${NAME}",
+    "image": "${IMAGE_NAME}:${IMAGE_TAG}",
+    "essential": true,
+    "command": ${COMMANDS},
+    "environment": ${ENVIRONMENT_VARIABLES},
+    "secrets": ${SECRETS_LIST},
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-create-group": "true",
+            "awslogs-group": "${CLOUDWATCH_LOG_GROUP_NAME}",
+            "awslogs-region": "${REGION}",
+            "awslogs-stream-prefix": "${NAME}",
+            "mode": "${ECS_FARGATE_LOG_MODE}"
+        }
+    }
+  }
+]

@@ -1,6 +1,14 @@
-variable "environment" {}
-variable "project" {}
-variable "vpc_id" {}
+variable "environment" {
+  type = string
+}
+
+variable "project" {
+  type = string
+}
+
+variable "vpc_id" {
+  type = string
+}
 
 # A custom name overrides the default {project}-{environment} convention
 variable "name" {
@@ -19,13 +27,24 @@ variable "regional" {
   type    = bool
 }
 
+variable "keep_alive_timeout" {
+  type    = number
+  default = 60
+  validation {
+    condition     = var.keep_alive_timeout >= 60 && var.keep_alive_timeout <= 4000
+    error_message = "keep_alive_timeout must be between 60 and 4000"
+  }
+}
+
 variable "allow_internal_traffic_to_ports" {
   type    = list(string)
   default = []
 }
 
-# Private IPs are where the app containers run
-variable "subnet_private_ids" { type = list(string) }
+variable "allow_alb_traffic_to_ports" {
+  type    = list(string)
+  default = []
+}
 
 # Public subnets are where forwarders run, such as a bastion, NAT or proxy
 variable "subnet_public_ids" { type = list(string) }
@@ -42,7 +61,9 @@ variable "kms_key_arns" {
 
 # Sets the certficate for https traffic into the cluster
 # If not passed, no SSL endpoint will be setup
-variable "certificate_arn" {}
+variable "certificate_arn" {
+  type = string
+}
 
 variable "additional_certificate_arns" {
   description = "Additional certificates to add to the load balancer"
@@ -68,18 +89,22 @@ variable "health_check_path" {
 }
 
 variable "grant_read_access_to_s3_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_write_access_to_s3_arns" {
   default = []
+  type    = list(string)
 }
 
 variable "grant_read_access_to_sqs_arns" {
+  type    = list(string)
   default = []
 }
 
 variable "grant_write_access_to_sqs_arns" {
+  type    = list(string)
   default = []
 }
 
@@ -130,7 +155,7 @@ variable "autoscale_metrics_map" {
       threshold_up   = optional(number, null) # Threshold of which ECS should start to scale up. If null, would not be included in the scale up alarm
       threshold_down = optional(number, null) # Threshold of which ECS should start to scale down. If null, would not be included in the scale down alarm
       namespace      = optional(string, "AWS/ECS")
-      dimensions     = optional(map(string), {})
+      dimensions     = optional(map(string), null)
     }))
   }))
   default = {}
@@ -139,4 +164,36 @@ variable "autoscale_metrics_map" {
 variable "cloudwatch_logs_retention_in_days" {
   type    = number
   default = 90
+}
+
+variable "alb_listener_rules" {
+  type = list(object({
+    priority         = string
+    type             = string
+    target_group_arn = string
+    path_pattern     = optional(list(string), [])
+  }))
+  default = []
+}
+
+variable "service_discovery_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "monitored_service_groups" {
+  type        = list(string)
+  default     = ["service:web"]
+  description = "ECS service groups to monitor STOPPED containers."
+}
+
+variable "health_check_options" {
+  type = object({
+    healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.
+    unhealthy_threshold = optional(number, 5)  # The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold.
+    timeout             = optional(number, 30) # The amount of time, in seconds, during which no response means a failed health check. For Application Load Balancers, the range is 2 to 120 seconds.
+    interval            = optional(number, 60) # The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds.
+    matcher             = optional(string, "200,204")
+  })
+  default = {}
 }
