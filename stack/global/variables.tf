@@ -90,12 +90,29 @@ variable "iam_cross_account_config" {
   default = null
 }
 
-variable "cloudtrail_config" {
+variable "is_cloudtrail_log_ingestor" {
+  type    = bool
+  default = false
+}
+
+variable "cloudtrail_producer_config" {
   type = object({
+    enable_cloudtrail                  = optional(bool, true)
     s3_bucket_arns_for_data_cloudtrail = optional(list(string), [])
     enable_data_cloudtrail             = optional(bool, false)
+    cloudtrail_target_bucket_name      = optional(string, null)
+    cloudtrail_target_bucket_kms_arn   = optional(string, null)
   })
   default = null
+}
+
+output "validate_cloudtrail" {
+  value = null
+
+  precondition {
+    condition     = (var.cloudtrail_producer_config != null || var.is_cloudtrail_log_ingestor)
+    error_message = "The account must be configured as either a CloudTrail log producer, with specified target bucket details, or as a CloudTrail log ingestor."
+  }
 }
 
 variable "private_buckets_list" {

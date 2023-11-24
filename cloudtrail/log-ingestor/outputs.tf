@@ -15,3 +15,7 @@ output "s3_kms_arn" {
 output "s3_kms_key_id" {
   value = module.s3-cloudtrail.kms-key-id
 }
+
+output "cloudtrail_arn" {
+  value = aws_cloudtrail.management[0].arn
+}
