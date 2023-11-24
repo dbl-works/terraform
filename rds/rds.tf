@@ -25,7 +25,7 @@ resource "aws_db_instance" "main" {
   vpc_security_group_ids = [
     aws_security_group.db.id,
   ]
-  backup_retention_period         = var.is_read_replica ? 0 : 7
+  backup_retention_period         = var.is_read_replica ? 0 : var.backup_retention_period
   storage_encrypted               = true
   kms_key_id                      = var.kms_key_arn
   monitoring_interval             = 5
@@ -37,6 +37,7 @@ resource "aws_db_instance" "main" {
   skip_final_snapshot             = var.skip_final_snapshot
   final_snapshot_identifier       = var.is_read_replica ? null : (var.final_snapshot_identifier == null ? local.final_snapshot_identifier : var.final_snapshot_identifier)
   ca_cert_identifier              = var.ca_cert_identifier
+  max_allocated_storage           = var.storage_autoscaling_upper_limit
 
   enabled_cloudwatch_logs_exports = [
     "postgresql",

@@ -11,12 +11,25 @@ variable "ca_cert_identifier" {
   type    = string
 }
 
+variable "backup_retention_period" {
+  default = 7
+  type    = number
+}
+
 variable "instance_class" { default = "db.t3.micro" }
 variable "engine_version" {
   default = "14"
   type    = string
 }
-variable "allocated_storage" { default = 100 }
+variable "allocated_storage" {
+  type    = number
+  default = 10
+}
+
+variable "storage_autoscaling_upper_limit" {
+  type    = number
+  default = 20
+}
 
 variable "publicly_accessible" {
   type    = bool
