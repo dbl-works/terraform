@@ -1,4 +1,4 @@
-module "central-log-buckets" {
+module "global-buckets" {
   source = "../../s3-private"
 
   # This defines bucket_name as the key,
