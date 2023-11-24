@@ -53,6 +53,7 @@ jobs:
           - script/database-roles
           - secrets
           - slack/chatbot
+          - slack/ecr-scanner-notifier
           - slack/ecs-deployment-failure
           - slack/sentry
           - slack/sns
