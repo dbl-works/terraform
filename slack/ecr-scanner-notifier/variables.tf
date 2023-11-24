@@ -9,7 +9,3 @@ variable "slack_webhook_url" {
 variable "slack_channel" {
   type = string
 }
-
-variable "runtime" {
-  type = string
-}

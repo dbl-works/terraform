@@ -18,6 +18,7 @@ module "lambda" {
   handler     = "index.handler"
   timeout     = 10
   memory_size = 1024
+  runtime     = "ruby3.2"
 
   # Subnets the lambdas are allowed to use to access resources in the VPC.
   subnet_ids = [
