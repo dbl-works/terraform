@@ -37,7 +37,7 @@ resource "aws_db_instance" "main" {
   skip_final_snapshot             = var.skip_final_snapshot
   final_snapshot_identifier       = var.is_read_replica ? null : (var.final_snapshot_identifier == null ? local.final_snapshot_identifier : var.final_snapshot_identifier)
   ca_cert_identifier              = var.ca_cert_identifier
-  max_allocated_storage           = var.max_allocated_storage
+  max_allocated_storage           = var.storage_autoscaling_upper_limit
 
   enabled_cloudwatch_logs_exports = [
     "postgresql",

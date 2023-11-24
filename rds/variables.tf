@@ -26,9 +26,9 @@ variable "allocated_storage" {
   default = 10
 }
 
-variable "max_allocated_storage" {
+variable "storage_autoscaling_upper_limit" {
   type    = number
-  default = 0
+  default = 20
 }
 
 variable "publicly_accessible" {

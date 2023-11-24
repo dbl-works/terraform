@@ -302,9 +302,9 @@ variable "rds_backup_retention_period" {
   type    = number
 }
 
-variable "rds_max_allocated_storage" {
+variable "rds_storage_autoscaling_upper_limit" {
   type    = number
-  default = 0
+  default = 20
 }
 
 variable "rds_multi_az" {
