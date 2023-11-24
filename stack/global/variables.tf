@@ -132,3 +132,11 @@ variable "private_buckets_list" {
   }))
   description = "S3 private buckets that are required globally, such as buckets used for storing Terraform state files or centralized log storage."
 }
+
+variable "ecr_scanner_notifier_config" {
+  type = object({
+    slack_webhook_url = string
+    slack_channel     = string
+  })
+  default = null
+}
