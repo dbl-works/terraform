@@ -2,7 +2,7 @@ require 'json'
 require 'net/http'
 require 'uri'
 
-def get_properties(finding_counts)
+def text_block_from(finding_counts)
   if finding_counts['CRITICAL'] != 0
     { 'color' => 'danger', 'icon' => ':red_circle:' }
   elsif finding_counts['HIGH'] != 0
