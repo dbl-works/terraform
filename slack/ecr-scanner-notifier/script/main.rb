@@ -35,7 +35,7 @@ def build_slack_message(event)
         'title' => "#{text_properties['icon']} #{repository_name}:#{detail['image-tags'][0]}",
         'title_link' => "https://#{region}.console.aws.amazon.com/ecr/repositories/#{repository_name}/_/image/#{detail['image-digest']}/scan-results?region=#{region}",
         'text' => "Image Scan Completed at #{event['time']}",
-        'fields' => severity_list.map { |k, v| { 'title' => k.capitalize, 'value' => v, 'short' => true } }
+        'fields' => severity_counts.map { |severity_level, count| { 'title' => severity_level.capitalize, 'value' => count, 'short' => true } }
       }
     ]
   }
