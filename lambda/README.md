@@ -12,7 +12,7 @@ module "lambda" {
   function_name   = "lambda"
   project         = "dbl"
   environment     = "production"
-  source_dir = "Path to the directory containing the lambda function code."
+  source_dir      = "Path to the directory containing the lambda function code."
 
   # optional
   handler     = "index.handler"
