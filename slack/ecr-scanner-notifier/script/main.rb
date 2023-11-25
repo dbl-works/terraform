@@ -21,7 +21,7 @@ def build_slack_message(event)
   message = "*ECR Image Scan findings | #{region} | Account ID:#{account_id}*"
   repository_name = detail['repository-name']
   severity_counts = detail['finding-severity-counts']
-  text_properties = get_properties(severity_list)
+  text_properties = text_block_from(severity_counts)
 
   {
     'username' => 'Amazon ECR',
