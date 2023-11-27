@@ -7,8 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### slack/ecr-scanner-notifier
+* Slack notifier for AWS Elastic Container Registry (ECR) image scans. It automatically sends notifications to a designated Slack channel whenever vulnerabilities are detected in ECR scans. [#196](https://github.com/dbl-works/terraform/pull/196)
+
 ### stack/global
 * New module for deploying resources required only once per project. [#273](https://github.com/dbl-works/terraform/pull/273)
+* Add ecr-scanner-notifier module [#196](https://github.com/dbl-works/terraform/pull/196)
 
 ### rds
 * update default value for backup_retention_period, max_allocated_storage, and allocated_storage. [#274](https://github.com/dbl-works/terraform/pull/274)
