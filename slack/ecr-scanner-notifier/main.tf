@@ -65,7 +65,7 @@ resource "aws_cloudwatch_event_rule" "ecr_scanner" {
 resource "aws_cloudwatch_event_target" "ecr_scanner" {
   rule      = aws_cloudwatch_event_rule.ecr_scanner.name
   target_id = aws_cloudwatch_event_rule.ecr_scanner.name
-  arn       = module.lambda.lambda_arn
+  arn       = module.lambda.arn
 
   depends_on = [
     aws_cloudwatch_event_rule.ecr_scanner
