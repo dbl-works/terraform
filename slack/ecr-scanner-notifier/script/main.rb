@@ -76,7 +76,7 @@ def lambda_handler(event:, context:)
   req.body = slack_message.to_json
 
   begin
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
+    Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
       http.request(req)
     end
     puts('Message posted.')
