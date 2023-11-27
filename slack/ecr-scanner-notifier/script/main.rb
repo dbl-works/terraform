@@ -3,9 +3,9 @@ require 'net/http'
 require 'uri'
 
 def text_block_from(finding_counts)
-  if finding_counts['CRITICAL'] != 0
+  if finding_counts.fetch('CRITICAL', 0) != 0
     { 'color' => 'danger', 'icon' => ':red_circle:' }
-  elsif finding_counts['HIGH'] != 0
+  elsif finding_counts.fetch('HIGH', 0) != 0
     { 'color' => 'warning', 'icon' => ':large_orange_diamond:' }
   else
     { 'color' => 'good', 'icon' => ':green_heart:' }
@@ -13,14 +13,16 @@ def text_block_from(finding_counts)
 end
 
 def build_slack_message(event)
-  account_id = event['account']
-  detail = event['detail']
-  region = ENV['AWS_DEFAULT_REGION']
-  channel = ENV['CHANNEL']
+  channel = ENV.fetch('CHANNEL')
+
+  account_id = event.fetch('account')
+  detail = event.fetch('detail')
+  region = event.fetch('region')
+  repository_name = detail.fetch('repository-name')
+  severity_counts = detail.fetch('finding-severity-counts')
+  image_digest = detail.fetch('image-digest')
 
   message = "*ECR Image Scan findings | #{region} | Account ID:#{account_id}*"
-  repository_name = detail['repository-name']
-  severity_counts = detail['finding-severity-counts']
   text_properties = text_block_from(severity_counts)
 
   {
@@ -31,11 +33,13 @@ def build_slack_message(event)
     'attachments' => [
       {
         'fallback' => 'AmazonECR Image Scan Findings Description.',
-        'color' => text_properties['color'],
-        'title' => "#{text_properties['icon']} #{repository_name}:#{detail['image-tags'][0]}",
-        'title_link' => "https://#{region}.console.aws.amazon.com/ecr/repositories/#{repository_name}/_/image/#{detail['image-digest']}/scan-results?region=#{region}",
-        'text' => "Image Scan Completed at #{event['time']}",
-        'fields' => severity_counts.map { |severity_level, count| { 'title' => severity_level.capitalize, 'value' => count, 'short' => true } }
+        'color' => text_properties.fetch('color'),
+        'title' => "#{text_properties.fetch('icon')} #{repository_name}:#{detail.fetch('image-tags', [])[0]}",
+        'title_link' => "https://#{region}.console.aws.amazon.com/ecr/repositories/#{repository_name}/_/image/#{image_digest}/scan-results?region=#{region}",
+        'text' => "Image Scan Completed at #{event.fetch('time')}",
+        'fields' => severity_counts.map do |severity_level, count|
+                      { 'title' => severity_level.capitalize, 'value' => count, 'short' => true }
+                    end
       }
     ]
   }
@@ -67,7 +71,7 @@ def lambda_handler(event:, context:)
   # }
   #
   slack_message = build_slack_message(event)
-  uri = URI(ENV['WEBHOOK_URL'])
+  uri = URI(ENV.fetch('WEBHOOK_URL'))
   req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
   req.body = slack_message.to_json
 
