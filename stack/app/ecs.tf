@@ -28,7 +28,6 @@ module "ecs" {
   additional_certificate_arns = var.additional_certificate_arns
   regional                    = var.regional
   name                        = var.ecs_name # custom name when convention exceeds 32 chars
-  region                      = var.region   # used for e.g CloudWatch metrics
   keep_alive_timeout          = var.keep_alive_timeout
   monitored_service_groups    = var.monitored_service_groups
 
