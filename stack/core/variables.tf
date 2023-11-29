@@ -17,8 +17,4 @@ variable "ecr_lifecycle_policy_rules" {
 variable "project" {
   type = string
 }
-
-variable "environment" {
-  type = string
-}
 # =============== ECR ================ #
