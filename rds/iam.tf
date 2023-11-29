@@ -1,8 +1,11 @@
+data "aws_caller_identity" "current" {}
+
 locals {
   db_roles = [
     "admin",
     "readonly",
   ]
+  account_id = data.aws_caller_identity.current.account_id
 }
 
 # Readonly access to database
@@ -27,7 +30,7 @@ resource "aws_iam_policy" "rds-db-connect" {
         "rds-db:connect"
       ],
       "Resource": [
-        "arn:aws:rds-db:${var.region}:${var.account_id}:dbuser:${aws_db_instance.main.resource_id}/${var.project}_${var.environment}_${each.key}"
+        "arn:aws:rds-db:${var.region}:${local.account_id}:dbuser:${aws_db_instance.main.resource_id}/${var.project}_${var.environment}_${each.key}"
       ]
     },
     {
@@ -36,8 +39,8 @@ resource "aws_iam_policy" "rds-db-connect" {
         "iam:ListPolicies"
       ],
       "Resource": [
-        "arn:aws:iam::${var.account_id}:policy/${local.name}-rds-db-connect-*",
-        "arn:aws:iam::${var.account_id}:policy/${local.name}-rds-view"
+        "arn:aws:iam::${local.account_id}:policy/${local.name}-rds-db-connect-*",
+        "arn:aws:iam::${local.account_id}:policy/${local.name}-rds-view"
       ]
     }
   ]

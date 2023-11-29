@@ -1,4 +1,3 @@
-variable "account_id" {}
 variable "vpc_id" {}
 variable "region" {} # TODO: Could this be determined from VPC?
 variable "subnet_ids" {}

@@ -23,7 +23,6 @@ module "rds" {
 
   project     = var.project
   environment = var.environment
-  account_id  = var.account_id
   region      = var.region
   vpc_id      = module.vpc.id
   password    = var.rds_is_read_replica ? null : local.credentials.db_root_password
