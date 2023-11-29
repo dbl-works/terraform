@@ -1,3 +1,9 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}
+
 variable "environment" {
   type = string
 }
@@ -9,10 +15,6 @@ variable "project" {
 variable "region" {
   type    = string
   default = "eu-central-1"
-}
-
-variable "account_id" {
-  type = string
 }
 
 # =============== Certificate Manager ================ #
