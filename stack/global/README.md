@@ -10,8 +10,24 @@ This launches resources required only once per Project. It includes the followin
 - CloudTrail (optional)
 
 ```
+provider "aws" {
+  profile = "<project>"
+  region = "eu-central-1"
+}
+
+provider "aws" {
+  alias = "us-east-1"
+  profile = "<project>"
+  region = "us-east-1"
+}
+
 module "stack-global" {
   source = "github.com/dbl-works/terraform//stack/global?ref=v2022.11.27"
+
+  providers = {
+    aws           = aws
+    aws.us-east-1 = aws.us-east-1 # Stack module requires us to pass aws.peer to the block
+  }
 
   project = "facebook"
 
@@ -36,13 +52,15 @@ module "stack-global" {
     client_affinity   = "SOURCE_IP"
   }
   sentry_config = {
-    organization_name    = "facebook"
-    slack_workspace_name = "facebook-slack"
-    platform             = "javascript"
-    sentry_teams         = ["developers"]
-    frequency            = 30
+    facebook = {
+      organization_name    = "facebook"
+      slack_workspace_name = "Meta"
+      platform             = "javascript"
+      sentry_teams         = ["developers"]
+      frequency            = 30
+    }
   }
-  period_for_billing_alert = "28800"
+  period_for_billing_alert = "86400"
   monthly_billing_threshold = "1000"
   sns_topic_name = "slack-sns"
   chatbot_config = {
