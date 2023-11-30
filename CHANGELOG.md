@@ -8,6 +8,21 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 
+### rds
+- Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### vpc
+- Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### vpn
+- Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### stack/global
+- Update default value for period_for_billing_alert & environment_tags_for_taggable_resources [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### stack/core -> stack/region
+- Remove iam-policy-for-taggable-resources module from the module and rename the modules to stack/region [#275](https://github.com/dbl-works/terraform/pull/275)
+
 ## [v2023.11.27]
 ### slack/ecr-scanner-notifier
 * Slack notifier for AWS Elastic Container Registry (ECR) image scans. It automatically sends notifications to a designated Slack channel whenever vulnerabilities are detected in ECR scans. [#196](https://github.com/dbl-works/terraform/pull/196)

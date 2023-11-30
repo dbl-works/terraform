@@ -60,6 +60,7 @@ jobs:
           - snowflake/cloud
           - stack/app
           - stack/global
+          - stack/region
           - stack/setup
           - vpc
           - vpc-peering
