@@ -8,6 +8,9 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 
+### ecs-deploy/cluster
+* Add `regional` variables [#277](https://github.com/dbl-works/terraform/pull/277)
+
 ### rds
 - Update ca_cert_identifier default value to `rds-ca-ecc384-g1` [#276](https://github.com/dbl-works/terraform/pull/276)
 
