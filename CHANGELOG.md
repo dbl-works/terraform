@@ -8,6 +8,9 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 
+### ecs
+- Remove region from variables.  [#275](https://github.com/dbl-works/terraform/pull/275)
+
 ### rds
 - Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
 
@@ -22,6 +25,9 @@ This project does not follow SemVer, since modules are independent of each other
 
 ### stack/core -> stack/region
 - Remove iam-policy-for-taggable-resources module from the module and rename the modules to stack/region [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### stack/app
+- Remove account_id from variables.  [#275](https://github.com/dbl-works/terraform/pull/275)
 
 ## [v2023.11.27]
 ### slack/ecr-scanner-notifier
