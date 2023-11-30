@@ -6,6 +6,7 @@ module "service" {
   environment = var.environment
   project     = var.project
   region      = var.region
+  regional    = var.regional
 
   app_config     = each.value.app_config
   sidecar_config = each.value.sidecar_config
