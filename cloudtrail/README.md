@@ -46,7 +46,7 @@ module "log-ingestor" {
   log_producer_account_ids = [data.aws_caller_identity.log_producer.account_id]
 
   # Optional
-  enable_cloudtrail = true
+  enable_cloudtrail = false
 }
 
 module "log-producer" {

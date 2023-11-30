@@ -17,5 +17,5 @@ output "s3_kms_key_id" {
 }
 
 output "cloudtrail_arn" {
-  value = aws_cloudtrail.management[0].arn
+  value = var.enable_cloudtrail ? aws_cloudtrail.management[0].arn : ""
 }
