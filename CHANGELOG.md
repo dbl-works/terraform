@@ -11,6 +11,9 @@ This project does not follow SemVer, since modules are independent of each other
 ### ecs-deploy/cluster
 * Add `regional` variables [#277](https://github.com/dbl-works/terraform/pull/277)
 
+### rds
+- Update ca_cert_identifier default value to `rds-ca-ecc384-g1` [#276](https://github.com/dbl-works/terraform/pull/276)
+
 ## [v2023.11.27]
 ### slack/ecr-scanner-notifier
 * Slack notifier for AWS Elastic Container Registry (ECR) image scans. It automatically sends notifications to a designated Slack channel whenever vulnerabilities are detected in ECR scans. [#196](https://github.com/dbl-works/terraform/pull/196)
