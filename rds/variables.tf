@@ -11,7 +11,7 @@ variable "project" {}
 variable "environment" {}
 
 variable "ca_cert_identifier" {
-  default = "rds-ca-rsa2048-g1"
+  default = "rds-ca-ecc384-g1"
   type    = string
 }
 

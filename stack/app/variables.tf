@@ -359,7 +359,7 @@ variable "rds_log_min_error_statement" {
 }
 
 variable "rds_ca_cert_identifier" {
-  default     = "rds-ca-rsa2048-g1"
+  default     = "rds-ca-ecc384-g1"
   type        = string
   description = "The identifier of the CA certificate for the DB instance."
 }
