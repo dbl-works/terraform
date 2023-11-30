@@ -17,11 +17,6 @@ variable "name" {
   default     = null
 }
 
-# Regional allows clusters with the same name to be in multiple regions
-variable "region" {
-  type    = string
-  default = "eu-central-1"
-}
 variable "regional" {
   default = false
   type    = bool

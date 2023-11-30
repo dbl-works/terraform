@@ -54,7 +54,7 @@ module "log-producer" {
     aws = aws.log-producer
   }
 
-  source = "github.com/dbl-works/terraform//cloudtrail/logging-account"
+  source = "github.com/dbl-works/terraform//cloudtrail/log-producer"
 
   environment = local.environment
   project = "test-organization"

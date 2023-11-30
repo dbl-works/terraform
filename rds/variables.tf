@@ -1,6 +1,10 @@
-variable "account_id" {}
+data "aws_region" "current" {}
+
+locals {
+  region = data.aws_region.current.name
+}
+
 variable "vpc_id" {}
-variable "region" {} # TODO: Could this be determined from VPC?
 variable "subnet_ids" {}
 variable "kms_key_arn" {}
 variable "project" {}
@@ -128,7 +132,7 @@ variable "identifier" {
 }
 
 locals {
-  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${local.region}" : ""}"
 }
 
 variable "log_min_duration_statement" {

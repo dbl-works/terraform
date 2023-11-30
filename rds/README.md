@@ -14,7 +14,6 @@ Will create an initial database named `{project}_{environment}`.
 module "db" {
   source = "github.com/dbl-works/terraform//rds?ref=v2021.07.01"
 
-  account_id                 = "12345678"
   region                     = "eu-central-1"
   vpc_id                     = "vpc-123"
   project                    = "someproject"

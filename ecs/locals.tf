@@ -1,3 +1,6 @@
+data "aws_region" "current" {}
+
 locals {
-  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+  region = data.aws_region.current.name
+  name   = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${local.region}" : ""}"
 }

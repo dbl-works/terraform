@@ -33,7 +33,7 @@ variable "sentry_config" {
 }
 
 variable "period_for_billing_alert" {
-  default     = "28800" # 8 hours
+  default     = "86400"
   description = "How frequent should we check for the bill (in seconds)"
 }
 
@@ -79,7 +79,7 @@ variable "users" {
 
 variable "environment_tags_for_taggable_resources" {
   type    = list(string)
-  default = []
+  default = ["staging", "production"]
 }
 
 variable "iam_cross_account_config" {

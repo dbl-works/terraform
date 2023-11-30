@@ -7,12 +7,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### ecs
+- Remove region from variables.  [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### rds
+- Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
+- Update ca_cert_identifier default value to `rds-ca-ecc384-g1` [#276](https://github.com/dbl-works/terraform/pull/276)
+
+### vpc
+- Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### vpn
+- Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### stack/global
+- Update default value for period_for_billing_alert & environment_tags_for_taggable_resources [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### stack/core -> stack/region
+- Remove iam-policy-for-taggable-resources module from the module and rename the modules to stack/region [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### stack/app
+- Remove account_id from variables.  [#275](https://github.com/dbl-works/terraform/pull/275)
 
 ### ecs-deploy/cluster
 * Add `regional` variables [#277](https://github.com/dbl-works/terraform/pull/277)
 
-### rds
-- Update ca_cert_identifier default value to `rds-ca-ecc384-g1` [#276](https://github.com/dbl-works/terraform/pull/276)
 
 ## [v2023.11.27]
 ### slack/ecr-scanner-notifier

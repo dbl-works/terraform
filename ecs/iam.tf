@@ -101,7 +101,7 @@ resource "aws_iam_policy" "ecs-console" {
       },
       "Resource": [
         "*",
-        "arn:aws:ssm:${var.region}:*:document/AmazonECS-ExecuteInteractiveCommand"
+        "arn:aws:ssm:${local.region}:*:document/AmazonECS-ExecuteInteractiveCommand"
       ]
     },
     {
