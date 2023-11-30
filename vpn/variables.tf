@@ -15,7 +15,9 @@ variable "availability_zone" {
   default = null
 }
 
+data "aws_region" "current" {}
+
 # can't use variables inside other variables, so we need to define a local variable
 locals {
-  availability_zone = var.availability_zone == null ? "${var.region}a" : var.availability_zone
+  availability_zone = var.availability_zone == null ? "${data.aws_region.current.name}a" : var.availability_zone
 }
