@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+
+## [v2023.12.03]
 ### ecs
 - Remove region from variables.  [#275](https://github.com/dbl-works/terraform/pull/275)
 
