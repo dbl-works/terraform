@@ -30,7 +30,7 @@ module "lambda" {
 
   environment_variables = {
     CONTEXT_NAME              = var.context_name == null ? "${var.project}-aws" : var.context_name
-    DEPLOY_BOT_NAME           = var.deploy_bot_name
+    USER_NAME                 = var.user_name
     CIRCLE_CI_ORGANIZATION_ID = var.circle_ci_organization_id
     SECRET_ID                 = module.secrets.id
   }

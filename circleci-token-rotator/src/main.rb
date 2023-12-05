@@ -49,7 +49,7 @@ end
 
 def renew_access_key(event:, context:)
   iam = Aws::IAM::Client.new
-  user_name = ENV.fetch('DEPLOY_BOT_NAME')
+  user_name = ENV.fetch('USER_NAME')
 
   keys = iam.list_access_keys(user_name:).access_key_metadata
 

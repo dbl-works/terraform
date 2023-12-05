@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_event_rule" "rotate_circleci_token" {
   name                = local.name
-  description         = "Rotate CircleCI Token twice per year"
-  schedule_expression = "rate(183 days)"
+  description         = "Rotate CircleCI Token every ${var.token_rotation_interval_days} days"
+  schedule_expression = "rate(${var.token_rotation_interval_days} days)"
 
   tags = {
     Project = var.project
