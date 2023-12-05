@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "iam" {
       "iam:DeleteAccessKey"
     ]
     resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${var.deploy_bot_name}"
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${var.user_name}"
     ]
   }
 }
