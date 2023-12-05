@@ -140,3 +140,15 @@ variable "ecr_scanner_notifier_config" {
   })
   default = null
 }
+
+variable "circleci_token_rotator_config" {
+  type = object({
+    circle_ci_organization_id    = string
+    context_name                 = optional(string, null)
+    user_name                    = optional(string, null)
+    token_rotation_interval_days = optional(number, null)
+    timeout                      = optional(number, null)
+    memory_size                  = optional(number, null)
+  })
+  default = null
+}

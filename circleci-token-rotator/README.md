@@ -5,7 +5,7 @@ Rotates IAM user's AWS Access Keys on CircleCI.
 ## Usage
 
 ```terraform
-module "ecr" {
+module "circleci-token-rotator" {
   source = "github.com/dbl-works/terraform//circleci-token-rotator"
 
   project = "facebook"
