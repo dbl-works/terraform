@@ -10,6 +10,7 @@ This project does not follow SemVer, since modules are independent of each other
 ### circleci-token-rotator
 - New module to rotate IAM user's AWS Access Keys on CircleCI. [#278](https://github.com/dbl-works/terraform/pull/278)
 
+## [v2023.12.03]
 ### ecs
 - Remove region from variables.  [#275](https://github.com/dbl-works/terraform/pull/275)
 
