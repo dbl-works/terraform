@@ -6,7 +6,7 @@ variable "services" {
       image_name            = optional(string, null)     #  Docker image name of the app container. Required if ecr_repo_name is null.
       secrets               = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the app
       ecr_repo_name         = optional(string, null)     # Required if image_name is null.
-      container_port        = optional(number, null)
+      container_ports       = optional(list(number), [])
       environment_variables = optional(map(string), {})
       commands = optional(list(string), [
         "bundle",
@@ -43,6 +43,22 @@ variable "services" {
     with_load_balancer              = optional(bool, true)
     ephemeral_storage_size_in_gib   = optional(number, 20)
     load_balancer_target_group_name = optional(string, null)
+    security_group_ids              = optional(list(string), [])
+    privileged                      = optional(bool, false)
+    launch_type                     = optional(string, "FARGATE")
+    volume = optional(
+      list(object({
+        name = optional(string, true)
+        efs_volume_configuration = optional(object({
+          file_system_id          = string
+          root_directory          = optional(string, "/")
+          transit_encryption      = optional(string, "DISABLED") # Valid values are "ENABLED"/"DISABLED"
+          transit_encryption_port = optional(number, null)
+          access_point_id         = optional(string, null)
+          iam                     = optional(string, null)
+        }), null)
+      })), []
+    )
   }))
 }
 
@@ -63,4 +79,19 @@ variable "regional" {
 
 variable "project" {
   type = string
+}
+
+variable "volume" {
+  type = list(object({
+    name = optional(string, true)
+    efs_volume_configuration = optional(object({
+      file_system_id          = string
+      root_directory          = optional(string, "/")
+      transit_encryption      = optional(string, "DISABLED") # Valid values are "ENABLED"/"DISABLED"
+      transit_encryption_port = optional(number, null)
+      access_point_id         = optional(string, null)
+      iam                     = optional(string, null)
+    }), null)
+  }))
+  default = []
 }

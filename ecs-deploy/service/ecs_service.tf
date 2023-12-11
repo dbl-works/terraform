@@ -25,7 +25,7 @@ locals {
   load_balancers = var.with_load_balancer ? [{
     target_group_arn = var.aws_lb_target_group_arn == null ? data.aws_lb_target_group.ecs.arn : var.aws_lb_target_group_arn
     container_name   = var.app_config.name,
-    container_port   = var.app_config.container_port
+    container_port   = length(var.app_config.container_ports) > 0 ? var.app_config.container_ports[0] : null
   }] : []
 }
 
@@ -51,7 +51,7 @@ resource "aws_ecs_service" "main" {
   cluster         = data.aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.main.arn
   desired_count   = var.desired_count
-  launch_type     = "FARGATE"
+  launch_type     = var.launch_type
 
   deployment_circuit_breaker {
     enable   = var.deployment_circuit_breaker.enable
@@ -59,8 +59,10 @@ resource "aws_ecs_service" "main" {
   }
 
   network_configuration {
-    subnets          = data.aws_subnets.selected.ids
-    security_groups  = [data.aws_security_group.ecs.id]
+    subnets = data.aws_subnets.selected.ids
+    security_groups = concat([
+      data.aws_security_group.ecs.id
+    ], var.security_group_ids)
     assign_public_ip = var.subnet_type == "public"
   }
 
@@ -80,7 +82,7 @@ resource "aws_ecs_service" "main" {
     content {
       target_group_arn = load_balancer.value.target_group_arn
       container_name   = load_balancer.value.container_name
-      container_port   = load_balancer.value.container_port
+      container_port   = length(var.app_config.container_ports) > 0 ? var.app_config.container_ports[0] : null
     }
   }
 
