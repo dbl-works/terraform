@@ -37,6 +37,13 @@ variable "services" {
         }))
       , [])
     })), [])
+    ulimits = optional(
+      list(object({
+        name      = string # "core"|"cpu"|"data"|"fsize"|"locks"|"memlock"|"msgqueue"|"nice"|"nofile"|"nproc"|"rss"|"rtprio"|"rttime"|"sigpending"|"stack",
+        softLimit = number
+        hardLimit = number
+      })), []
+    )
     cpu                             = optional(number, 256)
     memory                          = optional(number, 512)
     desired_count                   = optional(number, 1)
@@ -44,8 +51,7 @@ variable "services" {
     ephemeral_storage_size_in_gib   = optional(number, 20)
     load_balancer_target_group_name = optional(string, null)
     security_group_ids              = optional(list(string), [])
-    privileged                      = optional(bool, false)
-    launch_type                     = optional(string, "FARGATE")
+    service_discovery_namespace_id  = optional(string, null)
     volume = optional(
       list(object({
         name = optional(string, true)

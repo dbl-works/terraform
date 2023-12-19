@@ -18,6 +18,6 @@ module "service" {
   load_balancer_target_group_name = each.value.load_balancer_target_group_name
   volume                          = each.value.volume
   security_group_ids              = each.value.security_group_ids
-  privileged                      = each.value.privileged
-  launch_type                     = each.value.launch_type
+  service_discovery_namespace_id  = each.value.service_discovery_namespace_id
+  ulimits                         = each.value.ulimits
 }

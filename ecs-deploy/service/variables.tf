@@ -167,6 +167,16 @@ variable "aws_lb_target_group_arn" {
   default = null
 }
 
+variable "ulimits" {
+  type = list(object({
+    name      = string # "core"|"cpu"|"data"|"fsize"|"locks"|"memlock"|"msgqueue"|"nice"|"nofile"|"nproc"|"rss"|"rtprio"|"rttime"|"sigpending"|"stack",
+    softLimit = number
+    hardLimit = number
+  }))
+  default = []
+}
+
+
 variable "deployment_circuit_breaker" {
   type = object({
     enable   = optional(bool, true)
@@ -181,9 +191,4 @@ variable "deployment_circuit_breaker" {
 variable "security_group_ids" {
   type    = list(string)
   default = []
-}
-
-variable "privileged" {
-  type    = bool
-  default = false
 }
