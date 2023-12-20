@@ -164,11 +164,16 @@ variable "aws_lb_target_group_arn" {
 
 variable "ulimits" {
   type = list(object({
-    name      = string # "core"|"cpu"|"data"|"fsize"|"locks"|"memlock"|"msgqueue"|"nice"|"nofile"|"nproc"|"rss"|"rtprio"|"rttime"|"sigpending"|"stack",
+    name      = string
     softLimit = number
     hardLimit = number
   }))
   default = []
+
+  validation {
+    condition     = alltrue([for ulimit in var.ulimits : contains("core", "cpu", "data", "fsize", "locks", "memlock", "msgqueue", "nice", "nofile", "nproc", "rss", "rtprio", "rttime", "sigpending", "stack", ulimit.name)])
+    error_message = "Each 'name' must be one of the specified values."
+  }
 }
 
 
