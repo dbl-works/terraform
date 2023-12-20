@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 ### ecs
-- Add enable_container_insights variables. [#276](https://github.com/dbl-works/terraform/pull/276)
+- Add enable_container_insights variables. [#282](https://github.com/dbl-works/terraform/pull/282)
 
 ## [v2023.12.03]
 ### ecs
