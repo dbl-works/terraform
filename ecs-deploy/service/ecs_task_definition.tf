@@ -4,7 +4,7 @@ resource "aws_ecs_task_definition" "main" {
   task_role_arn            = data.aws_iam_role.main.arn
   execution_role_arn       = data.aws_iam_role.main.arn
   network_mode             = "awsvpc"
-  requires_compatibilities = [var.launch_type]
+  requires_compatibilities = ["FARGATE"]
   cpu                      = var.cpu
   memory                   = var.memory
 

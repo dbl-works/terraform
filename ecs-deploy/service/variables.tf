@@ -13,11 +13,6 @@ variable "project" {
   type = string
 }
 
-variable "launch_type" {
-  type    = string
-  default = "FARGATE"
-}
-
 variable "subnet_type" {
   type    = string
   default = "public"
