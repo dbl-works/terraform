@@ -192,3 +192,8 @@ variable "health_check_options" {
   })
   default = {}
 }
+
+variable "enable_container_insights" {
+  type    = bool
+  default = true
+}

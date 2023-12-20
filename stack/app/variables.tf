@@ -368,6 +368,11 @@ variable "rds_ca_cert_identifier" {
 # =============== ECS ================ #
 variable "health_check_path" { default = "/livez" }
 
+variable "enable_container_insights" {
+  type    = bool
+  default = true
+}
+
 variable "health_check_options" {
   type = object({
     healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.
