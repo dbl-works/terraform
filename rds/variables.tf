@@ -20,11 +20,16 @@ variable "backup_retention_period" {
   type    = number
 }
 
-variable "instance_class" { default = "db.t3.micro" }
-variable "engine_version" {
-  default = "14"
+variable "instance_class" {
+  default = "db.t3.micro"
   type    = string
 }
+
+variable "engine_version" {
+  default = "16"
+  type    = string
+}
+
 variable "allocated_storage" {
   type    = number
   default = 10

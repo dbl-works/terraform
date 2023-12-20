@@ -7,4 +7,8 @@ resource "aws_db_subnet_group" "main" {
     Project     = var.project
     Environment = var.environment
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
