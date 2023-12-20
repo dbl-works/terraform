@@ -86,18 +86,3 @@ variable "regional" {
 variable "project" {
   type = string
 }
-
-variable "volume" {
-  type = list(object({
-    name = optional(string, true)
-    efs_volume_configuration = optional(object({
-      file_system_id          = string
-      root_directory          = optional(string, "/")
-      transit_encryption      = optional(string, "DISABLED") # Valid values are "ENABLED"/"DISABLED"
-      transit_encryption_port = optional(number, null)
-      access_point_id         = optional(string, null)
-      iam                     = optional(string, null)
-    }), null)
-  }))
-  default = []
-}

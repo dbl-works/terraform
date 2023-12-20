@@ -51,7 +51,6 @@ resource "aws_ecs_service" "main" {
   cluster         = data.aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.main.arn
   desired_count   = var.desired_count
-  launch_type     = var.launch_type
 
   deployment_circuit_breaker {
     enable   = var.deployment_circuit_breaker.enable
