@@ -171,7 +171,7 @@ variable "ulimits" {
   default = []
 
   validation {
-    condition     = alltrue([for ulimit in var.ulimits : contains("core", "cpu", "data", "fsize", "locks", "memlock", "msgqueue", "nice", "nofile", "nproc", "rss", "rtprio", "rttime", "sigpending", "stack", ulimit.name)])
+    condition     = alltrue([for ulimit in var.ulimits : contains(["core", "cpu", "data", "fsize", "locks", "memlock", "msgqueue", "nice", "nofile", "nproc", "rss", "rtprio", "rttime", "sigpending", "stack"], ulimit.name)])
     error_message = "Each 'name' must be one of the specified values."
   }
 }
