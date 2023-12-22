@@ -192,3 +192,8 @@ variable "security_group_ids" {
   type    = list(string)
   default = []
 }
+
+variable "vpc_name" {
+  type    = string
+  default = null
+}

@@ -7,6 +7,7 @@ module "service" {
   project     = var.project
   region      = var.region
   regional    = var.regional
+  vpc_name    = var.vpc_name
 
   app_config                      = each.value.app_config
   sidecar_config                  = each.value.sidecar_config

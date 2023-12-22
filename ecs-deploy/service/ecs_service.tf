@@ -13,7 +13,7 @@ data "aws_lb_target_group" "ecs" {
 data "aws_vpc" "main" {
   filter {
     name   = "tag:Name"
-    values = ["${var.project}-${var.environment}"]
+    values = [local.vpc_name]
   }
 }
 
@@ -27,6 +27,7 @@ locals {
     container_name   = var.app_config.name,
     container_port   = length(var.app_config.container_ports) > 0 ? var.app_config.container_ports[0] : null
   }] : []
+  vpc_name = var.vpc_name == null ? "${var.project}-${var.environment}" : var.vpc_name
 }
 
 data "aws_subnets" "selected" {
@@ -37,7 +38,7 @@ data "aws_subnets" "selected" {
   filter {
     name = "tag:Name"
     values = [
-      "${var.project}-${var.environment}-${var.subnet_type}-*",
+      "${local.vpc_name}-${var.subnet_type}-*",
     ]
   }
 }
@@ -99,7 +100,6 @@ resource "aws_ecs_service" "main" {
     ]
   }
 }
-
 
 resource "aws_service_discovery_service" "main" {
   count = local.service_discovery_enabled ? 1 : 0
