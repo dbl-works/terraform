@@ -161,6 +161,11 @@ variable "cloudwatch_logs_retention_in_days" {
   default = 90
 }
 
+variable "skip_load_balancer" {
+  type    = bool
+  default = false
+}
+
 variable "alb_listener_rules" {
   type = list(object({
     priority         = string
