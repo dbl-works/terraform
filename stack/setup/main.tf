@@ -33,7 +33,6 @@ module "secrets" {
   description = each.value.description
 }
 
-
 resource "aws_secretsmanager_secret_version" "app" {
   secret_id     = module.secrets["app"].id
   secret_string = file("${path.cwd}/app-secrets.json")
