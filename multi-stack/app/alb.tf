@@ -52,31 +52,25 @@ resource "aws_alb_listener_certificate" "https" {
 }
 
 resource "aws_lb_listener_rule" "main" {
-  for_each = { for idx, rule in var.alb_listener_rules : idx => rule }
-
-  listener_arn = aws_alb_listener.https.arn
-  priority     = each.value.priority
-
-  action {
-    type             = each.value.type
-    target_group_arn = each.value.target_group_arn
-  }
-
-  dynamic "condition" {
-    for_each = length(each.value.path_pattern) > 0 ? [1] : []
-    content {
-      path_pattern {
-        values = each.value.path_pattern
-      }
+  for_each = {
+    for idx, name in keys(var.project_settings) :
+    idx => {
+      name     = name
+      settings = var.project_settings[name]
     }
   }
 
-  dynamic "condition" {
-    for_each = length(each.value.host_header) > 0 ? [1] : []
-    content {
-      host_header {
-        values = each.value.host_header
-      }
+  listener_arn = aws_alb_listener.https.arn
+  priority     = each.key + 1 # The priority for the rule between 1 and 50000.
+
+  action {
+    type             = "forward"
+    target_group_arn = module.ecs[each.value.name].alb_target_group_ecs_arn
+  }
+
+  condition {
+    host_header {
+      values = [each.value.settings.domain]
     }
   }
 }

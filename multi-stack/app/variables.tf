@@ -410,15 +410,15 @@ variable "keep_alive_timeout" {
   }
 }
 
-variable "alb_listener_rules" {
-  type = list(object({
-    priority         = string
-    type             = string
-    target_group_arn = string
-    path_pattern     = optional(list(string), [])
-  }))
-  default = []
-}
+# variable "alb_listener_rules" {
+#   type = list(object({
+#     priority         = string
+#     type             = string
+#     target_group_arn = string
+#     path_pattern     = optional(list(string), [])
+#   }))
+#   default = []
+# }
 
 variable "allowlisted_ssh_ips" {
   type    = list(string)

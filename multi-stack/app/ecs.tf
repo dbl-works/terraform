@@ -46,7 +46,6 @@ module "ecs" {
 
   allow_internal_traffic_to_ports = each.value.allow_internal_traffic_to_ports
   allow_alb_traffic_to_ports      = each.value.allow_alb_traffic_to_ports
-  alb_listener_rules              = var.alb_listener_rules
 
   allowlisted_ssh_ips = distinct(flatten(concat([
     var.allowlisted_ssh_ips,
