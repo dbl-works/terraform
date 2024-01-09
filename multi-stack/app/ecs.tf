@@ -5,6 +5,12 @@ data "aws_acm_certificate" "default" {
   most_recent = true
 }
 
+data "aws_secretsmanager_secret" "app" {
+  for_each = var.project_settings
+
+  name = "${each.key}/app/${var.environment}"
+}
+
 module "ecs" {
   for_each = var.project_settings
 
