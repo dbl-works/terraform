@@ -64,3 +64,8 @@ variable "regional" {
 variable "project" {
   type = string
 }
+
+variable "vpc_name" {
+  type    = string
+  default = null
+}
