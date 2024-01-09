@@ -10,13 +10,14 @@ module "ecs" {
 
   source = "../../ecs"
 
-  project           = each.key
-  environment       = var.environment
-  vpc_id            = module.vpc.id
-  subnet_public_ids = module.vpc.subnet_public_ids
+  skip_load_balancer = each.value.skip_load_balancer
+  project            = each.key
+  environment        = var.environment
+  vpc_id             = module.vpc.id
+  subnet_public_ids  = module.vpc.subnet_public_ids
   secrets_arns = flatten([
     data.aws_secretsmanager_secret.app[each.key].arn,
-    var.secret_arns
+    each.value.secret_arns
   ])
 
   kms_key_arns = compact(flatten(concat([
@@ -39,7 +40,7 @@ module "ecs" {
 
   allow_internal_traffic_to_ports = each.value.allow_internal_traffic_to_ports
   allow_alb_traffic_to_ports      = each.value.allow_alb_traffic_to_ports
-  alb_listener_rules              = each.value.alb_listener_rules
+  alb_listener_rules              = var.alb_listener_rules
 
   allowlisted_ssh_ips = distinct(flatten(concat([
     var.allowlisted_ssh_ips,

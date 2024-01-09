@@ -41,7 +41,7 @@ module "rds" {
   multi_az                        = var.rds_multi_az == null ? var.environment == "production" : var.rds_multi_az
   master_db_instance_arn          = var.rds_master_db_instance_arn
   is_read_replica                 = var.rds_is_read_replica
-  regional                        = var.regional
+  regional                        = true
   name                            = var.rds_name
   identifier                      = var.rds_identifier
   allow_from_cidr_blocks          = var.rds_allow_from_cidr_blocks

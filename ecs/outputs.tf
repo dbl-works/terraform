@@ -1,6 +1,6 @@
 # Load balancer endpoints for DNS values
 output "alb_dns_name" {
-  value = var.skip_alb ? "no alb" : aws_alb.alb.dns_name
+  value = var.skip_load_balancer ? "no alb" : aws_alb.alb[0].dns_name
 }
 
 output "nlb_dns_name" {
@@ -11,6 +11,7 @@ output "nlb_dns_name" {
 output "alb_target_group_ecs_arn" {
   value = aws_alb_target_group.ecs.arn
 }
+
 output "nlb_target_group_ecs_arn" {
   value = length(aws_lb.nlb) > 0 ? aws_lb_target_group.ssh[0].arn : null
 }
@@ -19,18 +20,19 @@ output "nlb_target_group_ecs_arn" {
 output "alb_security_group_id" {
   value = aws_security_group.alb.id
 }
+
 output "ecs_security_group_id" {
   value = aws_security_group.ecs.id
 }
 
 # Needed to attach additional ressources (e.g. certificates) to the ALB
 output "https_alb_listener_arn" {
-  value = aws_alb_listener.https.arn
+  value = var.skip_load_balancer ? "" : aws_alb_listener.https[0].arn
 }
 
 # Need this for the usage of cloudwatch metrics
 output "alb_arn_suffix" {
-  value = aws_alb.alb.arn_suffix
+  value = var.skip_load_balancer ? "" : aws_alb.alb[0].arn_suffix
 }
 
 output "ecs_cluster_name" {

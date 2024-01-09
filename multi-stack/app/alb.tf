@@ -1,14 +1,10 @@
 # Main load balancer for user facing traffic
 resource "aws_alb" "alb" {
-  count = var.skip_load_balancer ? 0 : 1
-
-  name    = local.name
-  subnets = var.subnet_public_ids
-  security_groups = [
-    aws_security_group.alb.id,
-  ]
-  enable_http2 = "true"
-  idle_timeout = var.keep_alive_timeout # The time in seconds that the connection is allowed to be idle.
+  name            = "${var.project}-${var.environment}"
+  subnets         = module.vpc.subnet_public_ids
+  security_groups = module.ecs.*.alb_security_group_id
+  enable_http2    = "true"
+  idle_timeout    = var.keep_alive_timeout # The time in seconds that the connection is allowed to be idle.
   tags = {
     Name        = "${var.project}-${var.environment}"
     Project     = var.project
@@ -17,9 +13,7 @@ resource "aws_alb" "alb" {
 }
 
 resource "aws_alb_listener" "http" {
-  count = var.skip_load_balancer ? 0 : 1
-
-  load_balancer_arn = aws_alb.alb[0].id
+  load_balancer_arn = aws_alb.alb.id
   port              = "80"
   protocol          = "HTTP"
 
@@ -34,31 +28,29 @@ resource "aws_alb_listener" "http" {
 }
 
 resource "aws_alb_listener" "https" {
-  count = var.skip_load_balancer ? 0 : 1
-
-  load_balancer_arn = aws_alb.alb[0].id
+  load_balancer_arn = aws_alb.alb.id
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = var.certificate_arn
+  certificate_arn   = data.aws_acm_certificate.default[0].arn
 
   default_action {
-    target_group_arn = aws_alb_target_group.ecs.arn
+    target_group_arn = module.ecs[0].alb_target_group_ecs_arn
     type             = "forward"
   }
 }
 
 # Using SNI to attach multiple certificates to the same load balancer
 resource "aws_alb_listener_certificate" "https" {
-  for_each = { for cert in var.additional_certificate_arns : cert.name => cert }
+  for_each = { for cert in data.aws_acm_certificate.default : cert.name => cert }
 
-  listener_arn    = aws_alb_listener.https[0].arn
+  listener_arn    = aws_alb_listener.https.arn
   certificate_arn = each.value.arn
 }
 
 resource "aws_lb_listener_rule" "main" {
   for_each = { for idx, rule in var.alb_listener_rules : idx => rule }
 
-  listener_arn = aws_alb_listener.https[0].arn
+  listener_arn = aws_alb_listener.https.arn
   priority     = each.value.priority
 
   action {

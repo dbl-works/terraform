@@ -10,6 +10,7 @@ variable "project_settings" {
   type = map(object({
     domain                          = string
     ecs_name                        = optional(string, null)
+    skip_load_balancer              = optional(bool, true)
     allow_internal_traffic_to_ports = optional(list(string), [])
     allow_alb_traffic_to_ports      = optional(list(string), [])
     regional                        = optional(bool, false)
@@ -17,7 +18,8 @@ variable "project_settings" {
     grant_write_access_to_s3_arns   = optional(list(string), [])
     grant_read_access_to_sqs_arns   = optional(list(string), [])
     grant_write_access_to_sqs_arns  = optional(list(string), [])
-    ecs_custom_policies             = optional(list(object), [])
+    ecs_custom_policies             = optional(list(any), [])
+    secret_arns                     = optional(list(string), [])
   }))
 }
 
@@ -436,12 +438,6 @@ variable "additional_certificate_arns" {
 variable "rds_secret_manager_id" {
   type        = string
   description = "secret manager id which store the rds root user and root password"
-}
-
-variable "secret_arns" {
-  type        = list(string)
-  description = "arns of the secret manager that ECS can access"
-  default     = []
 }
 
 variable "service_discovery_enabled" {
