@@ -74,3 +74,5 @@ resource "aws_lb_listener_rule" "main" {
     }
   }
 }
+
+# Also set ssh
