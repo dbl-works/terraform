@@ -34,6 +34,7 @@ module "ecs" {
 
   kms_key_arns = compact(flatten(concat([
     data.aws_kms_key.app[each.key].arn,
+    module.elasticache_kms.arn,
     var.grant_access_to_kms_arns,
     # values(module.s3-storage)[*].kms-key-arn
   ])))
