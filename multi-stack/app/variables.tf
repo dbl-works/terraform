@@ -110,10 +110,6 @@ variable "grant_access_to_kms_arns" {
   type    = list(string)
   default = []
 }
-
-variable "kms_app_arn" {
-  type = string
-}
 # =============== KMS ================ #
 
 # =============== NAT ================ #

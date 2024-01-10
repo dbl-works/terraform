@@ -1,3 +1,15 @@
+module "elasticache_kms" {
+  source = "../../kms-key"
+
+  alias                   = "elasticache"
+  project                 = var.project
+  environment             = var.environment
+  description             = "Used for elasticache"
+  deletion_window_in_days = var.kms_deletion_window_in_days
+  multi_region            = false
+}
+
+
 module "elasticache" {
   source = "../../elasticache"
 
@@ -5,7 +17,7 @@ module "elasticache" {
   environment = var.environment
   vpc_id      = module.vpc.id
   subnet_ids  = module.vpc.subnet_private_ids
-  kms_key_arn = var.kms_app_arn
+  kms_key_arn = module.elasticache_kms.arn
 
   allow_from_cidr_blocks = distinct(compact(flatten([
     var.vpc_cidr_block,

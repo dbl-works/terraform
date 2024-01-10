@@ -3,7 +3,7 @@ output "app_secrets_arn" {
 }
 
 output "app_secrets-kms-key" {
-  value = [for kms in module.secrets-kms-key : kms.arn]
+  value = [for secret in module.secrets : secret.kms_key_id]
 }
 
 output "cloudflare_validation_hostnames" {

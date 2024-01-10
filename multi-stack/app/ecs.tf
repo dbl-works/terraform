@@ -11,6 +11,12 @@ data "aws_secretsmanager_secret" "app" {
   name = "${each.key}/app/${var.environment}"
 }
 
+data "aws_kms_key" "app" {
+  for_each = var.project_settings
+
+  key_id = "alias/${each.key}/${var.environment}/app"
+}
+
 module "ecs" {
   for_each = var.project_settings
 
@@ -27,9 +33,8 @@ module "ecs" {
   ])
 
   kms_key_arns = compact(flatten(concat([
+    data.aws_kms_key.app[each.key].arn,
     var.grant_access_to_kms_arns,
-    var.kms_app_arn,
-    # TODO: @sam
     # values(module.s3-storage)[*].kms-key-arn
   ])))
 
