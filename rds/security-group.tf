@@ -7,10 +7,6 @@ resource "aws_security_group" "db" {
     Project     = var.project
     Environment = var.environment
   }
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_security_group_rule" "db-from-cidr-blocks" {

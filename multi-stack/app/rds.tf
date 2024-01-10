@@ -17,10 +17,9 @@ module "rds" {
   source = "../../rds"
   count  = var.skip_rds ? 0 : 1
 
-  # TODO: @sam
-  # depends_on = [
-  #   module.ecs
-  # ]
+  depends_on = [
+    module.ecs
+  ]
 
   project     = var.project
   environment = var.environment
@@ -29,9 +28,7 @@ module "rds" {
   kms_key_arn = var.rds_master_db_kms_key_arn == null ? module.rds-kms-key[0].arn : var.rds_master_db_kms_key_arn
   subnet_ids  = module.vpc.subnet_private_ids
 
-  allow_from_security_groups = [
-    # module.ecs.ecs_security_group_id,
-  ]
+  allow_from_security_groups = values(module.ecs)[*].ecs_security_group_id
 
   # optional
   username                        = var.rds_is_read_replica ? null : local.credentials.db_username

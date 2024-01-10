@@ -2,7 +2,7 @@
 resource "aws_alb_target_group" "ecs" {
   name        = "${local.name}-ecs"
   port        = 3000
-  protocol    = "HTTP"
+  protocol    = var.health_check_options.protocol
   vpc_id      = var.vpc_id
   target_type = "ip"
 
