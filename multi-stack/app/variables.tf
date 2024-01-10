@@ -20,6 +20,8 @@ variable "project_settings" {
     grant_write_access_to_sqs_arns  = optional(list(string), [])
     ecs_custom_policies             = optional(list(any), [])
     secret_arns                     = optional(list(string), [])
+    private_buckets_list            = optional(list(string), [])
+    public_buckets_list             = optional(list(string), [])
   }))
 }
 
@@ -69,37 +71,6 @@ variable "tls_settings" {
   default = null
 }
 # =============== Cloudflare ================ #
-
-# =============== S3 private ================ #
-variable "private_buckets_list" {
-  default = []
-  type = set(object({
-    bucket_name                     = string
-    versioning                      = bool
-    primary_storage_class_retention = number
-    replicas = optional(list(object({
-      bucket_arn = string
-      kms_arn    = string
-      region     = string
-    })), [])
-  }))
-}
-
-# =============== S3 private ================ #
-
-# =============== S3 public ================ #
-variable "public_buckets_list" {
-  default = []
-  type = set(object({
-    bucket_name                     = string
-    versioning                      = bool
-    primary_storage_class_retention = number
-    replicas = optional(list(object({
-      bucket_arn = string
-    })), [])
-  }))
-}
-# =============== S3 public ================ #
 
 # =============== KMS ================ #
 variable "kms_deletion_window_in_days" {
