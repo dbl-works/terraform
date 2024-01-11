@@ -337,7 +337,7 @@ variable "health_check_path" { default = "/livez" }
 
 variable "enable_container_insights" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "health_check_options" {
