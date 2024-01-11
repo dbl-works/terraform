@@ -1,12 +1,12 @@
 # Main load balancer for user facing traffic
 resource "aws_alb" "alb" {
-  name            = "${var.project}-${var.environment}"
+  name            = local.name
   subnets         = module.vpc.subnet_public_ids
   security_groups = values(module.ecs).*.alb_security_group_id
   enable_http2    = "true"
   idle_timeout    = var.keep_alive_timeout # The time in seconds that the connection is allowed to be idle.
   tags = {
-    Name        = "${var.project}-${var.environment}"
+    Name        = local.name
     Project     = var.project
     Environment = var.environment
   }
@@ -25,10 +25,6 @@ resource "aws_alb_listener" "http" {
       status_code = "HTTP_301"
     }
   }
-}
-
-locals {
-  default_project_name = keys(var.project_settings)[0]
 }
 
 resource "aws_alb_listener" "https" {

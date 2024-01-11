@@ -22,6 +22,9 @@ variable "project_settings" {
     secret_arns                     = optional(list(string), [])
     private_buckets_list            = optional(list(string), [])
     public_buckets_list             = optional(list(string), [])
+    s3_cloudflare_records = optional(map(object({
+      worker_script_name = string
+    })), {})
   }))
 }
 
@@ -47,20 +50,6 @@ variable "certificate_arn" {
 # =============== Certificate Manager ================ #
 
 # =============== Cloudflare ================ #
-variable "s3_cloudflare_records" {
-  type = map(object({
-    worker_script_name = string
-  }))
-  default = {
-    cdn = {
-      worker_script_name = "serve-cdn"
-    },
-    app = {
-      worker_script_name = "serve-app"
-    }
-  }
-}
-
 variable "tls_settings" {
   type = object({
     tls_1_3                  = string # "on/off"
@@ -492,3 +481,8 @@ variable "cloudwatch_logs_retention_in_days" {
   default = 90
 }
 # =============== Cloudwatch ================ #
+
+locals {
+  default_project_name = keys(var.project_settings)[0]
+  name                 = "${var.project}-${var.environment}"
+}
