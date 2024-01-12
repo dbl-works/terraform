@@ -12,7 +12,7 @@ module "cloudflare" {
   s3_cloudflare_records = var.project_settings[each.key].s3_cloudflare_records
 
   # optional
-  bastion_enabled    = true
+  bastion_enabled    = false
   tls_settings       = var.tls_settings
   bastion_public_dns = aws_lb.nlb[0].dns_name
 }

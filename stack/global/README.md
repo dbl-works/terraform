@@ -76,11 +76,13 @@ module "stack-global" {
     memory_size        = 2048 # Lambda memory in MB
   }
   users = {
-    iam            = string
-    github         = string
-    name           = string
-    groups         = list(string)
-    project_access = map(any)
+    gh-jacky = {
+      iam            = string
+      github         = string
+      name           = string
+      groups         = list(string)
+      project_access = map(any)
+    }
   }
   environment_tags_for_taggable_resources = ["staging", "production"]
   iam_cross_account_config = {
