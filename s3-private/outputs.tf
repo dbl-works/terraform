@@ -14,6 +14,10 @@ output "kms-key-arn" {
   value = module.s3.kms_arn
 }
 
+output "kms-key-id" {
+  value = module.s3.kms_id
+}
+
 output "s3-usage-policy-arn" {
   value = aws_iam_policy.usage.arn
 }

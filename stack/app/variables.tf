@@ -1,3 +1,9 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}
+
 variable "environment" {
   type = string
 }
@@ -9,10 +15,6 @@ variable "project" {
 variable "region" {
   type    = string
   default = "eu-central-1"
-}
-
-variable "account_id" {
-  type = string
 }
 
 # =============== Certificate Manager ================ #
@@ -285,7 +287,7 @@ variable "rds_engine_version" {
 }
 variable "rds_allocated_storage" {
   type    = number
-  default = 100
+  default = 10
 }
 variable "rds_allow_from_cidr_blocks" {
   type    = list(string)
@@ -295,6 +297,16 @@ variable "rds_allow_from_cidr_blocks" {
 variable "rds_subnet_group_name" {
   type    = string
   default = null
+}
+
+variable "rds_backup_retention_period" {
+  default = 7
+  type    = number
+}
+
+variable "rds_storage_autoscaling_upper_limit" {
+  type    = number
+  default = 20
 }
 
 variable "rds_multi_az" {
@@ -317,10 +329,49 @@ variable "rds_final_snapshot_identifier" {
   type    = string
   default = null
 }
+
+variable "rds_log_min_duration_statement" {
+  type        = number
+  default     = -1
+  description = "Used to log SQL statements that run longer than a specified duration of time (in ms)."
+}
+
+variable "rds_log_retention_period" {
+  type        = number
+  default     = 1440
+  description = "Controls how long automatic RDS log files are retained before being deleted (in min, must be between 1440-10080 (1-7 days)."
+
+  validation {
+    condition     = var.rds_log_retention_period >= 1440 && var.rds_log_retention_period <= 10080
+    error_message = "Log retention period must be between 1440-10080 (1-7 days)."
+  }
+}
+
+variable "rds_log_min_error_statement" {
+  type        = string
+  default     = "panic"
+  description = "Controls which SQL statements that cause an error condition are recorded in the server log."
+
+  validation {
+    condition     = contains(["debug5", "debug4", "debug3", "debug2", "debug1", "info", "notice", "warning", "error", "log", "fatal", "panic"], var.rds_log_min_error_statement)
+    error_message = "The valid values are [debug5, debug4, debug3, debug2, debug1, info, notice, warning, error, log, fatal, panic]"
+  }
+}
+
+variable "rds_ca_cert_identifier" {
+  default     = "rds-ca-ecc384-g1"
+  type        = string
+  description = "The identifier of the CA certificate for the DB instance."
+}
 # =============== RDS ================ #
 
 # =============== ECS ================ #
 variable "health_check_path" { default = "/livez" }
+
+variable "enable_container_insights" {
+  type    = bool
+  default = true
+}
 
 variable "health_check_options" {
   type = object({
@@ -469,7 +520,6 @@ variable "service_discovery_enabled" {
   type    = bool
   default = true
 }
-
 # =============== ECS ================ #
 
 # =============== Cloudwatch ================ #

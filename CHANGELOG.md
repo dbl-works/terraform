@@ -6,6 +6,93 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
+## Unreleased
+### ecs
+- Add enable_container_insights variables. [#282](https://github.com/dbl-works/terraform/pull/282)
+
+## [v2023.12.03]
+### ecs
+- Remove region from variables.  [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### rds
+- Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
+- Update ca_cert_identifier default value to `rds-ca-ecc384-g1` [#276](https://github.com/dbl-works/terraform/pull/276)
+
+### vpc
+- Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### vpn
+- Remove account_id and region from variables. [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### stack/global
+- Update default value for period_for_billing_alert & environment_tags_for_taggable_resources [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### stack/core -> stack/region
+- Remove iam-policy-for-taggable-resources module from the module and rename the modules to stack/region [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### stack/app
+- Remove account_id from variables.  [#275](https://github.com/dbl-works/terraform/pull/275)
+
+### ecs-deploy/cluster
+* Add `regional` variables [#277](https://github.com/dbl-works/terraform/pull/277)
+
+
+## [v2023.11.27]
+### slack/ecr-scanner-notifier
+* Slack notifier for AWS Elastic Container Registry (ECR) image scans. It automatically sends notifications to a designated Slack channel whenever vulnerabilities are detected in ECR scans. [#196](https://github.com/dbl-works/terraform/pull/196)
+
+### stack/global
+* New module for deploying resources required only once per project. [#273](https://github.com/dbl-works/terraform/pull/273)
+* Add ecr-scanner-notifier module [#196](https://github.com/dbl-works/terraform/pull/196)
+
+### rds
+* update default value for backup_retention_period, max_allocated_storage, and allocated_storage. [#274](https://github.com/dbl-works/terraform/pull/274)
+
+### ecs-deploy/cluster
+* New module for deploying a set of ecs services. [#272](https://github.com/dbl-works/terraform/pull/272)
+
+### ecs-deploy/service
+* Rename the module. [#272](https://github.com/dbl-works/terraform/pull/272)
+
+### Cloudtrail
+* New module which allows the creation of management and data cloudtrail
+
+### hashicorp/aws
+- Upgrade to v5. [#271](https://github.com/dbl-works/terraform/pull/271)
+
+### cloudwatch-kinesis
+- hashicorp/aws: Drop support for v4 and add support for v5.[#271](https://github.com/dbl-works/terraform/pull/271)
+
+
+## [v2023.11.08]
+### script/database-roles
+- DB username is retrieved from the AWS secret manager. [#268](https://github.com/dbl-works/terraform/pull/268)
+
+### rds
+- Add ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
+
+### stack/app
+- Add rds_ca_cert_identifier.[#269](https://github.com/dbl-works/terraform/pull/269)
+
+### ECS-Task
+- allow setting the ephemeral disk size [#270](https://github.com/dbl-works/terraform/pull/270)
+
+## [v2023.10.15]
+### rds
+- Add log_min_duration_statement, log_retention_period variables, log_min_error_statement. [#263](https://github.com/dbl-works/terraform/pull/263)
+
+### stack/app
+- Add rds_log_min_duration_statement, rds_log_retention_period variables, rds_log_min_error_statement. [#263](https://github.com/dbl-works/terraform/pull/263)
+
+### Secrets
+* Passing in a `kms_key_id` is now optional. If omitted, a new key is created
+
+### Github Backup
+* New module that allows backing up all repositories in an organization to an S3 bucket
+
+### Lambda
+* Rename lambda role
+
 ## [v2023.09.25]
 ### cloudflare
 - Prevent clickjacking. [#257](https://github.com/dbl-works/terraform/pull/257)

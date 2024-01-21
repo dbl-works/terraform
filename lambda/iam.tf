@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "combined" {
 
 resource "aws_iam_role" "main" {
   count              = var.lambda_role_name == null ? 1 : 0
-  name               = "${var.project}-${var.environment}-${var.function_name}-lambda-role"
+  name               = "${var.function_name}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_document.json
 
   inline_policy {
