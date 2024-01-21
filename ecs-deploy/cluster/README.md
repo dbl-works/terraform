@@ -1,5 +1,6 @@
 # Terraform Module: ECS Deploy Cluster
-Deploy a set of ECS services.
+
+Configuration to deploy a set of ECS services.
 
 ## Usage
 
@@ -60,3 +61,15 @@ module "ecs_cluster_services" {
   }
 }
 ```
+
+Permitted options for CPU and memory, as per the [docs](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html#fargate-tasks-size):
+
+| CPU   | Memory Options                     |
+|-------|------------------------------------|
+| 256   | 512, 1024, 2048                    |
+| 512   | 1024, 2048, 3072, 4096             |
+| 1024  | 1024 - 8192, increments of 1024    |
+| 2048  | 4096 - 16384, increments of 1024   |
+| 4096  | 8192 - 30720, increments of 1024   |
+| 8192  | 16384 - 61440, increments of 4096  |
+| 16384 | 32768 - 122880, increments of 8192 |
