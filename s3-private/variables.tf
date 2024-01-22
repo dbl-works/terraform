@@ -88,4 +88,8 @@ variable "cors_expose_headers" {
 variable "sse_algorithm" {
   type    = string
   default = "AES256"
+  validation {
+    condition     = contains(["AES256", "aws:kms", "aws:kms:dsse"], var.sse_algorithm)
+    error_message = "sse algorithm must be one of AES256, aws:kms, aws:kms:dsse"
+  }
 }
