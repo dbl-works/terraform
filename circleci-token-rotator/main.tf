@@ -3,9 +3,8 @@ locals {
   name        = "${var.project}-rotate-circleci"
 }
 
-resource "aws_secretsmanager_secret_version" "circleci" {
-  secret_id     = module.secrets.id
-  secret_string = file("${path.cwd}/secrets.json")
+data "aws_secretsmanager_secret" "app" {
+  name = "${var.project}/infra/${var.environment}"
 }
 
 module "lambda" {
