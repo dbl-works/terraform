@@ -1,3 +1,8 @@
+variable "environment" {
+  type    = string
+  default = "production"
+}
+
 variable "user_name" {
   type        = string
   default     = "deploy-bot"
