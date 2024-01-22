@@ -51,7 +51,7 @@ resource "aws_alb_listener" "https" {
 resource "aws_alb_listener_certificate" "https" {
   for_each = { for cert in var.additional_certificate_arns : cert.name => cert }
 
-  listener_arn    = aws_alb_listener.https.arn
+  listener_arn    = aws_alb_listener.https[0].arn
   certificate_arn = each.value.arn
 }
 
