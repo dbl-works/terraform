@@ -7,5 +7,5 @@ output "dns_name" {
 }
 
 output "circleci_token_rotator" {
-  value = var.circle_ci_token_rotator == null ? "not enabled" : "CircleCI Token Rotator enabled. Please set 'CIRCLE_CI_TOKEN' in the AWS vault 'TODO: VAULT NAME HERE'."
+  value = var.circleci_token_rotator == null ? "not enabled" : "CircleCI Token Rotator enabled. Please set 'CIRCLE_CI_TOKEN' in the AWS vault 'TODO: VAULT NAME HERE'."
 }

@@ -3,11 +3,33 @@ require 'aws-sdk-secretsmanager'
 require 'net/http'
 require 'json'
 
-API_BASE = 'https://circleci.com/api/v2'.freeze
-ORG_ID = ENV.fetch('CIRCLE_CI_ORGANIZATION_ID')
-CONTEXT_NAME = ENV.fetch('CONTEXT_NAME')
-SECRET_ID = ENV.fetch('SECRET_ID')
-AWS_REGION = ENV.fetch('AWS_REGION')
+CIRCLECI_API_BASE = 'https://circleci.com/api/v2'.freeze
+CIRCLECI_ORG_ID = ENV.fetch('CIRCLECI_ORG_ID')
+CIRCLECI_CONTEXT_NAME = ENV.fetch('CIRCLECI_CONTEXT_NAME')
+
+AWS_SECRET_ID = ENV.fetch('AWS_SECRET_ID')
+AWS_USER_NAME = ENV.fetch('AWS_USER_NAME')
+AWS_REGION = ENV.fetch('AWS_REGION') # set by AWS for the lambda
+
+def handler(event:, context:)
+  iam = Aws::IAM::Client.new
+  keys = iam.list_access_keys(user_name: AWS_USER_NAME).access_key_metadata
+  new_key = iam.create_access_key(user_name: AWS_USER_NAME).access_key
+
+  puts "Created new access key: #{new_key.access_key_id}"
+  update_env(context_id, 'AWS_ACCESS_KEY_ID', new_key.access_key_id)
+  update_env(context_id, 'AWS_SECRET_ACCESS_KEY', new_key.secret_access_key)
+
+  old_access_key_ids = keys.map(&:access_key_id)
+  old_access_key_ids.each do |access_key_id|
+    iam.delete_access_key({ user_name: AWS_USER_NAME, access_key_id: access_key_id })
+    puts "Deleted old access key: #{access_key_id}"
+  end
+rescue Aws::IAM::Errors::ServiceError => e
+  puts "IAM Error: #{e.message}"
+end
+
+private
 
 def request(uri, method: :get, data: nil)
   http = Net::HTTP.new(uri.host, uri.port)
@@ -24,46 +46,27 @@ def request(uri, method: :get, data: nil)
 end
 
 def update_env(context_id, env_var_name, env_var_value)
-  uri = URI("#{API_BASE}/context/#{context_id}/environment-variable/#{env_var_name}")
+  uri = URI("#{CIRCLECI_API_BASE}/context/#{context_id}/environment-variable/#{env_var_name}")
   data = { value: env_var_value }
   request(uri, method: :put, data:)
 end
 
-def get_context_id(organization_id, context_name)
-  uri = URI("#{API_BASE}/context?owner-id=#{organization_id}&owner-type=organization")
-  items = request(uri).fetch('items')
-  context = items.select { |item| item.fetch('name') == context_name }.first
-  raise "Failed to fetch context: #{items}" unless context
+def context_id
+  @context_id ||= begin
+    uri = URI("#{CIRCLECI_API_BASE}/context?owner-id=#{CIRCLECI_ORG_ID}&owner-type=organization")
+    items = request(uri).fetch('items')
+    context = items.select { |item| item.fetch('name') == CIRCLECI_CONTEXT_NAME }.first
+    raise "Failed to fetch context: #{items}" unless context
 
-  context.fetch('id')
+    context.fetch('id')
+  end
 end
 
 def circleci_token
   @circleci_token ||= begin
     secretsmanager = Aws::SecretsManager::Client.new(region: AWS_REGION)
-    secret = secretsmanager.get_secret_value(secret_id: SECRET_ID)
+    secret = secretsmanager.get_secret_value(secret_id: AWS_SECRET_ID)
     config = JSON.parse(secret.secret_string)
-    config.fetch('CIRCLE_CI_TOKEN')
+    config.fetch('CIRCLECI_TOKEN')
   end
-end
-
-def renew_access_key(event:, context:)
-  iam = Aws::IAM::Client.new
-  user_name = ENV.fetch('USER_NAME')
-
-  keys = iam.list_access_keys(user_name:).access_key_metadata
-
-  context_id = get_context_id(ORG_ID, CONTEXT_NAME)
-  new_key = iam.create_access_key(user_name:).access_key
-  puts "Created new access key: #{new_key.access_key_id}"
-  update_env(context_id, 'AWS_ACCESS_KEY_ID', new_key.access_key_id)
-  update_env(context_id, 'AWS_SECRET_ACCESS_KEY', new_key.secret_access_key)
-
-  old_access_key_ids = keys.map(&:access_key_id)
-  old_access_key_ids.each do |access_key_id|
-    iam.delete_access_key({ user_name:, access_key_id: })
-    puts "Deleted old access key: #{access_key_id}"
-  end
-rescue Aws::IAM::Errors::ServiceError => e
-  puts "IAM Error: #{e.message}"
 end

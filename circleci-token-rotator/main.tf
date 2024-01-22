@@ -21,7 +21,7 @@ module "lambda" {
   memory_size   = var.memory_size
 
   # Optional
-  handler = "main.renew_access_key"
+  handler = "main.handler"
 
   secrets_and_kms_arns = [
     module.secrets.arn,
@@ -29,10 +29,11 @@ module "lambda" {
   ]
 
   environment_variables = {
-    CONTEXT_NAME              = var.context_name == null ? "${var.project}-aws" : var.context_name
-    USER_NAME                 = var.user_name
-    CIRCLE_CI_ORGANIZATION_ID = var.circle_ci_organization_id
-    SECRET_ID                 = module.secrets.id
+    CIRCLECI_CONTEXT_NAME = var.context_name == null ? "${var.project}-aws" : var.context_name
+    CIRCLECI_ORG_ID       = var.circle_ci_organization_id
+
+    AWS_USER_NAME = var.user_name
+    AWS_SECRET_ID = module.secrets.id
   }
 
   lambda_policy_json = data.aws_iam_policy_document.iam.json
@@ -57,4 +58,3 @@ data "aws_iam_policy_document" "iam" {
     ]
   }
 }
-

@@ -141,7 +141,7 @@ variable "ecr_scanner_notifier_config" {
   default = null
 }
 
-variable "circle_ci_token_rotator" {
+variable "circleci_token_rotator" {
   description = "Rotates the AWS Token for the deploy-bot user in CircleCI"
   default     = null
 
