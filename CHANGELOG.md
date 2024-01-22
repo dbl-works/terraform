@@ -16,6 +16,12 @@ This project does not follow SemVer, since modules are independent of each other
 ### ecs
 - Add enable_container_insights variables. [#282](https://github.com/dbl-works/terraform/pull/282)
 
+### ecs-deploy
+- Add security_group_ids, volume, service_discovery_namespace_id, ulimits  variables. [#283](https://github.com/dbl-works/terraform/pull/283)
+
+### rds
+- Add database_address outputs. [#283](https://github.com/dbl-works/terraform/pull/283)
+
 ## [v2023.12.03]
 ### ecs
 - Remove region from variables.  [#275](https://github.com/dbl-works/terraform/pull/275)
