@@ -19,3 +19,13 @@ module "circleci-token-rotator" {
   memory_size = 128
 }
 ```
+
+## Pre-requisites
+
+- Please ensure to include the following secrets under the AWS Secrets Manager with the name `${var.project}/infra/${var.environment}`:
+
+```
+{
+  "CIRCLECI_TOKEN": "very-secret-string"
+}
+```

@@ -1,18 +1,20 @@
 locals {
-  environment = "global"
-  name        = "${var.project}-rotate-circleci"
+  name = "${var.project}-rotate-circleci"
 }
 
-resource "aws_secretsmanager_secret_version" "circleci" {
-  secret_id     = module.secrets.id
-  secret_string = file("${path.cwd}/secrets.json")
+data "aws_secretsmanager_secret" "infra" {
+  name = "${var.project}/infra/${var.environment}"
+}
+
+data "aws_kms_key" "infra" {
+  key_id = "alias/${var.project}/${var.environment}/infra"
 }
 
 module "lambda" {
   source = "../lambda"
 
   # Required
-  environment   = local.environment
+  environment   = var.environment
   project       = var.project
   source_dir    = "${path.module}/src"
   function_name = local.name
@@ -24,8 +26,8 @@ module "lambda" {
   handler = "main.handler"
 
   secrets_and_kms_arns = [
-    module.secrets.arn,
-    module.secrets.kms_key_arn
+    data.aws_secretsmanager_secret.infra.arn,
+    data.aws_kms_key.infra.arn
   ]
 
   environment_variables = {
@@ -33,14 +35,10 @@ module "lambda" {
     CIRCLECI_ORG_ID       = var.circle_ci_organization_id
 
     AWS_USER_NAME = var.user_name
-    AWS_SECRET_ID = module.secrets.id
+    AWS_SECRET_ID = data.aws_secretsmanager_secret.infra.id
   }
 
   lambda_policy_json = data.aws_iam_policy_document.iam.json
-
-  depends_on = [
-    module.secrets
-  ]
 }
 
 data "aws_caller_identity" "current" {}
