@@ -1,6 +1,5 @@
 locals {
-  environment = "global"
-  name        = "${var.project}-rotate-circleci"
+  name = "${var.project}-rotate-circleci"
 }
 
 data "aws_secretsmanager_secret" "infra" {
@@ -15,7 +14,7 @@ module "lambda" {
   source = "../lambda"
 
   # Required
-  environment   = local.environment
+  environment   = var.environment
   project       = var.project
   source_dir    = "${path.module}/src"
   function_name = local.name
