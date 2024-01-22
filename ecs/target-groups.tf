@@ -19,8 +19,4 @@ resource "aws_alb_target_group" "ecs" {
     Project     = var.project
     Environment = var.environment
   }
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
