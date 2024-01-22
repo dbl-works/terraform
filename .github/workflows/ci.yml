@@ -19,6 +19,7 @@ jobs:
           - cloudwatch
           - cloudwatch-kinesis
           - cloudwatch-snowflake
+          - circleci-token-rotator
           - cognito
           - ecr
           - ecs
