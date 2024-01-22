@@ -26,7 +26,7 @@ module "lambda" {
   handler = "main.handler"
 
   secrets_and_kms_arns = [
-    data.aws_secretsmanager_secret.app.arn,
+    data.aws_secretsmanager_secret.infra.arn,
     data.aws_kms_key.infra.arn
   ]
 
@@ -35,7 +35,7 @@ module "lambda" {
     CIRCLECI_ORG_ID       = var.circle_ci_organization_id
 
     AWS_USER_NAME = var.user_name
-    AWS_SECRET_ID = module.secrets.id
+    AWS_SECRET_ID = data.aws_secretsmanager_secret.infra.id
   }
 
   lambda_policy_json = data.aws_iam_policy_document.iam.json
