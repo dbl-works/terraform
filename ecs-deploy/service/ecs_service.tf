@@ -27,7 +27,7 @@ locals {
     container_name   = var.app_config.name,
     container_port   = length(var.app_config.container_ports) > 0 ? var.app_config.container_ports[0] : null
   }] : []
-  vpc_name = var.vpc_name == null ? "${var.project}-${var.environment}" : var.vpc_name
+  vpc_name = try(var.vpc_name, "${var.project}-${var.environment}")
 }
 
 data "aws_subnets" "selected" {
