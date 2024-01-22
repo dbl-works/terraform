@@ -7,20 +7,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### s3-private
+- Add default value for sse_algorithm to AES256. [#290](https://github.com/dbl-works/terraform/pull/290)
+
+### stack/setup
+- Rename the AWS secret manager from `terraform` to `infra`. [#293](https://github.com/dbl-works/terraform/pull/293)
+- Set default rds_engine_version to 16.
+
+### rds
+- Set nullable to false for engine_version. [#292](https://github.com/dbl-works/terraform/pull/292)
+- Add database_address outputs. [#283](https://github.com/dbl-works/terraform/pull/283)
+
+### circleci-token-rotator
+- New module to rotate IAM user's AWS Access Keys on CircleCI. [#278](https://github.com/dbl-works/terraform/pull/278)
+- Use the existing AWS secret manager instead of creating new one. [#293](https://github.com/dbl-works/terraform/pull/293)
+
+### ecs
+- Add enable_container_insights variables. [#282](https://github.com/dbl-works/terraform/pull/282)
+
 ### ecs-deploy/service
 - Add vpc_name variables. [#287](https://github.com/dbl-works/terraform/pull/287)
 
 ### ecs-deploy/cluster
 - Add vpc_name variables. [#287](https://github.com/dbl-works/terraform/pull/287)
 
-### ecs
-- Add enable_container_insights variables. [#282](https://github.com/dbl-works/terraform/pull/282)
-
 ### ecs-deploy
 - Add security_group_ids, volume, service_discovery_namespace_id, ulimits  variables. [#283](https://github.com/dbl-works/terraform/pull/283)
 
-### rds
-- Add database_address outputs. [#283](https://github.com/dbl-works/terraform/pull/283)
 
 ## [v2023.12.03]
 ### ecs
