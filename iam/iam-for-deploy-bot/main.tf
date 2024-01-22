@@ -5,6 +5,10 @@ resource "aws_iam_user" "user" {
   }
 }
 
+output "user_name" {
+  value = aws_iam_user.user.name
+}
+
 resource "aws_iam_user_group_membership" "memberships" {
   user   = "deploy-bot"
   groups = ["deploy-bot-deploy-access"]
