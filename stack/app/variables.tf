@@ -66,6 +66,7 @@ variable "private_buckets_list" {
     bucket_name                     = string
     versioning                      = bool
     primary_storage_class_retention = number
+    sse_algorithm                   = optional(string, "AES256")
     replicas = optional(list(object({
       bucket_arn = string
       kms_arn    = string
@@ -283,7 +284,7 @@ variable "rds_instance_class" {
 }
 variable "rds_engine_version" {
   type    = string
-  default = "16"
+  default = null
 }
 variable "rds_allocated_storage" {
   type    = number
