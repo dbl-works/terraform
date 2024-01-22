@@ -13,7 +13,7 @@ data "aws_lb_target_group" "ecs" {
 data "aws_vpc" "main" {
   filter {
     name   = "tag:Name"
-    values = ["${var.project}-${var.environment}"]
+    values = [local.vpc_name]
   }
 }
 
@@ -27,6 +27,7 @@ locals {
     container_name   = var.app_config.name,
     container_port   = var.app_config.container_port
   }] : []
+  vpc_name = try(var.vpc_name, "${var.project}-${var.environment}")
 }
 
 data "aws_subnets" "selected" {
@@ -37,7 +38,7 @@ data "aws_subnets" "selected" {
   filter {
     name = "tag:Name"
     values = [
-      "${var.project}-${var.environment}-${var.subnet_type}-*",
+      "${local.vpc_name}-${var.subnet_type}-*",
     ]
   }
 }

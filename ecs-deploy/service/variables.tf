@@ -162,3 +162,8 @@ variable "deployment_circuit_breaker" {
     rollback = true
   }
 }
+
+variable "vpc_name" {
+  type    = string
+  default = null
+}

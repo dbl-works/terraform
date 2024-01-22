@@ -10,6 +10,12 @@ This project does not follow SemVer, since modules are independent of each other
 ### circleci-token-rotator
 - New module to rotate IAM user's AWS Access Keys on CircleCI. [#278](https://github.com/dbl-works/terraform/pull/278)
 
+### ecs-deploy/service
+- Add vpc_name variables. [#287](https://github.com/dbl-works/terraform/pull/287)
+
+### ecs-deploy/cluster
+- Add vpc_name variables. [#287](https://github.com/dbl-works/terraform/pull/287)
+
 ### ecs
 - Add enable_container_insights variables. [#282](https://github.com/dbl-works/terraform/pull/282)
 
