@@ -32,6 +32,11 @@ module "stack-global" {
   project = "facebook"
 
   # optional
+  circle_ci_token_rotator = {
+    context_name     = "aws" # name of the "context" in CirlceiCI for storing the access credentials
+    organization_id  = "xxx"
+  }
+
   global_accelerator_config = {
     load_balancers = [
       {
