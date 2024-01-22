@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### rds
+- Set nullable to false for engine_version. [#292](https://github.com/dbl-works/terraform/pull/292)
+
 ### circleci-token-rotator
 - New module to rotate IAM user's AWS Access Keys on CircleCI. [#278](https://github.com/dbl-works/terraform/pull/278)
 
