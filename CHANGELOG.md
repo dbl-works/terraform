@@ -10,6 +10,9 @@ This project does not follow SemVer, since modules are independent of each other
 ### circleci-token-rotator
 - New module to rotate IAM user's AWS Access Keys on CircleCI. [#278](https://github.com/dbl-works/terraform/pull/278)
 
+### stack/app
+- Set default rds_engine_version to 16.
+
 ### ecs-deploy/service
 - Add vpc_name variables. [#287](https://github.com/dbl-works/terraform/pull/287)
 
