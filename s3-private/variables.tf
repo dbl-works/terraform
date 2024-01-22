@@ -84,3 +84,8 @@ variable "cors_expose_headers" {
   type    = list(string)
   default = ["ETag"]
 }
+
+variable "sse_algorithm" {
+  type    = string
+  default = "AES256"
+}
