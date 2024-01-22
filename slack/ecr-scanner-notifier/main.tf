@@ -1,6 +1,7 @@
 locals {
   function_name = "${var.project}-ecr-scanner-notifier"
 }
+
 module "lambda" {
   source = "../../lambda"
 

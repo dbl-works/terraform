@@ -9,7 +9,7 @@ This launches resources required only once per Project. It includes the followin
 - central buckets for: logging, terraform state, backups, etc.
 - CloudTrail (optional)
 
-```
+```terraform
 provider "aws" {
   profile = "<project>"
   region = "eu-central-1"
@@ -32,6 +32,11 @@ module "stack-global" {
   project = "facebook"
 
   # optional
+  circleci_token_rotator = {
+    context_name     = "aws" # name of the "context" in CirlceiCI for storing the access credentials
+    organization_id  = "xxx"
+  }
+
   global_accelerator_config = {
     load_balancers = [
       {
