@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 ### s3-private
-- Add default value for sse algorithm to AES256. [#290](https://github.com/dbl-works/terraform/pull/290)
+- Add default value for sse_algorithm to AES256. [#290](https://github.com/dbl-works/terraform/pull/290)
 
 ### ecs-deploy/service
 - Add vpc_name variables. [#287](https://github.com/dbl-works/terraform/pull/287)

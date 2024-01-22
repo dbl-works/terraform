@@ -128,6 +128,7 @@ module "s3-replica-for-private-bucket-us-east-1" {
   kms_deletion_window_in_days     = 30
   versioning                      = true
   primary_storage_class_retention = 0
+  sse_algorithm                   = "AES256"
   s3_replicas = [
     {
       id = module.s3-private.id
