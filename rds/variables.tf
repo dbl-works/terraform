@@ -24,8 +24,9 @@ variable "instance_class" {
 }
 
 variable "engine_version" {
-  default = "16"
-  type    = string
+  default  = "16"
+  type     = string
+  nullable = false
 }
 
 variable "allocated_storage" {

@@ -5,7 +5,7 @@ locals {
 }
 
 data "aws_secretsmanager_secret_version" "terraform" {
-  secret_id = "${var.project}/terraform/${var.environment}"
+  secret_id = "${var.project}/infra/${var.environment}"
 }
 
 data "aws_secretsmanager_secret" "app" {

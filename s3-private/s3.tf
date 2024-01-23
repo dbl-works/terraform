@@ -7,8 +7,8 @@ module "s3" {
 
   versioning                  = var.versioning
   kms_deletion_window_in_days = var.kms_deletion_window_in_days
-  enable_encryption           = true
   multi_region_kms_key        = var.multi_region_kms_key
+  enable_encryption           = var.sse_algorithm == "aws:kms"
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "main-bucket-lifecycle-rule" {
@@ -59,8 +59,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "main-bucket-sse-c
 
   rule {
     apply_server_side_encryption_by_default {
+      sse_algorithm     = var.sse_algorithm
       kms_master_key_id = module.s3.kms_arn
-      sse_algorithm     = "aws:kms"
     }
   }
 }
