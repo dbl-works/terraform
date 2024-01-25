@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### slack/ecr-scanner-notifier
+- Ignore undefined error in scanner. [#296](https://github.com/dbl-works/terraform/pull/296)
+
 ### s3-private
 - Add default value for sse_algorithm to AES256. [#290](https://github.com/dbl-works/terraform/pull/290)
 
