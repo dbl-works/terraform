@@ -38,8 +38,8 @@ resource "aws_secretsmanager_secret_version" "app" {
   secret_string = file("${path.cwd}/app-secrets.json")
 }
 
-resource "aws_secretsmanager_secret_version" "terraform" {
-  secret_id     = module.secrets["terraform"].id
+resource "aws_secretsmanager_secret_version" "infra" {
+  secret_id     = module.secrets["infra"].id
   secret_string = file("${path.cwd}/infra-secrets.json")
 }
 

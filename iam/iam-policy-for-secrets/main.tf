@@ -6,12 +6,12 @@ data "aws_secretsmanager_secret" "app" {
   name = "${each.value.name}/app/${each.value.environment}"
 }
 
-data "aws_secretsmanager_secret" "terraform" {
+data "aws_secretsmanager_secret" "infra" {
   for_each = {
     for project in local.admin_access_projects : "${project.name}-${project.environment}" => project
   }
 
-  name = "${each.value.name}/app/${each.value.environment}"
+  name = "${each.value.name}/infra/${each.value.environment}"
 }
 
 data "aws_kms_key" "secrets" {
