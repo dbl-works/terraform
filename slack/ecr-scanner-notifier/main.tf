@@ -48,10 +48,6 @@ resource "aws_cloudwatch_event_rule" "ecr_scanner" {
         "LOW": [{
           "exists": true
         }]
-      }, {
-        "UNDEFINED": [{
-          "exists": true
-        }]
       }]
     }
   }

@@ -2,13 +2,13 @@ data "aws_db_instance" "main" {
   db_instance_identifier = var.db_identifier
 }
 
-data "aws_secretsmanager_secret_version" "terraform" {
-  secret_id = "${var.project}/terraform/${var.environment}"
+data "aws_secretsmanager_secret_version" "infra" {
+  secret_id = "${var.project}/infra/${var.environment}"
 }
 
 locals {
   credentials = jsondecode(
-    data.aws_secretsmanager_secret_version.terraform.secret_string
+    data.aws_secretsmanager_secret_version.infra.secret_string
   )
 }
 
@@ -39,4 +39,3 @@ resource "null_resource" "database_script" {
     working_dir = path.module
   }
 }
-
