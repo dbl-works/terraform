@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### slack/chatbot
+- Grant more permissions to chatbot channel role. [#299](https://github.com/dbl-works/terraform/pull/299)
 
 ## [v2024.01.25]
 ### slack/ecr-scanner-notifier
