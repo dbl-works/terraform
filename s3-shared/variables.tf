@@ -15,8 +15,12 @@ variable "guest_account_id" {
   description = "The AWS account ID of the guest account"
 }
 
+variable "guest_account_name" {
+  type        = string
+  description = "The name of the guest account"
+}
 
 locals {
   current_region = data.aws_region.current.name
-  bucket_name    = "${var.project}-${var.environment}-${data.aws_region.current.name}-shared-${guest_account_name}"
+  bucket_name    = "${var.project}-${var.environment}-${data.aws_region.current.name}-shared-${var.guest_account_name}"
 }
