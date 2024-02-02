@@ -43,5 +43,5 @@ data "aws_iam_policy" "iam-humans-usage" {
 
 resource "aws_iam_user_policy_attachment" "iam-humans-usage" {
   user       = aws_iam_user.guest.name
-  policy_arn = aws_iam_policy.iam-humans-usage.arn
+  policy_arn = data.aws_iam_policy.iam-humans-usage.arn
 }
