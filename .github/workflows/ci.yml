@@ -34,6 +34,7 @@ jobs:
           - global-accelerator
           - http-proxy
           - iam/iam-for-deploy-bot
+          - iam/iam-for-guest-humans
           - iam/iam-for-humans
           - iam/iam-policy-for-cross-account-access/destination-account
           - iam/iam-policy-for-cross-account-access/origin-account
