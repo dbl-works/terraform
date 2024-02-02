@@ -18,5 +18,5 @@ variable "guest_account_id" {
 
 locals {
   current_region = data.aws_region.current.name
-  bucket_name    = "${var.project}-${var.environment}-${current_region}-shared-${guest_account_name}"
+  bucket_name    = "${var.project}-${var.environment}-${data.aws_region.current.name}-shared-${guest_account_name}"
 }
