@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 ### s3-shared
-- New module which allow external AWS account access [#300](https://github.com/dbl-works/terraform/pull/300)
+- New module `s3-shared` which creates a S3 Bucket and a user account that allows externals to exchange files with you [#300](https://github.com/dbl-works/terraform/pull/300)
 
 ## [v2024.01.25]
 ### slack/ecr-scanner-notifier
