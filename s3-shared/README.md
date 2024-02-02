@@ -2,6 +2,8 @@
 
 Sets up a private S3 bucket with full access by the host-account, and read/write only access for a guest-account.
 
+This depends on [iam-for-humans](iam/iam-for-humans/README.md) (part of the `app/stack/setup` module).
+
 ## Usage
 
 ```terraform
@@ -10,7 +12,6 @@ module "s3-shared-client_A" {
 
   environment        = "staging"
   project            = "someproject"
-  guest_account_id   = "123abc"
   guest_account_name = "client_A"
 }
 ```
