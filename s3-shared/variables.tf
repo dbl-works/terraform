@@ -1,5 +1,3 @@
-data "aws_region" "current" {}
-
 variable "environment" {
   type        = string
   description = "The environment name"
@@ -15,7 +13,12 @@ variable "guest_account_name" {
   description = "The name of the guest account"
 }
 
+variable "region_name" {
+  type        = string
+  description = "The name of the region"
+  default     = "eu-central-1"
+}
+
 locals {
-  current_region = data.aws_region.current.name
-  bucket_name    = "${var.project}-${var.environment}-${data.aws_region.current.name}-shared-${var.guest_account_name}"
+  bucket_name = "${var.project}-${var.environment}-${var.region_name}-shared-${var.guest_account_name}"
 }
