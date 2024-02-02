@@ -55,7 +55,7 @@ locals {
     CONTAINER_PORT = config.container_port
     IMAGE_NAME     = try(config.image_name, null) == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${config.ecr_repo_name}" : config.image_name
     IMAGE_TAG      = try(config.image_tag == null) == null ? var.app_config.image_tag : config.image_tag
-    LOG_GROUP_NAME = "/${config.name}/${local.name}"
+    LOG_GROUP_NAME = "/custom/${var.project}/${var.environment}/ecs-${config.name}"
     MOUNT_POINTS   = jsonencode(config.mount_points)
     NAME           = config.name
     PROTOCOL       = config.protocol
