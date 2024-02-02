@@ -11,7 +11,6 @@ module "s3-shared-client_A" {
   environment        = "staging"
   project            = "someproject"
   guest_account_id   = "123abc"
-  guest_account_name = "client_A"
 }
 ```
 
