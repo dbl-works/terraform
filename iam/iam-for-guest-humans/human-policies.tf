@@ -14,7 +14,7 @@ resource "aws_iam_policy" "iam-humans-password" {
           "iam:GetLoginProfile"
         ],
         Resource = [
-          "arn:aws:iam::*:user/guests/$${aws:username}"
+          "arn:aws:iam::*:user/guest/$${aws:username}"
         ]
       },
       {
@@ -59,7 +59,7 @@ resource "aws_iam_policy" "iam-humans-usage" {
           "iam:ChangePassword",
           "iam:GetUser"
         ],
-        Resource = "arn:aws:iam::*:user/guests/$${aws:username}"
+        Resource = "arn:aws:iam::*:user/guest/$${aws:username}"
       },
       {
         Sid    = "AllowManageOwnAccessKeys",
@@ -71,7 +71,7 @@ resource "aws_iam_policy" "iam-humans-usage" {
           "iam:ListAccessKeys",
           "iam:UpdateAccessKey"
         ],
-        Resource = "arn:aws:iam::*:user/guests/$${aws:username}"
+        Resource = "arn:aws:iam::*:user/guest/$${aws:username}"
       },
       {
         Sid    = "AllowCreateVirtualMFADevice",
@@ -104,7 +104,7 @@ resource "aws_iam_policy" "iam-humans-usage" {
           "iam:ListMFADevices",
           "iam:ResyncMFADevice"
         ],
-        Resource = "arn:aws:iam::*:user/guests/$${aws:username}"
+        Resource = "arn:aws:iam::*:user/guest/$${aws:username}"
       }
     ]
   })
