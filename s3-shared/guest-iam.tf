@@ -36,20 +36,11 @@ resource "aws_iam_user_policy" "s3" {
   policy = data.aws_iam_policy_document.s3.json
 }
 
-data "aws_iam_policy" "iam-humans-usage-base" {
-  name = "IAMHumansUsage"
+data "aws_iam_group" "iam-humans" {
+  group_name = "humans"
 }
 
-data "aws_iam_policy" "iam-humans-usage-password" {
-  name = "IAMUserChangePassword"
-}
-
-resource "aws_iam_user_policy_attachment" "iam-humans-usage-base" {
-  user       = aws_iam_user.guest.name
-  policy_arn = data.aws_iam_policy.iam-humans-usage-base.arn
-}
-
-resource "aws_iam_user_policy_attachment" "iam-humans-usage-password" {
-  user       = aws_iam_user.guest.name
-  policy_arn = data.aws_iam_policy.iam-humans-usage-password.arn
+resource "aws_iam_user_group_membership" "memberships" {
+  user   = aws_iam_user.guest.name
+  groups = [data.aws_iam_group.iam-humans.name]
 }
