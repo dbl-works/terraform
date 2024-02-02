@@ -10,11 +10,6 @@ variable "project" {
   description = "The project name"
 }
 
-variable "guest_account_id" {
-  type        = string
-  description = "The AWS account ID of the guest account"
-}
-
 variable "guest_account_name" {
   type        = string
   description = "The name of the guest account"
