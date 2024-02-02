@@ -42,5 +42,5 @@ data "aws_iam_group" "iam-humans" {
 
 resource "aws_iam_user_group_membership" "memberships" {
   user   = aws_iam_user.guest.name
-  groups = [data.aws_iam_group.iam-humans.name]
+  groups = [data.aws_iam_group.iam-humans.group_name]
 }
