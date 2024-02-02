@@ -1,8 +1,8 @@
 // Allow humans to change their own passwords
 resource "aws_iam_policy" "iam-humans-password" {
-  name        = "IAMGuestHumansUsage"
+  name        = "IAMGuestUserChangePassword"
   path        = "/"
-  description = "Allow humans guests to manage their own credentials"
+  description = "Allow human guests to manage their own credentials"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -36,7 +36,7 @@ resource "aws_iam_group_policy_attachment" "humans-iam-password" {
 resource "aws_iam_policy" "iam-humans-usage" {
   name        = "IAMGuestHumansUsage"
   path        = "/"
-  description = "Allow humans guests to manage their own credentials"
+  description = "Allow human guests to manage their own credentials"
 
   policy = jsonencode({
     Version = "2012-10-17"
