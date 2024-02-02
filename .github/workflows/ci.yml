@@ -51,6 +51,7 @@ jobs:
           - s3
           - s3-private
           - s3-public
+          - s3-shared
           - script/database-roles
           - secrets
           - slack/chatbot
