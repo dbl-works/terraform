@@ -85,7 +85,8 @@ resource "aws_iam_policy" "iam-humans-usage" {
         Sid    = "AllowDeleteVirtualMFADevice",
         Effect = "Allow",
         Action = [
-          "iam:DeleteVirtualMFADevice"
+          "iam:DeleteVirtualMFADevice",
+          "iam:DeactivateMFADevice"
         ],
         Resource = "arn:aws:iam::*:mfa/*",
         Condition = {
