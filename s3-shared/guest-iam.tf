@@ -35,11 +35,11 @@ resource "aws_iam_user_policy" "s3" {
   policy = data.aws_iam_policy_document.s3.json
 }
 
-data "aws_iam_group" "iam-humans" {
-  group_name = "humans"
+data "aws_iam_group" "iam-guest-humans" {
+  group_name = "guest-humans"
 }
 
 resource "aws_iam_user_group_membership" "memberships" {
   user   = aws_iam_user.guest.name
-  groups = [data.aws_iam_group.iam-humans.group_name]
+  groups = [data.aws_iam_group.iam-guest-humans.group_name]
 }

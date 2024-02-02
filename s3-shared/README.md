@@ -2,7 +2,7 @@
 
 Sets up a private S3 bucket with full access by the host-account, and read/write only access for a guest-account.
 
-This depends on [iam-for-humans](iam/iam-for-humans/README.md) (part of the `app/stack/setup` module), because the created guest-account is added to the `humans` group so they can change their password.
+This depends on [iam-for-humans](iam/iam-for-guest-humans/README.md), because the created guest-account is added to the `humans` group so they can change their password.
 
 ## Usage
 
