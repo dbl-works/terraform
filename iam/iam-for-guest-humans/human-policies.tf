@@ -10,7 +10,8 @@ resource "aws_iam_policy" "iam-humans-password" {
       {
         Effect = "Allow",
         Action = [
-          "iam:ChangePassword"
+          "iam:ChangePassword",
+          "iam:GetLoginProfile"
         ],
         Resource = [
           "arn:aws:iam::*:user/guests/$${aws:username}"
