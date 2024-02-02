@@ -23,7 +23,7 @@ pass the S3 bucket ARN to the ECS module to grant access to it for the apps
 
 ```terraform
 module "ecs" {
-  source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.
+  source = "github.com/dbl-works/terraform//ecs?ref=v2024.01.25
 
   grant_read_access_to_s3_arns  = [
     module.s3-shared-client_A.arn
