@@ -4,10 +4,6 @@ resource "aws_iam_policy" "iam-humans-password" {
   path        = "/"
   description = "Allow humans guests to manage their own credentials"
 
-  lifecycle {
-    create_before_destroy = false
-  }
-
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
