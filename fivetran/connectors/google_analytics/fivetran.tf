@@ -4,12 +4,9 @@ locals {
 }
 
 resource "fivetran_connector" "google_analytics" {
-  group_id          = var.fivetran_group_id
-  service           = "google_analytics"
-  sync_frequency    = var.sync_frequency // min
-  paused            = false
-  pause_after_trial = false
-  run_setup_tests   = true
+  group_id        = var.fivetran_group_id
+  service         = "google_analytics"
+  run_setup_tests = true
 
   destination_schema {
     name = local.name
@@ -43,4 +40,16 @@ resource "fivetran_connector" "google_analytics" {
       refresh_token = auth.value.refresh_token
     }
   }
+}
+
+resource "fivetran_connector_schedule" "lambda" {
+  connector_id = fivetran_connector.lambda.id
+
+  sync_frequency  = var.sync_frequency
+  daily_sync_time = "03:00"
+
+  paused            = false
+  pause_after_trial = false
+
+  schedule_type = "auto"
 }
