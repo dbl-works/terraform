@@ -2,11 +2,8 @@
 resource "fivetran_connector" "rds" {
   for_each = { for rds in var.sources_rds : rds.host => rds }
 
-  group_id          = fivetran_destination.main.group_id
-  service           = "postgres_rds" # https://fivetran.com/docs/rest-api/connectors/config#postgres
-  sync_frequency    = 60             # mins, supported values: 5, 15, 30, 60, 120, 180, 360, 480, 720, 1440.
-  paused            = false
-  pause_after_trial = false
+  group_id = fivetran_destination.main.group_id
+  service  = "postgres_rds" # https://fivetran.com/docs/rest-api/connectors/config#postgres
 
   destination_schema {
     name = "aws_rds_${each.value.database}" # name shown on Fivetran UI
@@ -29,15 +26,24 @@ resource "fivetran_connector" "rds" {
   }
 }
 
+resource "fivetran_connector_schedule" "rds" {
+  for_each = { for rds_connector in fivetran_connector.rds : rds_connector.id => rds_connector }
+
+  connector_id = each.key
+
+  sync_frequency    = "60"
+  paused            = false
+  pause_after_trial = false
+  schedule_type     = "auto"
+}
+
+
 resource "fivetran_connector" "github" {
   for_each = { for github in var.sources_github : github.organisation => github }
 
-  group_id          = fivetran_group.group.id
-  service           = "github"
-  sync_frequency    = 60
-  paused            = false
-  pause_after_trial = false
-  run_setup_tests   = true
+  group_id        = fivetran_group.group.id
+  service         = "github"
+  run_setup_tests = true
 
   destination_schema {
     name = "github_${replace(each.value.organisation, "/[^0-9A-Za-z_]/", "_")}" # name shown on Fivetran UI
@@ -51,6 +57,17 @@ resource "fivetran_connector" "github" {
     username     = each.value.username
     pat          = each.value.pat
   }
+}
+
+resource "fivetran_connector_schedule" "github" {
+  for_each = { for github_connector in fivetran_connector.github : github_connector.id => github_connector }
+
+  connector_id = each.key
+
+  sync_frequency    = "60"
+  paused            = false
+  pause_after_trial = false
+  schedule_type     = "auto"
 }
 
 module "lambda_connector" {
