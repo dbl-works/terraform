@@ -43,6 +43,7 @@ locals {
     ENVIRONMENT_VARIABLES = jsonencode(local.environment_variables)
     IMAGE_NAME            = local.image_name
     IMAGE_TAG             = var.app_config.image_tag
+    LOG_GROUP_NAME        = "/custom/${var.project}/${var.environment}/ecs-${var.app_config.name}"
     MOUNT_POINTS          = jsonencode(local.mount_points)
     NAME                  = var.app_config.name
     PORT_MAPPINGS         = jsonencode(local.app_port_mappings)
