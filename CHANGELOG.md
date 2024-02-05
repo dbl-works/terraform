@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 This project does not follow SemVer, since modules are independent of each other; thus, SemVer does not make sense. Changes are grouped per module.
 
 ## Unreleased
+### ecs
+- Add enable_multi_region_lb option for ecs. [#302](https://github.com/dbl-works/terraform/pull/302)
+
 ### s3-shared
 - New module `s3-shared` which creates a S3 Bucket and a user account that allows externals to exchange files with you [#300](https://github.com/dbl-works/terraform/pull/300)
 
