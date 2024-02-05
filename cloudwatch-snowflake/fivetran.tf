@@ -17,11 +17,8 @@ resource "fivetran_connector" "lambda" {
 resource "fivetran_connector_schedule" "lambda" {
   connector_id = fivetran_connector.lambda.id
 
-  sync_frequency  = "60"
-  daily_sync_time = "03:00"
-
+  sync_frequency    = "60"
   paused            = false
   pause_after_trial = false
-
-  schedule_type = "auto"
+  schedule_type     = "auto"
 }

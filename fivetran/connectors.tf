@@ -31,13 +31,10 @@ resource "fivetran_connector_schedule" "rds" {
 
   connector_id = each.key
 
-  sync_frequency  = "60"
-  daily_sync_time = "03:00"
-
+  sync_frequency    = "60"
   paused            = false
   pause_after_trial = false
-
-  schedule_type = "auto"
+  schedule_type     = "auto"
 }
 
 
@@ -67,13 +64,10 @@ resource "fivetran_connector_schedule" "github" {
 
   connector_id = each.key
 
-  sync_frequency  = "60"
-  daily_sync_time = "03:00"
-
+  sync_frequency    = "60"
   paused            = false
   pause_after_trial = false
-
-  schedule_type = "auto"
+  schedule_type     = "auto"
 }
 
 module "lambda_connector" {
