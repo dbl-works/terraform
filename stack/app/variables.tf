@@ -454,9 +454,10 @@ variable "ecs_custom_policies" {
   default = []
 }
 
-variable "enable_multi_region_lb" {
-  type    = bool
-  default = false
+variable "ecs_multi_az" {
+  type        = bool
+  default     = false
+  description = "multi-az for load balancers"
 }
 
 variable "additional_certificate_arns" {

@@ -198,7 +198,7 @@ variable "enable_container_insights" {
   default = true
 }
 
-variable "enable_multi_region_lb" {
+variable "multi_az" {
   type    = bool
   default = false
 }

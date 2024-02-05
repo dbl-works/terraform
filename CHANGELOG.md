@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 ### ecs
-- Add enable_multi_region_lb option for ecs. [#302](https://github.com/dbl-works/terraform/pull/302)
+- Add `multi_az` option for ecs. [#302](https://github.com/dbl-works/terraform/pull/302)
 
 ### s3-shared
 - New module `s3-shared` which creates a S3 Bucket and a user account that allows externals to exchange files with you [#300](https://github.com/dbl-works/terraform/pull/300)
