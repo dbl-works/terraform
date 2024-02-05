@@ -42,8 +42,8 @@ resource "fivetran_connector" "google_analytics" {
   }
 }
 
-resource "fivetran_connector_schedule" "lambda" {
-  connector_id = fivetran_connector.lambda.id
+resource "fivetran_connector_schedule" "google_analytics" {
+  connector_id = fivetran_connector.google_analytics.id
 
   sync_frequency  = var.sync_frequency
   daily_sync_time = "03:00"

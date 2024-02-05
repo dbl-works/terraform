@@ -63,7 +63,7 @@ resource "fivetran_connector" "github" {
 }
 
 resource "fivetran_connector_schedule" "github" {
-  for_each = { for rds_connector in fivetran_connector.rds : rds_connector.id => rds_connector }
+  for_each = { for github_connector in fivetran_connector.github : github_connector.id => github_connector }
 
   connector_id = each.key
 
