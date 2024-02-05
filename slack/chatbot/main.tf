@@ -17,7 +17,7 @@ resource "aws_iam_role" "chatbot" {
       {
         "Effect" : "Allow",
         "Principal" : {
-          "Service" : "management.chatbot.amazonaws.com"
+          "Service" : "chatbot.amazonaws.com"
         },
         "Action" : "sts:AssumeRole"
       }
@@ -43,6 +43,14 @@ resource "aws_iam_policy" "chatbot_policy" {
           "SNS:Unsubscribe",
           "SNS:Subscribe",
           "SNS:ListSubscriptions"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "*"
+      },
+      {
+        "Action" : [
+          "cloudwatch:List*",
+          "cloudwatch:Get*"
         ],
         "Effect" : "Allow",
         "Resource" : "*"

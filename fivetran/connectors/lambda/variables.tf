@@ -8,6 +8,23 @@ variable "lambda_name" {
   default = null
 }
 
+variable "runtime" {
+  type        = string
+  description = "The runtime environment for the Lambda function, see https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime."
+  default     = "nodejs20.x"
+}
+
+variable "timeout" {
+  type    = number
+  default = 900
+}
+
+variable "memory_size" {
+  type        = number
+  description = "The amount of memory that your function has access to."
+  default     = 128
+}
+
 variable "lambda_source_dir" {
   type        = string
   description = "Path to the directory containing the lambda function code"
@@ -63,7 +80,11 @@ variable "script_env" {
 }
 
 variable "sync_frequency" {
-  type        = number
-  default     = 60 // min
-  description = "The supported values are: 5, 15, 30, 60, 120, 180, 360, 480, 720, 1440."
+  type        = string
+  default     = "60" // min
+  description = "The supported values are: 1, 5, 15, 30, 60, 120, 180, 360, 480, 720, 1440."
+  validation {
+    condition     = can(regex("^(1|5|15|30|60|120|180|360|480|720|1440)$", var.sync_frequency))
+    error_message = "The supported values are: 1, 5, 15, 30, 60, 120, 180, 360, 480, 720, 1440."
+  }
 }

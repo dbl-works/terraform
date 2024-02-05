@@ -18,5 +18,6 @@
             "awslogs-region": "${REGION}",
             "mode": "${ECS_FARGATE_LOG_MODE}"
         }
-    }
+    },
+    "ulimits": ${ULIMITS}
 }
