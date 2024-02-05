@@ -1,7 +1,7 @@
 # Main load balancer for user facing traffic
 resource "aws_alb" "alb" {
   name    = local.name
-  subnets = var.subnet_public_ids
+  subnets = var.enable_multi_region_lb ? slice(var.subnet_public_ids, 0, 2) : var.subnet_public_ids[0]
   security_groups = [
     aws_security_group.alb.id,
   ]

@@ -454,6 +454,11 @@ variable "ecs_custom_policies" {
   default = []
 }
 
+variable "enable_multi_region_lb" {
+  type    = bool
+  default = false
+}
+
 variable "additional_certificate_arns" {
   description = "Additional certificates to add to the load balancer"
   default     = []
