@@ -27,7 +27,9 @@ resource "fivetran_connector" "rds" {
 }
 
 resource "fivetran_connector_schedule" "rds" {
-  connector_id = fivetran_connector.rds.id
+  for_each = { for rds_connector in fivetran_connector.rds : rds_connector.id => rds_connector }
+
+  connector_id = each.key
 
   sync_frequency  = "60"
   daily_sync_time = "03:00"
@@ -61,7 +63,9 @@ resource "fivetran_connector" "github" {
 }
 
 resource "fivetran_connector_schedule" "github" {
-  connector_id = fivetran_connector.github.id
+  for_each = { for rds_connector in fivetran_connector.rds : rds_connector.id => rds_connector }
+
+  connector_id = each.key
 
   sync_frequency  = "60"
   daily_sync_time = "03:00"
