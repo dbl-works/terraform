@@ -100,7 +100,6 @@ resource "aws_ecs_service" "main" {
   }
 }
 
-
 resource "aws_service_discovery_service" "main" {
   count = local.service_discovery_enabled ? 1 : 0
 
