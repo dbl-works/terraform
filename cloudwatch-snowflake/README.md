@@ -18,7 +18,7 @@ terraform {
     }
     fivetran = {
       source  = "fivetran/fivetran"
-      version = "~> 0.6.1"
+      version = "~> 1.0"
     }
   }
 
