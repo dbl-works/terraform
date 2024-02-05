@@ -23,10 +23,9 @@ variable "function_name" {
   description = "A unique identifier for the function."
 }
 
-# https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime
 variable "runtime" {
   type        = string
-  description = "The runtime environment for the Lambda function."
+  description = "The runtime environment for the Lambda function, see https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime."
   default     = "nodejs20.x"
 }
 

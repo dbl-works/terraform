@@ -25,7 +25,7 @@ locals {
   load_balancers = var.with_load_balancer ? [{
     target_group_arn = var.aws_lb_target_group_arn == null ? data.aws_lb_target_group.ecs.arn : var.aws_lb_target_group_arn
     container_name   = var.app_config.name,
-    container_port   = var.app_config.container_port
+    container_port   = length(var.app_config.container_ports) > 0 ? var.app_config.container_ports[0] : null
   }] : []
   vpc_name = try(var.vpc_name, "${var.project}-${var.environment}")
 }
@@ -60,8 +60,10 @@ resource "aws_ecs_service" "main" {
   }
 
   network_configuration {
-    subnets          = data.aws_subnets.selected.ids
-    security_groups  = [data.aws_security_group.ecs.id]
+    subnets = data.aws_subnets.selected.ids
+    security_groups = concat([
+      data.aws_security_group.ecs.id
+    ], var.security_group_ids)
     assign_public_ip = var.subnet_type == "public"
   }
 
@@ -81,7 +83,7 @@ resource "aws_ecs_service" "main" {
     content {
       target_group_arn = load_balancer.value.target_group_arn
       container_name   = load_balancer.value.container_name
-      container_port   = load_balancer.value.container_port
+      container_port   = length(var.app_config.container_ports) > 0 ? var.app_config.container_ports[0] : null
     }
   }
 
@@ -99,7 +101,6 @@ resource "aws_ecs_service" "main" {
     ]
   }
 }
-
 
 resource "aws_service_discovery_service" "main" {
   count = local.service_discovery_enabled ? 1 : 0

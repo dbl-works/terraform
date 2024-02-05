@@ -19,5 +19,6 @@
             "awslogs-stream-prefix": "${NAME}",
             "mode": "${ECS_FARGATE_LOG_MODE}"
         }
-    }
+    },
+    "ulimits": ${ULIMITS}
 }

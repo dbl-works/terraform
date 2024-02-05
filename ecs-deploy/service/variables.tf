@@ -59,7 +59,7 @@ variable "app_config" {
     image_name            = optional(string, null)     #  Docker image name of the app container. Required if ecr_repo_name is null.
     secrets               = optional(list(string), []) # keys of secrets stored in the aws secrets manager required for the app
     ecr_repo_name         = optional(string, null)     # Required if image_name is null.
-    container_port        = optional(number, null)
+    container_ports       = optional(list(number), [])
     environment_variables = optional(map(string), {})
     commands = optional(list(string), [
       "bundle",
@@ -116,9 +116,19 @@ variable "memory" {
   default = 512
 }
 
-variable "volume_name" {
-  type    = string
-  default = null
+variable "volume" {
+  type = list(object({
+    name = optional(string, true)
+    efs_volume_configuration = optional(object({
+      file_system_id          = string
+      root_directory          = optional(string, "/")
+      transit_encryption      = optional(string, "DISABLED") # Valid values are "ENABLED"/"DISABLED"
+      transit_encryption_port = optional(number, null)
+      access_point_id         = optional(string, null)
+      iam                     = optional(string, null)
+    }), null)
+  }))
+  default = []
 }
 
 variable "container_definitions_file_name" {
@@ -152,6 +162,21 @@ variable "aws_lb_target_group_arn" {
   default = null
 }
 
+variable "ulimits" {
+  type = list(object({
+    name      = string
+    softLimit = number
+    hardLimit = number
+  }))
+  default = []
+
+  validation {
+    condition     = alltrue([for ulimit in var.ulimits : contains(["core", "cpu", "data", "fsize", "locks", "memlock", "msgqueue", "nice", "nofile", "nproc", "rss", "rtprio", "rttime", "sigpending", "stack"], ulimit.name)])
+    error_message = "Each 'name' must be one of the specified values."
+  }
+}
+
+
 variable "deployment_circuit_breaker" {
   type = object({
     enable   = optional(bool, true)
@@ -161,6 +186,11 @@ variable "deployment_circuit_breaker" {
     enable   = true
     rollback = true
   }
+}
+
+variable "security_group_ids" {
+  type    = list(string)
+  default = []
 }
 
 variable "vpc_name" {

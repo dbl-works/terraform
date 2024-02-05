@@ -15,6 +15,10 @@ resource "aws_security_group" "alb" {
     protocol    = -1
     cidr_blocks = ["0.0.0.0/0"] # TODO: Change this to internal IPs only
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_security_group_rule" "lb-http" {
@@ -52,6 +56,10 @@ resource "aws_security_group" "ecs" {
     to_port     = 0
     protocol    = -1
     cidr_blocks = ["0.0.0.0/0"] # TODO: Change this to only allow NAT/proxy traffic
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
