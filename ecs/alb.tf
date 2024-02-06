@@ -1,7 +1,8 @@
 # Main load balancer for user facing traffic
 resource "aws_alb" "alb" {
-  name    = local.name
-  subnets = var.subnet_public_ids
+  name = local.name
+  # We limit ALB deployment to 2 AZs as a strategy to reduce costs.
+  subnets = var.multi_az ? slice(var.subnet_public_ids, 0, 2) : [var.subnet_public_ids[0]]
   security_groups = [
     aws_security_group.alb.id,
   ]
