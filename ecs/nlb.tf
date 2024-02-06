@@ -2,8 +2,9 @@ resource "aws_lb" "nlb" {
   count              = var.skip_load_balancer || length(var.allowlisted_ssh_ips) == 0 ? 0 : 1
   name               = "${local.name}-nlb"
   load_balancer_type = "network"
-  subnets            = var.subnet_public_ids
-  idle_timeout       = var.keep_alive_timeout
+  # The NLB is configured for single-region deployment as it serves developer-only purposes, and we accept the associated downtime risks.
+  subnets      = [var.subnet_public_ids[0]]
+  idle_timeout = var.keep_alive_timeout
   tags = {
     Name        = "${local.name}-nlb"
     Project     = var.project

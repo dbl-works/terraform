@@ -203,3 +203,8 @@ variable "enable_container_insights" {
   type    = bool
   default = true
 }
+
+variable "multi_az" {
+  type    = bool
+  default = false
+}
