@@ -8,11 +8,11 @@ resource "aws_alb_target_group" "ecs" {
 
   health_check {
     path                = var.health_check_path
-    healthy_threshold   = 2
-    unhealthy_threshold = 3
-    timeout             = 25
-    interval            = 30
-    matcher             = "200,301,302,401,403,404"
+    healthy_threshold   = var.health_check_options.healthy_threshold
+    unhealthy_threshold = var.health_check_options.unhealthy_threshold
+    timeout             = var.health_check_options.timeout
+    interval            = var.health_check_options.interval
+    matcher             = var.health_check_options.matcher
   }
 
   tags = {

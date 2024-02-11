@@ -45,6 +45,13 @@ module "ecs" {
   secrets_arns                = []
   kms_key_arns                = []
   health_check_path           = "/healthz"
+  health_check_options        = {
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    timeout             = 30
+    interval            = 60
+    matcher             = "200,204"
+  }
   certificate_arn             = module.ssl-certificate.arn # requires a `certificate` module to be created separately
   regional                    = true
   keep_alive_timeout          = 60

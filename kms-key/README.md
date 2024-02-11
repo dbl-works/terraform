@@ -14,7 +14,7 @@ module "kms-key" {
   environment = "staging"
   project     = "someproject"
   alias       = "rds"
-  description = "Used for ecrypting databases and their backups"
+  description = "Used for encrypting databases and their backups"
 
   # Optional
   deletion_window_in_days = 30

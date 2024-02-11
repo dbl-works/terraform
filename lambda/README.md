@@ -9,14 +9,16 @@ Used for managing lambda functions.
 module "lambda" {
   source = "github.com/dbl-works/terraform//lambda?ref=main"
 
+  function_name   = "lambda"
   project         = "dbl"
   environment     = "production"
-  source_dir = "Path to the directory containing the lambda function code."
+  source_dir      = "Path to the directory containing the lambda function code."
 
   # optional
-  handler = "index.handler"
-  timeout       = 10
-  memory_size   = 1024
+  handler     = "index.handler"
+  timeout     = 10
+  memory_size = 1024
+  runtime     = "nodejs16.x"
 
   # Subnets the lambdas are allowed to use to access resources in the VPC.
   subnet_ids = [
@@ -40,5 +42,30 @@ module "lambda" {
   secrets_and_kms_arns = [
     "arn:aws:secrets:*:abc:123",
   ]
+
+  lambda_policy_json = data.aws_iam_policy_document.s3.json
+  environment_variables = {
+    foo = "bar"
+  }
+  lambda_role_name = "aws-lambda-role"
 }
+
+data "aws_iam_policy_document" "s3" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:GenerateDataKey"
+    ]
+    resources = ["*"]
+  }
+}
+
 ```

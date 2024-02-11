@@ -1,3 +1,9 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}
+
 variable "environment" {
   type = string
 }
@@ -9,10 +15,6 @@ variable "project" {
 variable "region" {
   type    = string
   default = "eu-central-1"
-}
-
-variable "account_id" {
-  type = string
 }
 
 # =============== Certificate Manager ================ #
@@ -64,6 +66,7 @@ variable "private_buckets_list" {
     bucket_name                     = string
     versioning                      = bool
     primary_storage_class_retention = number
+    sse_algorithm                   = optional(string, "AES256")
     replicas = optional(list(object({
       bucket_arn = string
       kms_arn    = string
@@ -281,11 +284,11 @@ variable "rds_instance_class" {
 }
 variable "rds_engine_version" {
   type    = string
-  default = "13"
+  default = null
 }
 variable "rds_allocated_storage" {
   type    = number
-  default = 100
+  default = 10
 }
 variable "rds_allow_from_cidr_blocks" {
   type    = list(string)
@@ -295,6 +298,16 @@ variable "rds_allow_from_cidr_blocks" {
 variable "rds_subnet_group_name" {
   type    = string
   default = null
+}
+
+variable "rds_backup_retention_period" {
+  default = 7
+  type    = number
+}
+
+variable "rds_storage_autoscaling_upper_limit" {
+  type    = number
+  default = 20
 }
 
 variable "rds_multi_az" {
@@ -317,13 +330,70 @@ variable "rds_final_snapshot_identifier" {
   type    = string
   default = null
 }
+
+variable "rds_log_min_duration_statement" {
+  type        = number
+  default     = -1
+  description = "Used to log SQL statements that run longer than a specified duration of time (in ms)."
+}
+
+variable "rds_log_retention_period" {
+  type        = number
+  default     = 1440
+  description = "Controls how long automatic RDS log files are retained before being deleted (in min, must be between 1440-10080 (1-7 days)."
+
+  validation {
+    condition     = var.rds_log_retention_period >= 1440 && var.rds_log_retention_period <= 10080
+    error_message = "Log retention period must be between 1440-10080 (1-7 days)."
+  }
+}
+
+variable "rds_log_min_error_statement" {
+  type        = string
+  default     = "panic"
+  description = "Controls which SQL statements that cause an error condition are recorded in the server log."
+
+  validation {
+    condition     = contains(["debug5", "debug4", "debug3", "debug2", "debug1", "info", "notice", "warning", "error", "log", "fatal", "panic"], var.rds_log_min_error_statement)
+    error_message = "The valid values are [debug5, debug4, debug3, debug2, debug1, info, notice, warning, error, log, fatal, panic]"
+  }
+}
+
+variable "rds_ca_cert_identifier" {
+  default     = "rds-ca-ecc384-g1"
+  type        = string
+  description = "The identifier of the CA certificate for the DB instance."
+}
 # =============== RDS ================ #
 
 # =============== ECS ================ #
 variable "health_check_path" { default = "/livez" }
+
+variable "enable_container_insights" {
+  type    = bool
+  default = true
+}
+
+variable "health_check_options" {
+  type = object({
+    healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.
+    unhealthy_threshold = optional(number, 5)  # The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold.
+    timeout             = optional(number, 30) # The amount of time, in seconds, during which no response means a failed health check. For Application Load Balancers, the range is 2 to 120 seconds.
+    interval            = optional(number, 60) # The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds.
+    matcher             = optional(string, "200,204")
+  })
+  default = {}
+}
+
 variable "allow_internal_traffic_to_ports" {
   type    = list(string)
   default = []
+}
+
+variable "monitored_service_groups" {
+  type        = list(string)
+  default     = ["service:web"]
+  description = "ECS service groups to monitor STOPPED containers."
 }
 
 variable "keep_alive_timeout" {
@@ -382,6 +452,12 @@ variable "grant_read_access_to_sqs_arns" {
 
 variable "ecs_custom_policies" {
   default = []
+}
+
+variable "ecs_multi_az" {
+  type        = bool
+  default     = false
+  description = "multi-az for load balancers"
 }
 
 variable "additional_certificate_arns" {
@@ -450,7 +526,6 @@ variable "service_discovery_enabled" {
   type    = bool
   default = true
 }
-
 # =============== ECS ================ #
 
 # =============== Cloudwatch ================ #

@@ -9,6 +9,7 @@ resource "aws_security_group" "main" {
       to_port     = egress.value.port
       protocol    = egress.value.protocol
       cidr_blocks = egress.value.cidr_blocks
+      description = egress.value.description
     }
   }
 
@@ -30,11 +31,12 @@ resource "aws_security_group_rule" "ingress-tcp-8888-vpc" {
   protocol          = "tcp"
   cidr_blocks       = [var.cidr_block]
   security_group_id = aws_security_group.main.id
+  description       = "For the application to connect to the proxy"
 }
 
-# enable this only for the configuration of the proxy
+# required to SSH into the machine to configure it or perform maintenance work
 resource "aws_security_group_rule" "ingress-tcp-22-public" {
-  count = var.ssh_enabled ? 1 : 0
+  count = var.maintenance_mode ? 1 : 0
 
   type              = "ingress"
   from_port         = 22
@@ -42,4 +44,18 @@ resource "aws_security_group_rule" "ingress-tcp-22-public" {
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.main.id
+  description       = "For maintenance mode to allow SSH access"
+}
+
+# required to e.g. download updates or install packages
+resource "aws_security_group_rule" "egress-public-internet" {
+  count = var.maintenance_mode ? 1 : 0
+
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.main.id
+  description       = "For maintenance mode to allow access to the public internet"
 }

@@ -2,7 +2,8 @@ variable "project" {}
 variable "environment" {}
 
 variable "kms_key_id" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "application" {

@@ -1,3 +1,11 @@
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+  region     = data.aws_region.current.name
+}
+
 resource "aws_vpc" "vpc" {
   cidr_block           = var.cidr_block
   enable_dns_hostnames = true
@@ -8,8 +16,6 @@ resource "aws_vpc" "vpc" {
     Project     = var.project
   }
 }
-
-
 
 # Primary gateway for all traffic
 resource "aws_internet_gateway" "main" {
@@ -76,6 +82,6 @@ resource "aws_subnet" "private" {
 resource "aws_flow_log" "reject" {
   vpc_id          = aws_vpc.vpc.id
   traffic_type    = "REJECT"
-  iam_role_arn    = "arn:aws:iam::${var.account_id}:role/FlowLogsRole"
-  log_destination = "arn:aws:logs:${var.region}:${var.account_id}:log-group:VPCFlowLogs"
+  iam_role_arn    = "arn:aws:iam::${local.account_id}:role/FlowLogsRole"
+  log_destination = "arn:aws:logs:${local.region}:${local.account_id}:log-group:VPCFlowLogs"
 }

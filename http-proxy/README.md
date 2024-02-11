@@ -1,12 +1,13 @@
 # Terraform Module: HTTP Proxy
 
-Launches a tiny-proxy based HTTP proxy instance to allow an application server to assume a static IP address for outgoing traffic, e.g. when using a third-party API that requires a static IP address.
+Launches a [Tinyproxy](https://github.com/tinyproxy/tinyproxy)-based HTTP proxy instance to allow an application server to assume a static IP address for outgoing traffic, e.g. when using a third-party API that requires a static IP address.
 
-⚠️ This is not a great solution for production, but good enough for limited usage. For a more robust solution, consider using a NAT Gateway instead.
+Since this is based on an EC2 machine, you have to take care of keeping the machine's OS up to date (security updates). It also doesn't come with an automatic reboot on failure.
+For a much more robust (and expensive) solution, consider using a NAT Gateway instead.
 
 ## Usage
 
-Before launching this resouce, create a key-pair; read the [docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
+Before launching this resource, create a key-pair; read the [docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
 
 ```terraform
 module "http-proxy" {
@@ -20,10 +21,10 @@ module "http-proxy" {
   public_key       = "ssh-rsa xxx" # SSH key used for the initial set up
 
   # optional
-  eip           = "12.34.5.678" # if omitted, a new EIP is allocated
-  instance_type = "t3.micro"
-  ssh_enabled   = false                   # switch this to "true" for the initial configuration, but keep it "false" for production
-  ami_id        = "ami-0502e817a62226e03" # ubuntu 20.04 which has a free quota
+  eip              = "12.34.5.678" # if omitted, a new EIP is allocated
+  instance_type    = "t3.micro"
+  maintenance_mode = false                   # switch this to "true" for the initial configuration, but keep it "false" for production
+  ami_id           = "ami-0502e817a62226e03" # ubuntu 20.04 which has a free quota
 
   # protocol & cidr_block are optional and default to TCP and all IPs
   # protocol: one of "tcp", "udp", "icmp", or "-1" for all protocols
@@ -75,7 +76,7 @@ Prepare your local ENV
 ⚠️ ensure that the password does not contain special chars, as this breaks tinyproxy.
 
 ```shell
-export PATH_TO_SSH_KEY="/~/.ssh/http_proxy_ed25519"
+export PATH_TO_SSH_KEY="~/.ssh/http_proxy_ed25519"
 export SSH_USER="ubuntu"
 export SERVER_HOST="YOUR_EIP"
 export BASIC_AUTH_PASSWORD="CHOOSE_A_SECURE_PASSWORD"
@@ -109,4 +110,39 @@ sudo /etc/init.d/tinyproxy restart
 
 # verify that the proxy is running
 sudo /etc/init.d/tinyproxy status
+```
+
+## Usage in an app
+
+Set an ENV var on your machine:
+
+```shell
+http_proxy=http://usr:password@EIP:8888
+```
+
+If you are using Ruby and have a Rack-based app (e.g. Rails), setting the ENV var `http_proxy` is sufficient.
+
+If you want to limit outbound traffic through the fixed IP to certain requests, you can also use e.g. [net/ssh/proxy/http](https://net-ssh.github.io/ssh/v2/api/classes/Net/SSH/Proxy/HTTP.html).
+
+Example usage to assume static IP to access a FTP server:
+
+```ruby
+
+  sig { returns(Net::SFTP::Session) }
+  def sftp_session
+    @sftp_session ||= begin
+      if ENV['HTTP_PROXY_DBL'].present?
+        uri = URI.parse(ENV.fetch('HTTP_PROXY_DBL'))
+        proxy = Net::SSH::Proxy::HTTP.new(
+          uri.host,
+          uri.port,
+          user: uri.user,
+          password: uri.password,
+        )
+      end
+      params = { password: @password, proxy: proxy }.compact
+
+      Net::SFTP.start(@host, @username, **params)
+    end
+  end
 ```

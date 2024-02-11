@@ -23,16 +23,20 @@ module "ecs" {
 
   # optional
   health_check_path           = var.health_check_path
+  health_check_options        = var.health_check_options
   certificate_arn             = var.certificate_arn == null ? data.aws_acm_certificate.default.arn : var.certificate_arn
   additional_certificate_arns = var.additional_certificate_arns
   regional                    = var.regional
   name                        = var.ecs_name # custom name when convention exceeds 32 chars
-  region                      = var.region   # used for e.g CloudWatch metrics
   keep_alive_timeout          = var.keep_alive_timeout
+  monitored_service_groups    = var.monitored_service_groups
+  enable_container_insights   = var.enable_container_insights
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
   allow_alb_traffic_to_ports      = var.allow_alb_traffic_to_ports
   alb_listener_rules              = var.alb_listener_rules
+
+  multi_az = var.ecs_multi_az
 
   allowlisted_ssh_ips = distinct(flatten(concat([
     var.allowlisted_ssh_ips,
