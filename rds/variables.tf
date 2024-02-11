@@ -1,22 +1,45 @@
-variable "account_id" {}
+data "aws_region" "current" {}
+
+locals {
+  region = data.aws_region.current.name
+}
+
 variable "vpc_id" {}
-variable "region" {} # TODO: Could this be determined from VPC?
 variable "subnet_ids" {}
 variable "kms_key_arn" {}
 variable "project" {}
 variable "environment" {}
 
 variable "ca_cert_identifier" {
-  default = "rds-ca-rsa2048-g1"
+  default = "rds-ca-ecc384-g1"
   type    = string
 }
 
-variable "instance_class" { default = "db.t3.micro" }
-variable "engine_version" {
-  default = "14"
+variable "backup_retention_period" {
+  default = 7
+  type    = number
+}
+
+variable "instance_class" {
+  default = "db.t3.micro"
   type    = string
 }
-variable "allocated_storage" { default = 100 }
+
+variable "engine_version" {
+  default  = "16"
+  type     = string
+  nullable = false
+}
+
+variable "allocated_storage" {
+  type    = number
+  default = 10
+}
+
+variable "storage_autoscaling_upper_limit" {
+  type    = number
+  default = 20
+}
 
 variable "publicly_accessible" {
   type    = bool
@@ -115,7 +138,7 @@ variable "identifier" {
 }
 
 locals {
-  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${local.region}" : ""}"
 }
 
 variable "log_min_duration_statement" {

@@ -23,11 +23,10 @@ variable "function_name" {
   description = "A unique identifier for the function."
 }
 
-# https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime
 variable "runtime" {
   type        = string
-  description = "The runtime environment for the Lambda function."
-  default     = "nodejs16.x"
+  description = "The runtime environment for the Lambda function, see https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime."
+  default     = "nodejs20.x"
 }
 
 variable "secrets_and_kms_arns" {
@@ -84,5 +83,5 @@ variable "environment_variables" {
 variable "lambda_role_name" {
   type        = string
   default     = null
-  description = "(Optional) AWS IAM role name used by the lambda. If null, a new lambda role will be created"
+  description = "(Optional) AWS IAM role name used by the lambda. If null, a new lambda role will be created."
 }

@@ -13,4 +13,8 @@ variable "ecr_lifecycle_policy_rules" {
   type    = list(any)
   default = []
 }
+
+variable "project" {
+  type = string
+}
 # =============== ECR ================ #

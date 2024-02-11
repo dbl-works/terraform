@@ -1,3 +1,9 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}
+
 variable "environment" {
   type = string
 }
@@ -9,10 +15,6 @@ variable "project" {
 variable "region" {
   type    = string
   default = "eu-central-1"
-}
-
-variable "account_id" {
-  type = string
 }
 
 # =============== Certificate Manager ================ #
@@ -64,6 +66,7 @@ variable "private_buckets_list" {
     bucket_name                     = string
     versioning                      = bool
     primary_storage_class_retention = number
+    sse_algorithm                   = optional(string, "AES256")
     replicas = optional(list(object({
       bucket_arn = string
       kms_arn    = string
@@ -281,11 +284,11 @@ variable "rds_instance_class" {
 }
 variable "rds_engine_version" {
   type    = string
-  default = "13"
+  default = null
 }
 variable "rds_allocated_storage" {
   type    = number
-  default = 100
+  default = 10
 }
 variable "rds_allow_from_cidr_blocks" {
   type    = list(string)
@@ -295,6 +298,16 @@ variable "rds_allow_from_cidr_blocks" {
 variable "rds_subnet_group_name" {
   type    = string
   default = null
+}
+
+variable "rds_backup_retention_period" {
+  default = 7
+  type    = number
+}
+
+variable "rds_storage_autoscaling_upper_limit" {
+  type    = number
+  default = 20
 }
 
 variable "rds_multi_az" {
@@ -347,7 +360,7 @@ variable "rds_log_min_error_statement" {
 }
 
 variable "rds_ca_cert_identifier" {
-  default     = "rds-ca-rsa2048-g1"
+  default     = "rds-ca-ecc384-g1"
   type        = string
   description = "The identifier of the CA certificate for the DB instance."
 }
@@ -355,6 +368,11 @@ variable "rds_ca_cert_identifier" {
 
 # =============== ECS ================ #
 variable "health_check_path" { default = "/livez" }
+
+variable "enable_container_insights" {
+  type    = bool
+  default = true
+}
 
 variable "health_check_options" {
   type = object({
@@ -437,6 +455,12 @@ variable "ecs_custom_policies" {
   default = []
 }
 
+variable "ecs_multi_az" {
+  type        = bool
+  default     = false
+  description = "multi-az for load balancers"
+}
+
 variable "additional_certificate_arns" {
   description = "Additional certificates to add to the load balancer"
   default     = []
@@ -503,7 +527,6 @@ variable "service_discovery_enabled" {
   type    = bool
   default = true
 }
-
 # =============== ECS ================ #
 
 # =============== Cloudwatch ================ #

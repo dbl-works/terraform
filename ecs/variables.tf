@@ -17,11 +17,6 @@ variable "name" {
   default     = null
 }
 
-# Regional allows clusters with the same name to be in multiple regions
-variable "region" {
-  type    = string
-  default = "eu-central-1"
-}
 variable "regional" {
   default = false
   type    = bool
@@ -197,4 +192,14 @@ variable "health_check_options" {
     protocol            = optional(string, "HTTPS")
   })
   default = {}
+}
+
+variable "enable_container_insights" {
+  type    = bool
+  default = true
+}
+
+variable "multi_az" {
+  type    = bool
+  default = false
 }

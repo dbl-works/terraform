@@ -184,7 +184,7 @@ resource "aws_iam_role_policy" "ecs-task-execution-secrets-policy" {
         "Action" : [
           "secretsmanager:GetSecretValue",
         ],
-        "Resource" : "arn:aws:secretsmanager:${var.region}:*:secret:can-t-be-blank",
+        "Resource" : "arn:aws:secretsmanager:${local.region}:*:secret:can-t-be-blank",
       }
     ]
   })

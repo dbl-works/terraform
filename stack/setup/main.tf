@@ -3,8 +3,8 @@ locals {
     app = {
       description = "For applications to use inside containers"
     },
-    terraform = {
-      description = "Stores secrets for use in terraform workspace"
+    infra = {
+      description = "Stores secrets for use for infrastructure"
     }
   }
 }
@@ -39,9 +39,9 @@ resource "aws_secretsmanager_secret_version" "app" {
   secret_string = file("${path.cwd}/app-secrets.json")
 }
 
-resource "aws_secretsmanager_secret_version" "terraform" {
-  secret_id     = module.secrets["terraform"].id
-  secret_string = file("${path.cwd}/terraform-secrets.json")
+resource "aws_secretsmanager_secret_version" "infra" {
+  secret_id     = module.secrets["infra"].id
+  secret_string = file("${path.cwd}/infra-secrets.json")
 }
 
 module "secrets-kms-key" {

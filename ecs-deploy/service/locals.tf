@@ -20,10 +20,10 @@ locals {
       valueFrom : "${data.aws_secretsmanager_secret.app.arn}:${secret_name}::"
     }
   ]
-  app_port_mappings = try(var.app_config.container_port, null) == null ? [] : [{
-    containerPort : var.app_config.container_port,
-    hostPort : var.app_config.container_port,
-    name : var.app_config.name,
+  app_port_mappings = [for port in var.app_config.container_ports : {
+    containerPort : port,
+    hostPort : port,
+    name : "${var.app_config.name}-${port}",
     protocol : "tcp",
   }]
 
@@ -49,6 +49,7 @@ locals {
     PROJECT               = var.project
     REGION                = data.aws_region.current.name
     SECRETS_LIST          = jsonencode(local.secrets)
+    ULIMITS               = jsonencode(var.ulimits)
   })
 
   sidecar_container_definitions = [for config in var.sidecar_config : templatefile("${path.module}/task-definitions/sidecar.json", {

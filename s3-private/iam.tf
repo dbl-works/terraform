@@ -1,23 +1,20 @@
 locals {
   name = var.bucket_name != null ? var.bucket_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
-}
-
-resource "aws_iam_group" "usage" {
-  name = "${local.name}-s3-usage"
-}
-
-resource "aws_iam_policy" "usage" {
-  name        = "${local.name}-s3-usage"
-  description = "For uploading/downloading encrypted files on S3"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    ${var.policy_allow_listing_all_buckets ? "{\"Effect\": \"Allow\", \"Action\": [\"s3:ListAllMyBuckets\", \"s3:GetBucketLocation\"], \"Resource\": \"arn:aws:s3:::*\"}," : ""}
+  s3-policy = var.policy_allow_listing_all_buckets ? [
     {
-      "Effect": "Allow",
-      "Action": [
+      "Effect" : "Allow",
+      "Action" : [
+        "s3:ListAllMyBuckets",
+        "s3:GetBucketLocation",
+      ],
+      "Resource" : [
+        "arn:aws:s3:::*",
+      ]
+    }
+    ] : [
+    {
+      "Effect" : "Allow",
+      "Action" : [
         "s3:ListBucket",
         "s3:ListBucketVersions",
         "s3:ListObjectVersions",
@@ -30,25 +27,42 @@ resource "aws_iam_policy" "usage" {
         "s3:DeleteObject",
         "s3:DeleteObjectVersion"
       ],
-      "Resource": [
+      "Resource" : [
         "arn:aws:s3:::${var.bucket_name}",
         "arn:aws:s3:::${var.bucket_name}/*"
       ]
     },
+  ]
+  kms-policy = module.s3.kms_arn == null ? [] : [
     {
-      "Effect": "Allow",
-      "Action": [
+      "Effect" : "Allow",
+      "Action" : [
         "kms:Encrypt",
         "kms:Decrypt",
         "kms:GenerateDataKey"
       ],
-      "Resource": [
+      "Resource" : [
         "${module.s3.kms_arn}"
       ]
-    }
+    },
   ]
 }
-EOF
+
+resource "aws_iam_group" "usage" {
+  name = "${local.name}-s3-usage"
+}
+
+resource "aws_iam_policy" "usage" {
+  name        = "${local.name}-s3-usage"
+  description = "For uploading/downloading encrypted files on S3"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : concat(
+      local.s3-policy,
+      local.kms-policy
+    )
+  })
 }
 
 resource "aws_iam_group_policy_attachment" "usage" {

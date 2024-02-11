@@ -13,12 +13,18 @@ jobs:
           - aws-transfer/iam-role
           - certificate
           - cloudflare
+          - cloudtrail/cloudtrail-protection-scp
+          - cloudtrail/log-ingestor
+          - cloudtrail/log-producer
           - cloudwatch
+          - cloudwatch-kinesis
           - cloudwatch-snowflake
+          - circleci-token-rotator
           - cognito
           - ecr
           - ecs
-          - ecs-deploy
+          - ecs-deploy/service
+          - ecs-deploy/cluster
           - ecs-task
           - elasticache
           - fivetran
@@ -28,6 +34,7 @@ jobs:
           - global-accelerator
           - http-proxy
           - iam/iam-for-deploy-bot
+          - iam/iam-for-guest-humans
           - iam/iam-for-humans
           - iam/iam-policy-for-cross-account-access/destination-account
           - iam/iam-policy-for-cross-account-access/origin-account
@@ -45,24 +52,57 @@ jobs:
           - s3
           - s3-private
           - s3-public
+          - s3-shared
           - script/database-roles
           - secrets
           - slack/chatbot
+          - slack/ecr-scanner-notifier
           - slack/ecs-deployment-failure
           - slack/sentry
           - slack/sns
           - snowflake/cloud
           - stack/app
+          - stack/global
+          - stack/region
           - stack/setup
           - vpc
           - vpc-peering
           - vpn
           - xray
+        aws-version: ["~> 4.0", "~> 5.0"]
+        exclude:
+          - module: 'cloudwatch-kinesis'
+            aws-version: "~> 4.0"
       fail-fast: false
+
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      - name: Set AWS Provider Version
+        run: |
+          cd ${{ matrix.module }}
+          FILE=versions.tf
+          if test -f "$FILE"; then
+            sed -i '/aws = {/,/}/ s/version = "[^"]*/version = "${{ matrix.aws-version }}/' $FILE
+
+            echo "$FILE exists."
+          else
+            cat > $FILE <<EOF
+          terraform {
+            required_providers {
+              aws = {
+                source  = "hashicorp/aws"
+                version = "${{ matrix.aws-version }}"
+              }
+            }
+            required_version = ">= 1.0"
+          }
+          EOF
+          fi
+
+          cat $FILE
 
       - name: init
         run: |
@@ -75,6 +115,7 @@ jobs:
           # the stack/app module must have a provider block because the sub-module "vpc-peering" requires a non-standard "provider
           # see: https://github.com/hashicorp/terraform/issues/28490
           if [[ "${{ matrix.module }}" == "stack/app" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> vpc-peering.tf; fi
+          if [[ "${{ matrix.module }}" == "stack/global" ]]; then echo "provider \"aws\" { alias = \"us-east-1\" }" >> versions.tf; fi
           if [[ "${{ matrix.module }}" == "vpc-peering" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> main.tf; fi
           terraform validate
 
