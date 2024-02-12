@@ -3,8 +3,9 @@ resource "aws_alb" "alb" {
   count = var.skip_load_balancer ? 0 : 1
 
   name = local.name
-  # We limit ALB deployment to 2 AZs as a strategy to reduce costs.
-  subnets = var.multi_az ? slice(var.subnet_public_ids, 0, 2) : [var.subnet_public_ids[0]]
+
+  # At least two subnets in two different Availability Zones must be specified
+  subnets = slice(var.subnet_public_ids, 0, 2)
 
   security_groups = [
     aws_security_group.alb.id,
