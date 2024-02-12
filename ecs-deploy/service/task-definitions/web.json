@@ -14,6 +14,7 @@
         "logDriver": "awslogs",
         "options": {
             "awslogs-create-group": "true",
+            "awslogs-stream-prefix": "custom",
             "awslogs-group": "${LOG_GROUP_NAME}",
             "awslogs-region": "${REGION}",
             "mode": "${ECS_FARGATE_LOG_MODE}"
