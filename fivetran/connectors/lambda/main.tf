@@ -17,9 +17,9 @@ resource "aws_lambda_function" "main" {
   # Used to trigger updates
   source_code_hash = data.archive_file.zip.output_base64sha256
   handler          = "index.handler"
-  # List of available runtimes: https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime
-  runtime = "nodejs16.x"
-  timeout = 300
+  runtime          = var.runtime
+  timeout          = var.timeout
+  memory_size      = var.memory_size
 
   environment {
     variables = var.script_env

@@ -454,6 +454,12 @@ variable "ecs_custom_policies" {
   default = []
 }
 
+variable "ecs_multi_az" {
+  type        = bool
+  default     = false
+  description = "multi-az for load balancers"
+}
+
 variable "additional_certificate_arns" {
   description = "Additional certificates to add to the load balancer"
   default     = []
