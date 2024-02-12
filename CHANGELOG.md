@@ -8,7 +8,7 @@ This project does not follow SemVer, since modules are independent of each other
 
 ## Unreleased
 ### ecs
-- Decrease alb AZ region to 2 regions. [#302](https://github.com/dbl-works/terraform/pull/302)
+- Decrease alb AZ region to 2 regions. [#307](https://github.com/dbl-works/terraform/pull/307)
 
 ### s3-shared
 - New module `s3-shared` which creates a S3 Bucket and a user account that allows externals to exchange files with you [#300](https://github.com/dbl-works/terraform/pull/300)
