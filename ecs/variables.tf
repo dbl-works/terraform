@@ -195,7 +195,7 @@ variable "health_check_options" {
 
 variable "enable_container_insights" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "multi_az" {
