@@ -9,7 +9,6 @@ module "elasticache_kms" {
   multi_region            = false
 }
 
-
 module "elasticache" {
   source = "../../elasticache"
 

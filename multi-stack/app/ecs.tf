@@ -18,15 +18,12 @@ data "aws_kms_key" "app" {
 }
 
 module "ecs" {
-  for_each = var.project_settings
-
   source = "../../ecs"
 
-  skip_load_balancer = each.value.skip_load_balancer
-  project            = each.key
-  environment        = var.environment
-  vpc_id             = module.vpc.id
-  subnet_public_ids  = module.vpc.subnet_public_ids
+  project           = var.project
+  environment       = var.environment
+  vpc_id            = module.vpc.id
+  subnet_public_ids = module.vpc.subnet_public_ids
   secrets_arns = flatten([
     data.aws_secretsmanager_secret.app[each.key].arn,
     each.value.secret_arns
