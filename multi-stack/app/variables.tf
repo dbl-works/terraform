@@ -37,6 +37,7 @@ variable "project_settings" {
     s3_cloudflare_records = optional(map(object({
       worker_script_name = string
     })), {})
+    host_header       = optional(list(string), null)
     health_check_path = optional(string, null)
     health_check_options = optional(
       object({

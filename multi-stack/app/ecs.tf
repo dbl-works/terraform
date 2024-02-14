@@ -48,7 +48,7 @@ module "ecs" {
   alb_listener_rules = [for idx, project_name in keys(var.project_settings) : {
     priority         = idx + 1
     target_group_arn = aws_alb_target_group.ecs[project_name].arn
-    host_header      = ["api.${var.project_settings[project_name].domain}"]
+    host_header      = var.project_settings[project_name].host_header == null ? ["api.${var.project_settings[project_name].domain}"] : var.project_settings[project_name].host_header
     type             = "forward"
   }]
   certificate_arn             = local.certificate_arn
