@@ -10,7 +10,8 @@ resource "aws_security_group" "db" {
 }
 
 resource "aws_security_group_rule" "db-from-cidr-blocks" {
-  count             = length(var.allow_from_cidr_blocks)
+  count = length(var.allow_from_cidr_blocks)
+
   type              = "ingress"
   from_port         = 5432
   to_port           = 5432
@@ -23,7 +24,8 @@ resource "aws_security_group_rule" "db-from-cidr-blocks" {
 }
 
 resource "aws_security_group_rule" "db-from-security-groups" {
-  count                    = length(var.allow_from_security_groups)
+  count = length(var.allow_from_security_groups)
+
   type                     = "ingress"
   from_port                = 5432
   to_port                  = 5432

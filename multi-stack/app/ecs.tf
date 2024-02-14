@@ -17,6 +17,14 @@ data "aws_kms_key" "app" {
   key_id = "alias/${each.key}/${var.environment}/app"
 }
 
+locals {
+  certificate_arns = [for cert in values(data.aws_acm_certificate.default) : cert.arn]
+
+  certificate_arn             = slice(local.certificate_arns, 0, 1)[0]
+  additional_certificate_arns = slice(local.certificate_arns, 1, length(local.certificate_arns))
+}
+
+# TODO: Access right
 module "ecs" {
   source = "../../ecs"
 
@@ -25,7 +33,7 @@ module "ecs" {
   vpc_id            = module.vpc.id
   subnet_public_ids = module.vpc.subnet_public_ids
   secrets_arns = flatten([
-    data.aws_secretsmanager_secret.app[*].arn,
+    toset(values(data.aws_secretsmanager_secret.app).*.arn),
     var.ecs_config.secret_arns
   ])
 
@@ -39,8 +47,8 @@ module "ecs" {
   # optional
   health_check_path           = var.ecs_config.health_check_path
   health_check_options        = var.ecs_config.health_check_options
-  certificate_arn             = data.aws_acm_certificate.default[0].arn
-  additional_certificate_arns = toset(values(data.aws_acm_certificate.default).*.arn)
+  certificate_arn             = local.certificate_arn
+  additional_certificate_arns = local.additional_certificate_arns
   keep_alive_timeout          = var.ecs_config.keep_alive_timeout
   monitored_service_groups    = var.ecs_config.monitored_service_groups
   enable_container_insights   = var.ecs_config.enable_container_insights
@@ -54,12 +62,12 @@ module "ecs" {
   ])))
 
   grant_read_access_to_s3_arns = distinct(flatten(concat([
-    [for arn in values(module.s3-private)[*].arn : arn],
+    toset(values(module.s3-private).*.arn),
     var.ecs_config.grant_read_access_to_s3_arns
   ])))
 
   grant_write_access_to_s3_arns = distinct(flatten(concat([
-    [for arn in values(module.s3-private)[*].arn : arn],
+    toset(values(module.s3-private).*.arn),
     var.ecs_config.grant_write_access_to_s3_arns
   ])))
 
