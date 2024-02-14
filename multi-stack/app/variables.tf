@@ -6,22 +6,48 @@ variable "project" {
   type = string
 }
 
+variable "ecs" {
+  type = object({
+    allow_internal_traffic_to_ports = optional(list(string), null)
+    allow_alb_traffic_to_ports      = optional(list(string), null)
+    health_check_path               = optional(string, null)
+    grant_access_to_kms_arns        = optional(list(string), [])
+    health_check_options = optional(
+      object({
+        healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.
+        unhealthy_threshold = optional(number, 5)  # The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold.
+        timeout             = optional(number, 30) # The amount of time, in seconds, during which no response means a failed health check. For Application Load Balancers, the range is 2 to 120 seconds.
+        interval            = optional(number, 60) # The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds.
+        matcher             = optional(string, "200,204")
+        protocol            = optional(string, "HTTP")
+      }), {}
+    )
+    regional                          = optional(bool, null)
+    keep_alive_timeout                = optional(string, null)
+    grant_read_access_to_s3_arns      = optional(list(string), null)
+    grant_write_access_to_s3_arns     = optional(list(string), null)
+    grant_read_access_to_sqs_arns     = optional(list(string), null)
+    grant_write_access_to_sqs_arns    = optional(list(string), null)
+    ecs_custom_policies               = optional(list(any), [])
+    monitored_service_groups          = optional(list(string), null)
+    enable_container_insights         = optional(bool, false)
+    enable_dashboard                  = optional(bool, false)
+    cloudwatch_logs_retention_in_days = optional(number, null)
+    secret_arns                       = optional(list(string), [])
+    allowlisted_ssh_ips               = optional(list(string), null)
+    service_discovery_enabled         = optional(bool, null)
+    vpc_cidr_block                    = string
+    s3_cloudflare_records = optional(map(object({
+      worker_script_name = string
+    })), {})
+  })
+}
+
 variable "project_settings" {
   type = map(object({
-    domain                          = string
-    ecs_name                        = optional(string, null)
-    skip_load_balancer              = optional(bool, true)
-    allow_internal_traffic_to_ports = optional(list(string), [])
-    allow_alb_traffic_to_ports      = optional(list(string), [])
-    regional                        = optional(bool, false)
-    grant_read_access_to_s3_arns    = optional(list(string), [])
-    grant_write_access_to_s3_arns   = optional(list(string), [])
-    grant_read_access_to_sqs_arns   = optional(list(string), [])
-    grant_write_access_to_sqs_arns  = optional(list(string), [])
-    ecs_custom_policies             = optional(list(any), [])
-    secret_arns                     = optional(list(string), [])
-    private_buckets_list            = optional(list(string), [])
-    public_buckets_list             = optional(list(string), [])
+    domain               = string
+    private_buckets_list = optional(list(string), [])
+    public_buckets_list  = optional(list(string), [])
     s3_cloudflare_records = optional(map(object({
       worker_script_name = string
     })), {})
@@ -403,17 +429,6 @@ variable "service_discovery_enabled" {
 # =============== ECS ================ #
 
 # =============== Cloudwatch ================ #
-variable "cloudwatch_dashboard_view" {
-  type = string
-  # simple, detailed
-  default = "simple"
-}
-
-variable "enable_cloudwatch_dashboard" {
-  type    = bool
-  default = true
-}
-
 variable "cloudwatch_sns_topic_arns" {
   type    = list(string)
   default = []
