@@ -29,7 +29,7 @@ module "rds" {
   subnet_ids  = module.vpc.subnet_private_ids
 
   allow_from_security_groups = [
-    module.ecs.ecs_security_group_id,
+    module.ecs.ecs_security_group_id
   ]
 
   # optional

@@ -8,20 +8,9 @@ variable "project" {
 
 variable "ecs_config" {
   type = object({
-    allow_internal_traffic_to_ports = optional(list(string), null)
-    allow_alb_traffic_to_ports      = optional(list(string), null)
-    health_check_path               = optional(string, null)
-    grant_access_to_kms_arns        = optional(list(string), [])
-    health_check_options = optional(
-      object({
-        healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.
-        unhealthy_threshold = optional(number, 5)  # The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold.
-        timeout             = optional(number, 30) # The amount of time, in seconds, during which no response means a failed health check. For Application Load Balancers, the range is 2 to 120 seconds.
-        interval            = optional(number, 60) # The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds.
-        matcher             = optional(string, "200,204")
-        protocol            = optional(string, "HTTP")
-      }), {}
-    )
+    allow_internal_traffic_to_ports   = optional(list(string), null)
+    allow_alb_traffic_to_ports        = optional(list(string), null)
+    grant_access_to_kms_arns          = optional(list(string), [])
     regional                          = optional(bool, null)
     keep_alive_timeout                = optional(string, null)
     grant_read_access_to_s3_arns      = optional(list(string), [])
@@ -48,6 +37,17 @@ variable "project_settings" {
     s3_cloudflare_records = optional(map(object({
       worker_script_name = string
     })), {})
+    health_check_path = optional(string, null)
+    health_check_options = optional(
+      object({
+        healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.
+        unhealthy_threshold = optional(number, 5)  # The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy_threshold.
+        timeout             = optional(number, 30) # The amount of time, in seconds, during which no response means a failed health check. For Application Load Balancers, the range is 2 to 120 seconds.
+        interval            = optional(number, 60) # The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds.
+        matcher             = optional(string, "200,204")
+        protocol            = optional(string, "HTTP")
+      }), {}
+    )
   }))
 }
 

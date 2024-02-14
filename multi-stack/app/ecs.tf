@@ -45,8 +45,12 @@ module "ecs" {
   ])))
 
   # optional
-  health_check_path           = var.ecs_config.health_check_path
-  health_check_options        = var.ecs_config.health_check_options
+  alb_listener_rules = [for idx, project_name in keys(var.project_settings) : {
+    priority         = idx + 1
+    target_group_arn = aws_alb_target_group.ecs[project_name].arn
+    host_header      = [var.project_settings[project_name].domain]
+    type             = "forward"
+  }]
   certificate_arn             = local.certificate_arn
   additional_certificate_arns = local.additional_certificate_arns
   keep_alive_timeout          = var.ecs_config.keep_alive_timeout
