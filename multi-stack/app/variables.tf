@@ -37,9 +37,6 @@ variable "ecs_config" {
     allowlisted_ssh_ips               = optional(list(string), null)
     service_discovery_enabled         = optional(bool, null)
     vpc_cidr_block                    = string
-    s3_cloudflare_records = optional(map(object({
-      worker_script_name = string
-    })), {})
   })
 }
 
