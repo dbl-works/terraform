@@ -6,7 +6,7 @@ variable "project" {
   type = string
 }
 
-variable "ecs" {
+variable "ecs_config" {
   type = object({
     allow_internal_traffic_to_ports = optional(list(string), null)
     allow_alb_traffic_to_ports      = optional(list(string), null)
