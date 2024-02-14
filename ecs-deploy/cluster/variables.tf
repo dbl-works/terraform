@@ -96,8 +96,3 @@ variable "cluster_name" {
   type    = string
   default = null
 }
-
-variable "load_balancer_target_group_name" {
-  type    = string
-  default = null
-}
