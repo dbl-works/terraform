@@ -26,7 +26,7 @@ module "rds" {
   kms_key_arn = var.rds_master_db_kms_key_arn == null ? module.rds-kms-key.arn : var.rds_master_db_kms_key_arn
   subnet_ids  = module.vpc.subnet_private_ids
 
-  allow_from_security_groups = module.ecs.ecs_security_group_id
+  allow_from_security_groups = [module.ecs.ecs_security_group_id]
 
   # optional
   username                        = var.rds_is_read_replica ? null : local.credentials.db_username
