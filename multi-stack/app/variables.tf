@@ -399,21 +399,6 @@ variable "keep_alive_timeout" {
 #   default = []
 # }
 
-variable "allowlisted_ssh_ips" {
-  type    = list(string)
-  default = []
-}
-
-variable "additional_certificate_arns" {
-  description = "Additional certificates to add to the load balancer"
-  default     = []
-
-  type = list(object({
-    name = string
-    arn  = string
-  }))
-}
-
 variable "service_discovery_enabled" {
   type    = bool
   default = true

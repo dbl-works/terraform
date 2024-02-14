@@ -40,7 +40,7 @@ module "ecs" {
   health_check_path           = var.ecs_config.health_check_path
   health_check_options        = var.ecs_config.health_check_options
   certificate_arn             = data.aws_acm_certificate.default[0].arn
-  additional_certificate_arns = values(data.aws_acm_certificate.default)[*].arn
+  additional_certificate_arns = toset(values(data.aws_acm_certificate.default).*.arn)
   keep_alive_timeout          = var.ecs_config.keep_alive_timeout
   monitored_service_groups    = var.ecs_config.monitored_service_groups
   enable_container_insights   = var.ecs_config.enable_container_insights
