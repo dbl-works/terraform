@@ -414,11 +414,6 @@ variable "additional_certificate_arns" {
   }))
 }
 
-variable "rds_secret_manager_id" {
-  type        = string
-  description = "secret manager id which store the rds root user and root password"
-}
-
 variable "service_discovery_enabled" {
   type    = bool
   default = true
