@@ -87,7 +87,7 @@ resource "aws_acm_certificate" "main" {
 resource "aws_eip" "nat" {
   count = var.eips_nat_count # 1 per NAT / AZ
 
-  vpc = true
+  domain = "vpc"
 
   tags = {
     Name        = "${var.project}-nat-${var.environment}-${count.index + 1}"
