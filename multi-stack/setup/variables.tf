@@ -2,6 +2,10 @@ variable "environment" {
   type = string
 }
 
+variable "project" {
+  type = string
+}
+
 variable "project_settings" {
   type = map(object({
     domain = string

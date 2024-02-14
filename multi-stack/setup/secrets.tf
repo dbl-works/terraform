@@ -12,6 +12,21 @@ module "secrets" {
   description = "For applications to use inside containers"
 }
 
+
+module "infra-secrets" {
+  source = "../../secrets"
+
+  create_kms_key = true
+
+  project     = var.project
+  environment = var.environment
+
+  # Optional
+  application = "infra"
+  description = "Stores secrets for use for infrastructure"
+}
+
+
 resource "aws_secretsmanager_secret_version" "app" {
   for_each = var.project_settings
 
@@ -21,6 +36,6 @@ resource "aws_secretsmanager_secret_version" "app" {
 
 # We only need one for each multi-stack
 resource "aws_secretsmanager_secret_version" "infra" {
-  secret_id     = module.secrets["infra"].id
+  secret_id     = module.infra-secrets.id
   secret_string = file("${path.cwd}/infra-secrets.json")
 }
