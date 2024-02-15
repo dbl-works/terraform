@@ -58,10 +58,10 @@ variable "project_settings" {
 
 variable "tls_settings" {
   type = object({
-    tls_1_3                  = string # "on/off"
-    automatic_https_rewrites = string # "on/off"
-    ssl                      = string # "strict"
-    always_use_https         = string # "on/off"
+    tls_1_3                  = optional(string, "on")     # "on/off"
+    automatic_https_rewrites = optional(string, "on")     # "on/off"
+    ssl                      = optional(string, "strict") # "strict"
+    always_use_https         = optional(string, "on")     # "on/off"
   })
   default = null
 }
