@@ -24,7 +24,6 @@ locals {
   additional_certificate_arns = slice(local.certificate_arns, 1, length(local.certificate_arns))
 }
 
-# TODO: Access right
 module "ecs" {
   source = "../../ecs"
 
