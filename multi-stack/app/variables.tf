@@ -98,94 +98,26 @@ variable "remote_cidr_blocks" {
 }
 # =============== VPC ================ #
 
-
-# =============== Elasticache ================ #
-variable "elasticache_transit_encryption_enabled" {
-  type        = bool
-  default     = true
-  description = ":warning: changing this from `false` to `true` requires a re-creation of the cluster"
+variable "elasticache_config" {
+  type = object({
+    transit_encryption_enabled   = optional(bool, true)
+    name                         = optional(string, null)
+    node_type                    = optional(string, "cache.t3.micro")
+    major_version                = optional(number, 7)
+    minor_version                = optional(number, 0)
+    node_count                   = optional(number, 1)
+    parameter_group_name         = optional(string, "default.redis7.cluster.on")
+    replicas_per_node_group      = optional(number, 1)
+    shards_per_replication_group = optional(number, 1)
+    data_tiering_enabled         = optional(bool, false)
+    multi_az_enabled             = optional(bool, true)
+    snapshot_retention_limit     = optional(number, 0)
+    cluster_mode                 = optional(bool, true)
+    maxmemory_policy             = optional(string, null)
+    automatic_failover_enabled   = optional(bool, true)
+  })
 }
 
-variable "elasticache_name" {
-  type    = string
-  default = null
-}
-
-variable "elasticache_node_type" {
-  type    = string
-  default = "cache.t3.micro"
-}
-
-variable "elasticache_major_version" {
-  type    = number
-  default = 7
-  validation {
-    condition     = var.elasticache_major_version >= 6 && var.elasticache_major_version <= 7
-    error_message = "elasticache major_version must be 6 or 7"
-  }
-}
-
-variable "elasticache_minor_version" {
-  type    = number
-  default = 0
-  validation {
-    condition     = var.elasticache_minor_version >= 0
-    error_message = "elasticache minor_version must be between 0 or higher"
-  }
-}
-
-variable "elasticache_node_count" {
-  type    = number
-  default = 1
-}
-
-variable "elasticache_parameter_group_name" {
-  type    = string
-  default = "default.redis7.cluster.on"
-}
-
-variable "elasticache_replicas_per_node_group" {
-  type    = number
-  default = 1
-}
-
-variable "elasticache_shards_per_replication_group" {
-  type    = number
-  default = 1
-}
-
-variable "elasticache_data_tiering_enabled" {
-  type    = bool
-  default = false
-}
-
-variable "elasticache_multi_az_enabled" {
-  type    = bool
-  default = true
-}
-
-# Number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them
-# If the value of SnapshotRetentionLimit is set to zero (0), backups are turned off.
-variable "elasticache_snapshot_retention_limit" {
-  type    = number
-  default = 0
-}
-
-variable "elasticache_cluster_mode" {
-  type    = bool
-  default = true
-}
-
-variable "elasticache_maxmemory_policy" {
-  type    = string
-  default = null
-}
-
-variable "elasticache_automatic_failover_enabled" {
-  type    = bool
-  default = true
-}
-# =============== Elasticache ================ #
 variable "rds_config" {
   type = object({
     name                            = optional(string, null)
@@ -196,7 +128,7 @@ variable "rds_config" {
     allocated_storage               = optional(number, 10)
     allow_from_cidr_blocks          = optional(list(string), [])
     subnet_group_name               = optional(string, null)
-    backup_retention_period         = optional(7, number)
+    backup_retention_period         = optional(number, 7)
     storage_autoscaling_upper_limit = optional(number, 20)
     multi_az                        = optional(bool, null)
     delete_automated_backups        = optional(bool, true)
@@ -205,6 +137,6 @@ variable "rds_config" {
     log_min_duration_statement      = optional(number, -1)
     log_retention_period            = optional(number, 1440)
     log_min_error_statement         = optional(string, "panic")
-    ca_cert_identifier              = optional("rds-ca-ecc384-g1", string)
+    ca_cert_identifier              = optional(string, "rds-ca-ecc384-g1")
   })
 }

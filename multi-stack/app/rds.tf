@@ -31,15 +31,15 @@ module "rds" {
   # optional
   username                        = local.credentials.db_username
   instance_class                  = var.rds_config.instance_class
-  engine_version                  = var.rds_config.config.engine_version
+  engine_version                  = var.rds_config.engine_version
   allocated_storage               = var.rds_config.allocated_storage
   multi_az                        = var.rds_config.multi_az == null ? var.environment == "production" : var.rds_config.multi_az
   master_db_instance_arn          = null
   is_read_replica                 = false
   regional                        = true
   region                          = var.region
-  name                            = var.rds_config.config.name
-  identifier                      = var.rds_config.config.identifier
+  name                            = var.rds_config.name
+  identifier                      = var.rds_config.identifier
   allow_from_cidr_blocks          = var.rds_config.allow_from_cidr_blocks
   subnet_group_name               = var.rds_config.subnet_group_name
   delete_automated_backups        = var.rds_config.delete_automated_backups
