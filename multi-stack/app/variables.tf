@@ -6,6 +6,11 @@ variable "project" {
   type = string
 }
 
+variable "region" {
+  type    = string
+  default = "eu-central-1"
+}
+
 variable "ecs_config" {
   type = object({
     allow_internal_traffic_to_ports   = optional(list(string), null)
@@ -52,12 +57,6 @@ variable "project_settings" {
   }))
 }
 
-variable "region" {
-  type    = string
-  default = "eu-central-1"
-}
-
-# =============== Cloudflare ================ #
 variable "tls_settings" {
   type = object({
     tls_1_3                  = string # "on/off"
@@ -67,36 +66,25 @@ variable "tls_settings" {
   })
   default = null
 }
-# =============== KMS ================ #
+
 variable "kms_deletion_window_in_days" {
   type = number
 }
 
 # =============== KMS ================ #
 
-# =============== NAT ================ #
 variable "public_ips" {
   type    = list(string)
   default = []
 }
-# =============== NAT ================ #
 
-# =============== VPC ================ #
-variable "vpc_availability_zones" {
-  type    = list(string)
-  default = []
+variable "vpc_config" {
+  type = object({
+    availability_zones = optional(list(string), [])
+    cidr_block         = string
+    remote_cidr_blocks = optional(list(string), [])
+  })
 }
-
-variable "vpc_cidr_block" {
-  type = string
-}
-
-# CIDR blocks from all regions that are not this region
-variable "remote_cidr_blocks" {
-  type    = list(string)
-  default = []
-}
-# =============== VPC ================ #
 
 variable "elasticache_config" {
   type = object({

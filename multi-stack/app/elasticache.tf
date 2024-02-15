@@ -19,8 +19,8 @@ module "elasticache" {
   kms_key_arn = module.elasticache_kms.arn
 
   allow_from_cidr_blocks = distinct(compact(flatten([
-    var.vpc_cidr_block,
-    var.remote_cidr_blocks,
+    var.vpc_config.cidr_block,
+    var.vpc_config.remote_cidr_blocks,
   ])))
 
   # optional
