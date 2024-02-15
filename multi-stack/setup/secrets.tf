@@ -34,7 +34,7 @@ resource "aws_secretsmanager_secret_version" "app" {
   secret_string = file("${path.cwd}/app-secrets/${each.key}.json")
 }
 
-# We only need one for each multi-stack
+# We only need one infra secret manager for each multi-stack
 resource "aws_secretsmanager_secret_version" "infra" {
   secret_id     = module.infra-secrets.id
   secret_string = file("${path.cwd}/infra-secrets.json")
