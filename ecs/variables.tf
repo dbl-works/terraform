@@ -170,11 +170,6 @@ variable "cloudwatch_logs_retention_in_days" {
   nullable = false
 }
 
-variable "skip_load_balancer" {
-  type    = bool
-  default = false
-}
-
 variable "alb_listener_rules" {
   type = list(object({
     priority         = string

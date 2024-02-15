@@ -1,8 +1,7 @@
 # Load balancer endpoints for DNS values
 output "alb_dns_name" {
-  value = var.skip_load_balancer ? "no alb" : aws_alb.alb[0].dns_name
+  value = aws_alb.alb.dns_name
 }
-
 output "nlb_dns_name" {
   value = length(aws_lb.nlb) > 0 ? aws_lb.nlb[0].dns_name : null
 }

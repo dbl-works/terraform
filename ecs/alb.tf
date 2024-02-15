@@ -1,7 +1,5 @@
 # Main load balancer for user facing traffic
 resource "aws_alb" "alb" {
-  count = var.skip_load_balancer ? 0 : 1
-
   name = local.name
 
   # At least two subnets in two different Availability Zones must be specified
@@ -20,9 +18,7 @@ resource "aws_alb" "alb" {
 }
 
 resource "aws_alb_listener" "http" {
-  count = var.skip_load_balancer ? 0 : 1
-
-  load_balancer_arn = aws_alb.alb[0].id
+  load_balancer_arn = aws_alb.alb.id
   port              = "80"
   protocol          = "HTTP"
 
@@ -37,9 +33,7 @@ resource "aws_alb_listener" "http" {
 }
 
 resource "aws_alb_listener" "https" {
-  count = var.skip_load_balancer ? 0 : 1
-
-  load_balancer_arn = aws_alb.alb[0].id
+  load_balancer_arn = aws_alb.alb.id
   port              = "443"
   protocol          = "HTTPS"
   certificate_arn   = var.certificate_arn
@@ -61,7 +55,7 @@ resource "aws_alb_listener_certificate" "https" {
 resource "aws_lb_listener_rule" "main" {
   for_each = { for idx, rule in var.alb_listener_rules : idx => rule }
 
-  listener_arn = aws_alb_listener.https[0].arn
+  listener_arn = aws_alb_listener.https.arn
   priority     = each.value.priority
 
   action {

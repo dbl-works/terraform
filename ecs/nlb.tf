@@ -1,5 +1,5 @@
 resource "aws_lb" "nlb" {
-  count              = var.skip_load_balancer || length(var.allowlisted_ssh_ips) == 0 ? 0 : 1
+  count              = length(var.allowlisted_ssh_ips) > 0 ? 1 : 0
   name               = "${local.name}-nlb"
   load_balancer_type = "network"
   # The NLB is configured for single-region deployment as it serves developer-only purposes, and we accept the associated downtime risks.
