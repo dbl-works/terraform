@@ -199,6 +199,7 @@ variable "vpc_name" {
 }
 
 variable "availability_zones" {
-  type    = list(string)
-  default = ["eu-central-1a", "eu-central-1b"]
+  type     = list(string)
+  default  = ["eu-central-1a", "eu-central-1b"]
+  nullable = false
 }
