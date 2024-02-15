@@ -1,5 +1,5 @@
 output "ecs" {
-  value = values(module.ecs)[*]
+  value = module.ecs
 }
 
 output "rds" {
