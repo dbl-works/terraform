@@ -62,7 +62,7 @@ module "ecs" {
 
   allowlisted_ssh_ips = distinct(flatten(concat([
     var.ecs_config.allowlisted_ssh_ips,
-    var.ecs_config.vpc_cidr_block
+    var.vpc_config.cidr_block
   ])))
 
   grant_read_access_to_s3_arns = distinct(flatten(concat([

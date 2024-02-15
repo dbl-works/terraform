@@ -30,7 +30,6 @@ variable "ecs_config" {
     secret_arns                       = optional(list(string), [])
     allowlisted_ssh_ips               = optional(list(string), null)
     service_discovery_enabled         = optional(bool, null)
-    vpc_cidr_block                    = string
   })
 }
 
