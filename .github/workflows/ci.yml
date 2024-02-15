@@ -47,6 +47,8 @@ jobs:
           - kms-key
           - kms-key-replica
           - lambda
+          - multi-stack/app
+          - multi-stack/setup
           - nat
           - rds
           - s3
@@ -72,6 +74,8 @@ jobs:
         aws-version: ["~> 4.0", "~> 5.0"]
         exclude:
           - module: 'cloudwatch-kinesis'
+            aws-version: "~> 4.0"
+          - module: 'stack/setup'
             aws-version: "~> 4.0"
       fail-fast: false
 
