@@ -2,6 +2,7 @@
 output "alb_dns_name" {
   value = aws_alb.alb.dns_name
 }
+
 output "nlb_dns_name" {
   value = length(aws_lb.nlb) > 0 ? aws_lb.nlb[0].dns_name : null
 }
@@ -26,12 +27,12 @@ output "ecs_security_group_id" {
 
 # Needed to attach additional ressources (e.g. certificates) to the ALB
 output "https_alb_listener_arn" {
-  value = var.skip_load_balancer ? "" : aws_alb_listener.https[0].arn
+  value = aws_alb_listener.https.arn
 }
 
 # Need this for the usage of cloudwatch metrics
 output "alb_arn_suffix" {
-  value = var.skip_load_balancer ? "" : aws_alb.alb[0].arn_suffix
+  value = aws_alb.alb.arn_suffix
 }
 
 output "ecs_cluster_name" {
