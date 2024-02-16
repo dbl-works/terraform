@@ -3,11 +3,12 @@ module "service" {
 
   for_each = var.services
 
-  environment = var.environment
-  project     = var.project
-  region      = var.region
-  regional    = var.regional
-  vpc_name    = var.vpc_name
+  environment  = var.environment
+  project      = var.project
+  region       = var.region
+  regional     = var.regional
+  vpc_name     = var.vpc_name
+  cluster_name = var.cluster_name
 
   app_config                      = each.value.app_config
   sidecar_config                  = each.value.sidecar_config
