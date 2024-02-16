@@ -6,11 +6,6 @@ variable "environment" {
   type = string
 }
 
-variable "log_group_name" {
-  type    = string
-  default = null
-}
-
 variable "name" {
   type = string
 }
