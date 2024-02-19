@@ -52,6 +52,7 @@ variable "services" {
     load_balancer_target_group_name = optional(string, null)
     security_group_ids              = optional(list(string), [])
     service_discovery_namespace_id  = optional(string, null)
+    availability_zones              = optional(list(string), null)
     volume = optional(
       list(object({
         name = optional(string, true)

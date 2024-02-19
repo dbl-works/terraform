@@ -41,6 +41,10 @@ data "aws_subnets" "selected" {
       "${local.vpc_name}-${var.subnet_type}-*",
     ]
   }
+  filter {
+    name   = "availability-zone"
+    values = var.availability_zones
+  }
 }
 
 data "aws_security_group" "ecs" {

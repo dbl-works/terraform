@@ -22,4 +22,5 @@ module "service" {
   security_group_ids              = each.value.security_group_ids
   service_discovery_namespace_id  = each.value.service_discovery_namespace_id
   ulimits                         = each.value.ulimits
+  availability_zones              = each.value.availability_zones
 }
