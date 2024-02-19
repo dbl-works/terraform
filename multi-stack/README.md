@@ -17,7 +17,7 @@ module "multi-stack-setup" {
   source = "github.com/dbl-works/terraform//multi-stack/setup"
 
   environment = "staging"
-  project     = "lih-shared"
+  project     = "dbl-shared"
   project_settings = {
     facebook = {
       domain = "facebook.com"
@@ -36,7 +36,7 @@ module "multi-stack-setup" {
 module "multi-stack" {
   source = "github.com/dbl-works/terraform//multi-stack/app"
 
-  project     = "lih-shared"
+  project     = "dbl-shared"
   environment = "staging"
   region      = "eu-central-1"
 
