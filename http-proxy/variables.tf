@@ -51,7 +51,7 @@ variable "eip" {
   default     = null
   description = "Elastic IP to associate with the instance. If omitted, a new one is created."
   validation {
-    condition     = can(regex("^(\\d{1,3}\\.){3}\\d{1,3}$", var.eip))
+    condition     = can(regex("^(\\d{1,3}\\.){3}\\d{1,3}$", var.eip)) || var.eip == null
     error_message = "eip must be a valid IPv4 address."
   }
 }

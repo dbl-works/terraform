@@ -9,6 +9,10 @@ For a much more robust (and expensive) solution, consider using a NAT Gateway in
 
 Before launching this resource, create a key-pair; read the [docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html).
 
+### Using Mac OS
+- You can generate a key-pair using the following command:
+`ssh-keygen -t ed25519 -C <label>`
+
 ```terraform
 module "http-proxy" {
   source = "github.com/dbl-works/terraform//http-proxy?ref=v2021.08.24"
