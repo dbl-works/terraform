@@ -18,6 +18,5 @@ locals {
     for name, value in var.environment_variables : { name : name, value : value }
   ])
   image_name                = var.image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.ecr_repo_name}" : var.image_name
-  log_group_name            = var.log_group_name == null ? "${var.project}-${var.environment}" : var.log_group_name
-  cloudwatch_log_group_name = "/ecs/${local.log_group_name}/task"
+  cloudwatch_log_group_name = "/custom/${var.project}/${var.environment}/ecs-task"
 }

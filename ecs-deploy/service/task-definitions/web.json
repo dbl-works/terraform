@@ -14,9 +14,9 @@
         "logDriver": "awslogs",
         "options": {
             "awslogs-create-group": "true",
-            "awslogs-group": "/ecs/${PROJECT}-${ENVIRONMENT}",
+            "awslogs-stream-prefix": "custom",
+            "awslogs-group": "${LOG_GROUP_NAME}",
             "awslogs-region": "${REGION}",
-            "awslogs-stream-prefix": "${NAME}",
             "mode": "${ECS_FARGATE_LOG_MODE}"
         }
     },
