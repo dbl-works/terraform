@@ -68,7 +68,10 @@ variable "additional_certificate_arns" {
   description = "Additional certificates to add to the load balancer"
   default     = []
 
-  type = list(string)
+  type = list(object({
+    name = string
+    arn  = string
+  }))
 }
 
 # CIDR blocks to allow traffic from

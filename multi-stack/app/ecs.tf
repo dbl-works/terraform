@@ -51,7 +51,7 @@ module "ecs" {
     type             = "forward"
   }]
   certificate_arn             = local.certificate_arn
-  additional_certificate_arns = local.additional_certificate_arns
+  additional_certificate_arns = values(data.aws_acm_certificate.default)[*].arn
   keep_alive_timeout          = var.ecs_config.keep_alive_timeout
   monitored_service_groups    = var.ecs_config.monitored_service_groups
   enable_container_insights   = var.ecs_config.enable_container_insights

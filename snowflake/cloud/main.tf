@@ -5,6 +5,8 @@ resource "snowflake_database" "main" {
   data_retention_time_in_days = each.value.data_retention_in_days
 }
 
+
+
 resource "snowflake_warehouse" "main" {
   name           = var.warehouse_name
   warehouse_size = var.warehouse_size
@@ -20,6 +22,7 @@ resource "snowflake_warehouse" "main" {
 locals {
   network_policy_name = "IpNetworkPolicy"
 }
+
 
 #
 # when using "SECURITYADMIN" + "SYSADMIN" roles, which should be suffcient, see https://docs.snowflake.com/en/sql-reference/sql/create-network-policy.html
