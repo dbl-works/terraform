@@ -1,14 +1,12 @@
-data "aws_region" "current" {}
-
-locals {
-  region = data.aws_region.current.name
-}
-
 variable "vpc_id" {}
 variable "subnet_ids" {}
 variable "kms_key_arn" {}
 variable "project" {}
 variable "environment" {}
+variable "region" {
+  type    = string
+  default = "eu-central-1"
+}
 
 variable "ca_cert_identifier" {
   default = "rds-ca-ecc384-g1"
@@ -138,7 +136,7 @@ variable "identifier" {
 }
 
 locals {
-  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${local.region}" : ""}"
+  name = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
 }
 
 variable "log_min_duration_statement" {

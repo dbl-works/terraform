@@ -18,13 +18,15 @@ variable "name" {
 }
 
 variable "regional" {
-  default = false
-  type    = bool
+  default  = false
+  type     = bool
+  nullable = false
 }
 
 variable "keep_alive_timeout" {
-  type    = number
-  default = 60
+  type     = number
+  default  = 60
+  nullable = false
   validation {
     condition     = var.keep_alive_timeout >= 60 && var.keep_alive_timeout <= 4000
     error_message = "keep_alive_timeout must be between 60 and 4000"
@@ -32,13 +34,15 @@ variable "keep_alive_timeout" {
 }
 
 variable "allow_internal_traffic_to_ports" {
-  type    = list(string)
-  default = []
+  type     = list(string)
+  default  = []
+  nullable = false
 }
 
 variable "allow_alb_traffic_to_ports" {
-  type    = list(string)
-  default = []
+  type     = list(string)
+  default  = []
+  nullable = false
 }
 
 # Public subnets are where forwarders run, such as a bastion, NAT or proxy
@@ -73,34 +77,40 @@ variable "additional_certificate_arns" {
 # CIDR blocks to allow traffic from
 # Setting this will enable NLB traffic
 variable "allowlisted_ssh_ips" {
-  type    = list(string)
-  default = []
+  type     = list(string)
+  default  = []
+  nullable = false
 }
 
 # This is where the load balancer will send health check requests to the app containers
 variable "health_check_path" {
-  type    = string
-  default = "/healthz"
+  type     = string
+  default  = "/healthz"
+  nullable = false
 }
 
 variable "grant_read_access_to_s3_arns" {
-  type    = list(string)
-  default = []
+  type     = list(string)
+  default  = []
+  nullable = false
 }
 
 variable "grant_write_access_to_s3_arns" {
-  default = []
-  type    = list(string)
+  default  = []
+  type     = list(string)
+  nullable = false
 }
 
 variable "grant_read_access_to_sqs_arns" {
-  type    = list(string)
-  default = []
+  type     = list(string)
+  default  = []
+  nullable = false
 }
 
 variable "grant_write_access_to_sqs_arns" {
-  type    = list(string)
-  default = []
+  type     = list(string)
+  default  = []
+  nullable = false
 }
 
 variable "custom_policies" {
@@ -108,8 +118,9 @@ variable "custom_policies" {
 }
 
 variable "enable_dashboard" {
-  type    = bool
-  default = true
+  type     = bool
+  default  = true
+  nullable = false
 }
 
 variable "enable_xray" {
@@ -157,8 +168,9 @@ variable "autoscale_metrics_map" {
 }
 
 variable "cloudwatch_logs_retention_in_days" {
-  type    = number
-  default = 90
+  type     = number
+  default  = 90
+  nullable = false
 }
 
 variable "alb_listener_rules" {
@@ -167,19 +179,22 @@ variable "alb_listener_rules" {
     type             = string
     target_group_arn = string
     path_pattern     = optional(list(string), [])
+    host_header      = optional(list(string), [])
   }))
   default = []
 }
 
 variable "service_discovery_enabled" {
-  type    = bool
-  default = true
+  type     = bool
+  default  = true
+  nullable = false
 }
 
 variable "monitored_service_groups" {
   type        = list(string)
   default     = ["service:web"]
   description = "ECS service groups to monitor STOPPED containers."
+  nullable    = false
 }
 
 variable "health_check_options" {
@@ -189,6 +204,7 @@ variable "health_check_options" {
     timeout             = optional(number, 30) # The amount of time, in seconds, during which no response means a failed health check. For Application Load Balancers, the range is 2 to 120 seconds.
     interval            = optional(number, 60) # The approximate amount of time, in seconds, between health checks of an individual target. Minimum value 5 seconds, Maximum value 300 seconds.
     matcher             = optional(string, "200,204")
+    protocol            = optional(string, "HTTP")
   })
   default = {}
 }

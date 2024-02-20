@@ -33,7 +33,6 @@ module "secrets" {
   description = each.value.description
 }
 
-
 resource "aws_secretsmanager_secret_version" "app" {
   secret_id     = module.secrets["app"].id
   secret_string = file("${path.cwd}/app-secrets.json")
@@ -88,7 +87,7 @@ resource "aws_acm_certificate" "main" {
 resource "aws_eip" "nat" {
   count = var.eips_nat_count # 1 per NAT / AZ
 
-  vpc = true
+  domain = "vpc"
 
   tags = {
     Name        = "${var.project}-nat-${var.environment}-${count.index + 1}"

@@ -18,7 +18,7 @@ resource "aws_iam_policy" "rds-db-connect" {
   for_each    = toset(local.db_roles)
   name        = "${local.name}-rds-db-connect-${each.key}"
   path        = "/"
-  description = "Allow connecting as ${each.key} to ${local.name} (${local.region}) using IAM roles"
+  description = "Allow connecting as ${each.key} to ${local.name} (${var.region}) using IAM roles"
 
   policy = <<EOF
 {
@@ -30,7 +30,7 @@ resource "aws_iam_policy" "rds-db-connect" {
         "rds-db:connect"
       ],
       "Resource": [
-        "arn:aws:rds-db:${local.region}:${local.account_id}:dbuser:${aws_db_instance.main.resource_id}/${var.project}_${var.environment}_${each.key}"
+        "arn:aws:rds-db:${var.region}:${local.account_id}:dbuser:${aws_db_instance.main.resource_id}/${var.project}_${var.environment}_${each.key}"
       ]
     },
     {

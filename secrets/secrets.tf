@@ -3,7 +3,7 @@
 module "kms-key" {
   source = "../kms-key"
 
-  count = var.kms_key_id == null ? 1 : 0
+  count = var.create_kms_key ? 1 : 0
 
   environment = var.environment
   project     = var.project

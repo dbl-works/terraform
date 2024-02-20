@@ -2,6 +2,7 @@
 output "alb_dns_name" {
   value = aws_alb.alb.dns_name
 }
+
 output "nlb_dns_name" {
   value = length(aws_lb.nlb) > 0 ? aws_lb.nlb[0].dns_name : null
 }
@@ -10,6 +11,7 @@ output "nlb_dns_name" {
 output "alb_target_group_ecs_arn" {
   value = aws_alb_target_group.ecs.arn
 }
+
 output "nlb_target_group_ecs_arn" {
   value = length(aws_lb.nlb) > 0 ? aws_lb_target_group.ssh[0].arn : null
 }
@@ -18,6 +20,7 @@ output "nlb_target_group_ecs_arn" {
 output "alb_security_group_id" {
   value = aws_security_group.alb.id
 }
+
 output "ecs_security_group_id" {
   value = aws_security_group.ecs.id
 }

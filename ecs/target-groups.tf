@@ -13,6 +13,7 @@ resource "aws_alb_target_group" "ecs" {
     timeout             = var.health_check_options.timeout
     interval            = var.health_check_options.interval
     matcher             = var.health_check_options.matcher
+    protocol            = var.health_check_options.protocol
   }
 
   tags = {
