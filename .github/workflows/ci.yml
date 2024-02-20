@@ -3,16 +3,14 @@ name: ci
 on: [push]
 
 jobs:
-  test:
+  aws:
     strategy:
       matrix:
         module:
-          - analytics
           - autoscaling/ecs
           - aws-transfer
           - aws-transfer/iam-role
           - certificate
-          - cloudflare
           - cloudtrail/cloudtrail-protection-scp
           - cloudtrail/log-ingestor
           - cloudtrail/log-producer
@@ -27,9 +25,6 @@ jobs:
           - ecs-deploy/cluster
           - ecs-task
           - elasticache
-          - fivetran
-          - fivetran/connectors/google_analytics
-          - fivetran/connectors/lambda
           - github-backup
           - global-accelerator
           - http-proxy
@@ -62,7 +57,6 @@ jobs:
           - slack/ecs-deployment-failure
           - slack/sentry
           - slack/sns
-          - snowflake/cloud
           - stack/app
           - stack/global
           - stack/region
@@ -71,21 +65,17 @@ jobs:
           - vpc-peering
           - vpn
           - xray
-        aws-version: ["~> 4.0", "~> 5.0"]
-        exclude:
-          - module: 'cloudwatch-kinesis'
-            aws-version: "~> 4.0"
-          - module: 'stack/setup'
-            aws-version: "~> 4.0"
+        aws-version: ["~> 5.0"]
       fail-fast: false
 
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set AWS Provider Version
         run: |
+          cd aws
           cd ${{ matrix.module }}
           FILE=versions.tf
           if test -f "$FILE"; then
@@ -110,17 +100,50 @@ jobs:
 
       - name: init
         run: |
+          cd aws
           cd ${{ matrix.module }}
           terraform init
 
       - name: validate
         run: |
+          cd aws
           cd ${{ matrix.module }}
           # the stack/app module must have a provider block because the sub-module "vpc-peering" requires a non-standard "provider
           # see: https://github.com/hashicorp/terraform/issues/28490
           if [[ "${{ matrix.module }}" == "stack/app" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> vpc-peering.tf; fi
           if [[ "${{ matrix.module }}" == "stack/global" ]]; then echo "provider \"aws\" { alias = \"us-east-1\" }" >> versions.tf; fi
           if [[ "${{ matrix.module }}" == "vpc-peering" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> main.tf; fi
+          terraform validate
+
+      - name: fmt -check
+        run: |
+          cd aws
+          cd ${{ matrix.module }}
+          terraform fmt -check
+  cloudprovider_independent:
+    strategy:
+      matrix:
+        module:
+          - cloudflare
+          - fivetran
+          - fivetran/connectors/google_analytics
+          - fivetran/connectors/lambda
+          - snowflake/cloud
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: init
+        run: |
+          cd ${{ matrix.module }}
+          terraform init
+
+      - name: validate
+        run: |
+          cd ${{ matrix.module }}
           terraform validate
 
       - name: fmt -check
