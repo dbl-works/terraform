@@ -1,5 +1,5 @@
 locals {
-  alb_cloudwatch_metrics = [for alb in aws_alb.alb : [
+  alb_cloudwatch_metrics = [
     {
       "height" : 6,
       "width" : 9,
@@ -8,7 +8,7 @@ locals {
       "type" : "metric",
       "properties" : {
         "metrics" : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${alb.arn_suffix}"]
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${aws_alb.alb.arn_suffix}"]
         ],
         "view" : "timeSeries",
         "stacked" : true,
@@ -32,7 +32,7 @@ locals {
       "type" : "metric",
       "properties" : {
         "metrics" : [
-          ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", "${alb.arn_suffix}", { "label" : "Average", "id" : "m1", "stat" : "Average" }],
+          ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", "${aws_alb.alb.arn_suffix}", { "label" : "Average", "id" : "m1", "stat" : "Average" }],
           ["...", { "id" : "m2", "label" : "p95" }],
           ["...", { "id" : "m3", "stat" : "p90", "label" : "p90" }]
         ],
@@ -51,7 +51,7 @@ locals {
         "setPeriodToTimeRange" : true
       }
     }
-  ]]
+  ]
   metrics = [
     {
       "height" : 6,
