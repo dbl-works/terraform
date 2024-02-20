@@ -1,17 +1,3 @@
-data "aws_db_instance" "main" {
-  db_instance_identifier = var.db_identifier
-}
-
-data "aws_secretsmanager_secret_version" "infra" {
-  secret_id = "${var.project}/infra/${var.environment}"
-}
-
-locals {
-  credentials = jsondecode(
-    data.aws_secretsmanager_secret_version.infra.secret_string
-  )
-}
-
 resource "null_resource" "database_script" {
   provisioner "local-exec" {
     command = <<-EOF
@@ -26,10 +12,10 @@ resource "null_resource" "database_script" {
 
 
     environment = {
-      RDS_ENDPOINT = data.aws_db_instance.main.endpoint
-      DB_NAME      = data.aws_db_instance.main.db_name
-      DB_USER      = nonsensitive(local.credentials.db_username)
-      PGPASSWORD   = nonsensitive(local.credentials.db_root_password)
+      RDS_ENDPOINT = var.db_endpoint
+      DB_NAME      = var.db_name
+      DB_USER      = nonsensitive(var.db_username)
+      PGPASSWORD   = nonsensitive(var.db_root_password)
       BASTION_HOST = "${var.bastion_subdomain}.${var.domain_name}"
       PROJECT      = replace(var.project, "-", "_")
       ENVIRONMENT  = var.environment

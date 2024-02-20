@@ -18,3 +18,21 @@ variable "bastion_subdomain" {
 variable "db_identifier" {
   type = string
 }
+
+variable "db_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_root_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_endpoint" {
+  type = string
+}
+
+variable "db_name" {
+  type = string
+}
