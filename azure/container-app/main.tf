@@ -20,6 +20,11 @@ data "azurerm_key_vault_secret" "main" {
   key_vault_id = data.azurerm_key_vault.main.id
 }
 
+data "azurerm_user_assigned_identity" "main" {
+  name                = local.name
+  resource_group_name = var.resource_group_name
+}
+
 resource "azurerm_role_assignment" "main" {
   scope                = data.azurerm_container_registry.main.id
   role_definition_name = "acr_pull"
@@ -34,7 +39,7 @@ resource "azurerm_container_app" "main" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = var.user_assigned_identity_ids
+    identity_ids = [data.azurerm_user_assigned_identity.main.id]
   }
 
   registry {
@@ -50,6 +55,14 @@ resource "azurerm_container_app" "main" {
     traffic_weight {
       percentage      = 100
       latest_revision = true
+    }
+  }
+
+  dynamic "secret" {
+    for_each = toset(var.secret_variables)
+    content {
+      name  = secret.value
+      value = data.azurerm_key_vault_secret.main[secret.value].value
     }
   }
 
@@ -69,14 +82,6 @@ resource "azurerm_container_app" "main" {
           name        = env.key
           secret_name = env.value.secret_name
           value       = env.value.value
-        }
-      }
-
-      dynamic "secret" {
-        for_each = toset(var.secret_variables)
-        content {
-          name  = secret.value
-          value = data.azurerm_key_vault_secret.main[secret.value].value
         }
       }
 
