@@ -14,6 +14,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - uses: actions/checkout@v4
+      - uses: opentofu/setup-opentofu@v1
 
       - name: init
         run: |
