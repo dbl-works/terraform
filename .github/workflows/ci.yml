@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
-      - uses: opentofu/setup-opentofu@v1
+      - uses: actions/checkout@v4
 
       - name: init
         run: |
