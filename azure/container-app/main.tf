@@ -116,7 +116,6 @@ resource "azurerm_container_app" "main" {
   tags = local.default_tags
 }
 
-
 output "app_url" {
   value = azurerm_container_app.main.latest_revision_fqdn
 }

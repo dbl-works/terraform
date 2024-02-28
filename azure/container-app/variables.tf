@@ -32,10 +32,10 @@ variable "secret_variables" {
 }
 
 locals {
-  env = {
-    for secret in var.secret_variables : secret => { secret_name = secret },
-    for key, value in var.environment_variables : key => { value = value, secret_name = null }
-  }
+  env = merge(
+    { for secret in var.secret_variables : secret => { secret_name = secret } },
+    { for key, value in var.environment_variables : key => { value = value, secret_name = null } }
+  )
 }
 
 variable "revision_mode" {
