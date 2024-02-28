@@ -3,6 +3,32 @@ name: ci
 on: [push]
 
 jobs:
+  azure:
+    strategy:
+      matrix:
+        module:
+          - azure/container-registry
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: init
+        run: |
+          cd ${{ matrix.module }}
+          terraform init
+
+      - name: validate
+        run: |
+          cd ${{ matrix.module }}
+          terraform validate
+
+      - name: fmt -check
+        run: |
+          cd ${{ matrix.module }}
+          terraform fmt -check
   aws:
     strategy:
       matrix:
