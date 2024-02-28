@@ -8,9 +8,16 @@ data "azurerm_container_registry" "main" {
   resource_group_name = var.resource_group_name
 }
 
-data "azurerm_user_assigned_identity" "main" {
-  name                = var.user_assigned_identity_name
+data "azurerm_key_vault" "main" {
+  name                = local.name
   resource_group_name = var.resource_group_name
+}
+
+data "azurerm_key_vault_secret" "main" {
+  for_each = { for secret in var.secret_variables : secret => secret }
+
+  name         = each.key
+  key_vault_id = data.azurerm_key_vault.main.id
 }
 
 resource "azurerm_role_assignment" "main" {
@@ -23,11 +30,11 @@ resource "azurerm_container_app" "main" {
   name                         = var.project
   container_app_environment_id = data.azurerm_container_app_environment.main.id
   resource_group_name          = var.resource_group_name
-  revision_mode                = "Single"
+  revision_mode                = var.revision_mode
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [data.azurerm_user_assigned_identity.main.id]
+    identity_ids = var.user_assigned_identity_ids
   }
 
   registry {
@@ -39,19 +46,39 @@ resource "azurerm_container_app" "main" {
     allow_insecure_connections = false
     external_enabled           = true
     target_port                = var.target_port
+    exposed_port               = var.exposed_port
     traffic_weight {
-      percentage = 100
+      percentage      = 100
+      latest_revision = true
     }
-
-    transport = "Auto"
   }
 
   template {
+    min_replicas = var.min_replicas
+    max_replicas = var.max_replicas
+
     container {
       name   = local.name
-      image  = data.azurerm_container_registry.main.login_server
+      image  = "${data.azurerm_container_registry.main.login_server}:${var.image_version}"
       cpu    = var.cpu
       memory = var.memory
+
+      dynamic "env" {
+        for_each = coalesce(local.env, {})
+        content {
+          name        = env.key
+          secret_name = env.value.secret_name
+          value       = env.value.value
+        }
+      }
+
+      dynamic "secret" {
+        for_each = coalesce(var.secret_variables, {})
+        content {
+          name  = secret.key
+          value = data.azurerm_key_vault_secret.main[secret.key].value
+        }
+      }
 
       # Azure Container Apps health probes allow the Container Apps runtime to regularly inspect the status of your container apps.
       # Checks to see if a replica is ready to handle incoming requests.
@@ -87,4 +114,13 @@ resource "azurerm_container_app" "main" {
   }
 
   tags = local.default_tags
+}
+
+
+output "app_url" {
+  value = azurerm_container_app.main.latest_revision_fqdn
+}
+
+output "revision_name" {
+  value = azurerm_container_app.main.latest_revision_name
 }
