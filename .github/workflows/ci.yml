@@ -13,20 +13,20 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
-      - uses: actions/checkout@v4
+      - uses: opentofu/setup-opentofu@v1
 
       - name: init
         run: |
           cd ${{ matrix.module }}
-          terraform init
+          tofu init
       - name: validate
         run: |
           cd ${{ matrix.module }}
-          terraform validate
+          tofu validate
       - name: fmt -check
         run: |
           cd ${{ matrix.module }}
-          terraform fmt -check
+          tofu fmt -check
   aws:
     strategy:
       matrix:
