@@ -27,7 +27,7 @@ variable "user_assigned_identity_ids" {
   type = list(string)
 }
 
-variable "version" {
+variable "postgres_version" {
   type        = string
   default     = "16"
   description = "The version of PostgreSQL Flexible Server to use."

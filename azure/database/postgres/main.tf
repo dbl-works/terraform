@@ -2,7 +2,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
   name                   = local.name
   resource_group_name    = var.resource_group_name
   location               = var.region
-  version                = var.version
+  version                = var.postgres_version
   delegated_subnet_id    = azurerm_subnet.main.id
   private_dns_zone_id    = azurerm_private_dns_zone.main.id
   administrator_login    = var.administrator_login
@@ -16,10 +16,6 @@ resource "azurerm_postgresql_flexible_server" "main" {
     type         = "UserAssigned"
     identity_ids = var.user_assigned_identity_ids
   }
-
-  depends_on = [
-    azurerm_private_dns_zone_virtual_network_link.main
-  ]
 
   lifecycle {
     ignore_changes = [

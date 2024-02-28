@@ -55,6 +55,6 @@ resource "azurerm_private_dns_zone" "main" {
   tags = local.default_tags
 
   depends_on = [
-    azurerm_subnet_network_security_group_association.default
+    azurerm_subnet_network_security_group_association.main
   ]
 }
