@@ -73,10 +73,10 @@ resource "azurerm_container_app" "main" {
       }
 
       dynamic "secret" {
-        for_each = coalesce(var.secret_variables, {})
+        for_each = toset(var.secret_variables)
         content {
-          name  = secret.key
-          value = data.azurerm_key_vault_secret.main[secret.key].value
+          name  = secret.value
+          value = data.azurerm_key_vault_secret.main[secret.value].value
         }
       }
 
