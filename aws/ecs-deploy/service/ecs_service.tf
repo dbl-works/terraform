@@ -122,10 +122,6 @@ resource "aws_service_discovery_service" "main" {
     routing_policy = "MULTIVALUE" # one of MULTIVALUE or WEIGHTED
   }
 
-  health_check_custom_config {
-    failure_threshold = 2 # number between 1 and 10; number of 30 second intervals to wait before declaring failure
-  }
-
   tags = {
     Project     = var.project
     Environment = var.environment

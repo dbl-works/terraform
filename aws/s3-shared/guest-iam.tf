@@ -1,5 +1,5 @@
 resource "aws_iam_user" "guest" {
-  name = "guest-${var.guest_account_name}"
+  name = "guest-${var.environment}-${var.guest_account_name}"
   path = "/guest/"
 
   tags = {
