@@ -18,24 +18,34 @@ variable "environment" {
   type = string
 }
 
-variable "address_spaces" {
-  type = list(string)
+variable "address_space" {
+  type = string
 }
 
-variable "subnet_config" {
-  type = map(object({
-    address_prefixes = optional(list(string), [])
-    rules = optional(object({
-      priority                   = number
-      direction                  = string // Inbound, Outbound
-      access                     = optional(string, "Allow")
-      protocol                   = optional(string, "Tcp")
-      source_port_range          = string // "*"
-      destination_port_range     = string
-      source_address_prefix      = string
-      destination_address_prefix = string
-    }), {})
-  }), {})
+variable "private_subnet_config" {
+  type = object({
+    priority                   = number
+    direction                  = string // Inbound, Outbound
+    access                     = optional(string, "Allow")
+    protocol                   = optional(string, "Tcp")
+    source_port_range          = string // "*"
+    destination_port_range     = string
+    source_address_prefix      = string
+    destination_address_prefix = string
+  }, {})
+}
+
+variable "public_subnet_config" {
+  type = object({
+    priority                   = number
+    direction                  = string // Inbound, Outbound
+    access                     = optional(string, "Allow")
+    protocol                   = optional(string, "Tcp")
+    source_port_range          = string // "*"
+    destination_port_range     = string
+    source_address_prefix      = string
+    destination_address_prefix = string
+  }, {})
 }
 
 locals {
