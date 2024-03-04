@@ -14,3 +14,19 @@ Notes:
 * default to having a single availability zone
 * allow configuring two availability zones for production usage
 * allow configuring larger instance sizes for production usage
+
+```
+locals {
+  resource_group_name = "facebook"
+  region = "West Europe"
+}
+
+resource "azurerm_resource_group" "main" {
+  name     = local.resource_group_name
+  location = local.region
+}
+
+module "stack" {
+
+}
+```
