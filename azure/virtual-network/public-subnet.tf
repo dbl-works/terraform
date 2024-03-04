@@ -1,10 +1,10 @@
 # This is the existing public network that allows internet access
 resource "azurerm_subnet" "public" {
-  name                 = each.key
+  name                 = "${local.name}-public"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
   # (Assuming address space is 10.0.0.0) range 10.0.0.0 - 10.0.2.255
-  address_prefixes = cidrsubnet(var.address_space, 8, count.index + 1)
+  address_prefixes = [cidrsubnet(var.address_space, 8, 1)]
 }
 
 resource "azurerm_network_security_group" "public" {

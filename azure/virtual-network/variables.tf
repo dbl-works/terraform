@@ -32,7 +32,8 @@ variable "private_subnet_config" {
     destination_port_range     = string
     source_address_prefix      = string
     destination_address_prefix = string
-  }, {})
+  })
+  default = null
 }
 
 variable "public_subnet_config" {
@@ -45,7 +46,8 @@ variable "public_subnet_config" {
     destination_port_range     = string
     source_address_prefix      = string
     destination_address_prefix = string
-  }, {})
+  })
+  default = null
 }
 
 locals {
