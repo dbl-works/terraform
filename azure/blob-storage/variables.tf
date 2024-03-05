@@ -75,9 +75,19 @@ variable "account_replication_type" {
   }
 }
 
+variable "blob_properties_config" {
+  type = object({
+    versioning_enabled            = optional(bool, true)
+    change_feed_enabled           = optional(bool, true)
+    change_feed_retention_in_days = optional(number, 14)
+    last_access_time_enabled      = optional(bool, true)
+  })
+  default = {}
+}
+
 variable "public_network_access_enabled" {
   type    = bool
-  default = false
+  default = true
 
   nullable = false
 }
@@ -114,6 +124,14 @@ variable "static_website" {
 variable "versioning_enabled" {
   type    = bool
   default = false
+}
+
+variable "sas_policy" {
+  type = object({
+    expiration_period = optional(string, "00.02:00:00")
+    expiration_action = optional(string, "Log")
+  })
+  default = null
 }
 
 variable "cors_config" {

@@ -27,8 +27,9 @@ resource "azurerm_user_assigned_identity" "main" {
 }
 
 # https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=terraform
+# Make sure the access is limited, encryption at rest
 # Example: Setting up terraform state bucket
-module "blob-storage" {
+module "tfstate" {
   source = "github.com/dbl-works/terraform//azure/blob-storage"
 
   resource_group_name        = local.resource_group_name
@@ -41,7 +42,7 @@ module "blob-storage" {
   account_kind               = "StorageV2"
   account_tier               = "Standard"
   account_replication_type = "LRS"
-  public_network_access_enabled = false
+  public_network_access_enabled = true
   versioning_enabled = true
   cors_config = {}
 }
