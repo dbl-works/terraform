@@ -42,7 +42,7 @@ resource "azurerm_storage_account" "main" {
   tags = local.default_tags
 }
 
-resource "azurerm_storage_container" "tfstate" {
+resource "azurerm_storage_container" "main" {
   name                  = var.name
   storage_account_name  = azurerm_storage_account.main.name
   container_access_type = var.container_access_type
@@ -77,6 +77,10 @@ output "primary_web_host" {
   value = azurerm_storage_account.main.primary_web_host
 }
 
-output "id" {
+output "storage_account_id" {
   value = azurerm_storage_account.main.id
+}
+
+output "container_id" {
+  value = azurerm_storage_container.main.id
 }

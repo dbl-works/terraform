@@ -32,11 +32,12 @@ module "blob-storage" {
   source = "github.com/dbl-works/terraform//azure/blob-storage"
 
   resource_group_name        = local.resource_group_name
-  name                       = "${local.project}-${local.region}-${local.environment}"
+  name                       = "${local.project}-${local.region}-${local.environment}-tfstate"
   region                     = local.region
   project                    = local.project
   environment                = local.environment
   allow_nested_items_to_be_public = false
+  container_access_type      = "private"
   account_kind               = "StorageV2"
   account_tier               = "Standard"
   lifecycle_rules = {}
