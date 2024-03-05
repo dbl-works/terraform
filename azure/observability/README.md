@@ -79,7 +79,7 @@ module "monitors" {
   region      = local.region
 
   user_assigned_identity_ids = [azurerm_user_assigned_identity.main.id]
-  target_resource_id = module.container-app.id
+  container_app_id = module.container-app.id
 
   depends_on = [
     azurerm_resource_group.main

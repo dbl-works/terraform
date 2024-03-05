@@ -29,7 +29,7 @@ module "blob-storage" {
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
   name                       = local.name
-  target_resource_id         = var.target_resource_id # This could be an subscription id
+  target_resource_id         = var.container_app_id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
   storage_account_id         = module.blob-storage.id
 

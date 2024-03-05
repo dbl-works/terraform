@@ -28,7 +28,7 @@ variable "user_assigned_identity_ids" {
   type = list(string)
 }
 
-variable "target_resource_id" {
+variable "container_app_id" {
   type = string
 }
 
