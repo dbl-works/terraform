@@ -67,7 +67,7 @@ variable "storage_mb" {
 
 variable "storage_tier" {
   type        = string
-  default     = null
+  default     = "P4"
   description = "Name of storage tier for IOPS. Default value for storage performance tier depends on the --storage-size selected for flexible server creation"
   validation {
     condition     = contains(["P4", "P6", "P10", "P15", "P20", "P30", " P40", "P50", " P60", "P70", "P80"], var.storage_tier)
