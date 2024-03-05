@@ -8,6 +8,7 @@ jobs:
       matrix:
         module:
           - azure/blob-storage
+          - azure/container-registry
       fail-fast: false
 
     runs-on: ubuntu-latest
