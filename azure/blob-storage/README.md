@@ -40,10 +40,8 @@ module "blob-storage" {
   container_access_type      = "private"
   account_kind               = "StorageV2"
   account_tier               = "Standard"
-  lifecycle_rules = {}
   account_replication_type = "LRS"
   public_network_access_enabled = false
-  static_website = {}
   versioning_enabled = true
   cors_config = {}
 }

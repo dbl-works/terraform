@@ -49,13 +49,15 @@ resource "azurerm_storage_container" "main" {
 }
 
 resource "azurerm_storage_management_policy" "main" {
+  count = length(var.lifecycle_rules) > 1 ? 1 : 0
+
   storage_account_id = azurerm_storage_account.main.id
 
   dynamic "rule" {
     for_each = var.lifecycle_rules
 
     content {
-      name    = rule.value.name
+      name    = rule.key
       enabled = true
       filters {
         prefix_match = rule.value.prefix_match

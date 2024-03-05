@@ -19,14 +19,14 @@ variable "environment" {
 }
 
 variable "lifecycle_rules" {
-  type = object({
-    name                                                       = string
+  type = map(object({
     prefix_match                                               = list(string)
     blob_types                                                 = list(string)
     tier_to_cool_after_days_since_modification_greater_than    = optional(number, -1)
     tier_to_archive_after_days_since_modification_greater_than = optional(number, -1)
     delete_after_days_since_modification_greater_than          = optional(number, -1)
-  })
+  }))
+  default = {}
 }
 
 variable "user_assigned_identity_ids" {
