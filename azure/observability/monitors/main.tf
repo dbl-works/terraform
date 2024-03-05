@@ -10,7 +10,7 @@ resource "azurerm_log_analytics_workspace" "main" {
 }
 
 module "blob-storage" {
-  source = "../blob-storage"
+  source = "../../blob-storage"
 
   name                       = "${local.name}-monitoring"
   environment                = var.environment
@@ -35,41 +35,13 @@ resource "azurerm_monitor_diagnostic_setting" "main" {
 
   # Check here for the list of Service/Category available for different resources
   # https://learn.microsoft.com/en-gb/azure/azure-monitor/essentials/resource-logs-schema#service-specific-schemas
+  # https://learn.microsoft.com/en-us/azure/azure-monitor/reference/supported-logs/microsoft-app-managedenvironments-logs
   enabled_log {
-    category = "Administrative"
+    category = "ContainerAppConsoleLogs"
   }
 
   enabled_log {
-    category = "Security"
-  }
-
-  enabled_log {
-    category = "ServiceHealth"
-  }
-
-  enabled_log {
-    category = "Alert"
-  }
-
-  enabled_log {
-    category = "Recommendation"
-  }
-
-  enabled_log {
-    category = "Policy"
-  }
-
-  enabled_log {
-    category = "Autoscale"
-  }
-
-  enabled_log {
-    category = "ResourceHealth"
-  }
-
-  metric {
-    category = "AllMetrics"
-    enabled  = true
+    category = "ContainerAppSystemLogs"
   }
 }
 
