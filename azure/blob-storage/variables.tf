@@ -30,7 +30,8 @@ variable "lifecycle_rules" {
 }
 
 variable "user_assigned_identity_ids" {
-  type = list(string)
+  type    = list(string)
+  default = []
 }
 
 # BlobStorage: for storing unstructured object data, such as text or binary data
@@ -81,12 +82,33 @@ variable "public_network_access_enabled" {
   nullable = false
 }
 
+variable "allow_nested_items_to_be_public" {
+  type    = bool
+  default = false
+
+  nullable = false
+}
+
+variable "container_access_type" {
+  type        = string
+  default     = "blob"
+  description = "The Access Level configured for this Container."
+
+  # Private: You cannot access a resource by using the resource URL. For example, if your blob's URL is https://account.blob.core.windows.net/container/blob.txt and if you try to access this resource in a browser, you will receive a 404 error even though the blob is present.
+  # Blob: You can download a blob or get its properties by using the URL. However you will not be able to access a container's properties if the access level is set as Blob.
+  # Public: It is similar to Blob public access level but if the ACL for a container is set as public, you can get a container's properties as well as list blobs in that container.
+  validation {
+    condition     = contains(["blob", "container", "private"], var.container_access_type)
+    error_message = "Must be either blob, container or private"
+  }
+}
+
 variable "static_website" {
   type = object({
     index_document     = string
     error_404_document = string
   })
-  default = {}
+  default = null
 }
 
 variable "versioning_enabled" {
