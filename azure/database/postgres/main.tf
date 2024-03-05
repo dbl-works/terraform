@@ -12,6 +12,16 @@ resource "azurerm_postgresql_flexible_server" "main" {
   storage_tier           = var.storage_tier
   sku_name               = var.sku_name
 
+  dynamic "customer_managed_key" {
+    for_each = var.customer_managed_key == null ? [] : [1]
+
+    content {
+      key_vault_key_id                     = var.customer_managed_key.key_vault_key_id
+      primary_user_assigned_identity_id    = var.customer_managed_key.primary_user_assigned_identity_id
+      geo_backup_user_assigned_identity_id = var.customer_managed_key.geo_backup_user_assigned_identity_id
+    }
+  }
+
   identity {
     type         = "UserAssigned"
     identity_ids = var.user_assigned_identity_ids
