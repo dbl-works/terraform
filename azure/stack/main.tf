@@ -21,3 +21,11 @@ resource "azurerm_container_app_environment" "main" {
 output "user_assigned_identity_id" {
   value = azurerm_user_assigned_identity.main.id
 }
+
+output "user_assigned_identity_tenant_id" {
+  value = azurerm_user_assigned_identity.main.tenant_id
+}
+
+output "user_assigned_identity_principal_id" {
+  value = azurerm_user_assigned_identity.main.principal_id
+}
