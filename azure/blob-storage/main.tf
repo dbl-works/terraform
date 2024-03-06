@@ -1,14 +1,18 @@
 # provides a unique namespace in Azure for your data.
 resource "azurerm_storage_account" "main" {
-  name                            = var.name
-  resource_group_name             = var.resource_group_name
-  location                        = var.region
-  account_kind                    = var.account_kind
-  account_tier                    = var.account_tier
-  account_replication_type        = var.account_replication_type
-  public_network_access_enabled   = var.public_network_access_enabled
-  enable_https_traffic_only       = true
-  allow_nested_items_to_be_public = var.allow_nested_items_to_be_public
+  name                          = var.name
+  resource_group_name           = var.resource_group_name
+  location                      = var.region
+  account_kind                  = var.account_kind
+  account_tier                  = var.account_tier
+  account_replication_type      = var.account_replication_type
+  public_network_access_enabled = var.public_network_access_enabled
+  min_tls_version               = "TLS1_2"
+  enable_https_traffic_only     = true
+  # default_to_oauth_authentication   = true
+  # shared_access_key_enabled         = false
+  infrastructure_encryption_enabled = false
+  allow_nested_items_to_be_public   = var.allow_nested_items_to_be_public
 
   dynamic "identity" {
     for_each = length(var.user_assigned_identity_ids) > 1 ? [1] : []
@@ -36,7 +40,19 @@ resource "azurerm_storage_account" "main" {
       exposed_headers    = var.cors_config.exposed_headers
       max_age_in_seconds = var.cors_config.max_age_in_seconds
     }
-    versioning_enabled = var.versioning_enabled
+    versioning_enabled            = var.blob_properties_config.versioning_enabled
+    change_feed_enabled           = var.blob_properties_config.change_feed_enabled
+    change_feed_retention_in_days = var.blob_properties_config.change_feed_retention_in_days
+    last_access_time_enabled      = var.blob_properties_config.last_access_time_enabled
+  }
+
+  dynamic "sas_policy" {
+    for_each = var.sas_policy == null ? [] : [1]
+
+    content {
+      expiration_period = var.sas_policy.expiration_period
+      expiration_action = var.sas_policy.expiration_action
+    }
   }
 
   tags = local.default_tags
@@ -49,13 +65,15 @@ resource "azurerm_storage_container" "main" {
 }
 
 resource "azurerm_storage_management_policy" "main" {
+  count = length(var.lifecycle_rules) > 1 ? 1 : 0
+
   storage_account_id = azurerm_storage_account.main.id
 
   dynamic "rule" {
     for_each = var.lifecycle_rules
 
     content {
-      name    = rule.value.name
+      name    = rule.key
       enabled = true
       filters {
         prefix_match = rule.value.prefix_match
