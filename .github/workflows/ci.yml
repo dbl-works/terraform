@@ -9,6 +9,7 @@ jobs:
         module:
           - azure/blob-storage
           - azure/container-registry
+          - azure/virtual-network
       fail-fast: false
 
     runs-on: ubuntu-latest
