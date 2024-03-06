@@ -1,14 +1,19 @@
 resource "azurerm_container_registry" "main" {
-  name                          = var.project
+  name                          = var.name == null ? var.project : var.name
   resource_group_name           = var.resource_group_name
   location                      = var.region
   sku                           = var.sku
-  public_network_access_enabled = false
+  public_network_access_enabled = var.sku == "Premium" ? var.public_network_access_enabled : true
   anonymous_pull_enabled        = false
+  admin_enabled                 = var.admin_enabled
 
-  retention_policy {
-    days    = var.retention_in_days
-    enabled = true
+  dynamic "retention_policy" {
+    for_each = var.sku == "Premium" ? [1] : []
+
+    content {
+      days    = var.retention_in_days
+      enabled = true
+    }
   }
 
   identity {
@@ -16,21 +21,29 @@ resource "azurerm_container_registry" "main" {
     identity_ids = var.user_assigned_identity_ids
   }
 
-  encryption {
-    enabled            = true
-    key_vault_key_id   = data.azurerm_key_vault_key.main.id
-    identity_client_id = var.encryption_client_id
+  dynamic "encryption" {
+    for_each = var.sku == "Premium" ? [1] : []
+
+    content {
+      enabled            = true
+      key_vault_key_id   = var.key_vault_key_id
+      identity_client_id = var.encryption_client_id
+    }
   }
 
   tags = local.default_tags
 }
 
-data "azurerm_key_vault" "main" {
-  name                = local.name
-  resource_group_name = var.resource_group_name
+# TODO: Research on the lifecycle policy
+
+output "id" {
+  value = azurerm_container_registry.main.id
 }
 
-data "azurerm_key_vault_key" "main" {
-  name         = local.name
-  key_vault_id = data.azurerm_key_vault.main.id
+output "login_server" {
+  value = azurerm_container_registry.main.login_server
+}
+
+output "admin_username" {
+  value = "Retrieve the credentials from Container Registry > Access Keys"
 }
