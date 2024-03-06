@@ -7,6 +7,8 @@ resource "azurerm_key_vault" "main" {
   sku_name            = var.key_vault_config.sku_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
 
+  # Customer managed key require us to enable soft delete and purge protection.
+  purge_protection_enabled   = true
   soft_delete_retention_days = var.key_vault_config.retention_in_days
   tags                       = local.default_tags
 }
@@ -18,6 +20,8 @@ resource "azurerm_key_vault_access_policy" "main" {
 
   key_permissions = [
     "Get",
+    "UnwrapKey",
+    "WrapKey"
   ]
 
   secret_permissions = [
@@ -36,13 +40,8 @@ resource "azurerm_key_vault_key" "main" {
   key_type     = var.key_vault_config.key_type
   key_size     = var.key_vault_config.key_size
 
-  # TODO: Figure out what permission is needed
-  key_opts = [
-    "decrypt",
-    "encrypt",
-    "sign",
+  key_opts = length(var.key_vault_config.key_opts) > 0 ? var.key_vault_config.key_opts : [
     "unwrapKey",
-    "verify",
     "wrapKey",
   ]
 
@@ -58,4 +57,6 @@ resource "azurerm_key_vault_key" "main" {
   tags = local.default_tags
 }
 
-
+output "key_vault_id" {
+  value = azurerm_key_vault.main.id
+}
