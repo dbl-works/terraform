@@ -18,6 +18,11 @@ variable "environment" {
   type = string
 }
 
+variable "admin_enabled" {
+  type    = bool
+  default = true
+}
+
 variable "public_network_access_enabled" {
   type    = bool
   default = true

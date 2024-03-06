@@ -5,6 +5,7 @@ resource "azurerm_container_registry" "main" {
   sku                           = var.sku
   public_network_access_enabled = var.sku == "Premium" ? var.public_network_access_enabled : true
   anonymous_pull_enabled        = false
+  admin_enabled                 = var.admin_enabled
 
   dynamic "retention_policy" {
     for_each = var.sku == "Premium" ? [1] : []
@@ -41,4 +42,8 @@ output "id" {
 
 output "login_server" {
   value = azurerm_container_registry.main.login_server
+}
+
+output "admin_username" {
+  value = "Retrieve the credentials from Container Registry > Access Keys"
 }
