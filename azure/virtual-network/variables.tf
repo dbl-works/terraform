@@ -19,11 +19,13 @@ variable "environment" {
 }
 
 variable "address_space" {
-  type = string
+  type     = string
+  default  = "10.0.0.0/16"
+  nullable = false
 }
 
 variable "private_subnet_config" {
-  type = object({
+  type = list(object({
     priority                   = number
     direction                  = string // Inbound, Outbound
     access                     = optional(string, "Allow")
@@ -32,12 +34,12 @@ variable "private_subnet_config" {
     destination_port_range     = string
     source_address_prefix      = string
     destination_address_prefix = string
-  })
-  default = null
+  }))
+  default = []
 }
 
 variable "public_subnet_config" {
-  type = object({
+  type = list(object({
     priority                   = number
     direction                  = string // Inbound, Outbound
     access                     = optional(string, "Allow")
@@ -46,8 +48,8 @@ variable "public_subnet_config" {
     destination_port_range     = string
     source_address_prefix      = string
     destination_address_prefix = string
-  })
-  default = null
+  }))
+  default = []
 }
 
 locals {
