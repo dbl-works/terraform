@@ -101,7 +101,7 @@ variable "allow_nested_items_to_be_public" {
 
 variable "container_access_type" {
   type        = string
-  default     = "blob"
+  default     = "private"
   description = "The Access Level configured for this Container."
 
   # Private: You cannot access a resource by using the resource URL. For example, if your blob's URL is https://account.blob.core.windows.net/container/blob.txt and if you try to access this resource in a browser, you will receive a 404 error even though the blob is present.
