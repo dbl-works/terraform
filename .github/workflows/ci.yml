@@ -10,6 +10,7 @@ jobs:
           - azure/blob-storage
           - azure/container-registry
           - azure/virtual-network
+          - azure/database/postgres
       fail-fast: false
 
     runs-on: ubuntu-latest
