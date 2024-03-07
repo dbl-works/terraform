@@ -25,7 +25,7 @@ variable "admin_enabled" {
 
 variable "public_network_access_enabled" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "user_assigned_identity_ids" {
