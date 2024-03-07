@@ -35,7 +35,7 @@ variable "container_app_id" {
 variable "logs_retention_in_days" {
   type     = number
   nullable = false
-  default  = 14
+  default  = 90
 }
 
 locals {
