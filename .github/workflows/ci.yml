@@ -7,6 +7,8 @@ jobs:
     strategy:
       matrix:
         module:
+          - azure/blob-storage
+          - azure/container-registry
           - azure/observability/monitors
           - azure/observability/alerts
       fail-fast: false
@@ -29,6 +31,9 @@ jobs:
         run: |
           cd ${{ matrix.module }}
           tofu fmt -check
+
+
+
   aws:
     strategy:
       matrix:
