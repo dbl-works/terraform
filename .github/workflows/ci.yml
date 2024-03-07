@@ -7,13 +7,13 @@ jobs:
     strategy:
       matrix:
         module:
-          - azure/blob-storage
-          - azure/container-app
-          - azure/container-registry
-          - azure/database/postgres
-          - azure/observability/alerts
-          - azure/observability/monitors
-          - azure/virtual-network
+          - blob-storage
+          - container-app
+          - container-registry
+          - database/postgres
+          - observability/alerts
+          - observability/monitors
+          - virtual-network
       fail-fast: false
 
     runs-on: ubuntu-latest
@@ -24,14 +24,17 @@ jobs:
 
       - name: init
         run: |
+          cd azure
           cd ${{ matrix.module }}
           tofu init
       - name: validate
         run: |
+          cd azure
           cd ${{ matrix.module }}
           tofu validate
       - name: fmt -check
         run: |
+          cd azure
           cd ${{ matrix.module }}
           tofu fmt -check
 
@@ -153,7 +156,10 @@ jobs:
           cd aws
           cd ${{ matrix.module }}
           terraform fmt -check
-  cloudprovider_independent:
+
+
+
+  misc:
     strategy:
       matrix:
         module:
