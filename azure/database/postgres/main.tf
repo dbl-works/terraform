@@ -11,6 +11,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
   storage_mb             = var.storage_mb
   storage_tier           = var.storage_tier
   sku_name               = var.sku_name
+  backup_retention_days  = 7
 
   dynamic "customer_managed_key" {
     for_each = var.customer_managed_key == null ? [] : [1]
