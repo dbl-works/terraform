@@ -13,6 +13,7 @@ jobs:
           - azure/database/postgres
           - azure/observability/alerts
           - azure/observability/monitors
+          - azure/virtual-network
       fail-fast: false
 
     runs-on: ubuntu-latest
