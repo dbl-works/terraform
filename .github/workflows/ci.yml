@@ -10,6 +10,7 @@ jobs:
           - azure/blob-storage
           - azure/container-app
           - azure/container-registry
+          - azure/database/postgres
           - azure/observability/alerts
           - azure/observability/monitors
       fail-fast: false
