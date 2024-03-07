@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "path": "../aws",
+    },
+    {
+      "path": "../azure",
+    },
+    {
+      "path": "../cloudflare",
+    },
+    {
+      "path": "../fivetran",
+    },
+    {
+      "path": "../script",
+    },
+    {
+      "path": "../snowflake",
+    },
+  ]
+}

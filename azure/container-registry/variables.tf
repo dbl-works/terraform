@@ -25,7 +25,7 @@ variable "admin_enabled" {
 
 variable "public_network_access_enabled" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "user_assigned_identity_ids" {
@@ -57,7 +57,7 @@ variable "retention_in_days" {
 variable "sku" {
   type        = string
   description = "https://learn.microsoft.com/en-us/azure/container-registry/container-registry-skus"
-  default     = "Basic"
+  default     = "Standard"
   nullable    = false
 
   validation {

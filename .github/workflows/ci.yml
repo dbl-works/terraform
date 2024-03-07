@@ -8,9 +8,12 @@ jobs:
       matrix:
         module:
           - azure/blob-storage
+          - azure/container-app
           - azure/container-registry
-          - azure/virtual-network
           - azure/database/postgres
+          - azure/observability/alerts
+          - azure/observability/monitors
+          - azure/virtual-network
       fail-fast: false
 
     runs-on: ubuntu-latest
@@ -31,6 +34,9 @@ jobs:
         run: |
           cd ${{ matrix.module }}
           tofu fmt -check
+
+
+
   aws:
     strategy:
       matrix:

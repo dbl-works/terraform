@@ -2,7 +2,7 @@
 
 https://azure.microsoft.com/de-de/products/virtual-network
 
-Creates a virtual network in Azure account. Also generates a group fo public and private subnets.
+Creates a virtual network in Azure account. Also generates a group of public and private subnets.
 
 ```
 module "virtual-network" {

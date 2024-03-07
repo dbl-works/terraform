@@ -1,3 +1,4 @@
+# @TODO(sam, lud, 07.03.2024): consider adding HA support, see https://github.com/dbl-works/terraform/pull/316#discussion_r1515101871
 resource "azurerm_postgresql_flexible_server" "main" {
   name                   = local.name
   resource_group_name    = var.resource_group_name
@@ -11,6 +12,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
   storage_mb             = var.storage_mb
   storage_tier           = var.storage_tier
   sku_name               = var.sku_name
+  backup_retention_days  = 7
 
   dynamic "customer_managed_key" {
     for_each = var.customer_managed_key == null ? [] : [1]
