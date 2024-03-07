@@ -67,7 +67,7 @@ variable "account_replication_type" {
   # # Secondary Region
   # GRS: LRS (Primary Region) + LRS in secondary region.
   # GZRS: ZRS (Primary Region) + LRS in secondary region
-  default = "LRS"
+  default = "GZRS"
 
   validation {
     condition     = contains(["LRS", "ZRS", "GRS", "GZRS", "RAGRS", "RAGZRS"], var.account_replication_type)
@@ -87,7 +87,7 @@ variable "blob_properties_config" {
 
 variable "public_network_access_enabled" {
   type    = bool
-  default = true
+  default = false
 
   nullable = false
 }
