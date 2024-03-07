@@ -8,9 +8,10 @@ jobs:
       matrix:
         module:
           - azure/blob-storage
+          - azure/container-app
           - azure/container-registry
-          - azure/observability/monitors
           - azure/observability/alerts
+          - azure/observability/monitors
       fail-fast: false
 
     runs-on: ubuntu-latest
