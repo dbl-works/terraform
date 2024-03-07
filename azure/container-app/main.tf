@@ -113,7 +113,7 @@ resource "azurerm_container_app" "main" {
         path                    = var.health_check_options.path
         interval_seconds        = 1
         timeout                 = 3
-        failure_count_threshold = 240
+        failure_count_threshold = 60
       }
     }
   }

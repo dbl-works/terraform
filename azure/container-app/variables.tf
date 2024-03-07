@@ -41,7 +41,7 @@ locals {
 variable "revision_mode" {
   type        = string
   description = "In Single mode, a single revision is in operation at any given time. In Multiple mode, more than one revision can be active at a time and can be configured with load distribution via the traffic_weight block in the ingress configuration."
-  default     = "Single"
+  default     = "Multiple"
 
   validation {
     condition     = contains(["Single", "Multiple"], var.revision_mode)
@@ -61,7 +61,7 @@ variable "min_replicas" {
 
 variable "max_replicas" {
   type     = number
-  default  = 1
+  default  = 2
   nullable = false
 }
 
@@ -99,7 +99,7 @@ variable "health_check_options" {
     port                    = optional(string, 80)
     transport               = optional(string, "HTTP")
     failure_count_threshold = optional(number, 5)
-    interval_seconds        = optional(number, 5) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
+    interval_seconds        = optional(number, 7) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
     path                    = optional(string, "/livez")
     timeout                 = optional(number, 5)
   })
