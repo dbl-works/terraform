@@ -7,7 +7,9 @@ jobs:
     strategy:
       matrix:
         module:
+          - azure/blob-storage
           - azure/container-app
+          - azure/container-registry
       fail-fast: false
 
     runs-on: ubuntu-latest
@@ -28,6 +30,9 @@ jobs:
         run: |
           cd ${{ matrix.module }}
           tofu fmt -check
+
+
+
   aws:
     strategy:
       matrix:
