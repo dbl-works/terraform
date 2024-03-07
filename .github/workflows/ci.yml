@@ -7,6 +7,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
   azure:
     strategy:
       matrix:
@@ -40,8 +41,6 @@ jobs:
           cd azure
           cd ${{ matrix.module }}
           tofu fmt -check
-
-
 
   aws:
     strategy:
@@ -158,8 +157,6 @@ jobs:
           cd aws
           cd ${{ matrix.module }}
           terraform fmt -check
-
-
 
   misc:
     strategy:
