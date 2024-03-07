@@ -1,3 +1,4 @@
+# @TODO(sam, lud, 07.03.2024): consider adding HA support, see https://github.com/dbl-works/terraform/pull/316#discussion_r1515101871
 resource "azurerm_postgresql_flexible_server" "main" {
   name                   = local.name
   resource_group_name    = var.resource_group_name
