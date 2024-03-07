@@ -57,7 +57,7 @@ variable "retention_in_days" {
 variable "sku" {
   type        = string
   description = "https://learn.microsoft.com/en-us/azure/container-registry/container-registry-skus"
-  default     = "Basic"
+  default     = "Standard"
   nullable    = false
 
   validation {
