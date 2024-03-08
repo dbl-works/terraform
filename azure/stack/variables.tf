@@ -116,10 +116,14 @@ variable "key_vault_config" {
   }
 }
 
-locals {
-  name = "${var.project}-${var.environment}"
-  default_tags = {
+variable "default_tags" {
+  type = map(string)
+  default = {
     Project     = var.project
     Environment = var.environment
   }
+}
+
+locals {
+  name = "${var.project}-${var.environment}"
 }
