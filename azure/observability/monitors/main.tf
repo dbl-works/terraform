@@ -21,7 +21,7 @@ module "blob-storage" {
 
   lifecycle_rules = {
     name                                              = "monitoring-${local.name}"
-    prefix_match                                      = ["insights-activity-logs/ResourceId=${var.target_resource_id}"]
+    prefix_match                                      = ["insights-activity-logs/ResourceId=${var.container_app_id}"]
     blob_types                                        = ["appendBlob"]
     delete_after_days_since_modification_greater_than = var.logs_retention_in_days
   }
