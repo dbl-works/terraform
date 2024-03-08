@@ -82,6 +82,7 @@ variable "container_registry_config" {
 #
 variable "key_vault_config" {
   type = object({
+    name              = optional(string, null)
     retention_in_days = optional(number, 7)
     sku_name          = optional(string, "standard")
     key_type          = optional(string, "RSA")

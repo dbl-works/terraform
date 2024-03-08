@@ -1,7 +1,7 @@
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "main" {
-  name                = local.name
+  name                = coalesce(var.key_vault_config.name, local.name)
   location            = var.region
   resource_group_name = var.resource_group_name
   sku_name            = var.key_vault_config.sku_name
