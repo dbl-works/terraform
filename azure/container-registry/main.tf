@@ -1,5 +1,5 @@
 resource "azurerm_container_registry" "main" {
-  name                          = var.name == null ? var.project : var.name
+  name                          = coalesce(var.name, local.default_name)
   resource_group_name           = var.resource_group_name
   location                      = var.region
   sku                           = var.sku
@@ -31,7 +31,7 @@ resource "azurerm_container_registry" "main" {
     }
   }
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 # TODO: Research on the lifecycle policy
