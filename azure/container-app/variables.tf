@@ -106,8 +106,38 @@ variable "health_check_options" {
   nullable = false
 }
 
+variable "tags" {
+  type    = map(string)
+  default = null
+}
+
+variable "container_app_environment_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'"
+}
+
+variable "key_vault_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'"
+}
+
+variable "user_assigned_identity_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'"
+}
+
+variable "container_app_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'"
+}
+
 locals {
-  name = "${var.project}-${var.environment}"
+  default_name = "${var.project}-${var.environment}"
+
   default_tags = {
     Project     = var.project
     Environment = var.environment

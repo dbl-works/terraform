@@ -1,5 +1,5 @@
 data "azurerm_container_app_environment" "main" {
-  name                = local.name
+  name                = coalesce(var.container_app_environment_name, local.default_name)
   resource_group_name = var.resource_group_name
 }
 
@@ -9,7 +9,7 @@ data "azurerm_container_registry" "main" {
 }
 
 data "azurerm_key_vault" "main" {
-  name                = local.name
+  name                = coalesce(var.key_vault_name, local.default_name)
   resource_group_name = var.resource_group_name
 }
 
@@ -21,7 +21,7 @@ data "azurerm_key_vault_secret" "main" {
 }
 
 data "azurerm_user_assigned_identity" "main" {
-  name                = local.name
+  name                = coalesce(var.user_assigned_identity_name, local.default_name)
   resource_group_name = var.resource_group_name
 }
 
@@ -71,7 +71,7 @@ resource "azurerm_container_app" "main" {
     max_replicas = var.max_replicas
 
     container {
-      name   = local.name
+      name   = coalesce(var.container_app_name, local.default_name)
       image  = "${data.azurerm_container_registry.main.login_server}:${var.image_version}"
       cpu    = var.cpu
       memory = var.memory
@@ -118,7 +118,7 @@ resource "azurerm_container_app" "main" {
     }
   }
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 output "app_url" {
