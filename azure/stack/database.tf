@@ -13,7 +13,5 @@ module "database" {
 
   # Optional
   user_assigned_identity_ids = [azurerm_user_assigned_identity.main.id]
-  encryption_client_id       = azurerm_user_assigned_identity.main.client_id
-  retention_in_days          = var.database_config.retention_in_days
   db_subnet_address_prefixes = var.database_config.db_subnet_address_prefixes
 }
