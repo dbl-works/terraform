@@ -44,6 +44,10 @@ output "login_server" {
   value = azurerm_container_registry.main.login_server
 }
 
+output "name" {
+  value = coalesce(var.name, local.default_name)
+}
+
 output "admin_username" {
   value = "Retrieve the credentials from Container Registry > Access Keys"
 }

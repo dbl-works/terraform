@@ -49,10 +49,6 @@ variable "revision_mode" {
   }
 }
 
-variable "user_assigned_identity_ids" {
-  type = list(string)
-}
-
 variable "min_replicas" {
   type     = number
   default  = 1
@@ -99,7 +95,7 @@ variable "health_check_options" {
     port                    = optional(string, 80)
     transport               = optional(string, "HTTP")
     failure_count_threshold = optional(number, 5)
-    interval_seconds        = optional(number, 7) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
+    interval_seconds        = optional(number, 60) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
     path                    = optional(string, "/livez")
     timeout                 = optional(number, 5)
   })
@@ -111,22 +107,23 @@ variable "tags" {
   default = null
 }
 
-variable "container_app_environment_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment'"
-}
-
-variable "key_vault_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment'"
+variable "key_vault_id" {
+  type    = string
+  default = null
 }
 
 variable "user_assigned_identity_name" {
+  type = string
+}
+
+variable "container_app_environment_id" {
+  type = string
+}
+
+variable "container_registry_name" {
   type        = string
   default     = null
-  description = "Defaults to 'project-environment'"
+  description = "Defaults to 'project'"
 }
 
 variable "container_app_name" {

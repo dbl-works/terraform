@@ -1,15 +1,5 @@
-data "azurerm_container_app_environment" "main" {
-  name                = coalesce(var.container_app_environment_name, local.default_name)
-  resource_group_name = var.resource_group_name
-}
-
 data "azurerm_container_registry" "main" {
-  name                = var.project
-  resource_group_name = var.resource_group_name
-}
-
-data "azurerm_key_vault" "main" {
-  name                = coalesce(var.key_vault_name, local.default_name)
+  name                = coalesce(var.container_registry_name, var.project)
   resource_group_name = var.resource_group_name
 }
 
@@ -17,7 +7,7 @@ data "azurerm_key_vault_secret" "main" {
   for_each = { for secret in var.secret_variables : secret => secret }
 
   name         = each.key
-  key_vault_id = data.azurerm_key_vault.main.id
+  key_vault_id = var.key_vault_id
 }
 
 data "azurerm_user_assigned_identity" "main" {
@@ -33,7 +23,7 @@ resource "azurerm_role_assignment" "main" {
 
 resource "azurerm_container_app" "main" {
   name                         = var.project
-  container_app_environment_id = data.azurerm_container_app_environment.main.id
+  container_app_environment_id = var.container_app_environment_id
   resource_group_name          = var.resource_group_name
   revision_mode                = var.revision_mode
 
@@ -112,8 +102,8 @@ resource "azurerm_container_app" "main" {
         transport               = var.health_check_options.transport
         path                    = var.health_check_options.path
         interval_seconds        = 1
-        timeout                 = 3
-        failure_count_threshold = 60
+        timeout                 = 30 # TODO: @sam, make sure that this is align with the puma timeout
+        failure_count_threshold = 3
       }
     }
   }

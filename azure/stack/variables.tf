@@ -52,27 +52,27 @@ variable "administrator_password" {
   type      = string
 }
 
-# variable "container_app_config" {
-#   type = object({
-#     environment_variables = optional(map(string), {})
-#     secret_variables      = optional(list(string), [])
-#     target_port           = optional(number, null)
-#     exposed_port          = optional(number, null)
-#     cpu                   = optional(number, 0.25)
-#     memory                = optional(string, "0.5Gi")
-#     image_version         = optional(string, "latest")
-#     # https://learn.microsoft.com/en-us/azure/container-apps/health-probes?tabs=arm-template
-#     health_check_options = object({
-#       port                    = optional(string, 80)
-#       transport               = optional(string, "HTTP")
-#       failure_count_threshold = optional(number, 5)
-#       interval_seconds        = optional(number, 5) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
-#       path                    = optional(string, "/livez")
-#       timeout                 = optional(number, 5)
-#     }, {})
-#   })
-# }
-#
+variable "container_app_config" {
+  type = object({
+    environment_variables = optional(map(string), {})
+    secret_variables      = optional(list(string), [])
+    target_port           = optional(number, null)
+    exposed_port          = optional(number, null)
+    cpu                   = optional(number, 0.25)
+    memory                = optional(string, "0.5Gi")
+    image_version         = optional(string, "latest")
+    # https://learn.microsoft.com/en-us/azure/container-apps/health-probes?tabs=arm-template
+    health_check_options = optional(object({
+      port                    = optional(string, 80)
+      transport               = optional(string, "HTTP")
+      failure_count_threshold = optional(number, 5)
+      interval_seconds        = optional(number, 5) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
+      path                    = optional(string, "/livez")
+      timeout                 = optional(number, 5)
+    }), {})
+  })
+}
+
 variable "virtual_network_config" {
   type = object({
     address_spaces = optional(list(string), null)
