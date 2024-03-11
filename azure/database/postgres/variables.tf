@@ -6,6 +6,8 @@ variable "resource_group_name" {
   type = string
 }
 
+# https://azure.microsoft.com/en-gb/explore/global-infrastructure/products-by-region/?products=postgresql
+# West Europe doesn't support multiple AZ
 variable "region" {
   type = string
 }
@@ -104,8 +106,9 @@ variable "sku_name" {
 }
 
 variable "administrator_login" {
-  sensitive = true
-  type      = string
+  sensitive   = true
+  type        = string
+  description = "Admin username cannot start with numbers and must only contain characters and numbers, it also can not be root."
 }
 
 variable "administrator_password" {
