@@ -1,7 +1,6 @@
 module "virtual-network" {
   source = "../virtual-network"
 
-  name                = local.name
   resource_group_name = var.resource_group_name
   region              = var.region
   project             = var.project

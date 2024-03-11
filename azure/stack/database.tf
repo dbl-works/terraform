@@ -1,7 +1,6 @@
 module "database" {
   source = "../database/postgres"
 
-  name                = local.name
   resource_group_name = var.resource_group_name
   region              = var.region
   project             = var.project
