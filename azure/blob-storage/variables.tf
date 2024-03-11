@@ -146,8 +146,12 @@ variable "cors_config" {
   default = {}
 }
 
+variable "tags" {
+  type    = map(string)
+  default = null
+}
+
 locals {
-  name = "${var.project}-${var.environment}"
   default_tags = {
     Project     = var.project
     Environment = var.environment

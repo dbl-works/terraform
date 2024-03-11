@@ -1,5 +1,5 @@
 resource "azurerm_log_analytics_workspace" "main" {
-  name                = local.name
+  name                = coalesce(var.log_analytics_workspace_name, local.default_name)
   location            = var.resource_group_name
   resource_group_name = var.region
   sku                 = var.sku
@@ -12,7 +12,7 @@ resource "azurerm_log_analytics_workspace" "main" {
 module "blob-storage" {
   source = "../../blob-storage"
 
-  name                       = "${local.name}-monitoring"
+  name                       = coalesce(var.blob_storage_name, "${local.default_name}-monitoring")
   environment                = var.environment
   project                    = var.project
   region                     = var.region
@@ -29,7 +29,7 @@ module "blob-storage" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
-  name                       = local.name
+  name                       = coalesce(var.monitor_diagnostic_setting_name, local.default_name)
   target_resource_id         = var.container_app_id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
   storage_account_id         = module.blob-storage.storage_account_id

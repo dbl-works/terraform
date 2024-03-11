@@ -1,6 +1,6 @@
 # This is the existing public network that allows internet access
 resource "azurerm_subnet" "public" {
-  name                 = "${local.name}-public"
+  name                 = coalesce(var.public_subnet_name, "${local.default_name}-public")
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
   # (Assuming address space is 10.0.0.0) range 10.0.1.0 - 10.0.1.255
@@ -9,7 +9,7 @@ resource "azurerm_subnet" "public" {
 }
 
 resource "azurerm_network_security_group" "public" {
-  name                = "${local.name}-public"
+  name                = coalesce(var.private_network_security_group_name, "${local.default_name}-public")
   location            = var.region
   resource_group_name = var.resource_group_name
 }

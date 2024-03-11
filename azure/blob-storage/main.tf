@@ -55,7 +55,7 @@ resource "azurerm_storage_account" "main" {
     }
   }
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_storage_container" "main" {

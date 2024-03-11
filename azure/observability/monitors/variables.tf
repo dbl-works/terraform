@@ -38,8 +38,32 @@ variable "logs_retention_in_days" {
   default  = 90
 }
 
+variable "tags" {
+  type    = map(string)
+  default = null
+}
+
+variable "log_analytics_workspace_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
+variable "monitor_diagnostic_setting_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
+variable "blob_storage_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-monitoring'."
+}
+
 locals {
-  name = "${var.project}-${var.environment}"
+  default_name = "${var.project}-${var.environment}"
+
   default_tags = {
     Project     = var.project
     Environment = var.environment

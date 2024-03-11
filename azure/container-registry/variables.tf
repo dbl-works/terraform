@@ -2,10 +2,6 @@ variable "resource_group_name" {
   type = string
 }
 
-variable "name" {
-  type = string
-}
-
 variable "region" {
   type = string
 }
@@ -66,8 +62,20 @@ variable "sku" {
   }
 }
 
+variable "tags" {
+  type    = map(string)
+  default = null
+}
+
+variable "name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
 locals {
-  name = "${var.project}-${var.environment}"
+  default_name = var.project # for security reasons, you should use the same registry name for all environments
+
   default_tags = {
     Project     = var.project
     Environment = var.environment

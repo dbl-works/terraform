@@ -1,6 +1,6 @@
 # @TODO(sam, lud, 07.03.2024): consider adding HA support, see https://github.com/dbl-works/terraform/pull/316#discussion_r1515101871
 resource "azurerm_postgresql_flexible_server" "main" {
-  name                   = local.name
+  name                   = coalesce(var.db_name, local.default_name)
   resource_group_name    = var.resource_group_name
   location               = var.region
   version                = var.postgres_version
@@ -36,7 +36,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
     ]
   }
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 output "id" {

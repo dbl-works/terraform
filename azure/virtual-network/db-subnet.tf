@@ -1,10 +1,10 @@
 resource "azurerm_network_security_group" "db" {
-  name                = "${local.name}-db"
+  name                = "${local.default_name}-db"
   location            = var.region
   resource_group_name = var.resource_group_name
 
   security_rule {
-    name                       = "${local.name}-db"
+    name                       = "${local.default_name}-db"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
@@ -15,11 +15,11 @@ resource "azurerm_network_security_group" "db" {
     destination_address_prefix = "*"
   }
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_subnet" "db" {
-  name                 = "${local.name}-db-subnet"
+  name                 = "${local.default_name}-db-subnet"
   virtual_network_name = azurerm_virtual_network.main.name
   resource_group_name  = var.resource_group_name
   address_prefixes     = [cidrsubnet(var.address_space, 8, 200)]
@@ -44,10 +44,10 @@ resource "azurerm_subnet_network_security_group_association" "db" {
 }
 
 resource "azurerm_private_dns_zone" "db" {
-  name                = "${local.name}.postgres.database.azure.com"
+  name                = "${local.default_name}.postgres.database.azure.com"
   resource_group_name = var.resource_group_name
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 
   depends_on = [
     azurerm_subnet_network_security_group_association.db
