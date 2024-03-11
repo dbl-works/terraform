@@ -4,10 +4,15 @@ https://azure.microsoft.com/en-us/products/storage/blobs
 
 ```
 locals {
-  region = "West Europe"
-  project = "facebook"
+  region              = "West Europe"
+  project             = "facebook"
   resource_group_name = "facebook-staging"
-  environment = "staging"
+  environment         = "staging"
+
+  default_tags = {
+    Project     = local.project
+    Environment = local.environment
+  }
 }
 
 resource "azurerm_resource_group" "main" {
@@ -18,6 +23,7 @@ resource "azurerm_resource_group" "main" {
 resource "azurerm_user_assigned_identity" "main" {
   resource_group_name = local.resource_group_name
   location            = local.region
+
   name = local.name
   tags = local.default_tags
 

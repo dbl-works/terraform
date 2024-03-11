@@ -1,5 +1,5 @@
 resource "azurerm_log_analytics_workspace" "main" {
-  name                = local.name
+  name                = coalesce(var.log_analytics_workspace_name, local.default_name)
   location            = var.resource_group_name
   resource_group_name = var.region
   sku                 = var.sku
@@ -12,7 +12,7 @@ resource "azurerm_log_analytics_workspace" "main" {
 module "blob-storage" {
   source = "../../blob-storage"
 
-  name                       = "${local.name}-monitoring"
+  name                       = coalesce(var.blob_storage_name, "${local.default_name}-monitoring")
   environment                = var.environment
   project                    = var.project
   region                     = var.region
@@ -20,18 +20,19 @@ module "blob-storage" {
   user_assigned_identity_ids = var.user_assigned_identity_ids
 
   lifecycle_rules = {
-    name                                              = "monitoring-${local.name}"
-    prefix_match                                      = ["insights-activity-logs/ResourceId=${var.target_resource_id}"]
-    blob_types                                        = ["appendBlob"]
-    delete_after_days_since_modification_greater_than = var.logs_retention_in_days
+    "monitoring-${coalesce(var.blob_storage_name, "${local.default_name}-monitoring")}" = {
+      prefix_match                                      = ["insights-activity-logs/ResourceId=${var.container_app_id}"]
+      blob_types                                        = ["appendBlob"]
+      delete_after_days_since_modification_greater_than = var.logs_retention_in_days
+    }
   }
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
-  name                       = local.name
+  name                       = coalesce(var.monitor_diagnostic_setting_name, local.default_name)
   target_resource_id         = var.container_app_id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
-  storage_account_id         = module.blob-storage.id
+  storage_account_id         = module.blob-storage.storage_account_id
 
   # Check here for the list of Service/Category available for different resources
   # https://learn.microsoft.com/en-gb/azure/azure-monitor/essentials/resource-logs-schema#service-specific-schemas

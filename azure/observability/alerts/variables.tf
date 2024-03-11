@@ -32,8 +32,26 @@ variable "slack_webhook_url" {
   type = string
 }
 
+variable "tags" {
+  type    = map(string)
+  default = null
+}
+
+variable "monitor_metric_alert_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
+variable "monitor_action_group_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
 locals {
-  name = "${var.project}-${var.environment}"
+  default_name = "${var.project}-${var.environment}"
+
   default_tags = {
     Project     = var.project
     Environment = var.environment

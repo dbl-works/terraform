@@ -1,5 +1,5 @@
 resource "azurerm_monitor_metric_alert" "cpu" {
-  name                = local.name
+  name                = coalesce(var.monitor_metric_alert_name, local.default_name)
   resource_group_name = var.resource_group_name
   scopes              = [var.container_app_id]
   description         = "Action will be triggered when cpu usage is greater than ${var.cpu_percentage_threshold}"
@@ -17,10 +17,12 @@ resource "azurerm_monitor_metric_alert" "cpu" {
   action {
     action_group_id = azurerm_monitor_action_group.main.id
   }
+
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_monitor_metric_alert" "memory" {
-  name                = local.name
+  name                = coalesce(var.monitor_metric_alert_name, local.default_name)
   resource_group_name = var.resource_group_name
   scopes              = [var.container_app_id]
   description         = "Action will be triggered when memory usage is greater than ${var.memory_percentage_threshold}"
@@ -42,12 +44,12 @@ resource "azurerm_monitor_metric_alert" "memory" {
 
 
 resource "azurerm_monitor_action_group" "main" {
-  name                = local.name
+  name                = coalesce(var.monitor_action_group_name, local.default_name)
   resource_group_name = var.resource_group_name
-  short_name          = local.name
+  short_name          = coalesce(var.monitor_action_group_name, local.default_name)
 
   webhook_receiver {
-    name                    = "slack-${local.name}"
+    name                    = "slack-${coalesce(var.monitor_action_group_name, local.default_name)}"
     service_uri             = var.slack_webhook_url
     use_common_alert_schema = true
   }

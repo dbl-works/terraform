@@ -1,7 +1,3 @@
-variable "name" {
-  type = string
-}
-
 variable "resource_group_name" {
   type = string
 }
@@ -109,8 +105,38 @@ variable "administrator_password" {
   type      = string
 }
 
+variable "tags" {
+  type    = map(string)
+  default = null
+}
+
+variable "db_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-region'."
+}
+
+variable "network_security_group_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-region-db'."
+}
+
+variable "subnet_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-region-db-subnet'."
+}
+
+variable "dns_zone_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-region.postgres.database.azure.com'."
+}
+
 locals {
-  name = "${var.project}-${var.environment}-${lower(replace(var.region, " ", "-"))}"
+  default_name = "${var.project}-${var.environment}-${lower(replace(var.region, " ", "-"))}"
+
   default_tags = {
     Project     = var.project
     Environment = var.environment
