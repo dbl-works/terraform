@@ -3,12 +3,35 @@ variable "resource_group_name" {
   description = "Resource Group name"
 }
 
+variable "region" {
+  type = string
+}
+
 variable "project" {
   type = string
 }
 
 variable "environment" {
   type = string
+}
+
+variable "subnet_id" {
+  type = string
+}
+
+variable "zone_redundancy_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "internal_load_balancer_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "log_analytics_workspace_id" {
+  type    = string
+  default = null
 }
 
 variable "environment_variables" {
@@ -124,10 +147,6 @@ variable "key_vault_id" {
 }
 
 variable "user_assigned_identity_name" {
-  type = string
-}
-
-variable "container_app_environment_id" {
   type = string
 }
 

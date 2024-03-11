@@ -21,9 +21,24 @@ resource "azurerm_role_assignment" "main" {
   principal_id         = data.azurerm_user_assigned_identity.main.principal_id
 }
 
+# https://learn.microsoft.com/en-us/azure/container-apps/vnet-custom?tabs=bash%2Cazure-cli&pivots=azure-portal
+resource "azurerm_container_app_environment" "main" {
+  name                = local.default_name
+  location            = var.region
+  resource_group_name = var.resource_group_name
+
+  infrastructure_subnet_id       = var.subnet_id
+  zone_redundancy_enabled        = var.zone_redundancy_enabled
+  internal_load_balancer_enabled = var.internal_load_balancer_enabled
+  log_analytics_workspace_id     = var.log_analytics_workspace_id
+
+  tags = coalesce(var.tags, local.default_tags)
+}
+
+
 resource "azurerm_container_app" "main" {
   name                         = var.project
-  container_app_environment_id = var.container_app_environment_id
+  container_app_environment_id = azurerm_container_app_environment.main.id
   resource_group_name          = var.resource_group_name
   revision_mode                = var.revision_mode
 
@@ -118,4 +133,8 @@ output "app_url" {
 
 output "revision_name" {
   value = azurerm_container_app.main.latest_revision_name
+}
+
+output "public_ip_address" {
+  value = azurerm_container_app_environment.main.static_ip_address
 }

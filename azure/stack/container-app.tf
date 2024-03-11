@@ -1,17 +1,20 @@
+# A Container Apps environment is a secure boundary around groups of container apps that share the same virtual network and write logs to the same logging destination.
 module "container-app" {
   source = "../container-app"
 
   resource_group_name = var.resource_group_name
   project             = var.project
   environment         = var.environment
+  region              = var.region
 
-  key_vault_id                 = azurerm_key_vault.main.id
-  container_app_environment_id = azurerm_container_app_environment.main.id
-  container_registry_name      = module.container-registry.name
-  health_check_options         = var.container_app_config.health_check_options
+  key_vault_id            = azurerm_key_vault.main.id
+  container_registry_name = module.container-registry.name
+  health_check_options    = var.container_app_config.health_check_options
 
-  target_port                 = var.container_app_config.target_port
-  exposed_port                = var.container_app_config.exposed_port
+  target_port  = var.container_app_config.target_port
+  exposed_port = var.container_app_config.exposed_port
+  subnet_id    = module.virtual-network.public_subnet_id
+
   user_assigned_identity_name = local.name
   cpu                         = var.container_app_config.cpu
   memory                      = var.container_app_config.memory
