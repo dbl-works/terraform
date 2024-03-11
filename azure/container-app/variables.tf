@@ -89,6 +89,17 @@ variable "exposed_port" {
   nullable = false
 }
 
+variable "transport" {
+  type     = string
+  default  = "tcp"
+  nullable = false
+
+  validation {
+    condition     = contains(["auto", "http", "http2", "tcp"], var.transport)
+    error_message = "Must be either auto, http, http2 or tcp"
+  }
+}
+
 # https://learn.microsoft.com/en-us/azure/container-apps/health-probes?tabs=arm-template
 variable "health_check_options" {
   type = object({

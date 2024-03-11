@@ -17,7 +17,7 @@ data "azurerm_user_assigned_identity" "main" {
 
 resource "azurerm_role_assignment" "main" {
   scope                = data.azurerm_container_registry.main.id
-  role_definition_name = "acr_pull"
+  role_definition_name = "acrpull"
   principal_id         = data.azurerm_user_assigned_identity.main.principal_id
 }
 
@@ -42,6 +42,7 @@ resource "azurerm_container_app" "main" {
     external_enabled           = true
     target_port                = var.target_port
     exposed_port               = var.exposed_port
+    transport                  = var.transport
     traffic_weight {
       percentage      = 100
       latest_revision = true
