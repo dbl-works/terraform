@@ -18,9 +18,12 @@ variable "environment" {
   type = string
 }
 
-variable "virtual_network_name" {
-  type    = string
-  default = null
+variable "delegated_subnet_id" {
+  type = string
+}
+
+variable "private_dns_zone_id" {
+  type = string
 }
 
 variable "user_assigned_identity_ids" {

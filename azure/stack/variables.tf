@@ -34,12 +34,12 @@ variable "container_registry_config" {
 #
 variable "database_config" {
   type = object({
-    version                    = optional(string, null)
-    storage_mb                 = optional(number, null)
-    storage_tier               = optional(string, null)
-    sku_name                   = optional(string, null)
-    db_subnet_address_prefixes = optional(list(string), [])
+    version      = optional(string, null)
+    storage_mb   = optional(number, null)
+    storage_tier = optional(string, null)
+    sku_name     = optional(string, null)
   })
+  default = {}
 }
 
 variable "administrator_login" {

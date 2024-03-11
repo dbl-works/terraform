@@ -1,12 +1,13 @@
 module "database" {
   source = "../database/postgres"
 
-  name                 = local.name
-  virtual_network_name = module.virtual-network.name
-  resource_group_name  = var.resource_group_name
-  region               = var.region
-  project              = var.project
-  environment          = var.environment
+  name                = local.name
+  resource_group_name = var.resource_group_name
+  region              = var.region
+  project             = var.project
+  environment         = var.environment
+  private_dns_zone_id = module.virtual-network.db_private_dns_zone_id
+  delegated_subnet_id = module.virtual-network.db_subnet_id
 
   # TODO: Pass this value using key vault
   # Key vault must be created before database
@@ -15,7 +16,6 @@ module "database" {
 
   # Optional
   user_assigned_identity_ids = [azurerm_user_assigned_identity.main.id]
-  db_subnet_address_prefixes = var.database_config.db_subnet_address_prefixes
   postgres_version           = var.database_config.version
   storage_mb                 = var.database_config.storage_mb
   storage_tier               = var.database_config.storage_tier

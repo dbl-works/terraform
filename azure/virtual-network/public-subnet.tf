@@ -3,7 +3,8 @@ resource "azurerm_subnet" "public" {
   name                 = "${local.name}-public"
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
-  # (Assuming address space is 10.0.0.0) range 10.0.0.0 - 10.0.2.255
+  # (Assuming address space is 10.0.0.0) range 10.0.1.0 - 10.0.1.255
+  # i.e. 10.0.1.0/24
   address_prefixes = [cidrsubnet(var.address_space, 8, 1)]
 }
 

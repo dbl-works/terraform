@@ -7,6 +7,6 @@ module "virtual-network" {
   project             = var.project
   environment         = var.environment
 
-  address_space = var.virtual_network_config.address_space
+  address_space = try(var.virtual_network_config.address_space, null)
 }
 

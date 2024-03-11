@@ -10,3 +10,19 @@ resource "azurerm_virtual_network" "main" {
 output "name" {
   value = azurerm_virtual_network.main.name
 }
+
+output "db_subnet_id" {
+  value = azurerm_subnet.db.id
+}
+
+output "db_private_dns_zone_id" {
+  value = azurerm_private_dns_zone.db.id
+}
+
+output "private_subnet_id" {
+  value = azurerm_subnet.private.id
+}
+
+output "public_subnet_id" {
+  value = azurerm_subnet.public.id
+}

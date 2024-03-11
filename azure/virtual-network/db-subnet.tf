@@ -1,16 +1,11 @@
-data "azurerm_virtual_network" "main" {
-  name                = coalesce(var.virtual_network_name, "${var.project}-${var.environment}")
-  resource_group_name = var.resource_group_name
-}
-
-resource "azurerm_network_security_group" "main" {
+resource "azurerm_network_security_group" "db" {
   name                = "${local.name}-db"
   location            = var.region
   resource_group_name = var.resource_group_name
 
   security_rule {
     name                       = "${local.name}-db"
-    priority                   = 1
+    priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -23,11 +18,11 @@ resource "azurerm_network_security_group" "main" {
   tags = local.default_tags
 }
 
-resource "azurerm_subnet" "main" {
+resource "azurerm_subnet" "db" {
   name                 = "${local.name}-db-subnet"
-  virtual_network_name = data.azurerm_virtual_network.main.name
+  virtual_network_name = azurerm_virtual_network.main.name
   resource_group_name  = var.resource_group_name
-  address_prefixes     = var.db_subnet_address_prefixes
+  address_prefixes     = [cidrsubnet(var.address_space, 8, 200)]
   service_endpoints    = ["Microsoft.Storage"]
 
   delegation {
@@ -43,18 +38,18 @@ resource "azurerm_subnet" "main" {
   }
 }
 
-resource "azurerm_subnet_network_security_group_association" "main" {
-  subnet_id                 = azurerm_subnet.main.id
-  network_security_group_id = azurerm_network_security_group.main.id
+resource "azurerm_subnet_network_security_group_association" "db" {
+  subnet_id                 = azurerm_subnet.db.id
+  network_security_group_id = azurerm_network_security_group.db.id
 }
 
-resource "azurerm_private_dns_zone" "main" {
+resource "azurerm_private_dns_zone" "db" {
   name                = "${local.name}.postgres.database.azure.com"
   resource_group_name = var.resource_group_name
 
   tags = local.default_tags
 
   depends_on = [
-    azurerm_subnet_network_security_group_association.main
+    azurerm_subnet_network_security_group_association.db
   ]
 }
