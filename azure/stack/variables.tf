@@ -32,27 +32,26 @@ variable "container_registry_config" {
 #   })
 # }
 #
-# variable "database_config" {
-#   type = object({
-#     version                    = optional(string, null)
-#     storage_mb                 = optional(number, null)
-#     storage_tier               = optional(string, null)
-#     sku_name                   = optional(string, null)
-#     retention_in_days          = optional(number, null)
-#     db_subnet_address_prefixes = optional(list(string), [])
-#   })
-# }
-#
-# variable "administrator_login" {
-#   sensitive = true
-#   type      = string
-# }
-#
-# variable "administrator_password" {
-#   sensitive = true
-#   type      = string
-# }
-#
+variable "database_config" {
+  type = object({
+    version                    = optional(string, null)
+    storage_mb                 = optional(number, null)
+    storage_tier               = optional(string, null)
+    sku_name                   = optional(string, null)
+    db_subnet_address_prefixes = optional(list(string), [])
+  })
+}
+
+variable "administrator_login" {
+  sensitive = true
+  type      = string
+}
+
+variable "administrator_password" {
+  sensitive = true
+  type      = string
+}
+
 # variable "container_app_config" {
 #   type = object({
 #     environment_variables = optional(map(string), {})
@@ -74,12 +73,13 @@ variable "container_registry_config" {
 #   })
 # }
 #
-# variable "virtual_network_config" {
-#   type = object({
-#     address_spaces = optional(list(string), null)
-#   })
-# }
-#
+variable "virtual_network_config" {
+  type = object({
+    address_spaces = optional(list(string), null)
+  })
+  default = {}
+}
+
 variable "key_vault_config" {
   type = object({
     name              = optional(string, null)
@@ -117,11 +117,8 @@ variable "key_vault_config" {
 }
 
 variable "default_tags" {
-  type = map(string)
-  default = {
-    Project     = var.project
-    Environment = var.environment
-  }
+  type    = map(string)
+  default = {}
 }
 
 locals {

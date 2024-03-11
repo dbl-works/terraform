@@ -6,3 +6,7 @@ resource "azurerm_virtual_network" "main" {
 
   tags = local.default_tags
 }
+
+output "name" {
+  value = azurerm_virtual_network.main.name
+}

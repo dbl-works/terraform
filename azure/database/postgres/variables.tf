@@ -93,6 +93,7 @@ variable "sku_name" {
   # tier: The tier of the particular SKU, e.g. Burstable, GeneralPurpose, MemoryOptimized
   # The Burstable tier is best suited for low-cost development and low concurrency workloads without continuous compute capacity.
   # The General Purpose and Memory Optimized are better suited for production workloads requiring high concurrency, scale, and predictable performance.
+  # Burstable: B, General Purpose: GP, MemoryOptimized: MO
   type        = string
   description = "The SKU Name for the PostgreSQL Flexible Server. Follows the tier + name pattern "
   default     = "GP_Standard_D2s_v3"
