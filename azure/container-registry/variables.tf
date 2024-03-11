@@ -74,7 +74,7 @@ variable "name" {
 }
 
 locals {
-  default_name = "${var.project}-${var.environment}"
+  default_name = var.project # for security reasons, you should use the same registry name for all environments
 
   default_tags = {
     Project     = var.project
