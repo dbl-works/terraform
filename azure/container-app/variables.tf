@@ -106,15 +106,13 @@ variable "image_version" {
 }
 
 variable "target_port" {
-  type     = number
-  default  = 3000
-  nullable = false
+  type    = number
+  default = null
 }
 
 variable "exposed_port" {
-  type     = number
-  default  = 3000
-  nullable = false
+  type    = number
+  default = null
 }
 
 variable "transport" {
@@ -131,7 +129,7 @@ variable "transport" {
 # https://learn.microsoft.com/en-us/azure/container-apps/health-probes?tabs=arm-template
 variable "health_check_options" {
   type = object({
-    port                    = optional(string, 80)
+    port                    = optional(string, null)
     transport               = optional(string, "HTTP")
     failure_count_threshold = optional(number, 5)
     interval_seconds        = optional(number, 60) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
@@ -192,6 +190,8 @@ variable "log_analytics_workspace_name" {
 
 locals {
   default_name = "${var.project}-${var.environment}"
+
+  default_app_port = 3000
 
   default_tags = {
     Project     = var.project

@@ -40,8 +40,8 @@ resource "azurerm_container_app" "main" {
   ingress {
     allow_insecure_connections = false
     external_enabled           = true
-    target_port                = var.target_port
-    exposed_port               = var.exposed_port
+    target_port                = coalesce(var.target_port, local.default_app_port)
+    exposed_port               = coalesce(var.exposed_port, local.default_app_port)
     transport                  = var.transport
     traffic_weight {
       percentage      = 100
@@ -79,7 +79,7 @@ resource "azurerm_container_app" "main" {
       # Azure Container Apps health probes allow the Container Apps runtime to regularly inspect the status of your container apps.
       # Checks to see if a replica is ready to handle incoming requests.
       readiness_probe {
-        port                    = var.health_check_options.port
+        port                    = coalesce(var.health_check_options.port, local.default_app_port)
         transport               = var.health_check_options.transport
         path                    = var.health_check_options.path
         interval_seconds        = var.health_check_options.interval_seconds
@@ -89,22 +89,22 @@ resource "azurerm_container_app" "main" {
 
       # Checks if your application is still running and responsive.
       liveness_probe {
-        port                    = var.health_check_options.port
+        port                    = coalesce(var.health_check_options.port, local.default_app_port)
         transport               = var.health_check_options.transport
         path                    = var.health_check_options.path
         interval_seconds        = var.health_check_options.interval_seconds
-        timeout                 = var.health_check_options.timeout
+        timeout                 = var.health_check_options.timeout # TODO: @sam, make sure that this is align with the puma timeout
         failure_count_threshold = var.health_check_options.failure_count_threshold
       }
 
       # Checks if your application has successfully started. This check is separate from the liveness probe and executes during the initial startup phase of your application.
       startup_probe {
-        port                    = var.health_check_options.port
+        port                    = coalesce(var.health_check_options.port, local.default_app_port)
         transport               = var.health_check_options.transport
         path                    = var.health_check_options.path
-        interval_seconds        = 1
-        timeout                 = 30 # TODO: @sam, make sure that this is align with the puma timeout
-        failure_count_threshold = 3
+        interval_seconds        = 120
+        timeout                 = 60
+        failure_count_threshold = 5
       }
     }
   }

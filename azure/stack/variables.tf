@@ -71,12 +71,12 @@ variable "container_app_config" {
     logs_retention_in_days       = optional(number, null)
     # https://learn.microsoft.com/en-us/azure/container-apps/health-probes?tabs=arm-template
     health_check_options = optional(object({
-      port                    = optional(string, 80)
-      transport               = optional(string, "HTTP")
-      failure_count_threshold = optional(number, 5)
-      interval_seconds        = optional(number, 5) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
-      path                    = optional(string, "/livez")
-      timeout                 = optional(number, 5)
+      port                    = optional(string, null)
+      transport               = optional(string, null)
+      failure_count_threshold = optional(number, null)
+      interval_seconds        = optional(number, null) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
+      path                    = optional(string, null)
+      timeout                 = optional(number, null)
     }), {})
   })
 }

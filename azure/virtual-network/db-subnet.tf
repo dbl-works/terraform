@@ -1,3 +1,5 @@
+# TODO: remember to Link private DNS zone your virtual network
+
 resource "azurerm_network_security_group" "db" {
   name                = "${local.default_name}-db"
   location            = var.region
