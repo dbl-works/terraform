@@ -25,13 +25,6 @@ variable "container_registry_config" {
   default = {}
 }
 
-
-# variable "observability_config" {
-#   type = object({
-#     logs_retention_in_days = optional(string, null)
-#   })
-# }
-#
 variable "database_config" {
   type = object({
     version      = optional(string, null)

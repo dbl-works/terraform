@@ -167,6 +167,29 @@ variable "container_app_name" {
   description = "Defaults to 'project-environment'"
 }
 
+# Logging
+# The Free SKU has a default daily_quota_gb value of 0.5 (GB).
+variable "logging_sku" {
+  type = string
+  validation {
+    condition     = contains(["Free", "PerNode", "Premium", "Standard", "Standalone", "Unlimited", "CapacityReservation", "PerGB2018"], var.logging_sku)
+    error_message = "Must be either Free, PerNode, Premium, Standard, Standalone, Unlimited, CapacityReservation, and PerGB2018"
+  }
+  default = "PerGB2018"
+}
+
+variable "logs_retention_in_days" {
+  type     = number
+  nullable = false
+  default  = 90
+}
+
+variable "log_analytics_workspace_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
 locals {
   default_name = "${var.project}-${var.environment}"
 

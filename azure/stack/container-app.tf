@@ -2,15 +2,16 @@
 module "container-app" {
   source = "../container-app"
 
-  resource_group_name = var.resource_group_name
-  project             = var.project
-  environment         = var.environment
-  region              = var.region
+  resource_group_name          = var.resource_group_name
+  project                      = var.project
+  environment                  = var.environment
+  region                       = var.region
+  log_analytics_workspace_name = var.container_app_config.log_analytics_workspace_name
+  logs_retention_in_days       = var.container_app_config.logs_retention_in_days
 
-  key_vault_id               = azurerm_key_vault.main.id
-  container_registry_name    = module.container-registry.name
-  health_check_options       = var.container_app_config.health_check_options
-  log_analytics_workspace_id = module.observability.id
+  key_vault_id            = azurerm_key_vault.main.id
+  container_registry_name = module.container-registry.name
+  health_check_options    = var.container_app_config.health_check_options
 
   target_port  = var.container_app_config.target_port
   exposed_port = var.container_app_config.exposed_port
