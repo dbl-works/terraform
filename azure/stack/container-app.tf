@@ -7,9 +7,10 @@ module "container-app" {
   environment         = var.environment
   region              = var.region
 
-  key_vault_id            = azurerm_key_vault.main.id
-  container_registry_name = module.container-registry.name
-  health_check_options    = var.container_app_config.health_check_options
+  key_vault_id               = azurerm_key_vault.main.id
+  container_registry_name    = module.container-registry.name
+  health_check_options       = var.container_app_config.health_check_options
+  log_analytics_workspace_id = module.observability.id
 
   target_port  = var.container_app_config.target_port
   exposed_port = var.container_app_config.exposed_port

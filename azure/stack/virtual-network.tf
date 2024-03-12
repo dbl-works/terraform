@@ -10,4 +10,3 @@ module "virtual-network" {
 
   address_space = try(var.virtual_network_config.address_space, null)
 }
-

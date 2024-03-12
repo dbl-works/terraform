@@ -49,5 +49,9 @@ output "name" {
 }
 
 output "admin_username" {
-  value = "Retrieve the credentials from Container Registry > Access Keys"
+  value = azurerm_container_registry.main.admin_username
+}
+
+output "admin_password" {
+  value = azurerm_container_registry.main.admin_password
 }

@@ -1,5 +1,5 @@
 module "observability" {
-  source = "../observability"
+  source = "../observability/monitor"
 
   resource_group_name = var.resource_group_name
   environment         = var.environment

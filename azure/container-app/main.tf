@@ -78,7 +78,7 @@ resource "azurerm_container_app" "main" {
 
     container {
       name   = coalesce(var.container_app_name, local.default_name)
-      image  = "${data.azurerm_container_registry.main.login_server}:${var.image_version}"
+      image  = "${data.azurerm_container_registry.main.login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}"
       cpu    = var.cpu
       memory = var.memory
 
