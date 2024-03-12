@@ -14,6 +14,19 @@ variable "environment" {
   type = string
 }
 
+variable "blob_storage_config" {
+  type = map(object({
+    container_access_type           = optional(string, null)
+    account_kind                    = optional(string, null)
+    account_tier                    = optional(string, null)
+    account_replication_type        = optional(string, null)
+    public_network_access_enabled   = optional(bool, null)
+    allow_nested_items_to_be_public = optional(bool, null)
+    versioning_enabled              = optional(bool, null)
+  }))
+  default = {}
+}
+
 variable "container_registry_config" {
   type = object({
     name                          = optional(string, null)
@@ -47,13 +60,15 @@ variable "administrator_password" {
 
 variable "container_app_config" {
   type = object({
-    environment_variables = optional(map(string), {})
-    secret_variables      = optional(list(string), [])
-    target_port           = optional(number, null)
-    exposed_port          = optional(number, null)
-    cpu                   = optional(number, 0.25)
-    memory                = optional(string, "0.5Gi")
-    image_version         = optional(string, "latest")
+    environment_variables        = optional(map(string), {})
+    secret_variables             = optional(list(string), [])
+    target_port                  = optional(number, null)
+    exposed_port                 = optional(number, null)
+    cpu                          = optional(number, 0.25)
+    memory                       = optional(string, "0.5Gi")
+    image_version                = optional(string, "latest")
+    log_analytics_workspace_name = optional(string, null)
+    logs_retention_in_days       = optional(number, null)
     # https://learn.microsoft.com/en-us/azure/container-apps/health-probes?tabs=arm-template
     health_check_options = optional(object({
       port                    = optional(string, 80)
