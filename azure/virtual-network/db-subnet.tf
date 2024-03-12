@@ -1,5 +1,3 @@
-# TODO: remember to Link private DNS zone your virtual network
-
 resource "azurerm_network_security_group" "db" {
   name                = "${local.default_name}-db"
   location            = var.region
@@ -54,4 +52,12 @@ resource "azurerm_private_dns_zone" "db" {
   depends_on = [
     azurerm_subnet_network_security_group_association.db
   ]
+}
+
+# Must link private DNS zone your virtual network to enable access
+resource "azurerm_private_dns_zone_virtual_network_link" "db" {
+  name                  = "db"
+  resource_group_name   = var.resource_group_name
+  private_dns_zone_name = azurerm_private_dns_zone.db.name
+  virtual_network_id    = azurerm_virtual_network.main.id
 }
