@@ -65,6 +65,24 @@ variable "public_subnet_name" {
   description = "Defaults to 'project-environment-public'."
 }
 
+variable "db_subnet_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-db-subnet'."
+}
+
+variable "db_network_security_group_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-db'."
+}
+
+variable "db_dns_zone_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
 variable "private_subnet_name" {
   type        = string
   default     = null
