@@ -7,6 +7,7 @@ module "virtual-network" {
   region              = var.region
   project             = var.project
   environment         = var.environment
+  public_subnet_name  = var.virtual_network_config.public_subnet_name
 
   address_space = try(var.virtual_network_config.address_space, null)
 }
