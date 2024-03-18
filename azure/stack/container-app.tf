@@ -2,6 +2,7 @@
 module "container-app" {
   source = "../container-app"
 
+  container_app_name           = var.container_app_config.name
   resource_group_name          = var.resource_group_name
   project                      = var.project
   environment                  = var.environment

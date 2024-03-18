@@ -64,6 +64,7 @@ variable "administrator_password" {
 
 variable "container_app_config" {
   type = object({
+    name                         = optional(string, null)
     environment_variables        = optional(map(string), {})
     secret_variables             = optional(list(string), [])
     target_port                  = optional(number, null)

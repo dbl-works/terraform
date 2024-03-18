@@ -22,7 +22,7 @@ resource "azurerm_role_assignment" "main" {
 }
 
 resource "azurerm_container_app" "main" {
-  name                         = var.project
+  name                         = coalesce(var.container_app_name, local.default_name)
   container_app_environment_id = azurerm_container_app_environment.main.id
   resource_group_name          = var.resource_group_name
   revision_mode                = var.revision_mode
