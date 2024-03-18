@@ -35,19 +35,24 @@ resource "azurerm_container_app" "main" {
   ingress {
     allow_insecure_connections = false
     external_enabled           = true
-    target_port                = coalesce(var.target_port, 443)
-    exposed_port               = coalesce(var.exposed_port, local.default_app_port)
-    transport                  = var.transport
+    target_port                = coalesce(var.target_port, local.default_app_port)
+    # exposed_port can only be specified when transport is set to tcp.
+    # exposed_port = coalesce(var.exposed_port, local.default_app_port)
+    transport = var.transport
+
     traffic_weight {
       percentage      = 100
       latest_revision = true
     }
   }
 
+  # Secrets cannot be removed from the service once added, attempting to do so will result in an error.
+  # Their values may be zeroed, i.e. set to "", but the named secret must persist.
+  # This is due to a technical limitation on the service which causes the service to become unmanageable.
   dynamic "secret" {
     for_each = toset(var.secret_variables)
     content {
-      name  = secret.value
+      name  = lower(secret.value)
       value = data.azurerm_key_vault_secret.main[secret.value].value
     }
   }

@@ -61,7 +61,7 @@ variable "secret_variables" {
 
 locals {
   env = merge(
-    { for secret in var.secret_variables : secret => { secret_name = secret } },
+    { for secret in var.secret_variables : replace(secret, "-", "_") => { secret_name = secret, value = null } },
     { for key, value in var.environment_variables : key => { value = value, secret_name = null } }
   )
 }
@@ -178,6 +178,17 @@ variable "logging_sku" {
     error_message = "Must be either Free, PerNode, Premium, Standard, Standalone, Unlimited, CapacityReservation, and PerGB2018"
   }
   default = "PerGB2018"
+}
+
+
+variable "custom_domain" {
+  type = object({
+    certificate_binding_type = optional(string, "SniEnabled")
+    certificate_id           = string
+    domain_name              = string
+  })
+
+  default = null
 }
 
 variable "logs_retention_in_days" {

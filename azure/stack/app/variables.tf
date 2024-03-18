@@ -68,8 +68,9 @@ variable "administrator_password" {
 
 variable "container_app_config" {
   type = object({
-    name                         = optional(string, null)
-    environment_variables        = optional(map(string), {})
+    name                  = optional(string, null)
+    environment_variables = optional(map(string), {})
+    # secret variables must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
     secret_variables             = optional(list(string), [])
     target_port                  = optional(number, null)
     exposed_port                 = optional(number, null)
@@ -78,6 +79,13 @@ variable "container_app_config" {
     image_version                = optional(string, "latest")
     log_analytics_workspace_name = optional(string, null)
     logs_retention_in_days       = optional(number, null)
+    custom_domain = optional(
+      object({
+        certificate_binding_type = optional(string, "SniEnabled")
+        certificate_id           = string
+        domain_name              = string
+      }), null
+    )
     # https://learn.microsoft.com/en-us/azure/container-apps/health-probes?tabs=arm-template
     health_check_options = optional(object({
       port                    = optional(string, null)

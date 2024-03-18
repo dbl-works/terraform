@@ -15,9 +15,11 @@ module "container-app" {
   container_registry_login_server = module.container-registry.login_server
   health_check_options            = var.container_app_config.health_check_options
 
-  # TODO: Setting up the Custom Domain
+  custom_domain = var.container_app_config.custom_domain
+
   target_port  = var.container_app_config.target_port
-  exposed_port = var.container_app_config.exposed_port
+  exposed_port = 0
+  transport    = "auto"
   subnet_id    = module.virtual-network.public_subnet_id
 
   user_assigned_identity_name = var.user_assigned_identity_name
