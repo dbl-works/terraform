@@ -95,6 +95,12 @@ variable "key_vault_id" {
   default = null
 }
 
+variable "key_vault_key_id" {
+  type        = string
+  default     = null
+  description = "Used for container registry encryption"
+}
+
 variable "virtual_network_config" {
   type = object({
     address_spaces = optional(list(string), null)

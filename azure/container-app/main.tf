@@ -1,8 +1,3 @@
-data "azurerm_container_registry" "main" {
-  name                = coalesce(var.container_registry_name, var.project)
-  resource_group_name = var.resource_group_name
-}
-
 data "azurerm_key_vault_secret" "main" {
   for_each = { for secret in var.secret_variables : secret => secret }
 
@@ -16,7 +11,7 @@ data "azurerm_user_assigned_identity" "main" {
 }
 
 resource "azurerm_role_assignment" "main" {
-  scope                = data.azurerm_container_registry.main.id
+  scope                = var.container_registry_id
   role_definition_name = "acrpull"
   principal_id         = data.azurerm_user_assigned_identity.main.principal_id
 }
@@ -33,7 +28,7 @@ resource "azurerm_container_app" "main" {
   }
 
   registry {
-    server   = data.azurerm_container_registry.main.login_server
+    server   = var.container_registry_login_server
     identity = data.azurerm_user_assigned_identity.main.id
   }
 
@@ -63,7 +58,7 @@ resource "azurerm_container_app" "main" {
 
     container {
       name   = coalesce(var.container_app_name, local.default_name)
-      image  = "${data.azurerm_container_registry.main.login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}"
+      image  = "${var.container_registry_login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}"
       cpu    = var.cpu
       memory = var.memory
 

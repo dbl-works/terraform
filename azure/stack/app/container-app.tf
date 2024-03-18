@@ -10,9 +10,10 @@ module "container-app" {
   log_analytics_workspace_name = var.container_app_config.log_analytics_workspace_name
   logs_retention_in_days       = var.container_app_config.logs_retention_in_days
 
-  key_vault_id            = var.key_vault_id
-  container_registry_name = module.container-registry.name
-  health_check_options    = var.container_app_config.health_check_options
+  key_vault_id                    = var.key_vault_id
+  container_registry_id           = module.container-registry.id
+  container_registry_login_server = module.container-registry.login_server
+  health_check_options            = var.container_app_config.health_check_options
 
   # TODO: Setting up the Custom Domain
   target_port  = var.container_app_config.target_port
