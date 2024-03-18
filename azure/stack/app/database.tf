@@ -1,6 +1,6 @@
 # TODO: Make database shareable
 module "database" {
-  source = "../database/postgres"
+  source = "../../database/postgres"
 
   resource_group_name = var.resource_group_name
   region              = var.region
@@ -15,7 +15,7 @@ module "database" {
   administrator_password = var.administrator_password
 
   # Optional
-  user_assigned_identity_ids = [azurerm_user_assigned_identity.main.id]
+  user_assigned_identity_ids = [data.azurerm_user_assigned_identity.main.id]
   postgres_version           = var.database_config.version
   storage_mb                 = var.database_config.storage_mb
   storage_tier               = var.database_config.storage_tier

@@ -1,7 +1,7 @@
 module "blob-storage" {
   for_each = var.blob_storage_config
 
-  source = "../blob-storage"
+  source = "../../blob-storage"
 
   resource_group_name             = var.resource_group_name
   name                            = each.key
