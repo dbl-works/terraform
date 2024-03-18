@@ -2,7 +2,7 @@ resource "azurerm_user_assigned_identity" "main" {
   resource_group_name = var.resource_group_name
   location            = var.region
 
-  name = local.name
+  name = local.default_name
 
   tags = var.default_tags
 }

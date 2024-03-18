@@ -135,5 +135,5 @@ variable "default_tags" {
 }
 
 locals {
-  name = "${var.project}-${var.environment}"
+  default_name = "${var.project}-${var.environment}"
 }

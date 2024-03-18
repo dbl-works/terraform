@@ -1,7 +1,7 @@
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "main" {
-  name                = coalesce(var.key_vault_config.name, local.name)
+  name                = coalesce(var.key_vault_config.name, local.default_name)
   location            = var.region
   resource_group_name = var.resource_group_name
   sku_name            = var.key_vault_config.sku_name
@@ -36,7 +36,7 @@ resource "azurerm_key_vault_access_policy" "main" {
 }
 
 resource "azurerm_key_vault_key" "main" {
-  name         = local.name
+  name         = local.default_name
   key_vault_id = azurerm_key_vault.main.id
   key_type     = var.key_vault_config.key_type
   key_size     = var.key_vault_config.key_size
