@@ -40,7 +40,7 @@ resource "azurerm_container_app" "main" {
   ingress {
     allow_insecure_connections = false
     external_enabled           = true
-    target_port                = coalesce(var.target_port, local.default_app_port)
+    target_port                = coalesce(var.target_port, 443)
     exposed_port               = coalesce(var.exposed_port, local.default_app_port)
     transport                  = var.transport
     traffic_weight {

@@ -27,6 +27,7 @@ resource "azurerm_key_vault_access_policy" "main" {
   secret_permissions = [
     "Get",
     "Set",
+    "List",
   ]
 
   storage_permissions = [

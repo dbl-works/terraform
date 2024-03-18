@@ -23,6 +23,10 @@ variable "blob_storage_config" {
     public_network_access_enabled   = optional(bool, null)
     allow_nested_items_to_be_public = optional(bool, null)
     versioning_enabled              = optional(bool, null)
+    static_website = optional(object({
+      index_document     = string
+      error_404_document = string
+    }), null)
   }))
   default = {}
 }

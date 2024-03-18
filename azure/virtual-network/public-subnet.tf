@@ -6,6 +6,20 @@ resource "azurerm_subnet" "public" {
   # (Assuming address space is 10.0.0.0/16)
   # i.e. 10.0.2.0/23: range 10.0.1.0 - 10.0.2.255
   address_prefixes = [cidrsubnet(var.address_space, 7, 1)]
+  service_endpoints = [
+    "Microsoft.Storage",
+  ]
+
+  delegation {
+    name = "Microsoft.App.environments"
+
+    service_delegation {
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action",
+      ]
+      name = "Microsoft.App/environments"
+    }
+  }
 }
 
 resource "azurerm_network_security_group" "public" {
