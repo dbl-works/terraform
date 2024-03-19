@@ -81,7 +81,7 @@ resource "azurerm_container_app" "main" {
         for_each = coalesce(local.env, {})
         content {
           name        = env.key
-          secret_name = env.value.secret_name
+          secret_name = try(lower(env.value.secret_name), null)
           value       = env.value.value
         }
       }
