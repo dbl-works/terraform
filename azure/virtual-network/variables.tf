@@ -22,7 +22,7 @@ variable "address_space" {
 
 variable "private_subnet_config" {
   type = list(object({
-    priority                   = number
+    priority                   = number # Start from 100
     direction                  = string // Inbound, Outbound
     access                     = optional(string, "Allow")
     protocol                   = optional(string, "Tcp")
@@ -36,7 +36,7 @@ variable "private_subnet_config" {
 
 variable "public_subnet_config" {
   type = list(object({
-    priority                   = number
+    priority                   = number # Start from 100
     direction                  = string // Inbound, Outbound
     access                     = optional(string, "Allow")
     protocol                   = optional(string, "Tcp")

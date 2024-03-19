@@ -47,11 +47,3 @@ output "login_server" {
 output "name" {
   value = coalesce(var.name, local.default_name)
 }
-
-output "admin_username" {
-  value = azurerm_container_registry.main.admin_username
-}
-
-output "admin_password" {
-  value = azurerm_container_registry.main.admin_password
-}

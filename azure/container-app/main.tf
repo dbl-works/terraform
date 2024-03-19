@@ -120,6 +120,14 @@ resource "azurerm_container_app" "main" {
   }
 
   tags = coalesce(var.tags, local.default_tags)
+
+  # NOTE: This is a temporary fix before managed app environment certificate is enabled in the terraform environment
+  # Currently, after container app is created, we manually setup the custom domain in the console together with the enabling of certificate
+  lifecycle {
+    ignore_changes = [
+      ingress.0.custom_domain
+    ]
+  }
 }
 
 output "id" {
