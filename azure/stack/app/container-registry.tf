@@ -7,8 +7,8 @@ module "container-registry" {
   environment         = var.environment
   region              = var.region
   project             = var.project
-  # TODO: Verify whether this is the best practice and what is the potential risk
-  admin_enabled                 = var.container_registry_config.admin_enabled
+
+  admin_enabled                 = false
   sku                           = var.container_registry_config.sku
   user_assigned_identity_ids    = [data.azurerm_user_assigned_identity.main.id]
   retention_in_days             = var.container_registry_config.retention_in_days
