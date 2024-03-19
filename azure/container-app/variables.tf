@@ -39,6 +39,12 @@ variable "log_analytics_workspace_id" {
   default = null
 }
 
+variable "command" {
+  type        = list(string)
+  default     = null
+  description = "A command to pass to the container to override the default. This is provided as a list of command line elements without spaces."
+}
+
 variable "environment_variables" {
   # {
   #   SAMPLE_ENV = "xxx"

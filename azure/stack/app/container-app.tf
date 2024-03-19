@@ -16,6 +16,7 @@ module "container-app" {
   health_check_options            = var.container_app_config.health_check_options
 
   custom_domain = var.container_app_config.custom_domain
+  command       = var.container_app_config.command
 
   target_port  = var.container_app_config.target_port
   exposed_port = 0

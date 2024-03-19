@@ -72,10 +72,11 @@ resource "azurerm_container_app" "main" {
     max_replicas = var.max_replicas
 
     container {
-      name   = coalesce(var.container_app_name, local.default_name)
-      image  = "${var.container_registry_login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}"
-      cpu    = var.cpu
-      memory = var.memory
+      name    = coalesce(var.container_app_name, local.default_name)
+      image   = "${var.container_registry_login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}"
+      command = var.command
+      cpu     = var.cpu
+      memory  = var.memory
 
       dynamic "env" {
         for_each = coalesce(local.env, {})

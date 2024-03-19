@@ -76,6 +76,7 @@ variable "container_app_config" {
     exposed_port                 = optional(number, null)
     cpu                          = optional(number, 0.25)
     memory                       = optional(string, "0.5Gi")
+    command                      = optional(list(string), null)
     image_version                = optional(string, "latest")
     log_analytics_workspace_name = optional(string, null)
     logs_retention_in_days       = optional(number, null)
