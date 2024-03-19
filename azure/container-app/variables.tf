@@ -75,7 +75,7 @@ locals {
 variable "revision_mode" {
   type        = string
   description = "In Single mode, a single revision is in operation at any given time. In Multiple mode, more than one revision can be active at a time and can be configured with load distribution via the traffic_weight block in the ingress configuration."
-  default     = "Multiple"
+  default     = "Single"
 
   validation {
     condition     = contains(["Single", "Multiple"], var.revision_mode)
