@@ -30,3 +30,7 @@ module "container-app" {
   image_version               = var.container_app_config.image_version
 }
 
+
+output "container_app_environment_id" {
+  value = module.container-app.container_app_environment_id
+}

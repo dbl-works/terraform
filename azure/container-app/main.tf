@@ -44,6 +44,16 @@ resource "azurerm_container_app" "main" {
       percentage      = 100
       latest_revision = true
     }
+
+    dynamic "custom_domain" {
+      for_each = var.custom_domain == null ? [] : [1]
+
+      content {
+        certificate_binding_type = var.custom_domain.certificate_binding_type
+        certificate_id           = var.custom_domain.certificate_id
+        name                     = var.custom_domain.domain_name
+      }
+    }
   }
 
   # Secrets cannot be removed from the service once added, attempting to do so will result in an error.
@@ -130,4 +140,8 @@ output "revision_name" {
 
 output "public_ip_address" {
   value = azurerm_container_app_environment.main.static_ip_address
+}
+
+output "container_app_environment_id" {
+  value = azurerm_container_app_environment.main.id
 }
