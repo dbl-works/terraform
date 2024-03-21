@@ -10,16 +10,6 @@ variable "environment" {
   type = string
 }
 
-# The Free SKU has a default daily_quota_gb value of 0.5 (GB).
-variable "sku" {
-  type = string
-  validation {
-    condition     = contains(["Free", "PerNode", "Premium", "Standard", "Standalone", "Unlimited", "CapacityReservation", "PerGB2018"], var.sku)
-    error_message = "Must be either Free, PerNode, Premium, Standard, Standalone, Unlimited, CapacityReservation, and PerGB2018"
-  }
-  default = "PerGB2018"
-}
-
 variable "resource_group_name" {
   type = string
 }
@@ -32,21 +22,19 @@ variable "container_app_id" {
   type = string
 }
 
+variable "tags" {
+  type    = map(string)
+  default = null
+}
+
 variable "logs_retention_in_days" {
   type     = number
   nullable = false
   default  = 90
 }
 
-variable "tags" {
-  type    = map(string)
-  default = null
-}
-
-variable "log_analytics_workspace_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment'."
+variable "log_analytics_workspace_id" {
+  type = string
 }
 
 variable "monitor_diagnostic_setting_name" {

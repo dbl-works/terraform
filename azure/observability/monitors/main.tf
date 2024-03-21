@@ -1,23 +1,15 @@
-resource "azurerm_log_analytics_workspace" "main" {
-  name                = coalesce(var.log_analytics_workspace_name, local.default_name)
-  location            = var.resource_group_name
-  resource_group_name = var.region
-  sku                 = var.sku
-  # The workspace data retention in days. Possible values are either 7 (Free Tier only) or range between 30 and 730.
-  retention_in_days = var.logs_retention_in_days
-
-  tags = local.default_tags
-}
-
 module "blob-storage" {
   source = "../../blob-storage"
 
-  name                       = coalesce(var.blob_storage_name, "${local.default_name}-monitoring")
-  environment                = var.environment
-  project                    = var.project
-  region                     = var.region
-  resource_group_name        = var.resource_group_name
-  user_assigned_identity_ids = var.user_assigned_identity_ids
+  name                          = coalesce(var.blob_storage_name, "${var.project}${var.environment}monitoring")
+  environment                   = var.environment
+  project                       = var.project
+  region                        = var.region
+  resource_group_name           = var.resource_group_name
+  user_assigned_identity_ids    = var.user_assigned_identity_ids
+  public_network_access_enabled = false
+  container_access_type         = "private"
+  account_kind                  = "StorageV2"
 
   lifecycle_rules = {
     "monitoring-${coalesce(var.blob_storage_name, "${local.default_name}-monitoring")}" = {
@@ -31,7 +23,7 @@ module "blob-storage" {
 resource "azurerm_monitor_diagnostic_setting" "main" {
   name                       = coalesce(var.monitor_diagnostic_setting_name, local.default_name)
   target_resource_id         = var.container_app_id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
   storage_account_id         = module.blob-storage.storage_account_id
 
   # Check here for the list of Service/Category available for different resources
@@ -44,8 +36,4 @@ resource "azurerm_monitor_diagnostic_setting" "main" {
   enabled_log {
     category = "ContainerAppSystemLogs"
   }
-}
-
-output "id" {
-  value = azurerm_log_analytics_workspace.main.id
 }

@@ -3,12 +3,46 @@ variable "resource_group_name" {
   description = "Resource Group name"
 }
 
+variable "region" {
+  type = string
+}
+
 variable "project" {
   type = string
 }
 
 variable "environment" {
   type = string
+}
+
+variable "repository_name" {
+  type    = string
+  default = null
+}
+
+variable "subnet_id" {
+  type = string
+}
+
+variable "zone_redundancy_enabled" {
+  type    = bool
+  default = true
+}
+
+variable "internal_load_balancer_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "log_analytics_workspace_id" {
+  type    = string
+  default = null
+}
+
+variable "command" {
+  type        = list(string)
+  default     = null
+  description = "A command to pass to the container to override the default. This is provided as a list of command line elements without spaces."
 }
 
 variable "environment_variables" {
@@ -33,7 +67,7 @@ variable "secret_variables" {
 
 locals {
   env = merge(
-    { for secret in var.secret_variables : secret => { secret_name = secret } },
+    { for secret in var.secret_variables : replace(secret, "-", "_") => { secret_name = secret, value = null } },
     { for key, value in var.environment_variables : key => { value = value, secret_name = null } }
   )
 }
@@ -41,16 +75,12 @@ locals {
 variable "revision_mode" {
   type        = string
   description = "In Single mode, a single revision is in operation at any given time. In Multiple mode, more than one revision can be active at a time and can be configured with load distribution via the traffic_weight block in the ingress configuration."
-  default     = "Multiple"
+  default     = "Single"
 
   validation {
     condition     = contains(["Single", "Multiple"], var.revision_mode)
     error_message = "revision mode must be either Single or Multiple"
   }
-}
-
-variable "user_assigned_identity_ids" {
-  type = list(string)
 }
 
 variable "min_replicas" {
@@ -82,24 +112,33 @@ variable "image_version" {
 }
 
 variable "target_port" {
-  type     = number
-  default  = 3000
-  nullable = false
+  type    = number
+  default = null
 }
 
 variable "exposed_port" {
-  type     = number
-  default  = 3000
+  type    = number
+  default = null
+}
+
+variable "transport" {
+  type     = string
+  default  = "tcp"
   nullable = false
+
+  validation {
+    condition     = contains(["auto", "http", "http2", "tcp"], var.transport)
+    error_message = "Must be either auto, http, http2 or tcp"
+  }
 }
 
 # https://learn.microsoft.com/en-us/azure/container-apps/health-probes?tabs=arm-template
 variable "health_check_options" {
   type = object({
-    port                    = optional(string, 80)
+    port                    = optional(string, null)
     transport               = optional(string, "HTTP")
     failure_count_threshold = optional(number, 5)
-    interval_seconds        = optional(number, 7) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
+    interval_seconds        = optional(number, 60) # How often, in seconds, the probe should run. Possible values are between 1 and 240. Defaults to 10
     path                    = optional(string, "/livez")
     timeout                 = optional(number, 5)
   })
@@ -111,22 +150,23 @@ variable "tags" {
   default = null
 }
 
-variable "container_app_environment_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment'"
-}
-
-variable "key_vault_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment'"
+variable "key_vault_id" {
+  type    = string
+  default = null
 }
 
 variable "user_assigned_identity_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment'"
+  type = string
+}
+
+variable "container_registry_id" {
+  type    = string
+  default = null
+}
+
+variable "container_registry_login_server" {
+  type    = string
+  default = null
 }
 
 variable "container_app_name" {
@@ -135,8 +175,44 @@ variable "container_app_name" {
   description = "Defaults to 'project-environment'"
 }
 
+# Logging
+# The Free SKU has a default daily_quota_gb value of 0.5 (GB).
+variable "logging_sku" {
+  type = string
+  validation {
+    condition     = contains(["Free", "PerNode", "Premium", "Standard", "Standalone", "Unlimited", "CapacityReservation", "PerGB2018"], var.logging_sku)
+    error_message = "Must be either Free, PerNode, Premium, Standard, Standalone, Unlimited, CapacityReservation, and PerGB2018"
+  }
+  default = "PerGB2018"
+}
+
+
+variable "custom_domain" {
+  type = object({
+    certificate_binding_type = optional(string, "SniEnabled")
+    certificate_id           = string
+    domain_name              = string
+  })
+
+  default = null
+}
+
+variable "logs_retention_in_days" {
+  type     = number
+  nullable = false
+  default  = 90
+}
+
+variable "log_analytics_workspace_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
 locals {
   default_name = "${var.project}-${var.environment}"
+
+  default_app_port = 3000
 
   default_tags = {
     Project     = var.project

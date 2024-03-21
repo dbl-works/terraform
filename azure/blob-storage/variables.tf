@@ -3,7 +3,8 @@ variable "resource_group_name" {
 }
 
 variable "name" {
-  type = string
+  type        = string
+  description = "Blob name can only consist of lowercase letters and numbers, and must be between 3 and 24 characters long"
 }
 
 variable "region" {
@@ -40,8 +41,9 @@ variable "user_assigned_identity_ids" {
 # Storage: Legacy, support blobs, files, queues, tables, and disks.
 # StorageV2: Latest, support blobs, files, queues, tables, and disks
 variable "account_kind" {
-  type    = string
-  default = "StorageV2"
+  type     = string
+  default  = "StorageV2"
+  nullable = false
 
   validation {
     condition     = contains(["BlobStorage", "BlockBlobStorage", "FileStorage", "Storage", "StorageV2"], var.account_kind)
@@ -50,8 +52,9 @@ variable "account_kind" {
 }
 
 variable "account_tier" {
-  type    = string
-  default = "Standard"
+  type     = string
+  default  = "Standard"
+  nullable = false
 
   validation {
     condition     = contains(["Standard", "Premium"], var.account_tier)
@@ -67,7 +70,8 @@ variable "account_replication_type" {
   # # Secondary Region
   # GRS: LRS (Primary Region) + LRS in secondary region.
   # GZRS: ZRS (Primary Region) + LRS in secondary region
-  default = "GZRS"
+  default  = "GZRS"
+  nullable = false
 
   validation {
     condition     = contains(["LRS", "ZRS", "GRS", "GZRS", "RAGRS", "RAGZRS"], var.account_replication_type)
@@ -101,7 +105,8 @@ variable "allow_nested_items_to_be_public" {
 
 variable "container_access_type" {
   type        = string
-  default     = "blob"
+  default     = "private"
+  nullable    = false
   description = "The Access Level configured for this Container."
 
   # Private: You cannot access a resource by using the resource URL. For example, if your blob's URL is https://account.blob.core.windows.net/container/blob.txt and if you try to access this resource in a browser, you will receive a 404 error even though the blob is present.
@@ -122,8 +127,9 @@ variable "static_website" {
 }
 
 variable "versioning_enabled" {
-  type    = bool
-  default = false
+  type     = bool
+  default  = false
+  nullable = false
 }
 
 variable "sas_policy" {

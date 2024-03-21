@@ -15,12 +15,14 @@ variable "environment" {
 }
 
 variable "address_space" {
-  type = string
+  type     = string
+  default  = "10.0.0.0/16"
+  nullable = false
 }
 
 variable "private_subnet_config" {
-  type = object({
-    priority                   = number
+  type = list(object({
+    priority                   = number # Start from 100
     direction                  = string // Inbound, Outbound
     access                     = optional(string, "Allow")
     protocol                   = optional(string, "Tcp")
@@ -28,13 +30,13 @@ variable "private_subnet_config" {
     destination_port_range     = string
     source_address_prefix      = string
     destination_address_prefix = string
-  })
-  default = null
+  }))
+  default = []
 }
 
 variable "public_subnet_config" {
-  type = object({
-    priority                   = number
+  type = list(object({
+    priority                   = number # Start from 100
     direction                  = string // Inbound, Outbound
     access                     = optional(string, "Allow")
     protocol                   = optional(string, "Tcp")
@@ -42,8 +44,8 @@ variable "public_subnet_config" {
     destination_port_range     = string
     source_address_prefix      = string
     destination_address_prefix = string
-  })
-  default = null
+  }))
+  default = []
 }
 
 variable "tags" {
@@ -61,6 +63,24 @@ variable "public_subnet_name" {
   type        = string
   default     = null
   description = "Defaults to 'project-environment-public'."
+}
+
+variable "db_subnet_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-db-subnet'."
+}
+
+variable "db_network_security_group_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-db'."
+}
+
+variable "db_dns_zone_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
 }
 
 variable "private_subnet_name" {
