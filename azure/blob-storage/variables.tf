@@ -148,10 +148,3 @@ variable "tags" {
   type    = map(string)
   default = null
 }
-
-locals {
-  default_tags = {
-    Project     = var.project
-    Environment = var.environment
-  }
-}
