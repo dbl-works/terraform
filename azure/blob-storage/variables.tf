@@ -11,14 +11,6 @@ variable "region" {
   type = string
 }
 
-variable "project" {
-  type = string
-}
-
-variable "environment" {
-  type = string
-}
-
 variable "lifecycle_rules" {
   type = map(object({
     prefix_match                                               = list(string)
