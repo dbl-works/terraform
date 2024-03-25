@@ -7,6 +7,11 @@ variable "name" {
   description = "Blob name can only consist of lowercase letters and numbers, and must be between 3 and 24 characters long"
 }
 
+variable "container_name" {
+  type    = string
+  default = null
+}
+
 variable "region" {
   type = string
 }

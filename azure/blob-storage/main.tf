@@ -59,7 +59,7 @@ resource "azurerm_storage_account" "main" {
 }
 
 resource "azurerm_storage_container" "main" {
-  name                  = var.name
+  name                  = coalesce(var.container_name, var.name)
   storage_account_name  = azurerm_storage_account.main.name
   container_access_type = var.container_access_type
 }
