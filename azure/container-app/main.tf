@@ -10,10 +10,9 @@ data "azurerm_user_assigned_identity" "main" {
   resource_group_name = var.resource_group_name
 }
 
-resource "azurerm_role_assignment" "main" {
-  scope                = var.container_registry_id
-  role_definition_name = "acrpull"
-  principal_id         = data.azurerm_user_assigned_identity.main.principal_id
+data "azurerm_user_assigned_identity" "deploybot" {
+  name                = "deploybot"
+  resource_group_name = var.resource_group_name
 }
 
 resource "azurerm_container_app" "main" {
@@ -24,7 +23,9 @@ resource "azurerm_container_app" "main" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [data.azurerm_user_assigned_identity.main.id]
+    identity_ids = [
+      data.azurerm_user_assigned_identity.main.id
+    ]
   }
 
   registry {

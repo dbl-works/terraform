@@ -18,7 +18,9 @@ resource "azurerm_container_registry" "main" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = var.user_assigned_identity_ids
+    identity_ids = [
+      data.azurerm_user_assigned_identity.main.id
+    ]
   }
 
   dynamic "encryption" {
@@ -32,6 +34,17 @@ resource "azurerm_container_registry" "main" {
   }
 
   tags = coalesce(var.tags, local.default_tags)
+}
+
+data "azurerm_user_assigned_identity" "main" {
+  name                = coalesce(var.user_assigned_identity_name, local.default_name)
+  resource_group_name = var.resource_group_name
+}
+
+resource "azurerm_role_assignment" "main" {
+  scope                = azurerm_container_registry.main.id
+  role_definition_name = "acrpull"
+  principal_id         = data.azurerm_user_assigned_identity.main.principal_id
 }
 
 # TODO: Research on the lifecycle policy
