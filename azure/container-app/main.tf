@@ -10,11 +10,6 @@ data "azurerm_user_assigned_identity" "main" {
   resource_group_name = var.resource_group_name
 }
 
-data "azurerm_user_assigned_identity" "deploybot" {
-  name                = "deploybot"
-  resource_group_name = var.resource_group_name
-}
-
 resource "azurerm_container_app" "main" {
   name                         = coalesce(var.container_app_name, local.default_name)
   container_app_environment_id = azurerm_container_app_environment.main.id

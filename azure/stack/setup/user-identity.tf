@@ -1,12 +1,3 @@
-resource "azurerm_user_assigned_identity" "deploybot" {
-  resource_group_name = var.resource_group_name
-  location            = var.region
-
-  name = "deploybot"
-
-  tags = var.default_tags
-}
-
 resource "azurerm_user_assigned_identity" "main" {
   resource_group_name = var.resource_group_name
   location            = var.region

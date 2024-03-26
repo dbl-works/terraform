@@ -48,6 +48,7 @@ variable "container_registry_config" {
 
 variable "database_config" {
   type = object({
+    name         = optional(string, null)
     version      = optional(string, null)
     storage_mb   = optional(number, null)
     storage_tier = optional(string, null)
