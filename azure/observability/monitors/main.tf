@@ -2,8 +2,6 @@ module "blob-storage" {
   source = "../../blob-storage"
 
   name                          = coalesce(var.blob_storage_name, "${var.project}${var.environment}monitoring")
-  environment                   = var.environment
-  project                       = var.project
   region                        = var.region
   resource_group_name           = var.resource_group_name
   user_assigned_identity_ids    = var.user_assigned_identity_ids
