@@ -35,6 +35,8 @@ variable "key_vault_config" {
     rotate_before_expiry_in_days = optional(string, "30")
     expired_in_days              = optional(string, "90")
     notify_before_expiry         = optional(string, "90")
+    # User's object_ids who has access to the key vault
+    user_ids                     = optional(list(string), [])
   })
   default = {}
 
@@ -48,6 +50,11 @@ variable "key_vault_config" {
     condition     = contains(["standard", "premium"], var.key_vault_config.sku_name)
     error_message = "Must be either standard or premium"
   }
+}
+
+variable "key_vault_key_name" {
+  type    = string
+  default = null
 }
 
 variable "user_assigned_identity_name" {
