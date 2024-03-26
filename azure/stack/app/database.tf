@@ -12,7 +12,7 @@ data "azurerm_key_vault_secret" "database_password" {
 module "database" {
   source = "../../database/postgres"
 
-  db_name = var.database_config.name
+  db_name             = var.database_config.name
   resource_group_name = var.resource_group_name
   region              = var.region
   project             = var.project

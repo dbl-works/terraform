@@ -9,7 +9,7 @@ module "container-registry" {
   project             = var.project
 
   admin_enabled                 = false
-  user_assigned_identity_name = var.user_assigned_identity_name
+  user_assigned_identity_name   = var.user_assigned_identity_name
   sku                           = var.container_registry_config.sku
   retention_in_days             = var.container_registry_config.retention_in_days
   encryption_client_id          = data.azurerm_user_assigned_identity.main.client_id
