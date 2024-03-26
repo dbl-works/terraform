@@ -15,6 +15,7 @@ module "container-registry" {
   encryption_client_id          = data.azurerm_user_assigned_identity.main.client_id
   key_vault_key_id              = var.key_vault_key_id
   public_network_access_enabled = var.container_registry_config.public_network_access_enabled
+  tags                          = var.tags
 }
 
 output "container-registry" {

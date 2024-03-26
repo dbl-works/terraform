@@ -13,4 +13,5 @@ module "blob-storage" {
   public_network_access_enabled   = each.value.public_network_access_enabled
   allow_nested_items_to_be_public = each.value.allow_nested_items_to_be_public
   versioning_enabled              = each.value.versioning_enabled
+  tags                            = var.tags
 }

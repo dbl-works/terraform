@@ -56,16 +56,6 @@ variable "database_config" {
   default = {}
 }
 
-variable "administrator_login" {
-  sensitive = true
-  type      = string
-}
-
-variable "administrator_password" {
-  sensitive = true
-  type      = string
-}
-
 variable "container_app_config" {
   type = object({
     name                  = optional(string, null)
@@ -125,7 +115,7 @@ variable "virtual_network_config" {
   default = {}
 }
 
-variable "default_tags" {
+variable "tags" {
   type    = map(string)
   default = {}
 }

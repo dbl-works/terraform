@@ -10,4 +10,6 @@ module "observability" {
   logs_retention_in_days     = var.container_app_config.logs_retention_in_days
   container_app_id           = module.container-app.id
   user_assigned_identity_ids = [data.azurerm_user_assigned_identity.main.id]
+
+  tags = var.tags
 }
