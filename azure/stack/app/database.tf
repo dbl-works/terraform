@@ -20,8 +20,8 @@ module "database" {
   delegated_subnet_id = module.virtual-network.db_subnet_id
 
   # Key vault must be created before database
-  administrator_login    = data.azurerm_key_vault_secret.database_user
-  administrator_password = data.azurerm_key_vault_secret.database_password
+  administrator_login    = data.azurerm_key_vault_secret.database_user.value
+  administrator_password = data.azurerm_key_vault_secret.database_password.value
 
   # Optional
   user_assigned_identity_ids = [data.azurerm_user_assigned_identity.main.id]
