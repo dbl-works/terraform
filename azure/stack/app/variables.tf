@@ -20,6 +20,7 @@ variable "environment" {
 
 variable "blob_storage_config" {
   type = map(object({
+    container_name                  = optional(string, null)
     container_access_type           = optional(string, null)
     account_kind                    = optional(string, null)
     account_tier                    = optional(string, null)
@@ -53,6 +54,13 @@ variable "database_config" {
     storage_mb   = optional(number, null)
     storage_tier = optional(string, null)
     sku_name     = optional(string, null)
+  })
+  default = {}
+}
+
+variable "observability_config" {
+  type = object({
+    blob_storage_name = optional(string, null)
   })
   default = {}
 }
@@ -118,7 +126,7 @@ variable "virtual_network_config" {
 
 variable "tags" {
   type    = map(string)
-  default = {}
+  default = null
 }
 
 locals {
