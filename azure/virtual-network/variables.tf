@@ -59,10 +59,17 @@ variable "vnet_name" {
   description = "Defaults to 'project-environment'."
 }
 
+# =================== Subnet name ===================== #
 variable "public_subnet_name" {
   type        = string
   default     = null
   description = "Defaults to 'project-environment-public'."
+}
+
+variable "private_subnet_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-private'."
 }
 
 variable "db_subnet_name" {
@@ -71,22 +78,11 @@ variable "db_subnet_name" {
   description = "Defaults to 'project-environment-db-subnet'."
 }
 
+# =================== Network Security Group name ===================== #
 variable "db_network_security_group_name" {
   type        = string
   default     = null
   description = "Defaults to 'project-environment-db'."
-}
-
-variable "db_dns_zone_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment'."
-}
-
-variable "private_subnet_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment-private'."
 }
 
 variable "public_network_security_group_name" {
@@ -100,12 +96,20 @@ variable "private_network_security_group_name" {
   default     = null
   description = "Defaults to 'project-environment-private'."
 }
+# =================== Network Security Group name ===================== #
 
 variable "network_interface_name" {
   type        = string
   default     = null
   description = "Defaults to 'project-environment-ipconfig'."
 }
+
+variable "db_dns_zone_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
 
 locals {
   default_name = "${var.project}-${var.environment}"

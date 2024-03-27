@@ -20,6 +20,7 @@ variable "environment" {
 
 variable "blob_storage_config" {
   type = map(object({
+    container_name                  = optional(string, null)
     container_access_type           = optional(string, null)
     account_kind                    = optional(string, null)
     account_tier                    = optional(string, null)
@@ -48,6 +49,7 @@ variable "container_registry_config" {
 
 variable "database_config" {
   type = object({
+    name         = optional(string, null)
     version      = optional(string, null)
     storage_mb   = optional(number, null)
     storage_tier = optional(string, null)
@@ -56,14 +58,11 @@ variable "database_config" {
   default = {}
 }
 
-variable "administrator_login" {
-  sensitive = true
-  type      = string
-}
-
-variable "administrator_password" {
-  sensitive = true
-  type      = string
+variable "observability_config" {
+  type = object({
+    blob_storage_name = optional(string, null)
+  })
+  default = {}
 }
 
 variable "container_app_config" {
@@ -112,15 +111,22 @@ variable "key_vault_key_id" {
 
 variable "virtual_network_config" {
   type = object({
-    address_spaces     = optional(list(string), null)
-    public_subnet_name = optional(string, null)
+    address_spaces                      = optional(list(string), null)
+    public_subnet_name                  = optional(string, null)
+    private_subnet_name                 = optional(string, null)
+    db_subnet_name                      = optional(string, null)
+    db_network_security_group_name      = optional(string, null)
+    public_network_security_group_name  = optional(string, null)
+    private_network_security_group_name = optional(string, null)
+    network_interface_name              = optional(string, null)
+    db_dns_zone_name                    = optional(string, null)
   })
   default = {}
 }
 
-variable "default_tags" {
+variable "tags" {
   type    = map(string)
-  default = {}
+  default = null
 }
 
 locals {
