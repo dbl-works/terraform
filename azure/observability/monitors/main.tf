@@ -23,7 +23,7 @@ module "blob-storage" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
-  name                       = "test"
+  name                       = coalesce(var.monitor_diagnostic_setting_name, local.default_name)
   target_resource_id         = var.container_app_environment_id
   log_analytics_workspace_id = var.log_analytics_workspace_id
   storage_account_id         = module.blob-storage.storage_account_id
@@ -31,7 +31,16 @@ resource "azurerm_monitor_diagnostic_setting" "main" {
   # Check here for the list of Service/Category available for different resources
   # https://learn.microsoft.com/en-gb/azure/azure-monitor/essentials/resource-logs-schema#service-specific-schemas
   # https://learn.microsoft.com/en-us/azure/azure-monitor/reference/supported-logs/microsoft-app-managedenvironments-logs
+  enabled_log {
+    category_group = "allLogs"
+  }
+
+  enabled_log {
+    category_group = "audit"
+  }
+
   metric {
     category = "AllMetrics"
+    enabled  = true
   }
 }
