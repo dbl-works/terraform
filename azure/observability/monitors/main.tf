@@ -2,10 +2,10 @@ module "blob-storage" {
   source = "../../blob-storage"
 
   # https://github.com/hashicorp/terraform-provider-azurerm/issues/2977
-  name                          = coalesce(var.blob_storage_name, "${var.project}${var.environment}monitoring")
-  region                        = var.region
-  resource_group_name           = var.resource_group_name
-  user_assigned_identity_ids    = var.user_assigned_identity_ids
+  name                       = coalesce(var.blob_storage_name, "${var.project}${var.environment}monitoring")
+  region                     = var.region
+  resource_group_name        = var.resource_group_name
+  user_assigned_identity_ids = var.user_assigned_identity_ids
 
   # When setting public network access enabled to false, the following error will be thrown
   # containers.Client#GetProperties: Failure responding to request: StatusCode=403 -- Original Error: autorest/azure: Service returned an error. Status=403 Code="AuthorizationFailure" Message="This request is not authorized to perform this operation.
@@ -20,6 +20,8 @@ module "blob-storage" {
       delete_after_days_since_modification_greater_than = var.logs_retention_in_days
     }
   }
+
+  tags = var.tags
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
