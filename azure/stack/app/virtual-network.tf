@@ -7,6 +7,7 @@ module "virtual-network" {
   region                              = var.region
   project                             = var.project
   environment                         = var.environment
+  vnet_name                           = var.virtual_network_config.vnet_name
   public_subnet_name                  = var.virtual_network_config.public_subnet_name
   private_subnet_name                 = var.virtual_network_config.private_subnet_name
   db_subnet_name                      = var.virtual_network_config.db_subnet_name
