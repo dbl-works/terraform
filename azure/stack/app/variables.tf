@@ -79,6 +79,7 @@ variable "container_app_config" {
     image_version                = optional(string, "latest")
     log_analytics_workspace_name = optional(string, null)
     logs_retention_in_days       = optional(number, null)
+    zone_redundancy_enabled      = optional(bool, null)
     custom_domain = optional(
       object({
         certificate_binding_type = optional(string, "SniEnabled")

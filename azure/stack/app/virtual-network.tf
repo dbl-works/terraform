@@ -17,4 +17,5 @@ module "virtual-network" {
   db_dns_zone_name                    = var.virtual_network_config.db_dns_zone_name
 
   address_space = try(var.virtual_network_config.address_space, null)
+  tags          = var.tags
 }

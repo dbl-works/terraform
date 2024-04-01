@@ -12,6 +12,7 @@ module "container-app" {
   key_vault_id                    = var.key_vault_id
   container_registry_login_server = module.container-registry.login_server
   health_check_options            = var.container_app_config.health_check_options
+  zone_redundancy_enabled         = var.container_app_config.zone_redundancy_enabled
 
   custom_domain = var.container_app_config.custom_domain
   command       = var.container_app_config.command

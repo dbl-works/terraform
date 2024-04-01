@@ -25,8 +25,9 @@ variable "subnet_id" {
 }
 
 variable "zone_redundancy_enabled" {
-  type    = bool
-  default = true
+  type     = bool
+  default  = true
+  nullable = false
 }
 
 variable "internal_load_balancer_enabled" {
