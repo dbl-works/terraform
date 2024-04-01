@@ -186,17 +186,23 @@ jobs:
           terraform fmt -check
 
   security:
-    name: tfsec security check
+    name: Trivy Security Scan
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      pull-requests: write
-
     steps:
-      - name: Clone repo
-        uses: actions/checkout@master
-      - name: Run tfsec PR commenter
-        uses: aquasecurity/tfsec-pr-commenter-action@v1.3.1
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@master
         with:
-          github_token: ${{ github.token }}
+          scan-type: 'config'
+          hide-progress: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
