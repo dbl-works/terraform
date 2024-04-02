@@ -9,7 +9,7 @@ module "ecr-scanner-notifier" {
   source = "github.com/dbl-works/terraform//slack/ecr-scanner-notifier?ref=v2023.03.06"
 
   project = local.project
-  slack_webhook_url = "https://hooks.slack.com/services/XXXXXXXXX/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  slack_webhook_url = "https://hooks.slack.com/services/x/y/z"
   slack_channel = "ecr-scanner"
 }
 ```

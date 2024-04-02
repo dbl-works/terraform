@@ -120,7 +120,7 @@ module "stack-global" {
     }
   }]
   ecr_scanner_notifier_config = {
-    slack_webhook_url = "https://hooks.slack.com/services/XXXXXXXXX/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    slack_webhook_url = "https://hooks.slack.com/services/x/y/z"
     slack_channel = "ecr-scanner"
   }
 }
