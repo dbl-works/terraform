@@ -24,9 +24,8 @@ variable "public_network_access_enabled" {
   default = false
 }
 
-variable "user_assigned_identity_ids" {
-  type    = list(string)
-  default = []
+variable "user_assigned_identity_name" {
+  type = string
 }
 
 # Encryption can only be applied when using the Premium Sku.

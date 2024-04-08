@@ -35,8 +35,39 @@ resource "azurerm_key_vault_access_policy" "main" {
   ]
 }
 
+resource "azurerm_key_vault_access_policy" "users" {
+  for_each = toset(var.key_vault_config.user_ids)
+
+  key_vault_id = azurerm_key_vault.main.id
+  tenant_id    = azurerm_user_assigned_identity.main.tenant_id
+  object_id    = each.key
+
+  key_permissions = [
+    "Create",
+    "Delete",
+    "List",
+    "Get",
+    "Purge",
+    "Recover",
+    "Update",
+    "GetRotationPolicy",
+    "SetRotationPolicy"
+  ]
+
+  secret_permissions = [
+    "Get",
+    "Set",
+    "List",
+  ]
+
+  storage_permissions = [
+    "Get",
+  ]
+}
+
+
 resource "azurerm_key_vault_key" "main" {
-  name         = local.default_name
+  name         = coalesce(var.key_vault_key_name, local.default_name)
   key_vault_id = azurerm_key_vault.main.id
   key_type     = var.key_vault_config.key_type
   key_size     = var.key_vault_config.key_size
@@ -56,6 +87,10 @@ resource "azurerm_key_vault_key" "main" {
   }
 
   tags = var.default_tags
+
+  depends_on = [
+    azurerm_key_vault_access_policy.users
+  ]
 }
 
 output "key_vault_id" {

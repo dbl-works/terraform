@@ -10,12 +10,6 @@ data "azurerm_user_assigned_identity" "main" {
   resource_group_name = var.resource_group_name
 }
 
-resource "azurerm_role_assignment" "main" {
-  scope                = var.container_registry_id
-  role_definition_name = "acrpull"
-  principal_id         = data.azurerm_user_assigned_identity.main.principal_id
-}
-
 resource "azurerm_container_app" "main" {
   name                         = coalesce(var.container_app_name, local.default_name)
   container_app_environment_id = azurerm_container_app_environment.main.id
@@ -23,8 +17,10 @@ resource "azurerm_container_app" "main" {
   revision_mode                = var.revision_mode
 
   identity {
-    type         = "UserAssigned"
-    identity_ids = [data.azurerm_user_assigned_identity.main.id]
+    type = "UserAssigned"
+    identity_ids = [
+      data.azurerm_user_assigned_identity.main.id
+    ]
   }
 
   registry {

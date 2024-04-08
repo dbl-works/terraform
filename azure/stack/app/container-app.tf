@@ -1,4 +1,3 @@
-# A Container Apps environment is a secure boundary around groups of container apps that share the same virtual network and write logs to the same logging destination.
 module "container-app" {
   source = "../../container-app"
 
@@ -11,9 +10,9 @@ module "container-app" {
   logs_retention_in_days       = var.container_app_config.logs_retention_in_days
 
   key_vault_id                    = var.key_vault_id
-  container_registry_id           = module.container-registry.id
   container_registry_login_server = module.container-registry.login_server
   health_check_options            = var.container_app_config.health_check_options
+  zone_redundancy_enabled         = var.container_app_config.zone_redundancy_enabled
 
   custom_domain = var.container_app_config.custom_domain
   command       = var.container_app_config.command
@@ -29,6 +28,7 @@ module "container-app" {
   environment_variables       = var.container_app_config.environment_variables
   secret_variables            = var.container_app_config.secret_variables
   image_version               = var.container_app_config.image_version
+  tags                        = var.tags
 }
 
 

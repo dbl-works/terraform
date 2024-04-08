@@ -25,8 +25,9 @@ variable "subnet_id" {
 }
 
 variable "zone_redundancy_enabled" {
-  type    = bool
-  default = true
+  type     = bool
+  default  = true
+  nullable = false
 }
 
 variable "internal_load_balancer_enabled" {
@@ -157,11 +158,6 @@ variable "key_vault_id" {
 
 variable "user_assigned_identity_name" {
   type = string
-}
-
-variable "container_registry_id" {
-  type    = string
-  default = null
 }
 
 variable "container_registry_login_server" {
