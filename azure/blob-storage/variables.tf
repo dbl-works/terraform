@@ -7,15 +7,12 @@ variable "name" {
   description = "Blob name can only consist of lowercase letters and numbers, and must be between 3 and 24 characters long"
 }
 
+variable "container_name" {
+  type    = string
+  default = null
+}
+
 variable "region" {
-  type = string
-}
-
-variable "project" {
-  type = string
-}
-
-variable "environment" {
   type = string
 }
 
@@ -155,11 +152,4 @@ variable "cors_config" {
 variable "tags" {
   type    = map(string)
   default = null
-}
-
-locals {
-  default_tags = {
-    Project     = var.project
-    Environment = var.environment
-  }
 }
