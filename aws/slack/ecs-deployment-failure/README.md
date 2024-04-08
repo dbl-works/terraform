@@ -11,7 +11,7 @@ module "ecs_deployment_failure" {
   project     = local.project
   environment = local.environment
 
-  slack_webhook_url = "https://hooks.slack.com/services/xxxxxxxxx/xxxxxxxxxxx/yyyyyyyyyyyyyyyyyyyyyyyy"
+  slack_webhook_url = "https://hooks.slack.com/services/x/y/z"
 
   # Optional
   runtime = "ruby2.7" # Ruby 3.2 requires Terraform version 5, but some modules aren't ready for Terraform v5 yet (e.g. S3)
