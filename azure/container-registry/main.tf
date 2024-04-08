@@ -17,7 +17,7 @@ resource "azurerm_container_registry" "main" {
   }
 
   identity {
-    type         = "UserAssigned"
+    type = "UserAssigned"
     identity_ids = [
       data.azurerm_user_assigned_identity.main.id
     ]
