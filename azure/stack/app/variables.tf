@@ -118,6 +118,29 @@ variable "virtual_network_config" {
   default = {}
 }
 
+variable "redis_config" {
+  type = object({
+    name                                  = optional(string)
+    family                                = optional(string)
+    sku_name                              = optional(string)
+    public_network_access_enabled         = optional(bool)
+    redis_version                         = optional(number)
+    capacity                              = optional(number)
+    zones                                 = optional(list(string))
+    data_persistence_enabled              = optional(bool)
+    data_persistence_frequency_in_minutes = optional(number)
+    data_persistence_max_snapshot_count   = optional(number)
+    redis_additional_configuration        = optional(object(any))
+    shard_count                           = optional(number)
+
+    # If the data persistence is enabled
+    storage_name                                 = optional(string)
+    data_persistence_storage_account_tier        = optional(string)
+    data_persistence_storage_account_replication = optional(string)
+  })
+  default = {}
+}
+
 variable "default_tags" {
   type    = map(string)
   default = {}
