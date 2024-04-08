@@ -108,15 +108,6 @@ variable "tags" {
   default = null
 }
 
-locals {
-  default_name = "${var.project}-${var.environment}"
-
-  default_tags = {
-    Project     = var.project
-    Environment = var.environment
-  }
-}
-
 variable "storage_name" {
   type    = string
   default = null
