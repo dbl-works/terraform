@@ -139,7 +139,7 @@ variable "redis_config" {
     data_persistence_frequency_in_minutes = optional(number)
     data_persistence_max_snapshot_count   = optional(number)
     redis_additional_configuration = optional(object({
-      aof_backup_enabled                      = optional(bool)
+      aof_backup_enabled                      = optional(bool, false) # can only be set when SKU is Premium
       aof_storage_connection_string_0         = optional(string)
       aof_storage_connection_string_1         = optional(string)
       enable_authentication                   = optional(bool)
@@ -149,9 +149,6 @@ variable "redis_config" {
       # "volatile-lru", "allkeys-lru", "volatile-lfu", "allkeys-lfu", "volatile-random", "allkeys-random", "volatile-ttl", "noeviction"
       maxmemory_policy                       = optional(string) # How Redis will select what to remove when maxmemory is reached. Defaults to volatile-lru.
       maxfragmentationmemory_reserved        = optional(number) # The max-memory delta for this Redis instance.
-      rdb_backup_enabled                     = optional(bool)
-      rdb_backup_frequency                   = optional(number)
-      rdb_backup_max_snapshot_count          = optional(number)
       rdb_storage_connection_string          = optional(string)
       notify_keyspace_events                 = optional(string)
       storage_account_subscription_id        = optional(string)

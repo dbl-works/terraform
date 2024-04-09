@@ -22,8 +22,10 @@ resource "azurerm_subnet" "db" {
   name                 = coalesce(var.db_subnet_name, "${local.default_name}-db-subnet")
   virtual_network_name = azurerm_virtual_network.main.name
   resource_group_name  = var.resource_group_name
-  address_prefixes     = [cidrsubnet(var.address_space, 8, 200)]
-  service_endpoints    = ["Microsoft.Storage"]
+  # (Assuming address space is 10.0.0.0/16)
+  # i.e. 10.0.200.0/24, range 10.0.200.0 - 10.0.200.255
+  address_prefixes  = [cidrsubnet(var.address_space, 8, 200)]
+  service_endpoints = ["Microsoft.Storage"]
 
   delegation {
     name = "DBflexibleServers"

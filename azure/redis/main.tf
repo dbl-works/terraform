@@ -17,18 +17,23 @@ locals {
 }
 
 resource "azurerm_redis_cache" "main" {
-  name                          = coalesce(var.name, local.default_name)
-  location                      = var.region
-  resource_group_name           = var.resource_group_name
-  capacity                      = var.capacity
-  family                        = var.family
-  sku_name                      = var.sku_name
-  redis_version                 = var.redis_version
-  shard_count                   = var.shard_count
-  enable_non_ssl_port           = false
-  minimum_tls_version           = var.minimum_tls_version
+  name                = coalesce(var.name, local.default_name)
+  location            = var.region
+  resource_group_name = var.resource_group_name
+  capacity            = var.capacity
+  family              = var.family
+  sku_name            = var.sku_name
+  redis_version       = var.redis_version
+  shard_count         = var.shard_count
+  enable_non_ssl_port = false
+  minimum_tls_version = var.minimum_tls_version
+
+  # Network
   public_network_access_enabled = var.public_network_access_enabled
+  subnet_id                     = var.subnet_id
   zones                         = var.zones
+  # If you don't specify a static IP address, an IP address is chosen automatically.
+  private_static_ip_address = var.private_static_ip_address
 
   identity {
     type         = "UserAssigned"
@@ -36,28 +41,24 @@ resource "azurerm_redis_cache" "main" {
   }
 
   # Only needed if we want to backup data in storage account, eg. production environment
-  dynamic "redis_configuration" {
-    for_each = local.redis_config[*]
-    content {
-      aof_backup_enabled                      = redis_configuration.value.aof_backup_enabled
-      aof_storage_connection_string_0         = redis_configuration.value.aof_storage_connection_string_0
-      aof_storage_connection_string_1         = redis_configuration.value.aof_storage_connection_string_1
-      enable_authentication                   = redis_configuration.value.enable_authentication
-      active_directory_authentication_enabled = redis_configuration.value.active_directory_authentication_enabled
-      maxmemory_reserved                      = redis_configuration.value.maxmemory_reserved
-      maxmemory_delta                         = redis_configuration.value.maxmemory_delta
-      maxmemory_policy                        = redis_configuration.value.maxmemory_policy
-      maxfragmentationmemory_reserved         = redis_configuration.value.maxfragmentationmemory_reserved
-      rdb_backup_enabled                      = redis_configuration.value.rdb_backup_enabled
-      rdb_backup_frequency                    = redis_configuration.value.rdb_backup_frequency
-      rdb_backup_max_snapshot_count           = redis_configuration.value.rdb_backup_max_snapshot_count
-      rdb_storage_connection_string           = redis_configuration.value.rdb_storage_connection_string
-      notify_keyspace_events                  = redis_configuration.value.notify_keyspace_events
-      storage_account_subscription_id         = redis_configuration.value.storage_account_subscription_id
-      data_persistence_authentication_method  = redis_configuration.value.data_persistence_authentication_method
-    }
+  redis_configuration {
+    aof_backup_enabled                      = try(local.redis_config.aof_backup_enabled, null)
+    aof_storage_connection_string_0         = try(local.redis_config.aof_storage_connection_string_0, null)
+    aof_storage_connection_string_1         = try(local.redis_config.aof_storage_connection_string_1, null)
+    enable_authentication                   = try(local.redis_config.enable_authentication, null)
+    active_directory_authentication_enabled = try(local.redis_config.active_directory_authentication_enabled, null)
+    maxmemory_reserved                      = try(local.redis_config.maxmemory_reserved, null)
+    maxmemory_delta                         = try(local.redis_config.maxmemory_delta, null)
+    maxmemory_policy                        = try(local.redis_config.maxmemory_policy, null)
+    maxfragmentationmemory_reserved         = try(local.redis_config.maxfragmentationmemory_reserved, null)
+    rdb_backup_enabled                      = try(local.redis_config.rdb_backup_enabled, null)
+    rdb_backup_frequency                    = try(local.redis_config.rdb_backup_frequency, null)
+    rdb_backup_max_snapshot_count           = try(local.redis_config.rdb_backup_max_snapshot_count, null)
+    rdb_storage_connection_string           = try(local.redis_config.rdb_storage_connection_string, null)
+    notify_keyspace_events                  = try(local.redis_config.notify_keyspace_events, null)
+    storage_account_subscription_id         = try(local.redis_config.storage_account_subscription_id, null)
+    data_persistence_authentication_method  = try(local.redis_config.data_persistence_authentication_method, null)
   }
-
 
   tags = coalesce(var.tags, local.default_tags)
 }
@@ -76,4 +77,18 @@ resource "azurerm_storage_account" "redis_storage" {
   min_tls_version = "TLS1_2"
 
   tags = coalesce(var.tags, local.default_tags)
+}
+
+output "redis_config" {
+  value = local.redis_config[*]
+}
+
+output "hostname" {
+  value       = azurerm_redis_cache.main.hostname
+  description = "The unique DNS name through which your Redis cache instance can be accessed"
+}
+
+output "primary_connection_string" {
+  value       = azurerm_redis_cache.main.primary_connection_string
+  description = "The connection string used to connect to the Azure Redis instance. Used for read and write operations."
 }
