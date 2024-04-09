@@ -131,6 +131,11 @@ variable "tags" {
   default = null
 }
 
+variable "enable_defender" {
+  type    = bool
+  default = true
+}
+
 locals {
   default_name = "${var.project}-${var.environment}"
 }
