@@ -174,6 +174,14 @@ variable "enable_defender" {
   default = true
 }
 
+variable "security_config" {
+  type = object({
+    devop_email      = optional(string, null)
+    alerts_to_admins = optional(bool, true)
+  })
+  default = {}
+}
+
 locals {
   default_name = "${var.project}-${var.environment}"
 }

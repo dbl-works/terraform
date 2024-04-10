@@ -1,3 +1,9 @@
+# @TODO:
+# 1. Azure registry container images should have vulnerabilities resolved (powered by Microsoft Defender Vulnerability Management)
+# 2. Container registries should not allow unrestricted network access
+# In order to restrict the network, we need to use limited IP ranges if you are interacting with the container registry using service like CircleCI
+
+# 3. Container registries should use private link
 resource "azurerm_container_registry" "main" {
   name                          = coalesce(var.name, local.default_name)
   resource_group_name           = var.resource_group_name

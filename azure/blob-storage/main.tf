@@ -1,3 +1,9 @@
+# @TODO:
+# 1. Microsoft Defender for Storage should be enabled
+# 2. Storage accounts should restrict network access using virtual network rules
+# 3. Storage accounts should use private link
+# 4. [Preview]: Storage account public access should be disallowed
+
 # provides a unique namespace in Azure for your data.
 resource "azurerm_storage_account" "main" {
   name                          = var.name

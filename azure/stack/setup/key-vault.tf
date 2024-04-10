@@ -1,5 +1,11 @@
 data "azurerm_client_config" "current" {}
 
+# @TODO:
+# 1. PublicEndpoint of KeyVaults are considered a governance violation
+# 2. Firewall should be enabled on Key Vault
+# 3. Diagnostic logs in Key Vault should be enabled
+# 3.2 Resource logs in Key Vault should be enabled - Audit enabling of resource logs. This enables you to recreate activity trails to use for investigation purposes when a security incident occurs or when your network is compromised
+# 4. Azure Key Vaults should use private link
 resource "azurerm_key_vault" "main" {
   name                = coalesce(var.key_vault_config.name, local.default_name)
   location            = var.region
