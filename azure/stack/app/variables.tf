@@ -126,6 +126,44 @@ variable "virtual_network_config" {
   default = {}
 }
 
+variable "redis_config" {
+  type = object({
+    name                                  = optional(string)
+    family                                = optional(string)
+    sku_name                              = optional(string)
+    public_network_access_enabled         = optional(bool)
+    redis_version                         = optional(number)
+    capacity                              = optional(number)
+    zones                                 = optional(list(string))
+    data_persistence_enabled              = optional(bool)
+    data_persistence_frequency_in_minutes = optional(number)
+    data_persistence_max_snapshot_count   = optional(number)
+    redis_additional_configuration = optional(object({
+      aof_backup_enabled                      = optional(bool, false) # can only be set when SKU is Premium
+      aof_storage_connection_string_0         = optional(string)
+      aof_storage_connection_string_1         = optional(string)
+      enable_authentication                   = optional(bool)
+      active_directory_authentication_enabled = optional(bool)
+      maxmemory_reserved                      = optional(number)
+      maxmemory_delta                         = optional(number)
+      # "volatile-lru", "allkeys-lru", "volatile-lfu", "allkeys-lfu", "volatile-random", "allkeys-random", "volatile-ttl", "noeviction"
+      maxmemory_policy                       = optional(string) # How Redis will select what to remove when maxmemory is reached. Defaults to volatile-lru.
+      maxfragmentationmemory_reserved        = optional(number) # The max-memory delta for this Redis instance.
+      rdb_storage_connection_string          = optional(string)
+      notify_keyspace_events                 = optional(string)
+      storage_account_subscription_id        = optional(string)
+      data_persistence_authentication_method = optional(string) # Preferred auth method to communicate to storage account used for data persistence
+    }))
+    shard_count = optional(number)
+
+    # If the data persistence is enabled
+    storage_name                                 = optional(string)
+    data_persistence_storage_account_tier        = optional(string)
+    data_persistence_storage_account_replication = optional(string)
+  })
+  default = {}
+}
+
 variable "tags" {
   type    = map(string)
   default = null
