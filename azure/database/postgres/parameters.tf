@@ -2,7 +2,6 @@ locals {
   db_parameters = {
     "azure.extensions"        = "pgcrypto",
     "log_statement"           = "none"
-    "ssl"                     = "on"
     "log_min_error_statement" = var.log_min_error_statement
     "logfiles.retention_days" = var.log_retention_period
 
