@@ -58,8 +58,12 @@ resource "azurerm_container_app" "main" {
   dynamic "secret" {
     for_each = toset(var.secret_variables)
     content {
-      name  = lower(secret.value)
+      name = lower(secret.value)
+      # TODO: Sam, Make sure the secret is reference from the key vault, and we have just one place to hold the secret
+      # To be removed if we refer to the key vault secret id
       value = data.azurerm_key_vault_secret.main[secret.value].value
+      # identity = ""
+      # key_vault_secret_id = ""
     }
   }
 
