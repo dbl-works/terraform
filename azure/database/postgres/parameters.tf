@@ -16,5 +16,3 @@ resource "azurerm_postgresql_flexible_server_configuration" "main" {
   server_id = azurerm_postgresql_flexible_server.main.id
   value     = each.value
 }
-
-# TODO: Set log retention period here
