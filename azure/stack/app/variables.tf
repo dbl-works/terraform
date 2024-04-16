@@ -56,7 +56,6 @@ variable "database_config" {
     sku_name                = optional(string, null)
     log_retention_period    = optional(number, null)
     log_min_error_statement = optional(string, null)
-    enable_replication      = optional(bool, null)
   })
   default = {}
 }

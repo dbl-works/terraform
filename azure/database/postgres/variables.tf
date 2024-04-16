@@ -143,13 +143,13 @@ variable "dns_zone_name" {
 
 variable "log_retention_period" {
   type        = number
-  default     = 1440
-  description = "Controls how long automatic RDS log files are retained before being deleted (in min, must be between 1440-10080 (1-7 days)."
+  default     = 1
+  description = "Controls how long server log files are retained before being deleted (in day, must be between 1-7 days."
   nullable    = false
 
   validation {
-    condition     = var.log_retention_period >= 1440 && var.log_retention_period <= 10080
-    error_message = "Log retention period must be between 1440-10080 (1-7 days)."
+    condition     = var.log_retention_period >= 1 && var.log_retention_period <= 7
+    error_message = "Log retention period must be between 1-7 days."
   }
 }
 
@@ -163,13 +163,6 @@ variable "log_min_error_statement" {
     condition     = contains(["debug5", "debug4", "debug3", "debug2", "debug1", "info", "notice", "warning", "error", "log", "fatal", "panic"], var.log_min_error_statement)
     error_message = "The valid values are [debug5, debug4, debug3, debug2, debug1, info, notice, warning, error, log, fatal, panic]"
   }
-}
-
-variable "enable_replication" {
-  type        = bool
-  description = "Enables logical replication of the database."
-  default     = false
-  nullable    = false
 }
 
 locals {
