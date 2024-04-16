@@ -49,11 +49,14 @@ variable "container_registry_config" {
 
 variable "database_config" {
   type = object({
-    name         = optional(string, null)
-    version      = optional(string, null)
-    storage_mb   = optional(number, null)
-    storage_tier = optional(string, null)
-    sku_name     = optional(string, null)
+    name                    = optional(string, null)
+    version                 = optional(string, null)
+    storage_mb              = optional(number, null)
+    storage_tier            = optional(string, null)
+    sku_name                = optional(string, null)
+    log_retention_period    = optional(number, null)
+    log_min_error_statement = optional(string, null)
+    enable_replication      = optional(bool, null)
   })
   default = {}
 }
