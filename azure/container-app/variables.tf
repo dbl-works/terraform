@@ -40,12 +40,6 @@ variable "log_analytics_workspace_id" {
   default = null
 }
 
-variable "command" {
-  type        = list(string)
-  default     = null
-  description = "A command to pass to the container to override the default. This is provided as a list of command line elements without spaces."
-}
-
 variable "environment_variables" {
   # {
   #   SAMPLE_ENV = "xxx"
@@ -94,16 +88,6 @@ variable "max_replicas" {
   type     = number
   default  = 2
   nullable = false
-}
-
-variable "cpu" {
-  type    = number
-  default = 0.25
-}
-
-variable "memory" {
-  type    = string
-  default = "0.5Gi"
 }
 
 variable "image_version" {
@@ -163,6 +147,14 @@ variable "user_assigned_identity_name" {
 variable "container_registry_login_server" {
   type    = string
   default = null
+}
+
+variable "container_apps" {
+  type = map(object({
+    command = list(string) # "A command to pass to the container to override the default. This is provided as a list of command line elements without spaces."
+    cpu     = optional(number, 0.25)
+    memory  = optional(string, "0.5Gi")
+  }))
 }
 
 variable "container_app_name" {

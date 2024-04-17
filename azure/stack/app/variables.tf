@@ -75,13 +75,15 @@ variable "container_app_config" {
     secret_variables             = optional(list(string), [])
     target_port                  = optional(number, null)
     exposed_port                 = optional(number, null)
-    cpu                          = optional(number, 0.25)
-    memory                       = optional(string, "0.5Gi")
-    command                      = optional(list(string), null)
     image_version                = optional(string, "latest")
     log_analytics_workspace_name = optional(string, null)
     logs_retention_in_days       = optional(number, null)
     zone_redundancy_enabled      = optional(bool, null)
+    container_apps = map(object({
+      command = list(string) # "A command to pass to the container to override the default. This is provided as a list of command line elements without spaces."
+      cpu     = optional(number, 0.25)
+      memory  = optional(string, "0.5Gi")
+    }))
     custom_domain = optional(
       object({
         certificate_binding_type = optional(string, "SniEnabled")
