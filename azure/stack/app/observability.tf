@@ -7,10 +7,10 @@ module "observability" {
   region              = var.region
   project             = var.project
 
-  log_analytics_workspace_id = module.container-app.log_analytics_workspace_id
-  logs_retention_in_days     = var.container_app_config.logs_retention_in_days
+  log_analytics_workspace_id   = module.container-app.log_analytics_workspace_id
+  logs_retention_in_days       = var.container_app_config.logs_retention_in_days
   container_app_environment_id = module.container-app.container_app_environment_id
-  user_assigned_identity_ids = [data.azurerm_user_assigned_identity.main.id]
+  user_assigned_identity_ids   = [data.azurerm_user_assigned_identity.main.id]
 
   tags = var.tags
 }
