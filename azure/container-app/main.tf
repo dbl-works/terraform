@@ -71,11 +71,11 @@ resource "azurerm_container_app" "main" {
       for_each = var.container_apps
 
       content {
-        name    = each.key
+        name    = container.key
         image   = "${var.container_registry_login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}"
-        command = each.value.command
-        cpu     = each.value.cpu
-        memory  = each.value.memory
+        command = container.value.command
+        cpu     = container.value.cpu
+        memory  = container.value.memory
 
         dynamic "env" {
           for_each = coalesce(local.env, {})
