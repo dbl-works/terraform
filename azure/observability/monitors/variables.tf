@@ -18,6 +18,18 @@ variable "user_assigned_identity_ids" {
   type = list(string)
 }
 
+variable "allowed_ips" {
+  type    = list(string)
+  default = []
+}
+
+variable "public_network_access_enabled" {
+  type    = bool
+  default = false
+
+  nullable = false
+}
+
 variable "container_app_environment_id" {
   type = string
 }

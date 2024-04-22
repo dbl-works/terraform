@@ -69,7 +69,8 @@ variable "database_config" {
 
 variable "observability_config" {
   type = object({
-    blob_storage_name = optional(string, null)
+    blob_storage_name             = optional(string, null)
+    public_network_access_enabled = optional(bool, null)
   })
   default = {}
 }

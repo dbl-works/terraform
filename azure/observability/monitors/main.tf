@@ -7,11 +7,12 @@ module "blob-storage" {
   resource_group_name        = var.resource_group_name
   user_assigned_identity_ids = var.user_assigned_identity_ids
 
-  # When setting public network access enabled to false, the following error will be thrown
-  # containers.Client#GetProperties: Failure responding to request: StatusCode=403 -- Original Error: autorest/azure: Service returned an error. Status=403 Code="AuthorizationFailure" Message="This request is not authorized to perform this operation.
-  public_network_access_enabled = true
-  container_access_type         = "private"
-  account_kind                  = "StorageV2"
+  container_access_type = "private"
+  account_kind          = "StorageV2"
+
+  # Networking
+  public_network_access_enabled = var.public_network_access_enabled
+  allowed_ips                   = var.allowed_ips
 
   lifecycle_rules = {
     "monitoring-${coalesce(var.blob_storage_name, "${local.default_name}-monitoring")}" = {

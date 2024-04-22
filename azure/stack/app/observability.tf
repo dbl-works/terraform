@@ -12,6 +12,9 @@ module "observability" {
   container_app_environment_id = module.container-app.container_app_environment_id
   user_assigned_identity_ids   = [data.azurerm_user_assigned_identity.main.id]
 
+  public_network_access_enabled = var.observability_config.public_network_access_enabled
+  allowed_ips                   = var.allowed_ips
+
   tags = var.tags
 }
 
