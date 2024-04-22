@@ -14,6 +14,15 @@ resource "azurerm_storage_account" "main" {
   infrastructure_encryption_enabled = false
   allow_nested_items_to_be_public   = var.allow_nested_items_to_be_public
 
+  dynamic "network_rules" {
+    for_each = length(var.allowed_ips) > 0 ? [1] : [0]
+
+    content {
+      default_action = "Deny" # Deny or allow
+      ip_rules       = var.allowed_ips
+    }
+  }
+
   dynamic "identity" {
     for_each = length(var.user_assigned_identity_ids) > 1 ? [1] : []
 

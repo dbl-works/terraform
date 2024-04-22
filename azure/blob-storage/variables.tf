@@ -93,6 +93,13 @@ variable "public_network_access_enabled" {
   nullable = false
 }
 
+variable "allowed_ips" {
+  type    = list(string)
+  default = []
+
+  nullable = false
+}
+
 variable "allow_nested_items_to_be_public" {
   type    = bool
   default = false
