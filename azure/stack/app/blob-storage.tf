@@ -12,6 +12,7 @@ module "blob-storage" {
   account_tier                    = each.value.account_tier
   account_replication_type        = each.value.account_replication_type
   public_network_access_enabled   = each.value.public_network_access_enabled
+  allowed_ips                     = var.allowed_ips
   allow_nested_items_to_be_public = each.value.allow_nested_items_to_be_public
   versioning_enabled              = each.value.versioning_enabled
   tags                            = var.tags

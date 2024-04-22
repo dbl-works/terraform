@@ -18,6 +18,13 @@ variable "environment" {
   type = string
 }
 
+variable "allowed_ips" {
+  type    = list(string)
+  default = []
+
+  description = "IPs which is allowed access the resources. By default, we deny all the access from public network"
+}
+
 variable "blob_storage_config" {
   type = map(object({
     container_name                  = optional(string, null)
