@@ -1,12 +1,11 @@
-data "azurerm_key_vault_secret" "main" {
-  for_each = { for secret in var.secret_variables : secret => secret }
-
-  name         = each.key
-  key_vault_id = var.key_vault_id
+locals {
+  user_assigned_identity_name = coalesce(var.user_assigned_identity_name, local.default_name)
 }
 
+data "azurerm_subscription" "current" {}
+
 data "azurerm_user_assigned_identity" "main" {
-  name                = coalesce(var.user_assigned_identity_name, local.default_name)
+  name                = local.user_assigned_identity_name
   resource_group_name = var.resource_group_name
 }
 
@@ -58,8 +57,9 @@ resource "azurerm_container_app" "main" {
   dynamic "secret" {
     for_each = toset(var.secret_variables)
     content {
-      name  = lower(secret.value)
-      value = data.azurerm_key_vault_secret.main[secret.value].value
+      name                = lower(secret.value)
+      key_vault_secret_id = "https://${var.key_vault_name}.vault.azure.net/secrets/${secret.value}"
+      identity            = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${local.user_assigned_identity_name}"
     }
   }
 

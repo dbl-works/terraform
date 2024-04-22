@@ -10,7 +10,7 @@ module "container-app" {
   log_analytics_workspace_name = var.container_app_config.log_analytics_workspace_name
   logs_retention_in_days       = var.container_app_config.logs_retention_in_days
 
-  key_vault_id                    = var.key_vault_id
+  key_vault_name                  = var.key_vault_name
   container_registry_login_server = module.container-registry.login_server
   health_check_options            = var.container_app_config.health_check_options
   zone_redundancy_enabled         = var.container_app_config.zone_redundancy_enabled

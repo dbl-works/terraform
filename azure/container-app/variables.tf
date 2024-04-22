@@ -135,9 +135,10 @@ variable "tags" {
   default = null
 }
 
-variable "key_vault_id" {
+variable "key_vault_name" {
   type    = string
   default = null
+  # TODO: Required if secret variables present
 }
 
 variable "user_assigned_identity_name" {
