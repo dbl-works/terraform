@@ -8,7 +8,7 @@ module "container-registry" {
   region              = var.region
   project             = var.project
 
-  admin_enabled                 = false
+  admin_enabled                 = var.container_registry_config.admin_enabled
   user_assigned_identity_name   = var.user_assigned_identity_name
   sku                           = var.container_registry_config.sku
   retention_in_days             = var.container_registry_config.retention_in_days

@@ -67,51 +67,55 @@ resource "azurerm_container_app" "main" {
     min_replicas = var.min_replicas
     max_replicas = var.max_replicas
 
-    container {
-      name    = coalesce(var.container_app_name, local.default_name)
-      image   = "${var.container_registry_login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}"
-      command = var.command
-      cpu     = var.cpu
-      memory  = var.memory
+    dynamic "container" {
+      for_each = var.container_apps
 
-      dynamic "env" {
-        for_each = coalesce(local.env, {})
-        content {
-          name        = env.key
-          secret_name = try(lower(env.value.secret_name), null)
-          value       = env.value.value
+      content {
+        name    = container.key
+        image   = "${var.container_registry_login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}"
+        command = container.value.command
+        cpu     = container.value.cpu
+        memory  = container.value.memory
+
+        dynamic "env" {
+          for_each = coalesce(local.env, {})
+          content {
+            name        = env.key
+            secret_name = try(lower(env.value.secret_name), null)
+            value       = env.value.value
+          }
         }
-      }
 
-      # Azure Container Apps health probes allow the Container Apps runtime to regularly inspect the status of your container apps.
-      # Checks to see if a replica is ready to handle incoming requests.
-      readiness_probe {
-        port                    = coalesce(var.health_check_options.port, local.default_app_port)
-        transport               = var.health_check_options.transport
-        path                    = var.health_check_options.path
-        interval_seconds        = var.health_check_options.interval_seconds
-        timeout                 = var.health_check_options.timeout
-        failure_count_threshold = var.health_check_options.failure_count_threshold
-      }
+        # Azure Container Apps health probes allow the Container Apps runtime to regularly inspect the status of your container apps.
+        # Checks to see if a replica is ready to handle incoming requests.
+        readiness_probe {
+          port                    = coalesce(var.health_check_options.port, local.default_app_port)
+          transport               = var.health_check_options.transport
+          path                    = var.health_check_options.path
+          interval_seconds        = var.health_check_options.interval_seconds
+          timeout                 = var.health_check_options.timeout
+          failure_count_threshold = var.health_check_options.failure_count_threshold
+        }
 
-      # Checks if your application is still running and responsive.
-      liveness_probe {
-        port                    = coalesce(var.health_check_options.port, local.default_app_port)
-        transport               = var.health_check_options.transport
-        path                    = var.health_check_options.path
-        interval_seconds        = var.health_check_options.interval_seconds
-        timeout                 = var.health_check_options.timeout # TODO: @sam, make sure that this is align with the puma timeout
-        failure_count_threshold = var.health_check_options.failure_count_threshold
-      }
+        # Checks if your application is still running and responsive.
+        liveness_probe {
+          port                    = coalesce(var.health_check_options.port, local.default_app_port)
+          transport               = var.health_check_options.transport
+          path                    = var.health_check_options.path
+          interval_seconds        = var.health_check_options.interval_seconds
+          timeout                 = var.health_check_options.timeout # TODO: @sam, make sure that this is align with the puma timeout
+          failure_count_threshold = var.health_check_options.failure_count_threshold
+        }
 
-      # Checks if your application has successfully started. This check is separate from the liveness probe and executes during the initial startup phase of your application.
-      startup_probe {
-        port                    = coalesce(var.health_check_options.port, local.default_app_port)
-        transport               = var.health_check_options.transport
-        path                    = var.health_check_options.path
-        interval_seconds        = 120
-        timeout                 = 60
-        failure_count_threshold = 5
+        # Checks if your application has successfully started. This check is separate from the liveness probe and executes during the initial startup phase of your application.
+        startup_probe {
+          port                    = coalesce(var.health_check_options.port, local.default_app_port)
+          transport               = var.health_check_options.transport
+          path                    = var.health_check_options.path
+          interval_seconds        = 120
+          timeout                 = 60
+          failure_count_threshold = 5
+        }
       }
     }
   }

@@ -1,6 +1,7 @@
 module "container-app" {
   source = "../../container-app"
 
+  container_apps               = var.container_app_config.container_apps
   container_app_name           = var.container_app_config.name
   resource_group_name          = var.resource_group_name
   project                      = var.project
@@ -15,16 +16,12 @@ module "container-app" {
   zone_redundancy_enabled         = var.container_app_config.zone_redundancy_enabled
 
   custom_domain = var.container_app_config.custom_domain
-  command       = var.container_app_config.command
-
-  target_port  = var.container_app_config.target_port
-  exposed_port = 0
-  transport    = "auto"
-  subnet_id    = module.virtual-network.public_subnet_id
+  target_port   = var.container_app_config.target_port
+  exposed_port  = 0
+  transport     = "auto"
+  subnet_id     = module.virtual-network.public_subnet_id
 
   user_assigned_identity_name = var.user_assigned_identity_name
-  cpu                         = var.container_app_config.cpu
-  memory                      = var.container_app_config.memory
   environment_variables       = var.container_app_config.environment_variables
   secret_variables            = var.container_app_config.secret_variables
   image_version               = var.container_app_config.image_version
