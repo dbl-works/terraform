@@ -93,6 +93,13 @@ variable "public_network_access_enabled" {
   nullable = false
 }
 
+variable "shared_access_key_enabled" {
+  type    = bool
+  default = false
+
+  nullable = false
+}
+
 variable "allowed_ips" {
   type    = list(string)
   default = []

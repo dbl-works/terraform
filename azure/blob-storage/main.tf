@@ -10,7 +10,7 @@ resource "azurerm_storage_account" "main" {
   min_tls_version               = "TLS1_2"
   enable_https_traffic_only     = true
   # default_to_oauth_authentication   = true
-  # shared_access_key_enabled         = false
+  shared_access_key_enabled         = var.shared_access_key_enabled
   infrastructure_encryption_enabled = false
   allow_nested_items_to_be_public   = var.allow_nested_items_to_be_public
 
