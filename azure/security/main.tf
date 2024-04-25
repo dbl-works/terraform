@@ -1,7 +1,7 @@
 # @TODO
 # 1. Microsoft Defender for APIs should be enabled. https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-apis-deploy
-# 2. Subscriptions should have a contact email address for security issues
 
+# NOTE: To turn on the Defender CSPM Plan, user would need to have the subscription owner permission to access the full plan's capabilities
 # Cloud security posture management (CSPM) is the process of monitoring cloud-based systems and infrastructures for risks and misconfigurations
 resource "azurerm_security_center_subscription_pricing" "main" {
   tier          = "Standard"
@@ -23,6 +23,8 @@ resource "azurerm_security_center_subscription_pricing" "main" {
   }
 }
 
+# NOTE: Need owner access to edit this
+# This will resolve the alert -- Subscriptions should have a contact email address for security issues
 resource "azurerm_security_center_contact" "main" {
   name  = "Developer"
   email = var.devop_email
