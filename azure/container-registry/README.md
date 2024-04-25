@@ -30,3 +30,6 @@ module "container-registry" {
   retention_in_days          = 7
 }
 ```
+
+### Pricing
+- https://azure.microsoft.com/en-us/pricing/details/container-registry/
