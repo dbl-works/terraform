@@ -17,6 +17,9 @@ module "virtual-network" {
   network_interface_name              = var.virtual_network_config.network_interface_name
   db_dns_zone_name                    = var.virtual_network_config.db_dns_zone_name
 
+  default_suffix     = var.default_suffix
+  storage_account_id = module.observability.storage_account_id
+
   address_space = try(var.virtual_network_config.address_space, null)
   tags          = var.tags
 }

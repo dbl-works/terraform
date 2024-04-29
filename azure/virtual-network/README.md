@@ -27,3 +27,11 @@ module "virtual-network" {
   }
 }
 ```
+
+### List of address prefixes ranges
+Assuming address space is 10.0.0.0/16
+- Public subnet range: 10.0.2.0/23 (10.0.1.0 - 10.0.2.255)
+- Private subnet range: 10.0.100.0/24 (10.0.100.0 - 10.0.100.255)
+- DB subnet range: 10.0.200.0/24 (10.0.200.0 - 10.0.200.255)
+- Redis subnet range: 10.0.150.0/24 (10.0.150.0 - 10.0.150.255)
+- Bastion subnet range: 10.0.50.0/24 (10.0.50.0 - 10.0.50.255)

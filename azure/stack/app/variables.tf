@@ -187,6 +187,11 @@ variable "tags" {
   default = null
 }
 
+variable "default_suffix" {
+  type    = string
+  default = null
+}
+
 locals {
   default_name = "${var.project}-${var.environment}"
 }

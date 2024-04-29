@@ -84,6 +84,18 @@ variable "redis_subnet_name" {
   description = "Defaults to 'project-environment-redis-subnet'."
 }
 
+variable "bastion_subnet_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-bastion-subnet'."
+}
+
+# =================== Bastion Host ===================== #
+variable "enable_bastion" {
+  type    = bool
+  default = true
+}
+
 # =================== Network Security Group name ===================== #
 variable "db_network_security_group_name" {
   type        = string
@@ -122,9 +134,25 @@ variable "db_dns_zone_name" {
   description = "Defaults to 'project-environment'."
 }
 
+# =================== Enable Private Link ===================== #
+variable "enable_blob_storage_privatelink" {
+  type    = bool
+  default = true
+}
+
+variable "default_suffix" {
+  type    = string
+  default = null
+}
+
+variable "storage_account_id" {
+  type    = string
+  default = null
+}
 
 locals {
-  default_name = "${var.project}-${var.environment}"
+  default_name   = "${var.project}-${var.environment}"
+  default_suffix = coalesce(var.default_suffix, "${var.project}-${var.environment}")
 
   default_tags = {
     Project     = var.project
