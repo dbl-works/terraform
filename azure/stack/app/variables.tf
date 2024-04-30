@@ -130,16 +130,14 @@ variable "key_vault_key_id" {
 
 variable "virtual_network_config" {
   type = object({
-    vnet_name                           = optional(string, null)
-    address_spaces                      = optional(list(string), null)
-    public_subnet_name                  = optional(string, null)
-    private_subnet_name                 = optional(string, null)
-    db_subnet_name                      = optional(string, null)
-    db_network_security_group_name      = optional(string, null)
-    public_network_security_group_name  = optional(string, null)
-    private_network_security_group_name = optional(string, null)
-    network_interface_name              = optional(string, null)
-    db_dns_zone_name                    = optional(string, null)
+    vnet_name                          = optional(string, null)
+    address_spaces                     = optional(list(string), null)
+    public_subnet_name                 = optional(string, null)
+    private_subnet_name                = optional(string, null)
+    db_subnet_name                     = optional(string, null)
+    network_security_group_name_suffix = optional(string, null)
+    network_interface_name             = optional(string, null)
+    db_dns_zone_name                   = optional(string, null)
   })
   default = {}
 }

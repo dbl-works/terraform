@@ -24,7 +24,7 @@ resource "azurerm_network_interface" "private" {
 }
 
 resource "azurerm_network_security_group" "private" {
-  name                = coalesce(var.private_network_security_group_name, "${local.default_name}-private")
+  name                = "private-${local.network_security_group_name_suffix}"
   location            = var.region
   resource_group_name = var.resource_group_name
 

@@ -30,5 +30,6 @@ module "database" {
   storage_mb                 = var.database_config.storage_mb
   storage_tier               = var.database_config.storage_tier
   sku_name                   = var.database_config.sku_name
-  tags                       = var.tags
+
+  tags = var.tags
 }

@@ -16,7 +16,8 @@ output "db_subnet_id" {
 }
 
 output "redis_subnet_id" {
-  value = azurerm_subnet.redis.id
+  # value = azurerm_subnet.redis.id
+  value = ""
 }
 
 output "db_private_dns_zone_id" {

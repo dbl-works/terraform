@@ -1,10 +1,10 @@
 resource "azurerm_network_security_group" "db" {
-  name                = coalesce(var.db_network_security_group_name, "${local.default_name}-db")
+  name                = "db-${local.network_security_group_name_suffix}"
   location            = var.region
   resource_group_name = var.resource_group_name
 
   security_rule {
-    name                       = coalesce(var.db_network_security_group_name, "${local.default_name}-db")
+    name                       = "Allow Inbound"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
