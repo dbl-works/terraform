@@ -15,7 +15,10 @@ resource "azurerm_network_security_group" "db" {
     destination_address_prefix = "*"
   }
 
-  tags = local.default_tags
+  tags = merge(local.default_tags, {
+    # TODO: We are forced to add this to pass the validation
+    databricks-environment = false
+  })
 }
 
 # The azurerm_network_watcher_flow_log creates a new storage lifecyle management rule that overwrites existing rules.
