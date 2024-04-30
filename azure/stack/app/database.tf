@@ -21,6 +21,7 @@ module "database" {
   delegated_subnet_id = module.virtual-network.db_subnet_id
 
   # Key vault must be created before database
+  # TODO: Key vault is within the private link so we cannot access key vault from terraform
   administrator_login    = data.azurerm_key_vault_secret.database_user.value
   administrator_password = data.azurerm_key_vault_secret.database_password.value
 
