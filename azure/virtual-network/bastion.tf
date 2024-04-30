@@ -14,6 +14,46 @@ resource "azurerm_subnet" "bastion" {
 # Because Azure Bastion connects to your virtual machines over private IP,
 # you can configure your NSGs to allow RDP/SSH from Azure Bastion only.
 # This removes the hassle of managing NSGs each time you need to securely connect to your virtual machines.
+
+# TODO: Make sure that we don't override the existing network security group defined by Azure Bastion
+resource "azurerm_network_security_group" "bastion" {
+  name                = "${var.network_security_group_name_prefix}bastion${local.network_security_group_name_suffix}"
+  location            = var.region
+  resource_group_name = var.resource_group_name
+
+  tags = coalesce(var.tags, local.default_tags)
+}
+
+resource "azurerm_subnet_network_security_group_association" "bastion" {
+  subnet_id                 = azurerm_subnet.bastion.id
+  network_security_group_id = azurerm_network_security_group.bastion.id
+}
+
+# The azurerm_network_watcher_flow_log creates a new storage lifecyle management rule that overwrites existing rules.
+# Please make sure to use a storage_account with no existing management rules, until the issue is fixed.
+resource "azurerm_network_watcher_flow_log" "bastion" {
+  name                 = "${azurerm_network_security_group.bastion.name}-flow-log"
+  network_watcher_name = var.network_watcher_name
+  resource_group_name  = var.resource_group_name
+
+  network_security_group_id = azurerm_network_security_group.bastion.id
+  storage_account_id        = var.storage_account_for_network_logging
+  enabled                   = true
+
+  retention_policy {
+    enabled = true
+    days    = 90
+  }
+
+  traffic_analytics {
+    enabled               = true
+    workspace_id          = data.azurerm_log_analytics_workspace.main.workspace_id
+    workspace_region      = data.azurerm_log_analytics_workspace.main.location
+    workspace_resource_id = data.azurerm_log_analytics_workspace.main.id
+    interval_in_minutes   = 10
+  }
+}
+
 resource "azurerm_public_ip" "bastion" {
   count = var.enable_bastion ? 1 : 0
 
