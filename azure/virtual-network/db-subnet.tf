@@ -46,6 +46,7 @@ resource "azurerm_subnet_network_security_group_association" "db" {
 }
 
 resource "azurerm_private_dns_zone" "db" {
+  # TODO: Consider to rename to privatelink.postgres.database.azure.com
   name                = coalesce(var.db_dns_zone_name, "${local.default_name}.postgres.database.azure.com")
   resource_group_name = var.resource_group_name
 
