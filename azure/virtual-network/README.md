@@ -35,3 +35,8 @@ Assuming address space is 10.0.0.0/16
 - DB subnet range: 10.0.200.0/24 (10.0.200.0 - 10.0.200.255)
 - Redis subnet range: 10.0.150.0/24 (10.0.150.0 - 10.0.150.255)
 - Bastion subnet range: 10.0.50.0/24 (10.0.50.0 - 10.0.50.255)
+
+### Network Interface Name
+- 0: Private
+- 1: Key vault
+- 2: Blob Storage

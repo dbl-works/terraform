@@ -9,12 +9,12 @@ resource "azurerm_subnet" "private" {
 }
 
 resource "azurerm_network_interface" "private" {
-  name                = coalesce(var.network_interface_name, "${local.default_name}-private")
+  name                = "${var.network_interface_name_prefix}0"
   location            = var.region
   resource_group_name = var.resource_group_name
 
   ip_configuration {
-    name                          = coalesce(var.network_interface_name, "${local.default_name}-ipconfig")
+    name                          = "ipconfig"
     subnet_id                     = azurerm_subnet.private.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = null

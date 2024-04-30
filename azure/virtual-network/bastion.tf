@@ -9,37 +9,11 @@ resource "azurerm_subnet" "bastion" {
   address_prefixes = [cidrsubnet(var.address_space, 8, 50)]
 }
 
-resource "azurerm_network_security_group" "bastion" {
-  count = var.enable_bastion ? 1 : 0
-
-  name                = "bastion-${local.network_security_group_name_suffix}"
-  location            = var.region
-  resource_group_name = var.resource_group_name
-
-  # TODO: Update the security rule
-  security_rule {
-    name                       = "Allow Inbound"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = 22
-    destination_port_range     = 22
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
-  tags = coalesce(var.tags, local.default_tags)
-}
-
-
-resource "azurerm_subnet_network_security_group_association" "bastion" {
-  count = var.enable_bastion ? 1 : 0
-
-  subnet_id                 = azurerm_subnet.bastion[0].id
-  network_security_group_id = azurerm_network_security_group.bastion[0].id
-}
-
+# https://learn.microsoft.com/en-us/azure/bastion/bastion-overview
+# You don't need to apply any NSGs to the Azure Bastion subnet.
+# Because Azure Bastion connects to your virtual machines over private IP,
+# you can configure your NSGs to allow RDP/SSH from Azure Bastion only.
+# This removes the hassle of managing NSGs each time you need to securely connect to your virtual machines.
 resource "azurerm_public_ip" "bastion" {
   count = var.enable_bastion ? 1 : 0
 

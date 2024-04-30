@@ -11,10 +11,11 @@ resource "azurerm_private_dns_zone" "blob-storage" {
 resource "azurerm_private_endpoint" "blob-storage" {
   count = var.enable_blob_storage_privatelink ? 1 : 0
 
-  name                = "blob-storage-private-endpoint-${local.default_suffix}"
-  location            = var.region
-  resource_group_name = var.resource_group_name
-  subnet_id           = azurerm_subnet.private.id
+  name                          = "blob-storage-private-endpoint-${local.default_suffix}"
+  location                      = var.region
+  resource_group_name           = var.resource_group_name
+  subnet_id                     = azurerm_subnet.private.id
+  custom_network_interface_name = "${var.network_interface_name_prefix}1"
 
   private_service_connection {
     name                           = "blob-storage-private-connection-${local.default_suffix}"

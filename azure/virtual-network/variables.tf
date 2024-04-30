@@ -109,10 +109,10 @@ variable "network_security_group_name_suffix" {
 }
 # =================== Network Security Group name ===================== #
 
-variable "network_interface_name" {
+variable "network_interface_name_prefix" {
   type        = string
   default     = null
-  description = "Defaults to 'project-environment-ipconfig'."
+  description = "Defaults to 'project-environment-'."
 }
 
 variable "db_dns_zone_name" {
