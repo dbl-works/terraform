@@ -140,6 +140,16 @@ variable "enable_blob_storage_privatelink" {
   default = true
 }
 
+variable "enable_key_vault_privatelink" {
+  type    = bool
+  default = true
+}
+
+variable "key_vault_id" {
+  type    = string
+  default = null
+}
+
 variable "default_suffix" {
   type    = string
   default = null

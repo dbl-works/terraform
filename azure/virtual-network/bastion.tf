@@ -17,6 +17,8 @@ resource "azurerm_public_ip" "bastion" {
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
+
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_bastion_host" "main" {
@@ -24,6 +26,7 @@ resource "azurerm_bastion_host" "main" {
   name                = "bastion-host-${local.default_suffix}"
   location            = var.region
   resource_group_name = var.resource_group_name
+  tags                = coalesce(var.tags, local.default_tags)
 
   ip_configuration {
     name                 = "bas-configuration"
