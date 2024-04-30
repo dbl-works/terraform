@@ -14,22 +14,22 @@ module "blob-storage" {
   public_network_access_enabled = var.public_network_access_enabled
   allowed_ips                   = var.allowed_ips
 
-  lifecycle_rules = {
-    "monitoring-${coalesce(var.blob_storage_name, "${local.default_name}-monitoring")}" = {
-      # prefix_match                                      = ["insights-activity-logs/ResourceId=${each.key}"]
-      blob_types                                        = ["appendBlob"]
-      delete_after_days_since_modification_greater_than = var.logs_retention_in_days
-    }
-  }
+  # lifecycle_rules = {
+  #   "monitoring-${coalesce(var.blob_storage_name, "${local.default_name}-monitoring")}" = {
+  #     prefix_match                                      = ["insights-activity-logs/ResourceId=${each.key}"]
+  #     blob_types                                        = ["appendBlob"]
+  #     delete_after_days_since_modification_greater_than = var.logs_retention_in_days
+  #   }
+  # }
 
   tags = local.default_tags
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
-  for_each = toset(var.target_resource_ids_for_logging)
+  for_each = { for idx, id in var.target_resource_ids_for_logging : idx => id }
 
-  name                       = coalesce(var.monitor_diagnostic_setting_name, local.default_name)
-  target_resource_id         = each.key
+  name                       = "${coalesce(var.monitor_diagnostic_setting_name, local.default_name)}${each.key}"
+  target_resource_id         = each.value
   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
   storage_account_id         = module.blob-storage.storage_account_id
 

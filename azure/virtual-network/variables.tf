@@ -164,10 +164,10 @@ locals {
   default_suffix                     = coalesce(var.default_suffix, "${var.project}-${var.environment}")
   network_security_group_name_suffix = coalesce(var.network_security_group_name_suffix, "-${var.project}-${var.environment}")
 
-  default_tags = {
+  default_tags = coalesce(var.tags, {
     Project     = var.project
     Environment = var.environment
-  }
+  })
 }
 
 data "azurerm_log_analytics_workspace" "main" {

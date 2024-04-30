@@ -20,7 +20,7 @@ resource "azurerm_network_interface" "private" {
     public_ip_address_id          = null
   }
 
-  tags = coalesce(var.tags, local.default_tags)
+  tags = local.default_tags
 }
 
 resource "azurerm_network_watcher_flow_log" "private" {
@@ -44,6 +44,8 @@ resource "azurerm_network_watcher_flow_log" "private" {
     workspace_resource_id = data.azurerm_log_analytics_workspace.main.id
     interval_in_minutes   = 10
   }
+
+  tags = local.default_tags
 }
 
 

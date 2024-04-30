@@ -37,6 +37,8 @@ resource "azurerm_network_watcher_flow_log" "public" {
     workspace_resource_id = data.azurerm_log_analytics_workspace.main.id
     interval_in_minutes   = 10
   }
+
+  tags = local.default_tags
 }
 
 resource "azurerm_network_security_rule" "public" {

@@ -4,7 +4,7 @@ resource "azurerm_private_dns_zone" "key-vault" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = var.resource_group_name
 
-  tags = coalesce(var.tags, local.default_tags)
+  tags = local.default_tags
 }
 
 resource "azurerm_private_endpoint" "key_vault" {
@@ -28,5 +28,5 @@ resource "azurerm_private_endpoint" "key_vault" {
     subresource_names              = ["Vault"]
   }
 
-  tags = coalesce(var.tags, local.default_tags)
+  tags = local.default_tags
 }

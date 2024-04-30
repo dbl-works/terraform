@@ -15,7 +15,7 @@ resource "azurerm_network_security_group" "db" {
     destination_address_prefix = "*"
   }
 
-  tags = coalesce(var.tags, local.default_tags)
+  tags = local.default_tags
 }
 
 # The azurerm_network_watcher_flow_log creates a new storage lifecyle management rule that overwrites existing rules.
@@ -41,6 +41,8 @@ resource "azurerm_network_watcher_flow_log" "db" {
     workspace_resource_id = data.azurerm_log_analytics_workspace.main.id
     interval_in_minutes   = 10
   }
+
+  tags = local.default_tags
 }
 
 resource "azurerm_subnet" "db" {
