@@ -5,7 +5,7 @@ resource "azurerm_private_dns_zone" "blob-storage" {
   name                = "privatelink.blob.core.windows.net"
   resource_group_name = var.resource_group_name
 
-  tags                = coalesce(var.tags, local.default_tags)
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_private_endpoint" "blob-storage" {
@@ -15,7 +15,6 @@ resource "azurerm_private_endpoint" "blob-storage" {
   location            = var.region
   resource_group_name = var.resource_group_name
   subnet_id           = azurerm_subnet.private.id
-  tags                = coalesce(var.tags, local.default_tags)
 
   private_service_connection {
     name                           = "blob-storage-private-connection-${local.default_suffix}"
@@ -28,6 +27,8 @@ resource "azurerm_private_endpoint" "blob-storage" {
     name                 = azurerm_private_dns_zone.blob-storage[0].name
     private_dns_zone_ids = [azurerm_private_dns_zone.blob-storage[0].id]
   }
+
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "blob-storage" {
@@ -37,6 +38,8 @@ resource "azurerm_private_dns_zone_virtual_network_link" "blob-storage" {
   resource_group_name   = var.resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.blob-storage[0].name
   virtual_network_id    = azurerm_virtual_network.main.id
+
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_private_dns_a_record" "blob-storage" {
@@ -47,5 +50,7 @@ resource "azurerm_private_dns_a_record" "blob-storage" {
   resource_group_name = var.resource_group_name
   ttl                 = 300
   records             = [azurerm_private_endpoint.blob-storage.0.private_service_connection.0.private_ip_address]
+
+  tags = coalesce(var.tags, local.default_tags)
 }
 

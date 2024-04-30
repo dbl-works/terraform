@@ -26,13 +26,14 @@ resource "azurerm_bastion_host" "main" {
   name                = "bastion-host-${local.default_suffix}"
   location            = var.region
   resource_group_name = var.resource_group_name
-  tags                = coalesce(var.tags, local.default_tags)
 
   ip_configuration {
     name                 = "bas-configuration"
     subnet_id            = azurerm_subnet.bastion[0].id
     public_ip_address_id = azurerm_public_ip.bastion[0].id
   }
+
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_windows_virtual_machine" "bastion" {
@@ -60,4 +61,6 @@ resource "azurerm_windows_virtual_machine" "bastion" {
     sku       = "2019-Datacenter"
     version   = "latest"
   }
+
+  tags = coalesce(var.tags, local.default_tags)
 }

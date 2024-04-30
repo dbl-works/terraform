@@ -14,7 +14,6 @@ resource "azurerm_private_endpoint" "key_vault" {
   location            = var.region
   resource_group_name = var.resource_group_name
   subnet_id           = azurerm_subnet.private.id
-  tags                = coalesce(var.tags, local.default_tags)
 
   private_dns_zone_group {
     name                 = azurerm_private_dns_zone.key-vault[0].name
@@ -27,4 +26,6 @@ resource "azurerm_private_endpoint" "key_vault" {
     is_manual_connection           = false
     subresource_names              = ["Vault"]
   }
+
+  tags = coalesce(var.tags, local.default_tags)
 }
