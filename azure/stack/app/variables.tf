@@ -135,6 +135,7 @@ variable "virtual_network_config" {
     public_subnet_name                 = optional(string, null)
     private_subnet_name                = optional(string, null)
     db_subnet_name                     = optional(string, null)
+    network_security_group_name_prefix = optional(string, null)
     network_security_group_name_suffix = optional(string, null)
     network_interface_name             = optional(string, null)
     db_dns_zone_name                   = optional(string, null)

@@ -1,10 +1,10 @@
 resource "azurerm_network_security_group" "db" {
-  name                = "db-${local.network_security_group_name_suffix}"
+  name                = "${var.network_security_group_name_prefix}db${local.network_security_group_name_suffix}"
   location            = var.region
   resource_group_name = var.resource_group_name
 
   security_rule {
-    name                       = "Allow Inbound"
+    name                       = "AllowInbound"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"

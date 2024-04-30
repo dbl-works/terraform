@@ -14,6 +14,7 @@ module "virtual-network" {
   network_interface_name = var.virtual_network_config.network_interface_name
   db_dns_zone_name       = var.virtual_network_config.db_dns_zone_name
 
+  network_security_group_name_prefix = var.virtual_network_config.network_security_group_name_prefix
   network_security_group_name_suffix = var.virtual_network_config.network_security_group_name_suffix
   default_suffix                     = var.default_suffix
 

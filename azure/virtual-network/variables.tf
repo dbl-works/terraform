@@ -97,6 +97,11 @@ variable "enable_bastion" {
 }
 
 # =================== Network Security Group name ===================== #
+variable "network_security_group_name_prefix" {
+  type    = string
+  default = null
+}
+
 variable "network_security_group_name_suffix" {
   type        = string
   default     = null
@@ -145,7 +150,7 @@ variable "storage_account_id" {
 locals {
   default_name                       = "${var.project}-${var.environment}"
   default_suffix                     = coalesce(var.default_suffix, "${var.project}-${var.environment}")
-  network_security_group_name_suffix = coalesce(var.network_security_group_name_suffix, "${var.project}-${var.environment}")
+  network_security_group_name_suffix = coalesce(var.network_security_group_name_suffix, "-${var.project}-${var.environment}")
 
   default_tags = {
     Project     = var.project

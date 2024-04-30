@@ -9,7 +9,7 @@ resource "azurerm_subnet" "public" {
 }
 
 resource "azurerm_network_security_group" "public" {
-  name                = "public-${local.network_security_group_name_suffix}"
+  name                = "${var.network_security_group_name_prefix}public${local.network_security_group_name_suffix}"
   location            = var.region
   resource_group_name = var.resource_group_name
 
