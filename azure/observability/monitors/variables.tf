@@ -45,14 +45,27 @@ variable "logs_retention_in_days" {
   default  = 90
 }
 
-variable "log_analytics_workspace_id" {
-  type = string
-}
-
 variable "monitor_diagnostic_setting_name" {
   type        = string
   default     = null
   description = "Defaults to 'project-environment'."
+}
+
+variable "log_analytics_workspace_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
+# Logging
+# The Free SKU has a default daily_quota_gb value of 0.5 (GB).
+variable "logging_sku" {
+  type = string
+  validation {
+    condition     = contains(["Free", "PerNode", "Premium", "Standard", "Standalone", "Unlimited", "CapacityReservation", "PerGB2018"], var.logging_sku)
+    error_message = "Must be either Free, PerNode, Premium, Standard, Standalone, Unlimited, CapacityReservation, and PerGB2018"
+  }
+  default = "PerGB2018"
 }
 
 variable "blob_storage_name" {
@@ -64,8 +77,8 @@ variable "blob_storage_name" {
 locals {
   default_name = "${var.project}-${var.environment}"
 
-  default_tags = {
+  default_tags = coalesce(var.tags, {
     Project     = var.project
     Environment = var.environment
-  }
+  })
 }

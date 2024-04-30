@@ -1,14 +1,14 @@
 module "container-app" {
   source = "../../container-app"
 
-  container_apps               = var.container_app_config.container_apps
-  container_app_name           = var.container_app_config.name
-  resource_group_name          = var.resource_group_name
-  project                      = var.project
-  environment                  = var.environment
-  region                       = var.region
-  log_analytics_workspace_name = var.container_app_config.log_analytics_workspace_name
-  logs_retention_in_days       = var.container_app_config.logs_retention_in_days
+  container_apps             = var.container_app_config.container_apps
+  container_app_name         = var.container_app_config.name
+  resource_group_name        = var.resource_group_name
+  project                    = var.project
+  environment                = var.environment
+  region                     = var.region
+  log_analytics_workspace_id = module.observability.log_analytics_workspace_id
+  logs_retention_in_days     = var.container_app_config.logs_retention_in_days
 
   key_vault_name                  = var.key_vault_name
   container_registry_login_server = module.container-registry.login_server

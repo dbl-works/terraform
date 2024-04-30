@@ -81,13 +81,12 @@ variable "container_app_config" {
     name                  = optional(string, null)
     environment_variables = optional(map(string), {})
     # secret variables must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
-    secret_variables             = optional(list(string), [])
-    target_port                  = optional(number, null)
-    exposed_port                 = optional(number, null)
-    image_version                = optional(string, "latest")
-    log_analytics_workspace_name = optional(string, null)
-    logs_retention_in_days       = optional(number, null)
-    zone_redundancy_enabled      = optional(bool, null)
+    secret_variables        = optional(list(string), [])
+    target_port             = optional(number, null)
+    exposed_port            = optional(number, null)
+    image_version           = optional(string, "latest")
+    logs_retention_in_days  = optional(number, null)
+    zone_redundancy_enabled = optional(bool, null)
     container_apps = map(object({
       command = list(string) # "A command to pass to the container to override the default. This is provided as a list of command line elements without spaces."
       cpu     = optional(number, 0.25)
@@ -139,6 +138,7 @@ variable "virtual_network_config" {
     network_security_group_name_suffix = optional(string, null)
     network_interface_name_prefix      = optional(string, null)
     db_dns_zone_name                   = optional(string, null)
+    network_watcher_name               = optional(string, null)
   })
   default = {}
 }

@@ -90,6 +90,18 @@ variable "bastion_subnet_name" {
   description = "Defaults to 'project-environment-bastion-subnet'."
 }
 
+variable "network_watcher_name" {
+  type = string
+}
+
+variable "storage_account_for_network_logging" {
+  type = string
+}
+
+variable "log_analytics_workspace_name" {
+  type = string
+}
+
 # =================== Bastion Host ===================== #
 variable "enable_bastion" {
   type    = bool
@@ -156,4 +168,9 @@ locals {
     Project     = var.project
     Environment = var.environment
   }
+}
+
+data "azurerm_log_analytics_workspace" "main" {
+  name                = var.log_analytics_workspace_name
+  resource_group_name = var.resource_group_name
 }

@@ -22,13 +22,13 @@ module "blob-storage" {
     }
   }
 
-  tags = var.tags
+  tags = local.default_tags
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
   name                       = coalesce(var.monitor_diagnostic_setting_name, local.default_name)
   target_resource_id         = var.container_app_environment_id
-  log_analytics_workspace_id = var.log_analytics_workspace_id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
   storage_account_id         = module.blob-storage.storage_account_id
 
   # Check here for the list of Service/Category available for different resources
@@ -46,4 +46,15 @@ resource "azurerm_monitor_diagnostic_setting" "main" {
     category = "AllMetrics"
     enabled  = true
   }
+}
+
+resource "azurerm_log_analytics_workspace" "main" {
+  name                = coalesce(var.log_analytics_workspace_name, local.default_name)
+  location            = var.region
+  resource_group_name = var.resource_group_name
+  sku                 = var.logging_sku
+  # The workspace data retention in days. Possible values are either 7 (Free Tier only) or range between 30 and 730.
+  retention_in_days = var.logs_retention_in_days
+
+  tags = local.default_tags
 }

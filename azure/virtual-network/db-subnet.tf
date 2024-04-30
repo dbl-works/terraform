@@ -18,6 +18,31 @@ resource "azurerm_network_security_group" "db" {
   tags = coalesce(var.tags, local.default_tags)
 }
 
+# The azurerm_network_watcher_flow_log creates a new storage lifecyle management rule that overwrites existing rules.
+# Please make sure to use a storage_account with no existing management rules, until the issue is fixed.
+resource "azurerm_network_watcher_flow_log" "db" {
+  name                 = "${azurerm_network_security_group.db.name}-flow-log"
+  network_watcher_name = var.network_watcher_name
+  resource_group_name  = var.resource_group_name
+
+  network_security_group_id = azurerm_network_security_group.db.id
+  storage_account_id        = var.storage_account_for_network_logging
+  enabled                   = true
+
+  retention_policy {
+    enabled = true
+    days    = 90
+  }
+
+  traffic_analytics {
+    enabled               = true
+    workspace_id          = data.azurerm_log_analytics_workspace.main.workspace_id
+    workspace_region      = data.azurerm_log_analytics_workspace.main.location
+    workspace_resource_id = data.azurerm_log_analytics_workspace.main.id
+    interval_in_minutes   = 10
+  }
+}
+
 resource "azurerm_subnet" "db" {
   name                 = coalesce(var.db_subnet_name, "${local.default_name}-db-subnet")
   virtual_network_name = azurerm_virtual_network.main.name

@@ -23,6 +23,30 @@ resource "azurerm_network_interface" "private" {
   tags = coalesce(var.tags, local.default_tags)
 }
 
+resource "azurerm_network_watcher_flow_log" "private" {
+  name                 = "${azurerm_network_security_group.private.name}-flow-log"
+  network_watcher_name = var.network_watcher_name
+  resource_group_name  = var.resource_group_name
+
+  network_security_group_id = azurerm_network_security_group.private.id
+  storage_account_id        = var.storage_account_for_network_logging
+  enabled                   = true
+
+  retention_policy {
+    enabled = true
+    days    = 90
+  }
+
+  traffic_analytics {
+    enabled               = true
+    workspace_id          = data.azurerm_log_analytics_workspace.main.workspace_id
+    workspace_region      = data.azurerm_log_analytics_workspace.main.location
+    workspace_resource_id = data.azurerm_log_analytics_workspace.main.id
+    interval_in_minutes   = 10
+  }
+}
+
+
 resource "azurerm_network_security_group" "private" {
   name                = "${var.network_security_group_name_prefix}private${local.network_security_group_name_suffix}"
   location            = var.region

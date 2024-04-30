@@ -135,10 +135,6 @@ output "id" {
   value = azurerm_container_app.main.id
 }
 
-output "log_analytics_workspace_id" {
-  value = azurerm_log_analytics_workspace.main.id
-}
-
 output "app_url" {
   value = azurerm_container_app.main.latest_revision_fqdn
 }
