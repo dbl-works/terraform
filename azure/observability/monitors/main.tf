@@ -16,7 +16,7 @@ module "blob-storage" {
 
   lifecycle_rules = {
     "monitoring-${coalesce(var.blob_storage_name, "${local.default_name}-monitoring")}" = {
-      prefix_match                                      = ["insights-activity-logs/ResourceId=${var.container_app_environment_id}"]
+      # prefix_match                                      = ["insights-activity-logs/ResourceId=${each.key}"]
       blob_types                                        = ["appendBlob"]
       delete_after_days_since_modification_greater_than = var.logs_retention_in_days
     }
@@ -26,8 +26,10 @@ module "blob-storage" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
+  for_each = toset(var.target_resource_ids_for_logging)
+
   name                       = coalesce(var.monitor_diagnostic_setting_name, local.default_name)
-  target_resource_id         = var.container_app_environment_id
+  target_resource_id         = each.key
   log_analytics_workspace_id = azurerm_log_analytics_workspace.main.id
   storage_account_id         = module.blob-storage.storage_account_id
 

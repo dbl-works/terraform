@@ -30,8 +30,9 @@ variable "public_network_access_enabled" {
   nullable = false
 }
 
-variable "container_app_environment_id" {
-  type = string
+variable "target_resource_ids_for_logging" {
+  type    = list(string)
+  default = []
 }
 
 variable "tags" {
