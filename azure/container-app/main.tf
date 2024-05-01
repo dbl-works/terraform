@@ -131,6 +131,23 @@ resource "azurerm_container_app" "main" {
   }
 }
 
+# https://learn.microsoft.com/en-us/azure/container-apps/vnet-custom?tabs=bash%2Cazure-cli&pivots=azure-portal
+# https://github.com/microsoft/azure-container-apps/issues/345
+# When you deploy an internal or an external environment into your own network, a new resource group prefixed with MC_ is created in the Azure subscription where your environment is hosted. This resource group contains infrastructure components managed by the Azure Container Apps platform, and shouldn't be modified. The resource group contains Public IP addresses used specifically for outbound connectivity from your environment and a load balancer.
+# Your policy would need to have an exclusion for resource groups that start with "MC_"
+# For the moment, the proposed workaround is to add a policy assignment exception for resource group that have the MC_ prefix and _{region} suffix.
+resource "azurerm_container_app_environment" "main" {
+  name                = coalesce(var.container_app_name, local.default_name)
+  location            = var.region
+  resource_group_name = var.resource_group_name
+
+  infrastructure_subnet_id       = var.subnet_id
+  zone_redundancy_enabled        = var.zone_redundancy_enabled
+  internal_load_balancer_enabled = var.internal_load_balancer_enabled
+  log_analytics_workspace_id     = var.log_analytics_workspace_id
+  tags                           = coalesce(var.tags, local.default_tags)
+}
+
 output "id" {
   value = azurerm_container_app.main.id
 }

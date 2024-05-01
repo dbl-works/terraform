@@ -19,7 +19,12 @@ module "container-app" {
   target_port   = var.container_app_config.target_port
   exposed_port  = 0
   transport     = "auto"
-  subnet_id     = module.virtual-network.public_subnet_id
+
+  # Error Message: The Container Apps Environment failed to provision: ErrorCode: ManagedEnvironmentResourceDisallowedByPolicy,
+  # Message: Fail to create managed environment because creation of required resources was disallowed by policy
+  # Github Issues: https://github.com/microsoft/azure-container-apps/issues/559
+  # We are not allowed to create Container App Environment with external ingress traffic
+  subnet_id = module.virtual-network.public_subnet_id
 
   user_assigned_identity_name = var.user_assigned_identity_name
   environment_variables       = var.container_app_config.environment_variables
