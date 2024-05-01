@@ -83,7 +83,7 @@ variable "container_app_config" {
       command = list(string) # "A command to pass to the container to override the default. This is provided as a list of command line elements without spaces."
       image   = optional(string, null)
       # { sample-env = 'sample-env-value' }
-      environment_variables = optional(object(any), null)
+      environment_variables = optional(map(string), null)
       cpu                   = optional(number, 0.25)
       memory                = optional(string, "0.5Gi")
     }))
