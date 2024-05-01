@@ -72,13 +72,13 @@ resource "azurerm_container_app" "main" {
 
       content {
         name    = container.key
-        image   = "${var.container_registry_login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}"
+        image   = coalesce(container.value.image, "${var.container_registry_login_server}/${coalesce(var.repository_name, var.project)}:${var.image_version}")
         command = container.value.command
         cpu     = container.value.cpu
         memory  = container.value.memory
 
         dynamic "env" {
-          for_each = coalesce(local.env, {})
+          for_each = container.value.environment_variables == null ? local.env : { for env, value in container.value.environment_variables : env => { value = value, secret_name = null } }
           content {
             name        = env.key
             secret_name = try(lower(env.value.secret_name), null)
