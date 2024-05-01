@@ -81,8 +81,11 @@ variable "container_app_config" {
     zone_redundancy_enabled      = optional(bool, null)
     container_apps = map(object({
       command = list(string) # "A command to pass to the container to override the default. This is provided as a list of command line elements without spaces."
-      cpu     = optional(number, 0.25)
-      memory  = optional(string, "0.5Gi")
+      image   = optional(string, null)
+      # { sample-env = 'sample-env-value' }
+      environment_variables = optional(object(any), null)
+      cpu                   = optional(number, 0.25)
+      memory                = optional(string, "0.5Gi")
     }))
     custom_domain = optional(
       object({
