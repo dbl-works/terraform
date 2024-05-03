@@ -3,8 +3,8 @@ resource "azurerm_subnet" "db" {
   virtual_network_name = azurerm_virtual_network.main.name
   resource_group_name  = var.resource_group_name
   # (Assuming address space is 10.0.0.0/16)
-  # i.e. 10.0.200.0/24, range 10.0.200.0 - 10.0.200.255
-  address_prefixes  = [cidrsubnet(var.address_space, 8, 200)]
+  # i.e. 10.0.50.0/24, range 10.0.50.0 - 10.0.50.255
+  address_prefixes  = [cidrsubnet(var.address_space, 8, 50)]
   service_endpoints = ["Microsoft.Storage"]
 
   # Delegations enable the PostgreSQL service to perform tasks like configuring network settings,
@@ -23,28 +23,28 @@ resource "azurerm_subnet" "db" {
   }
 }
 
-# resource "azurerm_network_security_group" "db" {
-#   name                = "${var.network_security_group_name_prefix}db${local.network_security_group_name_suffix}"
-#   location            = var.region
-#   resource_group_name = var.resource_group_name
-#
-#   security_rule {
-#     name                       = "AllowInbound"
-#     priority                   = 100
-#     direction                  = "Inbound"
-#     access                     = "Allow"
-#     protocol                   = "Tcp"
-#     source_port_range          = 5432
-#     destination_port_range     = 5432
-#     source_address_prefix      = "*"
-#     destination_address_prefix = "*"
-#   }
-#
-#   tags = merge(local.default_tags, {
-#     # TODO: We are forced to add this to pass the validation
-#     databricks-environment = false
-#   })
-# }
+resource "azurerm_network_security_group" "db" {
+  name                = "${var.network_security_group_name_prefix}db${local.network_security_group_name_suffix}"
+  location            = var.region
+  resource_group_name = var.resource_group_name
+
+  # security_rule {
+  #   name                       = "AllowInbound"
+  #   priority                   = 100
+  #   direction                  = "Inbound"
+  #   access                     = "Allow"
+  #   protocol                   = "Tcp"
+  #   source_port_range          = 5432
+  #   destination_port_range     = 5432
+  #   source_address_prefix      = "*"
+  #   destination_address_prefix = "*"
+  # }
+
+  # tags = merge(local.default_tags, {
+  #   # TODO: We are forced to add this to pass the validation
+  #   databricks-environment = false
+  # })
+}
 #
 # The azurerm_network_watcher_flow_log creates a new storage lifecyle management rule that overwrites existing rules.
 # Please make sure to use a storage_account with no existing management rules, until the issue is fixed.
@@ -73,10 +73,10 @@ resource "azurerm_network_watcher_flow_log" "db" {
   tags = local.default_tags
 }
 
-# resource "azurerm_subnet_network_security_group_association" "db" {
-#   subnet_id                 = azurerm_subnet.db.id
-#   network_security_group_id = azurerm_network_security_group.db.id
-# }
+resource "azurerm_subnet_network_security_group_association" "db" {
+  subnet_id                 = azurerm_subnet.db.id
+  network_security_group_id = azurerm_network_security_group.db.id
+}
 
 # resource "azurerm_private_dns_zone" "db" {
 #   # TODO: Consider to rename to privatelink.postgres.database.azure.com

@@ -4,6 +4,7 @@ resource "azurerm_subnet" "private" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
   # i.e. 10.0.100.0/23
+  # 10.0.100.0 - 10.0.101.255
   # NOTE: Setting this to /23 because this is the minimum requirement of having a container app environment within
   address_prefixes = [cidrsubnet(var.address_space, 7, 100)]
 }

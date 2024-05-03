@@ -4,23 +4,9 @@ resource "azurerm_subnet" "public" {
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.main.name
   # (Assuming address space is 10.0.0.0/16)
-  # i.e. 10.0.2.0/23: range 10.0.1.0 - 10.0.2.255
+  # i.e. 10.0.1.0/23: range 10.0.1.0 - 10.0.2.255
   address_prefixes = [cidrsubnet(var.address_space, 7, 1)]
 }
-
-# resource "azurerm_route_table" "main" {
-#   name                = "default"
-#   location            = var.region
-#   resource_group_name = var.resource_group_name
-#   # TODO: Should we disable this?
-#   disable_bgp_route_propagation = true
-#   tags                          = var.tags
-# }
-#
-# resource "azurerm_subnet_route_table_association" "public" {
-#   subnet_id      = azurerm_subnet.public.id
-#   route_table_id = azurerm_route_table.main.id
-# }
 
 resource "azurerm_network_security_group" "public" {
   name                = "${var.network_security_group_name_prefix}public${local.network_security_group_name_suffix}"
