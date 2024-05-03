@@ -40,3 +40,12 @@ Assuming address space is 10.0.0.0/16
 - 0: Private
 - 1: Key vault
 - 2: Blob Storage
+
+### Service endpoint VS Private endpoint
+- With service endpoint, the traffic still left you VNet and hit the public endpoint of the PAAs resource
+- Private link sit within your VNet and gets a private IP on your VNET
+
+# https://learn.microsoft.com/en-us/azure/dns/private-dns-virtual-network-links
+## Virtual Network link
+
+- After you create a private DNS zone in Azure, you'll need to link a virtual network to it. Once linked, VMs hosted in that virtual network can access the private DNS zone.

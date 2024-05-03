@@ -119,8 +119,8 @@ variable "network_security_group_name_suffix" {
   default     = null
   description = "Defaults to 'project-environment'."
 }
-# =================== Network Security Group name ===================== #
 
+# =================== Network Security Group name ===================== #
 variable "network_interface_name_prefix" {
   type        = string
   default     = null
@@ -134,27 +134,16 @@ variable "db_dns_zone_name" {
 }
 
 # =================== Enable Private Link ===================== #
-variable "enable_blob_storage_privatelink" {
-  type    = bool
-  default = true
-}
-
-variable "enable_key_vault_privatelink" {
-  type    = bool
-  default = true
-}
-
-variable "key_vault_id" {
-  type    = string
-  default = null
+variable "privatelink_config" {
+  type = object({
+    key_vault_name       = optional(string, null)
+    storage_account_name = optional(string, null)
+    database_name        = optional(string, null)
+  })
+  default = {}
 }
 
 variable "default_suffix" {
-  type    = string
-  default = null
-}
-
-variable "storage_account_id" {
   type    = string
   default = null
 }

@@ -9,8 +9,8 @@ module "observability" {
 
   logs_retention_in_days = var.container_app_config.logs_retention_in_days
   target_resource_ids_for_logging = [
-    module.container-app.container_app_environment_id,
-    var.key_vault_id
+    var.key_vault_id,
+    # module.container-app.container_app_environment_id,
   ]
   user_assigned_identity_ids = [data.azurerm_user_assigned_identity.main.id]
 

@@ -9,7 +9,7 @@ module "redis" {
 
   # network
   public_network_access_enabled = var.redis_config.public_network_access_enabled
-  subnet_id                     = module.virtual-network.redis_subnet_id
+  subnet_id                     = module.virtual-network.private_subnet_id
 
   user_assigned_identity_ids = [
     data.azurerm_user_assigned_identity.main.id

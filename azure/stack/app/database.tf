@@ -8,7 +8,6 @@ data "azurerm_key_vault_secret" "database_password" {
   key_vault_id = var.key_vault_id
 }
 
-# TODO: Make database shareable
 module "database" {
   source = "../../database/postgres"
 
@@ -18,7 +17,7 @@ module "database" {
   project             = var.project
   environment         = var.environment
   private_dns_zone_id = module.virtual-network.db_private_dns_zone_id
-  delegated_subnet_id = module.virtual-network.db_subnet_id
+  delegated_subnet_id = module.virtual-network.private_subnet_id
 
   # Key vault must be created before database
   # TODO: Key vault is within the private link so we cannot access key vault from terraform
