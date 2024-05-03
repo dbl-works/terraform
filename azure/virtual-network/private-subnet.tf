@@ -6,22 +6,6 @@ resource "azurerm_subnet" "private" {
   # i.e. 10.0.100.0/23
   # NOTE: Setting this to /23 because this is the minimum requirement of having a container app environment within
   address_prefixes = [cidrsubnet(var.address_space, 7, 100)]
-
-  # For Setting Up Database
-  # TODO: Write the docs here
-  # service_endpoints = ["Microsoft.Storage"]
-
-  # delegation {
-  #   name = "DBflexibleServers"
-
-  #   service_delegation {
-  #     name = "Microsoft.DBforPostgreSQL/flexibleServers"
-
-  #     actions = [
-  #       "Microsoft.Network/virtualNetworks/subnets/join/action",
-  #     ]
-  #   }
-  # }
 }
 
 resource "azurerm_network_interface" "private" {

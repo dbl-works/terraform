@@ -20,8 +20,14 @@ variable "delegated_subnet_id" {
   type = string
 }
 
-variable "private_dns_zone_id" {
-  type = string
+variable "enable_privatelink" {
+  type    = bool
+  default = true
+}
+
+variable "virtual_network_id" {
+  type    = string
+  default = null
 }
 
 variable "user_assigned_identity_ids" {

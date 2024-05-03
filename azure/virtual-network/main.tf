@@ -11,8 +11,8 @@ output "name" {
   value = azurerm_virtual_network.main.name
 }
 
-output "db_private_dns_zone_id" {
-  value = "" # azurerm_private_dns_zone.db.id
+output "id" {
+  value = azurerm_virtual_network.main.id
 }
 
 output "private_subnet_id" {
@@ -23,10 +23,9 @@ output "public_subnet_id" {
   value = azurerm_subnet.public.id
 }
 
-# TO BE REMOVED
-# output "db_subnet_id" {
-#   value = azurerm_subnet.db.id
-# }
+output "db_subnet_id" {
+  value = azurerm_subnet.db.id
+}
 
 output "redis_subnet_id" {
   # value = azurerm_subnet.redis.id

@@ -1,13 +1,3 @@
-data "azurerm_key_vault_secret" "database_user" {
-  name         = "database-user"
-  key_vault_id = var.key_vault_id
-}
-
-data "azurerm_key_vault_secret" "database_password" {
-  name         = "database-password"
-  key_vault_id = var.key_vault_id
-}
-
 module "database" {
   source = "../../database/postgres"
 
@@ -16,13 +6,13 @@ module "database" {
   region              = var.region
   project             = var.project
   environment         = var.environment
-  private_dns_zone_id = module.virtual-network.db_private_dns_zone_id
-  delegated_subnet_id = module.virtual-network.private_subnet_id
+  delegated_subnet_id = module.virtual-network.db_subnet_id
+  virtual_network_id  = module.virtual-network.id
 
   # Key vault must be created before database
   # TODO: Key vault is within the private link so we cannot access key vault from terraform
-  administrator_login    = data.azurerm_key_vault_secret.database_user.value
-  administrator_password = data.azurerm_key_vault_secret.database_password.value
+  administrator_login    = var.database_config.administrator_login
+  administrator_password = var.database_config.administrator_password
 
   # Optional
   user_assigned_identity_ids = [data.azurerm_user_assigned_identity.main.id]

@@ -5,7 +5,7 @@ resource "azurerm_postgresql_flexible_server" "main" {
   location               = var.region
   version                = var.postgres_version
   delegated_subnet_id    = var.delegated_subnet_id
-  private_dns_zone_id    = var.private_dns_zone_id
+  private_dns_zone_id    = var.enable_privatelink ? azurerm_private_dns_zone.main[0].id : null
   administrator_login    = var.administrator_login
   administrator_password = var.administrator_password
   create_mode            = var.create_mode
