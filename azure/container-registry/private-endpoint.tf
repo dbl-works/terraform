@@ -20,7 +20,7 @@ resource "azurerm_private_endpoint" "main" {
     subresource_names    = ["Registry"]
   }
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_private_dns_zone" "main" {
@@ -29,7 +29,7 @@ resource "azurerm_private_dns_zone" "main" {
   name                = "privatelink.azurecr.io"
   resource_group_name = var.resource_group_name
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 # The azurerm_private_dns_zone_virtual_network_link resource allows you to link a virtual network to this DNS zone
@@ -42,5 +42,5 @@ resource "azurerm_private_dns_zone_virtual_network_link" "main" {
   private_dns_zone_name = azurerm_private_dns_zone.main[0].name
   virtual_network_id    = var.private_endpoint_config.virtual_network_id
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 }
