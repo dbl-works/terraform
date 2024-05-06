@@ -41,11 +41,12 @@ data "azurerm_user_assigned_identity" "main" {
   resource_group_name = var.resource_group_name
 }
 
-resource "azurerm_role_assignment" "main" {
-  scope                = azurerm_container_registry.main.id
-  role_definition_name = "acrpull"
-  principal_id         = data.azurerm_user_assigned_identity.main.principal_id
-}
+# TODO: Remove this
+# resource "azurerm_role_assignment" "main" {
+#   scope                = azurerm_container_registry.main.id
+#   role_definition_name = "acrpull"
+#   principal_id         = data.azurerm_user_assigned_identity.main.principal_id
+# }
 
 # TODO: Research on the lifecycle policy
 

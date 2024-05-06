@@ -1,3 +1,4 @@
+# NOTE: This subnet is delegated for user only with PostgreSQL Flexible Server
 resource "azurerm_subnet" "db" {
   name                 = coalesce(var.db_subnet_name, "${local.default_name}-db-subnet")
   virtual_network_name = azurerm_virtual_network.main.name
