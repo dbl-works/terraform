@@ -145,3 +145,11 @@ variable "data_persistence_storage_account_replication" {
   default     = "GZRS"
 }
 
+
+variable "private_endpoint_config" {
+  type = object({
+    virtual_network_id = optional(string, null)
+    subnet_id          = optional(string, null)
+  })
+  default = null
+}
