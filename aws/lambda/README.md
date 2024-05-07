@@ -2,7 +2,6 @@
 
 Used for managing lambda functions.
 
-
 ## Usage
 
 ```terraform
@@ -18,7 +17,7 @@ module "lambda" {
   handler     = "index.handler"
   timeout     = 10
   memory_size = 1024
-  runtime     = "nodejs16.x"
+  runtime     = "nodejs20.x" # https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime
 
   # Subnets the lambdas are allowed to use to access resources in the VPC.
   subnet_ids = [
