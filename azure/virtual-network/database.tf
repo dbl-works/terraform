@@ -41,6 +41,7 @@ resource "azurerm_network_security_group" "db" {
   #   destination_address_prefix = "*"
   # }
 
+  tags = coalesce(var.tags, local.default_tags)
   # tags = merge(local.default_tags, {
   #   # TODO: We are forced to add this to pass the validation
   #   databricks-environment = false

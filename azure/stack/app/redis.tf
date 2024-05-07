@@ -9,7 +9,8 @@ module "redis" {
 
   # network
   public_network_access_enabled = var.redis_config.public_network_access_enabled
-  subnet_id                     = module.virtual-network.private_subnet_id
+  # NOTE: Private endpoint is not supported when cache is inside Virtual Network.
+  # subnet_id                     = module.virtual-network.private_subnet_id
 
   user_assigned_identity_ids = [
     data.azurerm_user_assigned_identity.main.id
@@ -33,6 +34,8 @@ module "redis" {
   storage_name                                 = var.redis_config.storage_name
   data_persistence_storage_account_tier        = var.redis_config.data_persistence_storage_account_tier
   data_persistence_storage_account_replication = var.redis_config.data_persistence_storage_account_replication
+
+  tags = var.tags
 }
 
 output "redis" {

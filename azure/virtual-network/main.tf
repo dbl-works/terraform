@@ -26,8 +26,3 @@ output "public_subnet_id" {
 output "db_subnet_id" {
   value = azurerm_subnet.db.id
 }
-
-output "redis_subnet_id" {
-  # value = azurerm_subnet.redis.id
-  value = ""
-}

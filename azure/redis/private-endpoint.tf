@@ -17,7 +17,7 @@ resource "azurerm_private_endpoint" "main" {
     # If you are trying to connect the Private Endpoint to a remote resource without having the correct RBAC permissions on the remote resource set this value to true.
     # NOTE/@TODO: RBAC permissions is not encouraged by some policy, you might need to set it to true if there is no relevant RBAC permissions on Key vault
     is_manual_connection = false
-    subresource_names    = ["Registry"]
+    subresource_names    = ["redisCache"]
   }
 
   tags = coalesce(var.tags, local.default_tags)
@@ -44,3 +44,4 @@ resource "azurerm_private_dns_zone_virtual_network_link" "main" {
 
   tags = coalesce(var.tags, local.default_tags)
 }
+
