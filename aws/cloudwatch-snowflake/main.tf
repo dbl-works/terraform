@@ -13,9 +13,8 @@ resource "aws_lambda_function" "cloudwatch_metrics_tracker" {
   # Used to trigger updates
   source_code_hash = data.archive_file.zip.output_base64sha256
   handler          = "index.handler"
-  # List of available runtimes: https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-Runtime
-  runtime = "nodejs16.x"
-  timeout = 300
+  runtime          = "nodejs20.x"
+  timeout          = 300
 
   environment {
     variables = {
