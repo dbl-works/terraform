@@ -2,7 +2,7 @@
 resource "azurerm_subnet" "public" {
   name                 = coalesce(var.public_subnet_name, "${local.default_name}-public")
   resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.main.name
+  virtual_network_name = local.vnet.name
   # (Assuming address space is 10.0.0.0/16)
   # i.e. 10.0.1.0/23: range 10.0.1.0 - 10.0.2.255
   address_prefixes = [cidrsubnet(var.address_space, 7, 1)]

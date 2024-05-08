@@ -2,7 +2,7 @@
 resource "azurerm_subnet" "private" {
   name                 = coalesce(var.private_subnet_name, "${local.default_name}-private")
   resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.main.name
+  virtual_network_name = local.vnet.name
   # i.e. 10.0.100.0/23
   # 10.0.100.0 - 10.0.101.255
   # NOTE: Setting this to /23 because this is the minimum requirement of having a container app environment within

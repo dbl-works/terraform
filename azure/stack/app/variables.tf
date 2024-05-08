@@ -133,6 +133,7 @@ variable "key_vault_key_id" {
 variable "virtual_network_config" {
   type = object({
     vnet_name                          = optional(string, null)
+    create_vnet                        = optional(bool, false)
     address_spaces                     = optional(list(string), null)
     public_subnet_name                 = optional(string, null)
     private_subnet_name                = optional(string, null)

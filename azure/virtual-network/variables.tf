@@ -59,6 +59,11 @@ variable "vnet_name" {
   description = "Defaults to 'project-environment'."
 }
 
+variable "create_vnet" {
+  type    = bool
+  default = false
+}
+
 # =================== Subnet name ===================== #
 variable "public_subnet_name" {
   type        = string
