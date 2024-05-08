@@ -15,7 +15,7 @@ module "database" {
   administrator_password = var.database_config.administrator_password
 
   # Optional
-  user_assigned_identity_ids = [data.azurerm_user_assigned_identity.main.id]
+  user_assigned_identity_ids = [azurerm_user_assigned_identity.main.id]
   postgres_version           = var.database_config.version
   storage_mb                 = var.database_config.storage_mb
   storage_tier               = var.database_config.storage_tier

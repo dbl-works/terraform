@@ -69,6 +69,7 @@ resource "azurerm_storage_account" "main" {
   tags = var.tags
 }
 
+# TODO: This request is not authorized to perform this operation.
 resource "azurerm_storage_container" "main" {
   name                  = coalesce(var.container_name, var.name)
   storage_account_name  = azurerm_storage_account.main.name

@@ -1,3 +1,5 @@
+# TODO: Enable the Cloudflare IP access for
+# https://learn.microsoft.com/en-us/azure/container-registry/container-registry-access-selected-networks
 resource "azurerm_private_endpoint" "main" {
   count = var.private_endpoint_config == null ? 0 : 1
 

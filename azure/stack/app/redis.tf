@@ -13,7 +13,7 @@ module "redis" {
   # subnet_id                     = module.virtual-network.private_subnet_id
 
   user_assigned_identity_ids = [
-    data.azurerm_user_assigned_identity.main.id
+    azurerm_user_assigned_identity.main.id
   ]
 
   family                                = var.redis_config.family

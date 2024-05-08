@@ -71,8 +71,10 @@ variable "database_config" {
 
 variable "observability_config" {
   type = object({
+    log_analytics_workspace_name  = optional(string, null)
     blob_storage_name             = optional(string, null)
     public_network_access_enabled = optional(bool, null)
+    logs_retention_in_days        = optional(number, null)
   })
   default = {}
 }
@@ -194,9 +196,4 @@ variable "default_suffix" {
 
 locals {
   default_name = "${var.project}-${var.environment}"
-}
-
-data "azurerm_user_assigned_identity" "main" {
-  name                = var.user_assigned_identity_name
-  resource_group_name = var.resource_group_name
 }
