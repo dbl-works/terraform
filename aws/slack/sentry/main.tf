@@ -24,7 +24,7 @@ resource "sentry_issue_alert" "main" {
   [
     {
       "id": "sentry.rules.conditions.first_seen_event.FirstSeenEventCondition"
-    },
+    }
   ]
   EOT
 
