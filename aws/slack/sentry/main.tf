@@ -37,8 +37,8 @@ resource "sentry_issue_alert" "main" {
     {
       "id": "sentry.integrations.slack.notify_action.SlackNotifyServiceAction",
       "channel": "#ops-${var.project}",
-      "workspace": ${data.sentry_organization_integration.slack.provider_key},
-      "tags": ${var.tags}
+      "workspace": "${data.sentry_organization_integration.slack.provider_key}",
+      "tags": "${var.tags}"
     }
   ]
   EOT
