@@ -28,7 +28,7 @@ resource "sentry_issue_alert" "main" {
   ]
   EOT
 
-  filters = "[]"
+  # filters = "[]"
 
   # From: https://sentry.io/settings/[org-slug]/integrations/slack/[slack-integration-id]/
   # Or use the sentry_organization_integration data source to retrieve the integration ID:
