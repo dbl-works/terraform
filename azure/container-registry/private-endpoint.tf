@@ -46,3 +46,21 @@ resource "azurerm_private_dns_zone_virtual_network_link" "main" {
 
   tags = coalesce(var.tags, local.default_tags)
 }
+
+# resource "azurerm_private_link_service" "main" {
+#   name                = "privatelink-${azurerm_container_registry.main.name}-containerRegistry"
+#   resource_group_name = var.resource_group_name
+#   location            = var.region
+#
+#   auto_approval_subscription_ids              = ["00000000-0000-0000-0000-000000000000"]
+#   visibility_subscription_ids                 = ["00000000-0000-0000-0000-000000000000"]
+#   load_balancer_frontend_ip_configuration_ids = [azurerm_lb.main.frontend_ip_configuration[0].id]
+#
+#   nat_ip_configuration {
+#     name                       = "primary"
+#     private_ip_address         = "10.5.1.17"
+#     private_ip_address_version = "IPv4"
+#     subnet_id                  = azurerm_subnet.main.id
+#     primary                    = true
+#   }
+# }
