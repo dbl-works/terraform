@@ -1,3 +1,8 @@
+data "azurerm_user_assigned_identity" "main" {
+  name                = var.user_assigned_identity_name
+  resource_group_name = var.resource_group_name
+}
+
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "main" {
@@ -15,8 +20,8 @@ resource "azurerm_key_vault" "main" {
 
 resource "azurerm_key_vault_access_policy" "main" {
   key_vault_id = azurerm_key_vault.main.id
-  tenant_id    = azurerm_user_assigned_identity.main.tenant_id
-  object_id    = azurerm_user_assigned_identity.main.principal_id
+  tenant_id    = data.azurerm_user_assigned_identity.main.tenant_id
+  object_id    = data.azurerm_user_assigned_identity.main.principal_id
 
   key_permissions = [
     "Get",
@@ -39,7 +44,7 @@ resource "azurerm_key_vault_access_policy" "users" {
   for_each = toset(var.user_ids)
 
   key_vault_id = azurerm_key_vault.main.id
-  tenant_id    = azurerm_user_assigned_identity.main.tenant_id
+  tenant_id    = data.azurerm_user_assigned_identity.main.tenant_id
   object_id    = each.key
 
   key_permissions = [
@@ -92,10 +97,10 @@ resource "azurerm_key_vault_key" "main" {
   ]
 }
 
-output "key_vault_id" {
+output "id" {
   value = azurerm_key_vault.main.id
 }
 
-output "key_vault_key_id" {
+output "key_id" {
   value = azurerm_key_vault_key.main.id
 }

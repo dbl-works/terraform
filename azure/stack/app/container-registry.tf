@@ -11,7 +11,7 @@ module "container-registry" {
   admin_enabled                 = var.container_registry_config.admin_enabled
   sku                           = var.container_registry_config.sku
   retention_in_days             = var.container_registry_config.retention_in_days
-  key_vault_key_id              = var.key_vault_key_id
+  key_vault_key_id              = module.key-vault.key_id
   public_network_access_enabled = var.container_registry_config.public_network_access_enabled
   private_endpoint_config = {
     virtual_network_id = module.virtual-network.id
