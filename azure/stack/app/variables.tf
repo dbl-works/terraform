@@ -66,6 +66,8 @@ variable "database_config" {
     log_min_error_statement = optional(string, null)
     administrator_login     = string
     administrator_password  = string
+    subnet_name             = optional(string, null)
+    private_dns_zone_name   = optional(string, null)
   })
 }
 
@@ -137,12 +139,11 @@ variable "virtual_network_config" {
     address_spaces                     = optional(list(string), null)
     public_subnet_name                 = optional(string, null)
     private_subnet_name                = optional(string, null)
-    db_subnet_name                     = optional(string, null)
     network_security_group_name_prefix = optional(string, null)
     network_security_group_name_suffix = optional(string, null)
     network_interface_name_prefix      = optional(string, null)
-    db_dns_zone_name                   = optional(string, null)
     network_watcher_name               = optional(string, null)
+    storage_account_id                 = optional(string, null)
   })
   default = {}
 }

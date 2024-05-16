@@ -10,9 +10,7 @@ module "virtual-network" {
   vnet_name                     = var.virtual_network_config.vnet_name
   public_subnet_name            = var.virtual_network_config.public_subnet_name
   private_subnet_name           = var.virtual_network_config.private_subnet_name
-  db_subnet_name                = var.virtual_network_config.db_subnet_name
   network_interface_name_prefix = var.virtual_network_config.network_interface_name_prefix
-  db_dns_zone_name              = var.virtual_network_config.db_dns_zone_name
 
   network_watcher_name                = var.virtual_network_config.network_watcher_name
   storage_account_for_network_logging = module.observability.storage_account_id

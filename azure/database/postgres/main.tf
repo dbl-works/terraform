@@ -1,11 +1,15 @@
+locals {
+  db_name = coalesce(var.db_name, local.default_name)
+}
+
 # @TODO(sam, lud, 07.03.2024): consider adding HA support, see https://github.com/dbl-works/terraform/pull/316#discussion_r1515101871
 resource "azurerm_postgresql_flexible_server" "main" {
-  name                   = coalesce(var.db_name, local.default_name)
+  name                   = local.db_name
   resource_group_name    = var.resource_group_name
   location               = var.region
   version                = var.postgres_version
-  delegated_subnet_id    = var.delegated_subnet_id
-  private_dns_zone_id    = var.enable_privatelink ? azurerm_private_dns_zone.main[0].id : null
+  delegated_subnet_id    = azurerm_subnet.db.id
+  private_dns_zone_id    = var.enable_privatelink ? azurerm_private_dns_zone.db.id : null
   administrator_login    = var.administrator_login
   administrator_password = var.administrator_password
   create_mode            = var.create_mode

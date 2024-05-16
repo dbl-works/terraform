@@ -16,16 +16,17 @@ variable "environment" {
   type = string
 }
 
-variable "delegated_subnet_id" {
-  type = string
-}
-
 variable "enable_privatelink" {
   type    = bool
   default = true
 }
 
 variable "virtual_network_id" {
+  type    = string
+  default = null
+}
+
+variable "virtual_network_name" {
   type    = string
   default = null
 }
@@ -135,18 +136,6 @@ variable "network_security_group_name" {
   description = "Defaults to 'project-environment-region-db'."
 }
 
-variable "subnet_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment-region-db-subnet'."
-}
-
-variable "dns_zone_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment-region.postgres.database.azure.com'."
-}
-
 variable "log_retention_period" {
   type        = number
   default     = 1
@@ -171,11 +160,58 @@ variable "log_min_error_statement" {
   }
 }
 
+# =================== Subnet ===================== #
+variable "address_space" {
+  type        = string
+  default  = "10.0.0.0/16"
+  nullable = false
+}
+
+variable "subnet_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-db-subnet'."
+}
+
+variable "private_dns_zone_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'. It can not be server name plus zone suffix."
+}
+
+variable "network_security_group_name_prefix" {
+  type    = string
+  default = null
+}
+
+variable "network_security_group_name_suffix" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment'."
+}
+
+variable "network_watcher_name" {
+  type = string
+}
+
+variable "storage_account_id_for_network_logging" {
+  type = string
+}
+# =================== Subnet ===================== #
+variable "log_analytics_workspace_name" {
+  type = string
+}
+
 locals {
   default_name = "${var.project}-${var.environment}-${lower(replace(var.region, " ", "-"))}"
-
+  network_security_group_name_suffix = coalesce(var.network_security_group_name_suffix, "-${var.project}-${var.environment}")
   default_tags = {
     Project     = var.project
     Environment = var.environment
   }
+}
+
+data "azurerm_log_analytics_workspace" "main" {
+  name                = var.log_analytics_workspace_name
+  resource_group_name = var.resource_group_name
 }
