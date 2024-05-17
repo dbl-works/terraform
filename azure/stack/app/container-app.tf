@@ -30,7 +30,7 @@ module "container-app" {
   environment_variables       = var.container_app_config.environment_variables
   secret_variables            = var.container_app_config.secret_variables
   image_version               = var.container_app_config.image_version
-  tags                        = var.tags
+  tags                        = merge(var.container_app_config.tags, var.tags)
 }
 
 

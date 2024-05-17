@@ -94,7 +94,7 @@ variable "user_assigned_identity_name" {
   type = string
 }
 
-variable "default_tags" {
+variable "tags" {
   type    = map(string)
   default = {}
 }

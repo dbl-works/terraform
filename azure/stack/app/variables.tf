@@ -47,7 +47,7 @@ variable "key_vault_config" {
     expired_in_days              = optional(string, "90")
     notify_before_expiry         = optional(string, "90")
     # User's object_ids who has access to the key vault
-    user_ids                     = optional(list(string), [])
+    user_ids = optional(list(string), [])
   })
   default = {}
 
@@ -151,6 +151,7 @@ variable "container_app_config" {
       path                    = optional(string, null)
       timeout                 = optional(number, null)
     }), {})
+    tags = optional(map(string), {})
   })
 }
 

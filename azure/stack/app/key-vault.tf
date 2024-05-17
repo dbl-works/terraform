@@ -1,11 +1,11 @@
 module "key-vault" {
   source = "../../key-vault"
 
-  project = var.project
-  environment = var.environment
-  region = var.region
+  project                     = var.project
+  environment                 = var.environment
+  region                      = var.region
   user_assigned_identity_name = var.user_assigned_identity_name
-  resource_group_name = var.resource_group_name
+  resource_group_name         = var.resource_group_name
 
   name              = var.key_vault_config.name
   retention_in_days = var.key_vault_config.retention_in_days
@@ -27,5 +27,7 @@ module "key-vault" {
   expired_in_days              = var.key_vault_config.expired_in_days
   notify_before_expiry         = var.key_vault_config.notify_before_expiry
   # User's object_ids who has access to the key vault
-  user_ids                     = var.key_vault_config.user_ids
+  user_ids = var.key_vault_config.user_ids
+
+  tags = var.tags
 }

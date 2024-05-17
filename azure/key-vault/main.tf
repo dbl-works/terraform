@@ -15,7 +15,7 @@ resource "azurerm_key_vault" "main" {
   # Customer managed key require us to enable soft delete and purge protection.
   purge_protection_enabled   = true
   soft_delete_retention_days = var.retention_in_days
-  tags                       = var.default_tags
+  tags                       = var.tags
 }
 
 resource "azurerm_key_vault_access_policy" "main" {
@@ -90,7 +90,7 @@ resource "azurerm_key_vault_key" "main" {
     notify_before_expiry = "P${var.notify_before_expiry}D"
   }
 
-  tags = var.default_tags
+  tags = var.tags
 
   depends_on = [
     azurerm_key_vault_access_policy.users
