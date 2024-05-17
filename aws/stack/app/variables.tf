@@ -416,6 +416,7 @@ variable "alb_listener_rules" {
     type             = string
     target_group_arn = string
     path_pattern     = optional(list(string), [])
+    host_header      = optional(list(string), [])
   }))
   default = []
 }
