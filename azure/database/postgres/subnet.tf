@@ -1,10 +1,9 @@
 # NOTE: This subnet is delegated for user only with PostgreSQL Flexible Server
 resource "azurerm_subnet" "db" {
-  name                 = coalesce(var.subnet_name, "${local.db_name}-db-subnet")
+  name = coalesce(var.subnet_name, "${local.db_name}-db-subnet")
   # TODO: Use data block to retrieve name/id
   virtual_network_name = var.virtual_network_name
-  resource_group_name  = var.resource_group_name
-  # (Assuming address space is 10.0.0.0/16)
+  resource_group_name  = var.resource_group_name # (Assuming address space is 10.0.0.0/16)
   # i.e. 10.0.50.0/24, range 10.0.50.0 - 10.0.50.255
   address_prefixes  = [cidrsubnet(var.address_space, 8, 50)]
   service_endpoints = ["Microsoft.Storage"]
@@ -43,10 +42,6 @@ resource "azurerm_network_security_group" "db" {
   # }
 
   tags = coalesce(var.tags, local.default_tags)
-  # tags = merge(local.default_tags, {
-  #   # TODO: We are forced to add this to pass the validation
-  #   databricks-environment = false
-  # })
 }
 
 # The azurerm_network_watcher_flow_log creates a new storage lifecyle management rule that overwrites existing rules.
@@ -73,7 +68,7 @@ resource "azurerm_network_watcher_flow_log" "db" {
     interval_in_minutes   = 10
   }
 
-  tags = local.default_tags
+  tags = coalesce(var.tags, local.default_tags)
 }
 
 resource "azurerm_subnet_network_security_group_association" "db" {
