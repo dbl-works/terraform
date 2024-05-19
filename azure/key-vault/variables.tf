@@ -94,6 +94,15 @@ variable "user_assigned_identity_name" {
   type = string
 }
 
+# TODO @sam: Reevaluate the name, eg. private endpoint? privatelink?
+variable "privatelink_config" {
+  type = object({
+    subnet_id          = string
+    virtual_network_id = string
+  })
+  default = null
+}
+
 variable "tags" {
   type    = map(string)
   default = {}

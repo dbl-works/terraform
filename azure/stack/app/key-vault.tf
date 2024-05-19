@@ -29,5 +29,10 @@ module "key-vault" {
   # User's object_ids who has access to the key vault
   user_ids = var.key_vault_config.user_ids
 
+  privatelink_config = {
+    subnet_id          = module.virtual-network.private_subnet_id
+    virtual_network_id = module.virtual-network.id
+  }
+
   tags = var.tags
 }
