@@ -27,12 +27,14 @@ module "key-vault" {
   expired_in_days              = var.key_vault_config.expired_in_days
   notify_before_expiry         = var.key_vault_config.notify_before_expiry
   # User's object_ids who has access to the key vault
-  user_ids = var.key_vault_config.user_ids
+  user_ids = concat([azurerm_user_assigned_identity.main.principal_id], var.key_vault_config.user_ids)
 
   privatelink_config = {
     subnet_id          = module.virtual-network.private_subnet_id
     virtual_network_id = module.virtual-network.id
   }
+
+  public_network_access_enabled = var.key_vault_config.public_network_access_enabled
 
   tags = var.tags
 }

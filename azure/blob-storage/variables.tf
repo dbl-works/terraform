@@ -163,6 +163,14 @@ variable "cors_config" {
   default = {}
 }
 
+variable "privatelink_config" {
+  type = object({
+    subnet_id          = string
+    virtual_network_id = string
+  })
+  default = null
+}
+
 variable "tags" {
   type    = map(string)
   default = null

@@ -1,3 +1,9 @@
+# NOTE: https://github.com/microsoft/azure-container-apps/issues/1159
+# Container App cannot be create because it can't access key vault
+
+# NOTE: During the creation of container app environment,
+# The access of key vault key must be enabled
+# If the access is disabled, terraform will throw error.
 module "container-app" {
   source = "../../container-app"
 
@@ -31,9 +37,4 @@ module "container-app" {
   secret_variables            = var.container_app_config.secret_variables
   image_version               = var.container_app_config.image_version
   tags                        = merge(var.container_app_config.tags, var.tags)
-}
-
-
-output "container_app_environment_id" {
-  value = module.container-app.container_app_environment_id
 }

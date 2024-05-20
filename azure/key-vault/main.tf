@@ -11,6 +11,10 @@ resource "azurerm_key_vault" "main" {
   resource_group_name = var.resource_group_name
   sku_name            = var.sku_name
   tenant_id           = data.azurerm_client_config.current.tenant_id
+  # NOTE: Always set the public network access to true so that we can perform the terraform changes
+  # This is a hack to overcome the limitation of terraform
+  # TODO: Find a better and official recommended solution
+  public_network_access_enabled = var.public_network_access_enabled
 
   # Customer managed key require us to enable soft delete and purge protection.
   purge_protection_enabled   = true
@@ -99,6 +103,10 @@ resource "azurerm_key_vault_key" "main" {
 
 output "id" {
   value = azurerm_key_vault.main.id
+}
+
+output "name" {
+  value = azurerm_key_vault_key.main.name
 }
 
 output "key_id" {

@@ -10,7 +10,7 @@ module "observability" {
 
   logs_retention_in_days = var.container_app_config.logs_retention_in_days
   target_resource_ids_for_logging = [
-    var.key_vault_id,
+    module.key-vault.id, # To enable resource logs in key vault
     # module.container-app.container_app_environment_id,
   ]
   user_assigned_identity_ids = [azurerm_user_assigned_identity.main.id]
@@ -21,3 +21,7 @@ module "observability" {
   tags = var.tags
 }
 
+
+output "observability" {
+  value = module.observability
+}

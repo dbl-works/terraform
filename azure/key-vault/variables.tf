@@ -80,6 +80,12 @@ variable "notify_before_expiry" {
   default = "90"
 }
 
+variable "public_network_access_enabled" {
+  type     = bool
+  default  = false
+  nullable = false
+}
+
 variable "user_ids" {
   type    = list(string)
   default = []

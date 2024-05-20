@@ -22,7 +22,7 @@ module "virtual-network" {
 
   # The resource which we would like to enable private link
   privatelink_config = {
-    key_vault_name       = var.key_vault_name
+    key_vault_name       = module.key-vault.name
     storage_account_name = module.observability.storage_account_name
   }
 
