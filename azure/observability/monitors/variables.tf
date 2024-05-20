@@ -75,6 +75,15 @@ variable "blob_storage_name" {
   description = "Defaults to 'project-environment-monitoring'."
 }
 
+# =================== Enable Private Link ===================== #
+variable "privatelink_config" {
+  type = object({
+    subnet_id          = string
+    virtual_network_id = string
+  })
+  default = null
+}
+
 locals {
   default_name = "${var.project}-${var.environment}"
 

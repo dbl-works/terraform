@@ -15,6 +15,11 @@ module "observability" {
   ]
   user_assigned_identity_ids = [azurerm_user_assigned_identity.main.id]
 
+  privatelink_config = {
+    subnet_id          = module.virtual-network.private_subnet_id
+    virtual_network_id = module.virtual-network.id
+  }
+
   public_network_access_enabled = var.observability_config.public_network_access_enabled
   allowed_ips                   = var.allowed_ips
 

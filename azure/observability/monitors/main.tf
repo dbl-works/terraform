@@ -22,6 +22,11 @@ module "blob-storage" {
   #   }
   # }
 
+  privatelink_config = {
+    subnet_id          = var.privatelink_config.subnet_id
+    virtual_network_id = var.privatelink_config.virtual_network_id
+  }
+
   tags = local.default_tags
 }
 
