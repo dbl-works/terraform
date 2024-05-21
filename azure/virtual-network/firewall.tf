@@ -19,6 +19,11 @@ resource "azurerm_public_ip" "firewall" {
   tags = coalesce(var.tags, local.default_tags)
 }
 
+# When you create a route for outbound and inbound connectivity through the firewall,
+# a default route to 0.0.0.0/0 with the virtual appliance private IP as a next hop is sufficient.
+# This directs any outgoing and incoming connections through the firewall.
+# As an example, if the firewall is fulfilling a TCP-handshake and responding to an incoming request,
+# then the response is directed to the IP address who sent the traffic.
 resource "azurerm_firewall" "main" {
   name                = "firewall-${local.default_suffix}"
   location            = var.region
@@ -38,23 +43,23 @@ resource "azurerm_firewall" "main" {
   tags = coalesce(var.tags, local.default_tags)
 }
 
-resource "azurerm_route_table" "main" {
-  name                = "default"
-  location            = var.region
-  resource_group_name = var.resource_group_name
-
-  route {
-    name                   = "default-route"
-    address_prefix         = "0.0.0.0/0"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = azurerm_firewall.main.ip_configuration[0].private_ip_address
-  }
-
-  tags = var.tags
-}
-
-resource "azurerm_subnet_route_table_association" "private" {
-  subnet_id      = azurerm_subnet.private.id
-  route_table_id = azurerm_route_table.main.id
-}
-
+# TODO: Firewall cannot be deployed with Container App: https://github.com/microsoft/azure-container-apps/issues/227
+# resource "azurerm_route_table" "main" {
+#   name                = "default"
+#   location            = var.region
+#   resource_group_name = var.resource_group_name
+#
+#   route {
+#     name                   = "firewall-dg"
+#     address_prefix         = "0.0.0.0/0"
+#     next_hop_type          = "VirtualAppliance"
+#     next_hop_in_ip_address = azurerm_firewall.main.ip_configuration[0].private_ip_address
+#   }
+#
+#   tags = var.tags
+# }
+#
+# resource "azurerm_subnet_route_table_association" "private" {
+#   subnet_id      = azurerm_subnet.private.id
+#   route_table_id = azurerm_route_table.main.id
+# }

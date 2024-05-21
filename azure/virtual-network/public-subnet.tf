@@ -1,3 +1,4 @@
+# TODO: Remove public subnet since wwe are not supposed to allow internet access
 # This is the existing public network that allows internet access
 resource "azurerm_subnet" "public" {
   name                 = coalesce(var.public_subnet_name, "${local.default_name}-public")
