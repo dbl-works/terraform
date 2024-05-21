@@ -129,6 +129,8 @@ variable "container_app_config" {
     target_port             = optional(number, null)
     exposed_port            = optional(number, null)
     image_version           = optional(string, "latest")
+    username                = optional(string, null)
+    password_secret_name    = optional(string, null)
     logs_retention_in_days  = optional(number, null)
     zone_redundancy_enabled = optional(bool, null)
     container_apps = map(object({

@@ -24,7 +24,9 @@ resource "azurerm_container_app" "main" {
 
   registry {
     server   = var.container_registry_login_server
-    identity = data.azurerm_user_assigned_identity.main.id
+    identity = var.username == null && var.password_secret_name == null ? data.azurerm_user_assigned_identity.main.id : null
+    username = var.username
+    password_secret_name = var.password_secret_name
   }
 
   ingress {

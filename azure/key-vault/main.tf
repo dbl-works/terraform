@@ -30,7 +30,9 @@ resource "azurerm_key_vault_access_policy" "main" {
   key_permissions = [
     "Get",
     "UnwrapKey",
-    "WrapKey"
+    "WrapKey",
+    "Encrypt", # For secret management in container app
+    "Decrypt", # For secret management in container app
   ]
 
   secret_permissions = [

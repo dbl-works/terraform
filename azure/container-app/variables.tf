@@ -140,6 +140,18 @@ variable "key_vault_name" {
   # TODO: Required if secret variables present
 }
 
+variable "username" {
+  type    = string
+  default = null
+  description = "Required if identity is not present. The username to use for this Container Registry."
+}
+
+variable "password_secret_name" {
+  type    = string
+  default = null
+  description = "Required if identity is not present. The name of the Secret Reference containing the password value for this user on the Container Registry."
+}
+
 variable "user_assigned_identity_name" {
   type = string
 }

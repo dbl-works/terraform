@@ -21,6 +21,9 @@ module "container-app" {
   health_check_options            = var.container_app_config.health_check_options
   zone_redundancy_enabled         = var.container_app_config.zone_redundancy_enabled
 
+  username = var.container_app_config.username
+  password_secret_name  = var.container_app_config.password_secret_name
+
   custom_domain = var.container_app_config.custom_domain
   target_port   = var.container_app_config.target_port
   exposed_port  = 0
