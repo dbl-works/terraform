@@ -112,9 +112,13 @@ output "id" {
 }
 
 output "name" {
-  value = azurerm_key_vault_key.main.name
+  value = azurerm_key_vault.main.name
 }
 
 output "key_id" {
   value = azurerm_key_vault_key.main.id
+}
+
+output "key_name" {
+  value = azurerm_key_vault_key.main.name
 }

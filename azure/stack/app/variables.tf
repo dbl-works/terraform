@@ -158,22 +158,6 @@ variable "container_app_config" {
   })
 }
 
-variable "key_vault_id" {
-  type    = string
-  default = null
-}
-
-variable "key_vault_name" {
-  type    = string
-  default = null
-}
-
-variable "key_vault_key_id" {
-  type        = string
-  default     = null
-  description = "Used for container registry encryption"
-}
-
 variable "virtual_network_config" {
   type = object({
     vnet_name                          = optional(string, null)
