@@ -62,7 +62,11 @@ resource "azurerm_key_vault_access_policy" "users" {
     "Recover",
     "Update",
     "GetRotationPolicy",
-    "SetRotationPolicy"
+    "SetRotationPolicy",
+    "UnwrapKey",
+    "WrapKey",
+    "Encrypt", # Used for decrypt the container registry
+    "Decrypt"
   ]
 
   secret_permissions = [
