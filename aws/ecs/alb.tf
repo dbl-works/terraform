@@ -3,7 +3,7 @@ resource "aws_alb" "alb" {
   name = local.name
 
   # At least two subnets in two different Availability Zones must be specified
-  subnets = slice(var.subnet_public_ids, 0, 2)
+  subnets = slice(var.subnet_public_ids, 0, var.no_of_subnets_in_alb)
 
   security_groups = [
     aws_security_group.alb.id,
