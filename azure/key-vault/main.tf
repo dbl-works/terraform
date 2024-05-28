@@ -66,7 +66,7 @@ resource "azurerm_key_vault_access_policy" "users" {
     "UnwrapKey",
     "WrapKey",
     "Encrypt", # Used for decrypt the container registry
-    "Decrypt"
+    "Decrypt",
   ]
 
   secret_permissions = [
