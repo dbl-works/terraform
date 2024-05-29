@@ -1,5 +1,6 @@
 resource "aws_iam_role" "replication" {
   count = length(var.s3_replicas) > 0 ? 1 : 0
+  # NOTE: There is a limitation of 64 characters
   name  = "s3CRRFor-${trim(var.bucket_name, 55)}"
 
   assume_role_policy = <<POLICY
