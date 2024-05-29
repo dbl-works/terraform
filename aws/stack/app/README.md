@@ -84,7 +84,6 @@ module "stack" {
       primary_storage_class_retention = 0,
       replicas                        = [
         {
-          id         = "${project}-${environment}-storage-us-east-1"
           bucket_arn = "arn:aws:s3:::${project}-${environment}-storage-us-east-1"
           kms_arn    = "arn:aws:kms:us-east-1:${account_id}:key/${key_id}"
           region     = "us-east-1"
