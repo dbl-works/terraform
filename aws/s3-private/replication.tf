@@ -141,8 +141,12 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
         # with customer managed keys stored in AWS KMS.
         # This setup will required a source kms key for the replication source bucket.
 
-        sse_kms_encrypted_objects {
-          status = rule.value.kms_arn == null ? "Disabled" : "Enabled"
+        dynamic "sse_kms_encrypted_objects" {
+          for_each = rule.value.kms_arn == null ? [] : [1]
+
+          content {
+            status = "Enabled"
+          }
         }
       }
 
