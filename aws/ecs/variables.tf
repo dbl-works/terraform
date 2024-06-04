@@ -219,3 +219,9 @@ variable "multi_az" {
   type    = bool
   default = false
 }
+
+variable "no_of_subnets_in_alb" {
+  type     = number
+  nullable = false
+  default  = 2
+}

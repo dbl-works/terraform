@@ -455,6 +455,11 @@ variable "ecs_custom_policies" {
   default = []
 }
 
+variable "no_of_subnets_in_alb" {
+  type    = number
+  default = null
+}
+
 variable "ecs_multi_az" {
   type        = bool
   default     = false
