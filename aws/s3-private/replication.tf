@@ -56,7 +56,7 @@ locals {
       ]))
     }
   ]
-  decrypt-policy = [
+  decrypt-policy = module.s3.kms_arn == null ? [] : [
     {
       "Effect" : "Allow",
       "Action" : [
@@ -74,7 +74,7 @@ locals {
     },
   ]
   encrypt-policy = compact([
-    for replica in var.s3_replicas : replica.kms_arn == null ? {} : {
+    for replica in var.s3_replicas : {
       "Effect" : "Allow",
       "Action" : [
         "kms:Encrypt"
@@ -86,7 +86,7 @@ locals {
         }
       },
       "Resource" : [replica.kms_arn]
-    }
+    } if replica.kms_arn != null
   ])
 }
 
@@ -142,7 +142,7 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
         # This setup will required a source kms key for the replication source bucket.
 
         sse_kms_encrypted_objects {
-          status = "Enabled"
+          status = rule.value.kms_arn == null ? "Disabled" : "Enabled"
         }
       }
 
