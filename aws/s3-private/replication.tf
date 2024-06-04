@@ -74,7 +74,7 @@ locals {
     },
   ]
   encrypt-policy = compact([
-    for replica in var.s3_replicas : replica.kms_arn == null ? null : {
+    for replica in var.s3_replicas : replica.kms_arn == null ? {} : {
       "Effect" : "Allow",
       "Action" : [
         "kms:Encrypt"
