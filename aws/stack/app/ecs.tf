@@ -36,7 +36,8 @@ module "ecs" {
   allow_alb_traffic_to_ports      = var.allow_alb_traffic_to_ports
   alb_listener_rules              = var.alb_listener_rules
 
-  multi_az = var.ecs_multi_az
+  multi_az             = var.ecs_multi_az
+  no_of_subnets_in_alb = var.no_of_subnets_in_alb
 
   allowlisted_ssh_ips = distinct(flatten(concat([
     var.allowlisted_ssh_ips,

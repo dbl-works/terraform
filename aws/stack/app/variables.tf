@@ -416,6 +416,7 @@ variable "alb_listener_rules" {
     type             = string
     target_group_arn = string
     path_pattern     = optional(list(string), [])
+    host_header      = optional(list(string), [])
   }))
   default = []
 }
@@ -452,6 +453,11 @@ variable "grant_read_access_to_sqs_arns" {
 
 variable "ecs_custom_policies" {
   default = []
+}
+
+variable "no_of_subnets_in_alb" {
+  type    = number
+  default = null
 }
 
 variable "ecs_multi_az" {
