@@ -68,13 +68,13 @@ locals {
           "kms:EncryptionContext:aws:s3:arn" : ["${module.s3.arn}/*"]
         }
       },
-      "Resource" : compact([
+      "Resource" : [
         module.s3.kms_arn
-      ])
+      ]
     },
   ]
-  encrypt-policy = [
-    for replica in var.s3_replicas : {
+  encrypt-policy = compact([
+    for replica in var.s3_replicas : replica.kms_arn == null ? null : {
       "Effect" : "Allow",
       "Action" : [
         "kms:Encrypt"
@@ -85,9 +85,9 @@ locals {
           "kms:EncryptionContext:aws:s3:arn" : ["${replica.bucket_arn}/*"]
         }
       },
-      "Resource" : compact([replica.kms_arn])
+      "Resource" : [replica.kms_arn]
     }
-  ]
+  ])
 }
 
 resource "aws_iam_policy" "replication" {
@@ -146,18 +146,18 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
         }
       }
 
-      dynamic "destination" {
-        for_each = rule.value.kms_arn == null ? {} : { rule.value.bucket_arn = rule.value.kms_arn }
+      destination {
+        bucket = rule.value.bucket_arn
+        # You can use multi-Region AWS KMS keys in Amazon S3.
+        # However, Amazon S3 currently treats multi-Region keys as though
+        # they were single-Region keys, and does not use the multi-Region features
+        # of the key.
+        dynamic "encryption_configuration" {
+          for_each = rule.value.kms_arn == null ? [] : [1]
 
-        content {
-          bucket = destination.key
-          # You can use multi-Region AWS KMS keys in Amazon S3.
-          # However, Amazon S3 currently treats multi-Region keys as though
-          # they were single-Region keys, and does not use the multi-Region features
-          # of the key.
-          encryption_configuration {
+          content {
             # The KMS key must have been created in the same AWS Region as the destination buckets.
-            replica_kms_key_id = destination.value
+            replica_kms_key_id = rule.value.kms_arn
           }
         }
       }
