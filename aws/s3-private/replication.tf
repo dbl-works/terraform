@@ -136,15 +136,14 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
         status = "Enabled"
       }
 
-      source_selection_criteria {
+      dynamic "source_selection_criteria" {
+        for_each = rule.value.kms_arn == null ? [] : [1]
         # By default, Amazon S3 doesn't replicate objects that are stored at rest using server-side encryption
         # with customer managed keys stored in AWS KMS.
         # This setup will required a source kms key for the replication source bucket.
 
-        dynamic "sse_kms_encrypted_objects" {
-          for_each = rule.value.kms_arn == null ? [] : [1]
-
-          content {
+        content {
+          sse_kms_encrypted_objects {
             status = "Enabled"
           }
         }
