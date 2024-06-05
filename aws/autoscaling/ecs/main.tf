@@ -31,6 +31,13 @@ resource "aws_appautoscaling_policy" "scale_up_ecs" {
   depends_on = [
     aws_appautoscaling_target.ecs_target
   ]
+
+  # https://stackoverflow.com/questions/74424769/how-to-avoid-terraforms-repeated-in-place-updates-of-aws-autoscaling-policy
+  lifecycle {
+    ignore_changes = [
+      adjustment_type
+    ]
+  }
 }
 
 resource "aws_appautoscaling_policy" "scale_down_ecs" {
