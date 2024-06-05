@@ -16,7 +16,7 @@ module "kms-key" {
 }
 
 locals {
-  kms_key_id = var.kms_key_id == null ? module.kms-key[0].id : var.kms_key_id
+  kms_key_id = var.create_kms_key ? module.kms-key[0].id : var.kms_key_id
 }
 
 resource "aws_secretsmanager_secret" "main" {

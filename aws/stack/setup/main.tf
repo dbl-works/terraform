@@ -22,8 +22,9 @@ module "kms-key-replica-rds" {
 module "secrets" {
   source = "../../secrets"
 
-  for_each   = local.secret_vaults
-  kms_key_id = module.secrets-kms-key[each.key].id
+  for_each       = local.secret_vaults
+  kms_key_id     = module.secrets-kms-key[each.key].id
+  create_kms_key = true
 
   project     = var.project
   environment = var.environment
@@ -41,21 +42,6 @@ resource "aws_secretsmanager_secret_version" "app" {
 resource "aws_secretsmanager_secret_version" "infra" {
   secret_id     = module.secrets["infra"].id
   secret_string = file("${path.cwd}/infra-secrets.json")
-}
-
-module "secrets-kms-key" {
-  source = "../../kms-key"
-
-  for_each = local.secret_vaults
-
-  # Required
-  environment = var.environment
-  project     = var.project
-  alias       = each.key
-  description = "kms key for ${var.project} ${each.key} secrets"
-
-  # Optional
-  deletion_window_in_days = var.kms_deletion_window_in_days
 }
 
 resource "aws_acm_certificate" "main" {
