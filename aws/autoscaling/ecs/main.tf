@@ -6,14 +6,8 @@ resource "aws_appautoscaling_target" "ecs_target" {
   service_namespace  = "ecs" # AWS service namespace of the scalable target
   # The ARN of the IAM role that allows Application AutoScaling to modify your scalable target on your behalf.
   # This defaults to an IAM Service-Linked Role for most services and custom IAM Roles are ignored by the API for those namespaces.
-  role_arn = var.ecs_autoscale_role_arn
-
   # https://stackoverflow.com/questions/74424769/how-to-avoid-terraforms-repeated-in-place-updates-of-aws-autoscaling-policy
-  lifecycle {
-    ignore_changes = [
-      role_arn
-    ]
-  }
+  role_arn = var.ecs_autoscale_role_arn
 }
 
 resource "aws_appautoscaling_policy" "scale_up_ecs" {
