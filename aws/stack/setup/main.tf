@@ -23,7 +23,6 @@ module "secrets" {
   source = "../../secrets"
 
   for_each       = local.secret_vaults
-  kms_key_id     = module.secrets-kms-key[each.key].id
   create_kms_key = true
 
   project     = var.project
