@@ -1,6 +1,7 @@
 resource "aws_iam_role" "replication" {
   count = length(var.s3_replicas) > 0 ? 1 : 0
-  name  = "s3CRRFor-${var.bucket_name}"
+  # NOTE: There is a limitation of 64 characters
+  name = "s3CRRFor-${substr(var.bucket_name, 0, 55)}"
 
   assume_role_policy = <<POLICY
 {
@@ -55,7 +56,7 @@ locals {
       ]))
     }
   ]
-  decrypt-policy = [
+  decrypt-policy = module.s3.kms_arn == null ? [] : [
     {
       "Effect" : "Allow",
       "Action" : [
@@ -72,7 +73,7 @@ locals {
       ]
     },
   ]
-  encrypt-policy = [
+  encrypt-policy = compact([
     for replica in var.s3_replicas : {
       "Effect" : "Allow",
       "Action" : [
@@ -85,8 +86,8 @@ locals {
         }
       },
       "Resource" : [replica.kms_arn]
-    }
-  ]
+    } if replica.kms_arn != null
+  ])
 }
 
 resource "aws_iam_policy" "replication" {
@@ -140,19 +141,28 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
         # with customer managed keys stored in AWS KMS.
         # This setup will required a source kms key for the replication source bucket.
 
-        sse_kms_encrypted_objects {
-          status = "Enabled"
+        dynamic "sse_kms_encrypted_objects" {
+          for_each = rule.value.kms_arn == null ? [] : [1]
+
+          content {
+            status = "Enabled"
+          }
         }
       }
+
       destination {
         bucket = rule.value.bucket_arn
         # You can use multi-Region AWS KMS keys in Amazon S3.
         # However, Amazon S3 currently treats multi-Region keys as though
         # they were single-Region keys, and does not use the multi-Region features
         # of the key.
-        encryption_configuration {
-          # The KMS key must have been created in the same AWS Region as the destination buckets.
-          replica_kms_key_id = rule.value.kms_arn
+        dynamic "encryption_configuration" {
+          for_each = rule.value.kms_arn == null ? [] : [1]
+
+          content {
+            # The KMS key must have been created in the same AWS Region as the destination buckets.
+            replica_kms_key_id = rule.value.kms_arn
+          }
         }
       }
     }

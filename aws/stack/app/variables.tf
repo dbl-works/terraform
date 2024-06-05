@@ -69,7 +69,7 @@ variable "private_buckets_list" {
     sse_algorithm                   = optional(string, "AES256")
     replicas = optional(list(object({
       bucket_arn = string
-      kms_arn    = string
+      kms_arn    = optional(string, null)
       region     = string
     })), [])
   }))

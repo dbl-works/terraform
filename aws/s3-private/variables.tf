@@ -55,7 +55,7 @@ variable "s3_replicas" {
   default = []
   type = list(object({
     bucket_arn = string
-    kms_arn    = string
+    kms_arn    = optional(string, null)
     region     = string
   }))
 }
