@@ -7,11 +7,11 @@ output "terraform_secrets_arn" {
 }
 
 output "app_secrets-kms-key" {
-  value = module.secrets-kms-key["app"].arn
+  value = module.secrets["app"].kms_key_arn
 }
 
 output "terraform_secrets-kms-key" {
-  value = module.secrets-kms-key["infra"].arn
+  value = module.secrets["infra"].kms_key_arn
 }
 
 output "eips-nat" {
