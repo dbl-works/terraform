@@ -1,17 +1,61 @@
-const AWS = require('aws-sdk')
-const constants = require('./../constants');
-const dateUtil = require('./date');
+import { CloudWatchClient, GetMetricDataCommand } from '@aws-sdk/client-cloudwatch'
 
-const cloudwatch = new AWS.CloudWatch()
+const PERIOD = process.env.PERIOD
+const RESOURCES_DATA = process.env.RESOURCES_DATA
+const AWS_REGION = process.env.AWS_REGION
+
+
+const previousHour = () => {
+  const today = new Date()
+  const lastHour = today.getHours() - 1
+  today.setUTCHours(lastHour, 0, 0, 0)
+  return today
+}
+
+const oneHourBefore = (time) => {
+  const currentTime = time.getTime()
+  return new Date(currentTime - 1 * 60 * 60 * 1000)
+}
+
+
+const setupFivetranResponse = ({ state, newRecords = [], deletedRecords = [] }) => {
+  return {
+    state: {
+      ...state,
+      cursor: new Date().toISOString(),
+    },
+    insert: {
+      metric: newRecords,
+    },
+    delete: {
+      metric: deletedRecords,
+    },
+    schema: {
+      metric: {
+        primary_key: [
+          'start_time',
+          'end_time',
+          'metric_name',
+          'project_name',
+          'region',
+          'stat',
+          'environment'
+        ]
+      },
+    },
+    hasMore: false
+  }
+}
+
 
 const ECS_METRICS = [
   'CPUUtilization',
   'MemoryUtilization'
 ]
 const PERCENTILES = [
+  'Maximum',
+  'p99.9',
   'p99',
-  'p90',
-  'p50'
 ]
 
 // expected pattern: ^[a-z][a-zA-Z0-9_]*$
@@ -37,7 +81,7 @@ const ecsMetricQueries = ({ serviceName, clusterName, projectName, environment }
         MetricName: metric, /* required */
         Namespace: 'AWS/ECS', /* required */
       },
-      Period: constants.PERIOD,
+      Period: PERIOD,
       Stat: 'Maximum', /* required */
       Unit: 'Percent'
     },
@@ -59,7 +103,7 @@ const responseTimesQueries = ({ projectName, loadBalancerName, environment }) =>
         MetricName: 'TargetResponseTime', /* required */
         Namespace: 'AWS/ApplicationELB', /* required */
       },
-      Period: constants.PERIOD,
+      Period: PERIOD,
       Stat: percentile, /* required */
       Unit: 'Seconds' // If we set it as Milliseconds, the value returned will be undefined
     },
@@ -81,7 +125,51 @@ const errorCountsQueries = ({ projectName, loadBalancerName, environment }) => {
         MetricName: 'HTTPCode_Target_5XX_Count', /* required */
         Namespace: 'AWS/ApplicationELB', /* required */
       },
-      Period: constants.PERIOD,
+      Period: PERIOD,
+      Stat: 'Sum', /* required */
+      Unit: 'Count'
+    },
+    ReturnData: true
+  }
+}
+
+const clientErrorCountsQueries = ({ projectName, loadBalancerName, environment }) => {
+  return {
+    Id: `clientErrorCount_${formatQueryId(loadBalancerName)}_${projectName}_${environment}`, // /^[a-z][a-zA-Z0-9_]*$./
+    MetricStat: {
+      Metric: {
+        Dimensions: [
+          {
+            Name: 'LoadBalancer',
+            Value: loadBalancerName
+          },
+        ],
+        MetricName: 'HTTPCode_Target_4XX_Count', /* required */
+        Namespace: 'AWS/ApplicationELB', /* required */
+      },
+      Period: PERIOD,
+      Stat: 'Sum', /* required */
+      Unit: 'Count'
+    },
+    ReturnData: true
+  }
+}
+
+const successCountsQueries = ({ projectName, loadBalancerName, environment }) => {
+  return {
+    Id: `successCount_${formatQueryId(loadBalancerName)}_${projectName}_${environment}`, // /^[a-z][a-zA-Z0-9_]*$./
+    MetricStat: {
+      Metric: {
+        Dimensions: [
+          {
+            Name: 'LoadBalancer',
+            Value: loadBalancerName
+          },
+        ],
+        MetricName: 'HTTPCode_Target_2XX_Count', /* required */
+        Namespace: 'AWS/ApplicationELB', /* required */
+      },
+      Period: PERIOD,
       Stat: 'Sum', /* required */
       Unit: 'Count'
     },
@@ -93,7 +181,9 @@ const performanceMetricQueries = ({ serviceName, clusterName, projectName, loadB
   return [
     ...ecsMetricQueries({ serviceName, clusterName, projectName, environment }),
     ...responseTimesQueries({ projectName, loadBalancerName, environment }),
-    errorCountsQueries({ projectName, loadBalancerName, environment })
+    errorCountsQueries({ projectName, loadBalancerName, environment }),
+    clientErrorCountsQueries({ projectName, loadBalancerName, environment }),
+    successCountsQueries({ projectName, loadBalancerName, environment }),
   ]
 }
 
@@ -111,7 +201,7 @@ const recordRows = ({ dataPoints, params }) => {
     return {
       project_name: projectName,
       environment: environment,
-      region: constants.AWS_REGION,
+      region: AWS_REGION,
       metric_name: metricStat?.Metric?.MetricName,
       dimensions: metricStat?.Metric?.Dimensions,
       start_time: params.StartTime.toISOString(),
@@ -123,21 +213,24 @@ const recordRows = ({ dataPoints, params }) => {
     }
   })
 }
-
 const getCloudwatchData = async () => {
-  const resourcesData = JSON.parse(constants.RESOURCES_DATA)
+  const resourcesData = JSON.parse(RESOURCES_DATA)
   const metricDataQueries = resourcesData.flatMap((data) => performanceMetricQueries(data))
 
-  const prevHour = dateUtil.previousHour()
+  const prevHour = previousHour()
   const params = {
     MetricDataQueries: metricDataQueries,
-    StartTime: dateUtil.oneHourBefore(prevHour),
+    StartTime: oneHourBefore(prevHour),
     EndTime: prevHour
   }
 
   // NOTE: A single GetMetricData call can include as many as 500 MetricDataQuery structures.
   // NOTE: We can't retrieve data from region different than the lambda region
-  const { MetricDataResults: dataPoints } = await cloudwatch.getMetricData(params).promise()
+
+  const client = new CloudWatchClient()
+  const command = new GetMetricDataCommand(params)
+
+  const { MetricDataResults: dataPoints } = await client.send(command)
   // Sample API Response
   // {
   //   ResponseMetadata: { RequestId: 'fe077633-9093-47e7-8e64-d26c244494bb' },
@@ -156,6 +249,16 @@ const getCloudwatchData = async () => {
   return recordRows({ dataPoints, params })
 }
 
-module.exports = {
-  getCloudwatchData
+
+
+
+
+
+export const handler = async (request, _context, _callback) => {
+  const newRecords = await getCloudwatchData()
+
+  return setupFivetranResponse({
+    state: request.state,
+    newRecords
+  })
 }
