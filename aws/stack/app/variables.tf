@@ -58,6 +58,20 @@ variable "tls_settings" {
   })
   default = null
 }
+
+# HSTS protects HTTPS web servers from downgrade attacks.
+# These attacks redirect web browsers from an HTTPS web server to an attacker-controlled server, allowing bad actors to compromise user data and cookies.
+# https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/
+variable "hsts_settings" {
+  type = object({
+    enabled            = optional(bool, null)
+    preload            = optional(bool, null)
+    max_age            = optional(number, null)
+    include_subdomains = optional(bool, null)
+    nosniff            = optional(bool, null)
+  })
+  default = null
+}
 # =============== Cloudflare ================ #
 
 # =============== S3 private ================ #

@@ -13,5 +13,6 @@ resource "cloudflare_zone_settings_override" "tls" {
     automatic_https_rewrites = var.tls_settings.automatic_https_rewrites
     ssl                      = var.tls_settings.ssl
     always_use_https         = var.tls_settings.always_use_https
+    security_header          = var.hsts_settings
   }
 }
