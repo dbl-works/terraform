@@ -9,6 +9,7 @@ resource "cloudflare_zone_settings_override" "tls" {
 
   settings {
     tls_1_3                  = var.tls_settings.tls_1_3
+    min_tls_version          = var.tls_settings.min_tls_version
     automatic_https_rewrites = var.tls_settings.automatic_https_rewrites
     ssl                      = var.tls_settings.ssl
     always_use_https         = var.tls_settings.always_use_https

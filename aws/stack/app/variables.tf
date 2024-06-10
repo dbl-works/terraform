@@ -50,10 +50,11 @@ variable "s3_cloudflare_records" {
 
 variable "tls_settings" {
   type = object({
-    tls_1_3                  = string # "on/off"
-    automatic_https_rewrites = string # "on/off"
-    ssl                      = string # "strict"
-    always_use_https         = string # "on/off"
+    min_tls_version          = optional(string, null) # 1.0, 1.1, 1.2, 1.3
+    tls_1_3                  = string                 # "on/off"
+    automatic_https_rewrites = string                 # "on/off"
+    ssl                      = string                 # "strict"
+    always_use_https         = string                 # "on/off"
   })
   default = null
 }
