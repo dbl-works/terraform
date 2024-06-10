@@ -29,8 +29,8 @@ variable "tls_settings" {
 variable "hsts_settings" {
   type = object({
     enabled            = optional(bool, true)
-    preload            = optional(bool, false)
-    max_age            = optional(number, 31536000)
+    preload            = optional(bool, true)       # Initially disable until you are sure about your configuration
+    max_age            = optional(number, 31536000) # Set it to least value for validating functionality.
     include_subdomains = optional(bool, true)
     nosniff            = optional(bool, true)
   })
