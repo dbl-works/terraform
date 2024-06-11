@@ -2,29 +2,55 @@
 resource "azurerm_subnet" "private" {
   name                 = coalesce(var.private_subnet_name, "${local.default_name}-private")
   resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.main.name
-  # (Assuming address space is 10.0.0.0) range 10.0.100.0 - 10.0.100.255
-  # i.e. 10.0.100.0/24
-  address_prefixes = [cidrsubnet(var.address_space, 8, 100)]
+  virtual_network_name = local.vnet.name
+  # i.e. 10.0.100.0/23
+  # 10.0.100.0 - 10.0.101.255
+  # NOTE: Setting this to /23 because this is the minimum requirement of having a container app environment within
+  address_prefixes = [cidrsubnet(var.address_space, 7, 100)]
 }
 
 resource "azurerm_network_interface" "private" {
-  name                = coalesce(var.network_interface_name, "${local.default_name}-private")
+  name                = "${var.network_interface_name_prefix}0"
   location            = var.region
   resource_group_name = var.resource_group_name
 
   ip_configuration {
-    name                          = coalesce(var.network_interface_name, "${local.default_name}-ipconfig")
+    name                          = "ipconfig"
     subnet_id                     = azurerm_subnet.private.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = null
   }
 
-  tags = coalesce(var.tags, local.default_tags)
+  tags = local.default_tags
+}
+
+resource "azurerm_network_watcher_flow_log" "private" {
+  name                 = "${azurerm_network_security_group.private.name}-flow-log"
+  network_watcher_name = var.network_watcher_name
+  resource_group_name  = var.resource_group_name
+
+  network_security_group_id = azurerm_network_security_group.private.id
+  storage_account_id        = var.storage_account_for_network_logging
+  enabled                   = true
+
+  retention_policy {
+    enabled = true
+    days    = 90
+  }
+
+  traffic_analytics {
+    enabled               = true
+    workspace_id          = data.azurerm_log_analytics_workspace.main.workspace_id
+    workspace_region      = data.azurerm_log_analytics_workspace.main.location
+    workspace_resource_id = data.azurerm_log_analytics_workspace.main.id
+    interval_in_minutes   = 10
+  }
+
+  tags = local.default_tags
 }
 
 resource "azurerm_network_security_group" "private" {
-  name                = coalesce(var.private_network_security_group_name, "${local.default_name}-private")
+  name                = "${var.network_security_group_name_prefix}private${local.network_security_group_name_suffix}"
   location            = var.region
   resource_group_name = var.resource_group_name
 

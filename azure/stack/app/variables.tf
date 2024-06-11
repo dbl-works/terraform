@@ -18,6 +18,52 @@ variable "environment" {
   type = string
 }
 
+variable "allowed_ips" {
+  type    = list(string)
+  default = []
+
+  description = "IPs which is allowed access the resources. By default, we deny all the access from public network"
+}
+
+variable "key_vault_config" {
+  type = object({
+    name              = optional(string, null)
+    retention_in_days = optional(number, 7)
+    sku_name          = optional(string, "standard")
+    key_type          = optional(string, "RSA")
+    key_size          = optional(number, 2048)
+    # https://learn.microsoft.com/en-us/azure/key-vault/keys/about-keys-details#key-access-control
+    # Permissions for cryptographic operations
+
+    # decrypt: Use the key to unprotect a sequence of bytes
+    # encrypt: Use the key to protect an arbitrary sequence of bytes
+    # unwrapKey: Use the key to unprotect wrapped symmetric keys
+    # wrapKey: Use the key to protect a symmetric key
+    # verify: Use the key to verify digests
+    # sign: Use the key to sign digests
+    key_opts = optional(list(string), [])
+    # https://en.wikipedia.org/wiki/ISO_8601#Durations
+    rotate_before_expiry_in_days = optional(string, "30")
+    expired_in_days              = optional(string, "90")
+    notify_before_expiry         = optional(string, "90")
+    # User's object_ids who has access to the key vault
+    user_ids                      = optional(list(string), [])
+    public_network_access_enabled = optional(bool, null)
+  })
+  default = {}
+
+  # https://learn.microsoft.com/en-us/azure/key-vault/keys/about-keys
+  validation {
+    condition     = contains(["EC", "EC-HSM", "RSA", "RSA-HSM"], var.key_vault_config.key_type)
+    error_message = "Must be either EC (Elliptic Curve), EC-HSM, RSA or RSA-HSM"
+  }
+
+  validation {
+    condition     = contains(["standard", "premium"], var.key_vault_config.sku_name)
+    error_message = "Must be either standard or premium"
+  }
+}
+
 variable "blob_storage_config" {
   type = map(object({
     container_name                  = optional(string, null)
@@ -26,6 +72,7 @@ variable "blob_storage_config" {
     account_tier                    = optional(string, null)
     account_replication_type        = optional(string, null)
     public_network_access_enabled   = optional(bool, null)
+    shared_access_key_enabled       = optional(bool, null)
     allow_nested_items_to_be_public = optional(bool, null)
     versioning_enabled              = optional(bool, null)
     static_website = optional(object({
@@ -56,13 +103,19 @@ variable "database_config" {
     sku_name                = optional(string, null)
     log_retention_period    = optional(number, null)
     log_min_error_statement = optional(string, null)
+    administrator_login     = string
+    administrator_password  = string
+    subnet_name             = optional(string, null)
+    private_dns_zone_name   = optional(string, null)
   })
-  default = {}
 }
 
 variable "observability_config" {
   type = object({
-    blob_storage_name = optional(string, null)
+    log_analytics_workspace_name  = optional(string, null)
+    blob_storage_name             = optional(string, null)
+    public_network_access_enabled = optional(bool, null)
+    logs_retention_in_days        = optional(number, null)
   })
   default = {}
 }
@@ -72,13 +125,14 @@ variable "container_app_config" {
     name                  = optional(string, null)
     environment_variables = optional(map(string), {})
     # secret variables must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character
-    secret_variables             = optional(list(string), [])
-    target_port                  = optional(number, null)
-    exposed_port                 = optional(number, null)
-    image_version                = optional(string, "latest")
-    log_analytics_workspace_name = optional(string, null)
-    logs_retention_in_days       = optional(number, null)
-    zone_redundancy_enabled      = optional(bool, null)
+    secret_variables        = optional(list(string), [])
+    target_port             = optional(number, null)
+    exposed_port            = optional(number, null)
+    image_version           = optional(string, "latest")
+    username                = optional(string, null)
+    password_secret_name    = optional(string, null)
+    logs_retention_in_days  = optional(number, null)
+    zone_redundancy_enabled = optional(bool, null)
     container_apps = map(object({
       command = list(string) # "A command to pass to the container to override the default. This is provided as a list of command line elements without spaces."
       image   = optional(string, null)
@@ -103,32 +157,22 @@ variable "container_app_config" {
       path                    = optional(string, null)
       timeout                 = optional(number, null)
     }), {})
+    tags = optional(map(string), {})
   })
-}
-
-variable "key_vault_id" {
-  type    = string
-  default = null
-}
-
-variable "key_vault_key_id" {
-  type        = string
-  default     = null
-  description = "Used for container registry encryption"
 }
 
 variable "virtual_network_config" {
   type = object({
-    vnet_name                           = optional(string, null)
-    address_spaces                      = optional(list(string), null)
-    public_subnet_name                  = optional(string, null)
-    private_subnet_name                 = optional(string, null)
-    db_subnet_name                      = optional(string, null)
-    db_network_security_group_name      = optional(string, null)
-    public_network_security_group_name  = optional(string, null)
-    private_network_security_group_name = optional(string, null)
-    network_interface_name              = optional(string, null)
-    db_dns_zone_name                    = optional(string, null)
+    vnet_name                          = optional(string, null)
+    create_vnet                        = optional(bool, false)
+    address_spaces                     = optional(list(string), null)
+    public_subnet_name                 = optional(string, null)
+    private_subnet_name                = optional(string, null)
+    network_security_group_name_prefix = optional(string, null)
+    network_security_group_name_suffix = optional(string, null)
+    network_interface_name_prefix      = optional(string, null)
+    network_watcher_name               = optional(string, null)
+    storage_account_id                 = optional(string, null)
   })
   default = {}
 }
@@ -176,11 +220,11 @@ variable "tags" {
   default = null
 }
 
-locals {
-  default_name = "${var.project}-${var.environment}"
+variable "default_suffix" {
+  type    = string
+  default = null
 }
 
-data "azurerm_user_assigned_identity" "main" {
-  name                = var.user_assigned_identity_name
-  resource_group_name = var.resource_group_name
+locals {
+  default_name = "${var.project}-${var.environment}"
 }

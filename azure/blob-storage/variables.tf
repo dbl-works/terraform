@@ -93,6 +93,20 @@ variable "public_network_access_enabled" {
   nullable = false
 }
 
+variable "shared_access_key_enabled" {
+  type    = bool
+  default = false
+
+  nullable = false
+}
+
+variable "allowed_ips" {
+  type    = list(string)
+  default = []
+
+  nullable = false
+}
+
 variable "allow_nested_items_to_be_public" {
   type    = bool
   default = false
@@ -147,6 +161,14 @@ variable "cors_config" {
   })
 
   default = {}
+}
+
+variable "privatelink_config" {
+  type = object({
+    subnet_id          = string
+    virtual_network_id = string
+  })
+  default = null
 }
 
 variable "tags" {

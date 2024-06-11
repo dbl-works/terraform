@@ -10,9 +10,20 @@ resource "azurerm_storage_account" "main" {
   min_tls_version               = "TLS1_2"
   enable_https_traffic_only     = true
   # default_to_oauth_authentication   = true
-  # shared_access_key_enabled         = false
+  shared_access_key_enabled         = var.shared_access_key_enabled
   infrastructure_encryption_enabled = false
   allow_nested_items_to_be_public   = var.allow_nested_items_to_be_public
+
+  dynamic "network_rules" {
+    for_each = length(var.allowed_ips) > 0 ? [1] : [0]
+
+    content {
+      default_action = "Deny" # Deny or allow
+      ip_rules       = var.allowed_ips
+      # virtual_network_subnet_ids = []
+      bypass = ["Metrics", "AzureServices"]
+    }
+  }
 
   dynamic "identity" {
     for_each = length(var.user_assigned_identity_ids) > 1 ? [1] : []
@@ -58,6 +69,7 @@ resource "azurerm_storage_account" "main" {
   tags = var.tags
 }
 
+# TODO: This request is not authorized to perform this operation.
 resource "azurerm_storage_container" "main" {
   name                  = coalesce(var.container_name, var.name)
   storage_account_name  = azurerm_storage_account.main.name

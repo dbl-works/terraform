@@ -29,4 +29,16 @@ resource "azurerm_resource_group" "main" {
 module "stack" {
 
 }
+
+```
+
+If you set the blob storage shared_key_access to false, you must set `storage_use_azuread` to true in the provider block. This ensure terraform to access the bucket using AD, not using a shared key.
+Refer to this [issues]
+(https://github.com/hashicorp/terraform-provider-azurerm/issues/25521) for more information.
+
+```
+provider "azurerm" {
+  storage_use_azuread = true
+  features {}
+}
 ```

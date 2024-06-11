@@ -10,3 +10,8 @@ az ad signed-in-user show --query id --output tsv
 ```
 
 3. Fill in your object ID value in `key_vault_config.user_ids` fields
+
+
+### Issues when trying to access key vault with private endpoint enabled only
+
+- https://github.com/hashicorp/terraform-provider-azurerm/issues/24260

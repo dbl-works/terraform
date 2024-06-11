@@ -9,10 +9,11 @@ module "redis" {
 
   # network
   public_network_access_enabled = var.redis_config.public_network_access_enabled
-  subnet_id                     = module.virtual-network.redis_subnet_id
+  # NOTE: Private endpoint is not supported when cache is inside Virtual Network.
+  # subnet_id                     = module.virtual-network.private_subnet_id
 
   user_assigned_identity_ids = [
-    data.azurerm_user_assigned_identity.main.id
+    azurerm_user_assigned_identity.main.id
   ]
 
   family                                = var.redis_config.family
@@ -25,10 +26,16 @@ module "redis" {
   redis_additional_configuration        = var.redis_config.redis_additional_configuration
   shard_count                           = var.redis_config.shard_count
   zones                                 = var.redis_config.zones
+  private_endpoint_config = {
+    virtual_network_id = module.virtual-network.id
+    subnet_id          = module.virtual-network.private_subnet_id
+  }
 
   storage_name                                 = var.redis_config.storage_name
   data_persistence_storage_account_tier        = var.redis_config.data_persistence_storage_account_tier
   data_persistence_storage_account_replication = var.redis_config.data_persistence_storage_account_replication
+
+  tags = var.tags
 }
 
 output "redis" {

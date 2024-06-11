@@ -30,8 +30,9 @@ resource "azurerm_redis_cache" "main" {
 
   # Network
   public_network_access_enabled = var.public_network_access_enabled
-  subnet_id                     = var.subnet_id
-  zones                         = var.zones
+  # NOTE: Private endpoint is not supported when cache is inside Virtual Network.
+  subnet_id = var.subnet_id
+  zones     = var.zones
   # If you don't specify a static IP address, an IP address is chosen automatically.
   private_static_ip_address = var.private_static_ip_address
 

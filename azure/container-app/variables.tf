@@ -36,8 +36,7 @@ variable "internal_load_balancer_enabled" {
 }
 
 variable "log_analytics_workspace_id" {
-  type    = string
-  default = null
+  type = string
 }
 
 variable "environment_variables" {
@@ -135,9 +134,22 @@ variable "tags" {
   default = null
 }
 
-variable "key_vault_id" {
+variable "key_vault_name" {
   type    = string
   default = null
+  # TODO: Required if secret variables present
+}
+
+variable "username" {
+  type    = string
+  default = null
+  description = "Required if identity is not present. The username to use for this Container Registry."
+}
+
+variable "password_secret_name" {
+  type    = string
+  default = null
+  description = "Required if identity is not present. The name of the Secret Reference containing the password value for this user on the Container Registry."
 }
 
 variable "user_assigned_identity_name" {
@@ -166,18 +178,6 @@ variable "container_app_name" {
   description = "Defaults to 'project-environment'"
 }
 
-# Logging
-# The Free SKU has a default daily_quota_gb value of 0.5 (GB).
-variable "logging_sku" {
-  type = string
-  validation {
-    condition     = contains(["Free", "PerNode", "Premium", "Standard", "Standalone", "Unlimited", "CapacityReservation", "PerGB2018"], var.logging_sku)
-    error_message = "Must be either Free, PerNode, Premium, Standard, Standalone, Unlimited, CapacityReservation, and PerGB2018"
-  }
-  default = "PerGB2018"
-}
-
-
 variable "custom_domain" {
   type = object({
     certificate_binding_type = optional(string, "SniEnabled")
@@ -192,12 +192,6 @@ variable "logs_retention_in_days" {
   type     = number
   nullable = false
   default  = 90
-}
-
-variable "log_analytics_workspace_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment'."
 }
 
 locals {

@@ -28,6 +28,14 @@ variable "user_assigned_identity_name" {
   type = string
 }
 
+variable "private_endpoint_config" {
+  type = object({
+    virtual_network_id = optional(string, null)
+    subnet_id          = optional(string, null)
+  })
+  default = null
+}
+
 # Encryption can only be applied when using the Premium Sku.
 variable "key_vault_key_id" {
   type    = string

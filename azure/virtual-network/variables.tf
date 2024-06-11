@@ -59,6 +59,11 @@ variable "vnet_name" {
   description = "Defaults to 'project-environment'."
 }
 
+variable "create_vnet" {
+  type    = bool
+  default = false
+}
+
 # =================== Subnet name ===================== #
 variable "public_subnet_name" {
   type        = string
@@ -72,62 +77,81 @@ variable "private_subnet_name" {
   description = "Defaults to 'project-environment-private'."
 }
 
-variable "db_subnet_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment-db-subnet'."
-}
-
 variable "redis_subnet_name" {
   type        = string
   default     = null
   description = "Defaults to 'project-environment-redis-subnet'."
 }
 
+variable "bastion_subnet_name" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-bastion-subnet'."
+}
+
+variable "network_watcher_name" {
+  type = string
+}
+
+variable "storage_account_for_network_logging" {
+  type = string
+}
+
+variable "log_analytics_workspace_name" {
+  type = string
+}
+
+# =================== Bastion Host ===================== #
+variable "enable_bastion" {
+  type    = bool
+  default = true
+}
+
 # =================== Network Security Group name ===================== #
-variable "db_network_security_group_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment-db'."
+variable "network_security_group_name_prefix" {
+  type    = string
+  default = null
 }
 
-variable "redis_network_security_group_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment-redis'."
-}
-
-variable "public_network_security_group_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment-public'."
-}
-
-variable "private_network_security_group_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment-private'."
-}
-# =================== Network Security Group name ===================== #
-
-variable "network_interface_name" {
-  type        = string
-  default     = null
-  description = "Defaults to 'project-environment-ipconfig'."
-}
-
-variable "db_dns_zone_name" {
+variable "network_security_group_name_suffix" {
   type        = string
   default     = null
   description = "Defaults to 'project-environment'."
 }
+# =================== Network Security Group name ===================== #
+variable "network_interface_name_prefix" {
+  type        = string
+  default     = null
+  description = "Defaults to 'project-environment-'."
+}
 
+# =================== Enable Private Link ===================== #
+variable "privatelink_config" {
+  type = object({
+    key_vault_name       = optional(string, null)
+    storage_account_name = optional(string, null)
+    database_name        = optional(string, null)
+  })
+  default = {}
+}
+
+variable "default_suffix" {
+  type    = string
+  default = null
+}
 
 locals {
-  default_name = "${var.project}-${var.environment}"
+  default_name                       = "${var.project}-${var.environment}"
+  default_suffix                     = coalesce(var.default_suffix, "${var.project}-${var.environment}")
+  network_security_group_name_suffix = coalesce(var.network_security_group_name_suffix, "-${var.project}-${var.environment}")
 
-  default_tags = {
+  default_tags = coalesce(var.tags, {
     Project     = var.project
     Environment = var.environment
-  }
+  })
+}
+
+data "azurerm_log_analytics_workspace" "main" {
+  name                = var.log_analytics_workspace_name
+  resource_group_name = var.resource_group_name
 }

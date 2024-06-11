@@ -65,7 +65,6 @@ resource "azurerm_key_vault_access_policy" "users" {
   ]
 }
 
-
 resource "azurerm_key_vault_key" "main" {
   name         = coalesce(var.key_vault_key_name, local.default_name)
   key_vault_id = azurerm_key_vault.main.id

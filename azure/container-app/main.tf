@@ -1,12 +1,11 @@
-data "azurerm_key_vault_secret" "main" {
-  for_each = { for secret in var.secret_variables : secret => secret }
-
-  name         = each.key
-  key_vault_id = var.key_vault_id
+locals {
+  user_assigned_identity_name = coalesce(var.user_assigned_identity_name, local.default_name)
 }
 
+data "azurerm_subscription" "current" {}
+
 data "azurerm_user_assigned_identity" "main" {
-  name                = coalesce(var.user_assigned_identity_name, local.default_name)
+  name                = local.user_assigned_identity_name
   resource_group_name = var.resource_group_name
 }
 
@@ -25,7 +24,9 @@ resource "azurerm_container_app" "main" {
 
   registry {
     server   = var.container_registry_login_server
-    identity = data.azurerm_user_assigned_identity.main.id
+    identity = var.username == null && var.password_secret_name == null ? data.azurerm_user_assigned_identity.main.id : null
+    username = var.username
+    password_secret_name = var.password_secret_name
   }
 
   ingress {
@@ -58,8 +59,9 @@ resource "azurerm_container_app" "main" {
   dynamic "secret" {
     for_each = toset(var.secret_variables)
     content {
-      name  = lower(secret.value)
-      value = data.azurerm_key_vault_secret.main[secret.value].value
+      name                = lower(secret.value)
+      key_vault_secret_id = "https://${var.key_vault_name}.vault.azure.net/secrets/${secret.value}"
+      identity            = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group_name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${local.user_assigned_identity_name}"
     }
   }
 
@@ -131,12 +133,25 @@ resource "azurerm_container_app" "main" {
   }
 }
 
-output "id" {
-  value = azurerm_container_app.main.id
+# https://learn.microsoft.com/en-us/azure/container-apps/vnet-custom?tabs=bash%2Cazure-cli&pivots=azure-portal
+# https://github.com/microsoft/azure-container-apps/issues/345
+# When you deploy an internal or an external environment into your own network, a new resource group prefixed with MC_ is created in the Azure subscription where your environment is hosted. This resource group contains infrastructure components managed by the Azure Container Apps platform, and shouldn't be modified. The resource group contains Public IP addresses used specifically for outbound connectivity from your environment and a load balancer.
+# Your policy would need to have an exclusion for resource groups that start with "MC_"
+# For the moment, the proposed workaround is to add a policy assignment exception for resource group that have the MC_ prefix and _{region} suffix.
+resource "azurerm_container_app_environment" "main" {
+  name                = coalesce(var.container_app_name, local.default_name)
+  location            = var.region
+  resource_group_name = var.resource_group_name
+
+  infrastructure_subnet_id       = var.subnet_id
+  zone_redundancy_enabled        = var.zone_redundancy_enabled
+  internal_load_balancer_enabled = var.internal_load_balancer_enabled
+  log_analytics_workspace_id     = var.log_analytics_workspace_id
+  tags                           = coalesce(var.tags, local.default_tags)
 }
 
-output "log_analytics_workspace_id" {
-  value = azurerm_log_analytics_workspace.main.id
+output "id" {
+  value = azurerm_container_app.main.id
 }
 
 output "app_url" {
