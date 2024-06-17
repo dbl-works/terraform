@@ -31,7 +31,7 @@ variable "node_count" {
 
 variable "parameter_group_name" {
   type    = string
-  default = null
+  default = null # "default.redis7.cluster.on"
 }
 
 variable "major_version" {
