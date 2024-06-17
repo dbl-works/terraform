@@ -19,4 +19,5 @@ module "global-buckets" {
   region                          = each.value.region
   regional                        = true
   s3_replicas                     = each.value.replicas
+  sse_algorithm                   = each.value.sse_algorithm
 }
