@@ -93,7 +93,7 @@ variable "elasticache_config" {
     major_version                = optional(number, 7)
     minor_version                = optional(number, 0)
     node_count                   = optional(number, 1)
-    parameter_group_name         = optional(string, null) # "default.redis7.cluster.on"
+    parameter_group_name         = optional(string, null) # Use default.redis7.cluster.on, for Redis (cluster mode enabled) clusters and replication groups. Use default.redis7, for Redis (cluster mode disabled) clusters and replication groups.
     replicas_per_node_group      = optional(number, 1)
     shards_per_replication_group = optional(number, 1)
     data_tiering_enabled         = optional(bool, false)

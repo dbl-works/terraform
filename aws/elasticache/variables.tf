@@ -30,8 +30,9 @@ variable "node_count" {
 }
 
 variable "parameter_group_name" {
-  type    = string
-  default = null # "default.redis7.cluster.on"
+  type        = string
+  default     = null
+  description = "Use default.redis7.cluster.on, for Redis (cluster mode enabled) clusters and replication groups. Use default.redis7, for Redis (cluster mode disabled) clusters and replication groups."
 }
 
 variable "major_version" {
