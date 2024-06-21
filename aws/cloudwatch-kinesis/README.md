@@ -28,7 +28,7 @@ module "cloudwatch-kinesis" {
   # Optional
   kinesis_stream_name = "kinesis-aws"
   region = "us-east-1"
-  subscription_log_group_name = "/ecs/facebook-staging"
+  subscription_log_group_names = ["/ecs/facebook-staging"]
   s3_output_prefix = "raw/"
   s3_error_output_prefix = "errors/"
   enable_dynamic_partitioning = true

@@ -69,8 +69,8 @@ variable "s3_configuration" {
   default = null
 }
 
-variable "subscription_log_group_name" {
-  type = string
+variable "subscription_log_group_names" {
+  type = list(string)
 }
 
 variable "kinesis_stream_name" {
