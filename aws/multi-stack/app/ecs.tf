@@ -27,11 +27,11 @@ locals {
 module "ecs" {
   source = "../../ecs"
 
-  project           = var.project
-  environment       = var.environment
-  vpc_id            = module.vpc.id
-  alb_subnet_ids    = var.ecs_config.alb_subnet_type == "private" ? module.vpc.subnet_private_ids : module.vpc.subnet_public_ids
-  nlb_subnet_id     = module.vpc.subnet_public_ids[0]
+  project        = var.project
+  environment    = var.environment
+  vpc_id         = module.vpc.id
+  alb_subnet_ids = var.ecs_config.alb_subnet_type == "private" ? module.vpc.subnet_private_ids : module.vpc.subnet_public_ids
+  nlb_subnet_id  = module.vpc.subnet_public_ids[0]
   secrets_arns = flatten([
     toset(values(data.aws_secretsmanager_secret.app).*.arn),
     var.ecs_config.secret_arns
