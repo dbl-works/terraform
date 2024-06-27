@@ -13,7 +13,7 @@ output "alb_arn" {
 }
 
 output "nlb_arn" {
-  value = aws_alb.nlb.arn
+  value = aws_lb.nlb.arn
 }
 
 output "nlb_dns_name" {
