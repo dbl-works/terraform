@@ -460,7 +460,7 @@ variable "alb_subnet_type" {
   type    = string
   default = "public"
   validation {
-    condition     = contains(["public", "private"], var.subnet_type)
+    condition     = contains(["public", "private"], var.alb_subnet_type)
     error_message = "subnet_type must be either public or private"
   }
 }
