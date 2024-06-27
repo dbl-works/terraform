@@ -216,7 +216,7 @@ variable "alb_subnet_ids" {
   type = list(string)
   validation {
     condition     = length(var.alb_subnet_ids) >= 2
-    error_message = "At least two subnets in two different Availability Zones must be specified"
+    error_message = "At least two subnets in two different Availability Zones must be specified (AWS limitation)."
   }
 }
 
