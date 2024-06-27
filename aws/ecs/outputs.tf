@@ -12,6 +12,10 @@ output "alb_arn" {
   value = aws_alb.alb.arn
 }
 
+output "nlb_arn" {
+  value = aws_alb.nlb.arn
+}
+
 output "nlb_dns_name" {
   value = length(aws_lb.nlb) > 0 ? aws_lb.nlb[0].dns_name : null
 }
