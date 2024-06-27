@@ -59,10 +59,25 @@ variable "project_settings" {
 
 variable "tls_settings" {
   type = object({
+    min_tls_version          = optional(string, null)     # 1.0, 1.1, 1.2, 1.3
     tls_1_3                  = optional(string, "on")     # "on/off"
     automatic_https_rewrites = optional(string, "on")     # "on/off"
     ssl                      = optional(string, "strict") # "strict"
     always_use_https         = optional(string, "on")     # "on/off"
+  })
+  default = null
+}
+
+# HSTS protects HTTPS web servers from downgrade attacks.
+# These attacks redirect web browsers from an HTTPS web server to an attacker-controlled server, allowing bad actors to compromise user data and cookies.
+# https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/
+variable "hsts_settings" {
+  type = object({
+    enabled            = optional(bool, null)
+    preload            = optional(bool, null)
+    max_age            = optional(number, null)
+    include_subdomains = optional(bool, null)
+    nosniff            = optional(bool, null)
   })
   default = null
 }

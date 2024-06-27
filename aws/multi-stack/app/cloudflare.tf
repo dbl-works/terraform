@@ -14,5 +14,6 @@ module "cloudflare" {
   # optional
   bastion_enabled    = false
   tls_settings       = var.tls_settings
+  hsts_settings      = var.hsts_settings
   bastion_public_dns = module.ecs.nlb_dns_name
 }
