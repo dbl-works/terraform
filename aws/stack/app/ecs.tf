@@ -9,7 +9,8 @@ module "ecs" {
   project           = var.project
   environment       = var.environment
   vpc_id            = module.vpc.id
-  subnet_public_ids = module.vpc.subnet_public_ids
+  alb_subnet_ids    = var.alb_subnet_type == "private" ? module.vpc.subnet_private_ids : module.vpc.subnet_public_ids
+  nlb_subnet_id     = module.vpc.subnet_public_ids[0]
   secrets_arns = flatten([
     data.aws_secretsmanager_secret.app.arn,
     var.secret_arns
@@ -35,9 +36,6 @@ module "ecs" {
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
   allow_alb_traffic_to_ports      = var.allow_alb_traffic_to_ports
   alb_listener_rules              = var.alb_listener_rules
-
-  multi_az             = var.ecs_multi_az
-  no_of_subnets_in_alb = var.no_of_subnets_in_alb
 
   allowlisted_ssh_ips = distinct(flatten(concat([
     var.allowlisted_ssh_ips,

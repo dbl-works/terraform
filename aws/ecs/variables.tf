@@ -45,9 +45,6 @@ variable "allow_alb_traffic_to_ports" {
   nullable = false
 }
 
-# Public subnets are where forwarders run, such as a bastion, NAT or proxy
-variable "subnet_public_ids" { type = list(string) }
-
 # Allow containers to access the following resources from inside the cluster
 variable "secrets_arns" {
   type    = list(string)
@@ -215,13 +212,14 @@ variable "enable_container_insights" {
   nullable = false
 }
 
-variable "multi_az" {
-  type    = bool
-  default = false
+variable "alb_subnet_ids" {
+  type = list(string)
+  validation {
+    condition     = length(var.alb_subnet_ids) >= 2
+    error_message = "At least two subnets in two different Availability Zones must be specified"
+  }
 }
 
-variable "no_of_subnets_in_alb" {
-  type     = number
-  nullable = false
-  default  = 2
+variable "nlb_subnet_id" {
+  type = string
 }

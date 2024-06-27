@@ -456,16 +456,15 @@ variable "ecs_custom_policies" {
   default = []
 }
 
-variable "no_of_subnets_in_alb" {
-  type    = number
-  default = null
+variable "alb_subnet_type" {
+  type    = string
+  default = "public"
+  validation {
+    condition     = contains(["public", "private"], var.subnet_type)
+    error_message = "subnet_type must be either public or private"
+  }
 }
 
-variable "ecs_multi_az" {
-  type        = bool
-  default     = false
-  description = "multi-az for load balancers"
-}
 
 variable "additional_certificate_arns" {
   description = "Additional certificates to add to the load balancer"
