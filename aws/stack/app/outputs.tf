@@ -69,6 +69,10 @@ output "alb_dns_name" {
   value = module.ecs.alb_dns_name
 }
 
+output "alb_arn" {
+  value = module.ecs.alb_arn
+}
+
 output "nlb_dns_name" {
   value = module.ecs.nlb_dns_name
 }
