@@ -10,7 +10,7 @@ module "ecs" {
   environment    = var.environment
   vpc_id         = module.vpc.id
   alb_subnet_ids = var.alb_subnet_type == "private" ? module.vpc.subnet_private_ids : module.vpc.subnet_public_ids
-  nlb_subnet_id  = module.vpc.subnet_public_ids[0]
+  nlb_subnet_ids = [module.vpc.subnet_public_ids[0]]
   secrets_arns = flatten([
     data.aws_secretsmanager_secret.app.arn,
     var.secret_arns

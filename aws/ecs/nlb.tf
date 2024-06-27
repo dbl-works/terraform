@@ -3,7 +3,7 @@ resource "aws_lb" "nlb" {
   name               = "${local.name}-nlb"
   load_balancer_type = "network"
   # The NLB is configured for single-region deployment as it serves developer-only purposes, and we accept the associated downtime risks.
-  subnets      = [var.nlb_subnet_id]
+  subnets      = var.nlb_subnet_ids
   idle_timeout = var.keep_alive_timeout
   tags = {
     Name        = "${local.name}-nlb"

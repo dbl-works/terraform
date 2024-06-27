@@ -220,6 +220,6 @@ variable "alb_subnet_ids" {
   }
 }
 
-variable "nlb_subnet_id" {
-  type = string
+variable "nlb_subnet_ids" {
+  type = list(string)
 }
