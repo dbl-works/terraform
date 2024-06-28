@@ -223,3 +223,8 @@ variable "alb_subnet_ids" {
 variable "nlb_subnet_ids" {
   type = list(string)
 }
+
+variable "nlb_security_groups" {
+  type    = list(string)
+  default = []
+}

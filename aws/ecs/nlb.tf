@@ -10,6 +10,11 @@ resource "aws_lb" "nlb" {
     Project     = var.project
     Environment = var.environment
   }
+
+  security_groups = var.nlb_security_groups
+
+  # TODO: Update this
+  enforce_security_group_inbound_rules_on_private_link_traffic = "off"
 }
 
 # Bastion is allowed, only from some IPs
