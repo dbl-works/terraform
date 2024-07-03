@@ -231,12 +231,6 @@ variable "enable_waf" {
   default     = false
 }
 
-variable "waf_scope" {
-  description = "Scope of the WAF ACL (REGIONAL or CLOUDFRONT)"
-  type        = string
-  default     = "REGIONAL"
-}
-
 variable "waf_rules" {
   description = "List of WAF rules to include in the Web ACL"
   type = list(object({

@@ -1,12 +1,24 @@
 locals {
+  # 1-128 characters, a-z, A-Z, 0-9, and _ (underscore)
+  # unique within the scope of the resource
+  #   i.e. unique per REGION if scope is REGIONAL
+  #        unique per ACCOUNT if scope is CLOUDFRONT
   waf_acl_name = "${var.project}-${var.environment}-alb-waf-acl"
+}
+
+# attach WAF to the ALB
+resource "aws_wafv2_web_acl_association" "alb_waf" {
+  count = var.enable_waf ? 1 : 0
+
+  resource_arn = aws_alb.alb.arn
+  web_acl_arn  = aws_wafv2_web_acl.alb[0].arn
 }
 
 resource "aws_wafv2_web_acl" "alb" {
   count = var.enable_waf ? 1 : 0
 
   name  = local.waf_acl_name
-  scope = var.waf_scope
+  scope = "REGIONAL" # or "CLOUDFRONT", but we have 1 ALB per cluster
 
   default_action {
     block {}

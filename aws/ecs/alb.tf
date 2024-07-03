@@ -142,11 +142,3 @@ resource "aws_lb_listener_rule" "main" {
     }
   }
 }
-
-# attach WAF
-resource "aws_wafv2_web_acl_association" "alb_waf" {
-  count = var.enable_waf ? 1 : 0
-
-  resource_arn = aws_alb.alb.arn
-  web_acl_arn  = aws_wafv2_web_acl.alb[0].arn
-}
