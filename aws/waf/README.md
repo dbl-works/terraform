@@ -12,8 +12,8 @@ The WAF is regional, so it can be associated with all ALBs from one region (rega
 module "waf" {
   source = "github.com/dbl-works/terraform//aws/waf?ref=v2021.07.05"
 
-  project     = local.project
-  region      = local.region # or region_name
+  project = local.project
+  region  = local.region # or region_name
 
   permitted_domain_names = [
     "example.com",
@@ -52,6 +52,6 @@ See [waf-rules](https://docs.aws.amazon.com/waf/latest/developerguide/waf-rules.
 
 See [waf-oversize-request-components](https://docs.aws.amazon.com/waf/latest/developerguide/waf-oversize-request-components.html)
 
-> Body and JSON Body - For Application Load Balancer and AWS AppSync, AWS WAF can inspect the first 8 KB of the body of a request. For CloudFront, API Gateway, Amazon Cognito, App Runner, and Verified Access, by default, AWS WAF can inspect the first 16 KB, and you can increase the limit up to 64 KB in your web ACL configuration.
-> Headers - AWS WAF can inspect at most the first 8 KB (8,192 bytes) of the request headers and at most the first 200 headers. The content is available for inspection by AWS WAF up to the first limit reached.
-> Cookies - AWS WAF can inspect at most the first 8 KB (8,192 bytes) of the request cookies and at most the first 200 cookies. The content is available for inspection by AWS WAF up to the first limit reached.
+* Body and JSON Body - For Application Load Balancer and AWS AppSync, AWS WAF can inspect the first 8 KB of the body of a request. For CloudFront, API Gateway, Amazon Cognito, App Runner, and Verified Access, by default, AWS WAF can inspect the first 16 KB, and you can increase the limit up to 64 KB in your web ACL configuration.
+* Headers - AWS WAF can inspect at most the first 8 KB (8,192 bytes) of the request headers and at most the first 200 headers. The content is available for inspection by AWS WAF up to the first limit reached.
+* Cookies - AWS WAF can inspect at most the first 8 KB (8,192 bytes) of the request cookies and at most the first 200 cookies. The content is available for inspection by AWS WAF up to the first limit reached.
