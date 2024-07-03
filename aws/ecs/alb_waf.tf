@@ -85,6 +85,7 @@ resource "aws_wafv2_web_acl" "alb" {
     }
   }
 
+  # https://developers.cloudflare.com/fundamentals/reference/http-request-headers/#cf-ray
   dynamic "rule" {
     for_each = var.waf_require_cloudflare ? [1] : []
     content {
