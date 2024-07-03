@@ -139,6 +139,35 @@ module "ecs" {
     scale_down_treat_missing_data = "breaching"
     scale_up_treat_missing_data   = "missing"
   }
+
+  # WAF
+  enable_waf = false
+  waf_rules = [
+    {
+      name                  = "AllowCloudflare"
+      priority              = 1
+      action_type           = "ALLOW"
+      header_name           = "X-Custom-Header"
+      header_value          = "your-secret-value" # inject some secret to the headers in CF
+      positional_constraint = "EXACTLY"
+      text_transformation   = "NONE"
+    },
+    {
+      name                  = "BlockOtherTraffic"
+      priority              = 2
+      action_type           = "BLOCK"
+      header_name           = "X-Other-Header"
+      header_value          = "block-value"
+      positional_constraint = "CONTAINS"
+      text_transformation   = "LOWERCASE"
+    }
+  ]
+
+  # Access Logs, stored in S3
+  # see: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
+  enable_access_logs = false
+  access_logs_bucket = ""
+  access_logs_prefix = "lb-logs"
 }
 ```
 

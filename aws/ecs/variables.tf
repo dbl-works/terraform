@@ -231,17 +231,36 @@ variable "enable_waf" {
   default     = false
 }
 
-variable "waf_acl_arn" {
-  description = "ARN of the WAF ACL to associate with the ALB"
-  type        = string
-  default     = "default-web-acl"
-}
-
 variable "waf_scope" {
   description = "Scope of the WAF ACL (REGIONAL or CLOUDFRONT)"
   type        = string
   default     = "REGIONAL"
 }
+
+variable "waf_rules" {
+  description = "List of WAF rules to include in the Web ACL"
+  type = list(object({
+    name                  = string
+    priority              = number
+    action_type           = string # one of: ALLOW, BLOCK, COUNT
+    header_name           = optional(string)
+    header_value          = optional(string)
+    positional_constraint = optional(string, "EXACTLY")
+    text_transformation   = optional(string, "NONE")
+  }))
+  default = [
+    {
+      name                  = "AWSManagedRulesCommonRuleSet"
+      priority              = 1
+      action_type           = "COUNT"
+      header_name           = null
+      header_value          = null
+      positional_constraint = "EXACTLY"
+      text_transformation   = "NONE"
+    }
+  ]
+}
+
 
 variable "enable_access_logs" {
   description = "Enable access logging for the ALB"
