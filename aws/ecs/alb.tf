@@ -15,6 +15,67 @@ resource "aws_alb" "alb" {
     Project     = var.project
     Environment = var.environment
   }
+
+  dynamic "access_logs" {
+    for_each = var.enable_access_logs ? [1] : []
+    content {
+      bucket  = var.access_logs_bucket
+      prefix  = var.access_logs_prefix
+      enabled = true
+    }
+  }
+}
+
+# Access logs
+data "aws_elb_service_account" "main" {}
+
+data "aws_iam_policy_document" "lb_logs" {
+  policy_id = "lb_logs"
+
+  statement {
+    actions = [
+      "s3:PutObject",
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::${var.access_logs_bucket}/${var.access_logs_prefix}/*"]
+
+    principals {
+      identifiers = ["${data.aws_elb_service_account.main.arn}"]
+      type        = "AWS"
+    }
+  }
+
+  statement {
+    actions = [
+      "s3:PutObject"
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::${var.access_logs_bucket}/${var.access_logs_prefix}/*"]
+    principals {
+      identifiers = ["delivery.logs.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+
+
+  statement {
+    actions = [
+      "s3:GetBucketAcl"
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::${var.access_logs_bucket}"]
+    principals {
+      identifiers = ["delivery.logs.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "lb-logs" {
+  count = var.enable_access_logs ? 1 : 0
+
+  bucket = var.access_logs_bucket
+  policy = data.aws_iam_policy_document.lb_logs.json
 }
 
 resource "aws_alb_listener" "http" {

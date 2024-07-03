@@ -8,6 +8,8 @@ The `idle_timeout` is set to 60 seconds. Ensure that your webserver's keep-alive
 
 When using Rails with Puma, the default timeout is 20 seconds. This can be changed by setting the `persistent_timeout` option in `config/puma.rb`.
 
+If you enable WAF, and you don't specify any further rules, then the default rule will be to block all traffic.
+
 ## Usage
 
 ```terraform
@@ -139,6 +141,36 @@ module "ecs" {
     scale_down_treat_missing_data = "breaching"
     scale_up_treat_missing_data   = "missing"
   }
+
+  # WAF
+  enable_waf  = false
+  domain_name = "example.com" # only requests originating on this domain will be allowed
+  waf_rules = [
+    {
+      name                  = "AllowCloudflare"
+      priority              = 1
+      action_type           = "ALLOW"
+      header_name           = "X-Custom-Header"
+      header_value          = "your-secret-value" # inject some secret to the headers in CF
+      positional_constraint = "EXACTLY"
+      text_transformation   = "NONE"
+    },
+    {
+      name                  = "BlockOtherTraffic"
+      priority              = 2
+      action_type           = "BLOCK"
+      header_name           = "X-Other-Header"
+      header_value          = "block-value"
+      positional_constraint = "CONTAINS"
+      text_transformation   = "LOWERCASE"
+    }
+  ]
+
+  # Access Logs, stored in S3
+  # see: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
+  enable_access_logs = false
+  access_logs_bucket = ""
+  access_logs_prefix = "lb-logs"
 }
 ```
 
