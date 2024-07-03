@@ -30,23 +30,39 @@ resource "aws_wafv2_web_acl" "alb" {
       priority = rule.value.priority
 
       dynamic "action" {
-        for_each = rule.value.action_type == "ALLOW" ? [1] : []
-        content {
-          allow {}
-        }
-      }
+        for_each = rule.value.name != "AWSManagedRulesCommonRuleSet" ? [1] : []
 
-      dynamic "action" {
-        for_each = rule.value.action_type == "BLOCK" ? [1] : []
         content {
-          block {}
+          dynamic "allow" {
+            for_each = rule.value.action_type == "ALLOW" ? [1] : []
+            content {}
+          }
+
+          dynamic "block" {
+            for_each = rule.value.action_type == "BLOCK" ? [1] : []
+            content {}
+          }
+
+          dynamic "count" {
+            for_each = rule.value.action_type == "COUNT" ? [1] : []
+            content {}
+          }
         }
       }
 
       dynamic "override_action" {
-        for_each = rule.value.action_type == "COUNT" ? [1] : []
+        # TODO: We should match the rule set name here
+        for_each = rule.value.name == "AWSManagedRulesCommonRuleSet" ? [1] : []
+
         content {
-          count {}
+          dynamic "none" {
+            for_each = rule.value.action_type == "NONE" ? [1] : []
+            content {}
+          }
+          dynamic "count" {
+            for_each = rule.value.action_type == "COUNT" ? [1] : []
+            content {}
+          }
         }
       }
 
