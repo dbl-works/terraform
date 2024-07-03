@@ -15,7 +15,17 @@ resource "aws_alb" "alb" {
     Project     = var.project
     Environment = var.environment
   }
+
+  dynamic "access_logs" {
+    for_each = var.enable_access_logs ? [1] : []
+    content {
+      bucket  = var.access_logs_bucket
+      prefix  = var.access_logs_prefix
+      enabled = true
+    }
+  }
 }
+
 
 resource "aws_alb_listener" "http" {
   load_balancer_arn = aws_alb.alb.id
@@ -80,4 +90,12 @@ resource "aws_lb_listener_rule" "main" {
       }
     }
   }
+}
+
+# WAF
+resource "aws_wafv2_web_acl_association" "alb_waf" {
+  count = var.enable_waf ? 1 : 0
+
+  resource_arn = aws_alb.alb.arn
+  web_acl_arn  = var.waf_acl_arn == "default-web-acl" ? aws_wafv2_web_acl.default-web-acl.arn : var.waf_acl_arn
 }

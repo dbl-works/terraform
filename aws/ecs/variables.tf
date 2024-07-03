@@ -223,3 +223,40 @@ variable "alb_subnet_ids" {
 variable "nlb_subnet_ids" {
   type = list(string)
 }
+
+# WAF & Access Logs
+variable "enable_waf" {
+  description = "Enable WAF for the ALB"
+  type        = bool
+  default     = false
+}
+
+variable "waf_acl_arn" {
+  description = "ARN of the WAF ACL to associate with the ALB"
+  type        = string
+  default     = "default-web-acl"
+}
+
+variable "waf_scope" {
+  description = "Scope of the WAF ACL (REGIONAL or CLOUDFRONT)"
+  type        = string
+  default     = "REGIONAL"
+}
+
+variable "enable_access_logs" {
+  description = "Enable access logging for the ALB"
+  type        = bool
+  default     = false
+}
+
+variable "access_logs_bucket" {
+  description = "S3 bucket for ALB access logs"
+  type        = string
+  default     = ""
+}
+
+variable "access_logs_prefix" {
+  description = "S3 prefix for ALB access logs"
+  type        = string
+  default     = "lb-logs"
+}
