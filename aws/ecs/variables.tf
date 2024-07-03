@@ -225,41 +225,10 @@ variable "nlb_subnet_ids" {
 }
 
 # WAF & Access Logs
-variable "enable_waf" {
-  description = "Enable WAF for the ALB"
-  type        = bool
-  default     = false
-}
-
-variable "domain_name" {
-  description = "Allowlisted domain name for the WAF"
+variable "waf_acl_arn" {
+  description = "ARN of the WAF Web ACL to associate with the ALB"
   type        = string
-  default     = ""
-
-}
-
-variable "waf_rules" {
-  description = "List of WAF rules to include in the Web ACL"
-  type = list(object({
-    name                  = string
-    priority              = number
-    action_type           = string # one of: ALLOW, BLOCK, COUNT
-    header_name           = optional(string)
-    header_value          = optional(string)
-    positional_constraint = optional(string, "EXACTLY")
-    text_transformation   = optional(string, "NONE")
-  }))
-  default = [
-    {
-      name                  = "AWSManagedRulesCommonRuleSet"
-      priority              = 1
-      action_type           = "COUNT"
-      header_name           = null
-      header_value          = null
-      positional_constraint = "EXACTLY"
-      text_transformation   = "NONE"
-    }
-  ]
+  default     = null
 }
 
 variable "enable_access_logs" {

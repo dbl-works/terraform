@@ -26,6 +26,14 @@ resource "aws_alb" "alb" {
   }
 }
 
+# WAF
+resource "aws_wafv2_web_acl_association" "alb_waf" {
+  count = var.waf_acl_arn == null ? 0 : 1
+
+  resource_arn = aws_alb.alb.arn
+  web_acl_arn  = var.waf_acl_arn
+}
+
 # Access logs
 data "aws_elb_service_account" "main" {}
 
