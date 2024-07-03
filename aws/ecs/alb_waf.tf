@@ -101,12 +101,11 @@ resource "aws_wafv2_web_acl" "alb" {
     }
   }
 
-  # https://developers.cloudflare.com/fundamentals/reference/http-request-headers/#cf-ray
   dynamic "rule" {
-    for_each = var.waf_require_cloudflare ? [1] : []
+    for_each = [1]
     content {
-      name     = "RequireCloudflare"
-      priority = 0 # Ensure this runs before other rules
+      name     = "RequireSpecificHost"
+      priority = 1 # Adjust the priority accordingly
 
       action {
         allow {}
@@ -114,23 +113,23 @@ resource "aws_wafv2_web_acl" "alb" {
 
       statement {
         byte_match_statement {
-          search_string = "cloudflare"
+          search_string = var.domain_name
           field_to_match {
             single_header {
-              name = "server"
+              name = "host"
             }
           }
           text_transformation {
             priority = 0
             type     = "NONE"
           }
-          positional_constraint = "EXACTLY"
+          positional_constraint = "ENDS_WITH"
         }
       }
 
       visibility_config {
         cloudwatch_metrics_enabled = true
-        metric_name                = "RequireCloudflare"
+        metric_name                = "RequireSpecificHost"
         sampled_requests_enabled   = true
       }
     }

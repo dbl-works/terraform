@@ -8,7 +8,7 @@ The `idle_timeout` is set to 60 seconds. Ensure that your webserver's keep-alive
 
 When using Rails with Puma, the default timeout is 20 seconds. This can be changed by setting the `persistent_timeout` option in `config/puma.rb`.
 
-If you enable WAF, and you don't specify any further rules, then the default rule will be to block all traffic that doesn't come from Cloudflare. If you set `waf_require_cloudflare` to `false`, then all traffic will be blocked and you must specify rules to allow traffic.
+If you enable WAF, and you don't specify any further rules, then the default rule will be to block all traffic.
 
 ## Usage
 
@@ -143,8 +143,8 @@ module "ecs" {
   }
 
   # WAF
-  enable_waf             = false
-  waf_require_cloudflare = true # Checks for a header CF sets
+  enable_waf  = false
+  domain_name = "example.com" # only requests originating on this domain will be allowed
   waf_rules = [
     {
       name                  = "AllowCloudflare"

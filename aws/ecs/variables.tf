@@ -231,10 +231,11 @@ variable "enable_waf" {
   default     = false
 }
 
-variable "waf_require_cloudflare" {
-  description = "Require Cloudflare header CF-RAY"
-  type        = bool
-  default     = true
+variable "domain_name" {
+  description = "Allowlisted domain name for the WAF"
+  type        = string
+  default     = ""
+
 }
 
 variable "waf_rules" {
