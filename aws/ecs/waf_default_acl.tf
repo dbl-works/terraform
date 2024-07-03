@@ -1,7 +1,11 @@
-resource "aws_wafv2_web_acl" "default-web-acl" {
-  count = var.enable_waf ? 1 : 0
+locals {
+  default_waf_acl_name = "${var.project}-${var.environment}-default-web-acl"
 
-  name  = "default-web-acl"
+}
+resource "aws_wafv2_web_acl" "default-web-acl" {
+  count = var.enable_waf && var.waf_acl_arn == "default-web-acl" ? 1 : 0
+
+  name  = local.default_waf_acl_name
   scope = var.waf_scope
 
   default_action {
@@ -32,12 +36,12 @@ resource "aws_wafv2_web_acl" "default-web-acl" {
 
   visibility_config {
     cloudwatch_metrics_enabled = true
-    metric_name                = "default-web-acl"
+    metric_name                = local.default_waf_acl_name
     sampled_requests_enabled   = true
   }
 
   tags = {
-    Name        = "default-web-acl"
+    Name        = local.default_waf_acl_name
     Environment = var.environment
     Project     = var.project
   }

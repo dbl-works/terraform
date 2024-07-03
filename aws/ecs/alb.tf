@@ -97,5 +97,5 @@ resource "aws_wafv2_web_acl_association" "alb_waf" {
   count = var.enable_waf ? 1 : 0
 
   resource_arn = aws_alb.alb.arn
-  web_acl_arn  = var.waf_acl_arn == "default-web-acl" ? aws_wafv2_web_acl.default-web-acl.arn : var.waf_acl_arn
+  web_acl_arn  = var.waf_acl_arn == "default-web-acl" ? aws_wafv2_web_acl.default-web-acl[0].arn : var.waf_acl_arn
 }
