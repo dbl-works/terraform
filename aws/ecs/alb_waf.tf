@@ -27,7 +27,7 @@ resource "aws_wafv2_web_acl" "alb" {
     for_each = var.waf_rules
     content {
       name     = rule.value.name
-      priority = rule.value.priority
+      priority = rule.value.priority + 1 # prio must be unqiue. Hardcoded rules: see below
 
       dynamic "action" {
         for_each = rule.value.name != "AWSManagedRulesCommonRuleSet" ? [1] : []
