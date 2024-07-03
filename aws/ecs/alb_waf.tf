@@ -114,17 +114,17 @@ resource "aws_wafv2_web_acl" "alb" {
 
       statement {
         byte_match_statement {
-          search_string = ""
+          search_string = "cloudflare"
           field_to_match {
             single_header {
-              name = "CF-RAY"
+              name = "Server"
             }
           }
           text_transformation {
             priority = 0
             type     = "NONE"
           }
-          positional_constraint = "PRESENT"
+          positional_constraint = "EXACTLY"
         }
       }
 
