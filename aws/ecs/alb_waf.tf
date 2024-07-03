@@ -117,7 +117,7 @@ resource "aws_wafv2_web_acl" "alb" {
           search_string = "cloudflare"
           field_to_match {
             single_header {
-              name = "Server"
+              name = "server"
             }
           }
           text_transformation {
