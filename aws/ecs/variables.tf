@@ -261,7 +261,6 @@ variable "waf_rules" {
   ]
 }
 
-
 variable "enable_access_logs" {
   description = "Enable access logging for the ALB"
   type        = bool

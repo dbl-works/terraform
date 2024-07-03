@@ -43,7 +43,7 @@ resource "aws_wafv2_web_acl" "alb" {
         }
       }
 
-      dynamic "action" {
+      dynamic "override_action" {
         for_each = rule.value.action_type == "COUNT" ? [1] : []
         content {
           count {}
