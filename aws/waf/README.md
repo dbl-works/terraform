@@ -15,10 +15,10 @@ module "waf" {
   project = local.project
   region  = local.region # or region_name
 
+  # NOTE: all subdomans are permitted
   permitted_domain_names = [
     "example.com",
-    "api.example.com",
-    "www.example.com",
+    "example.cloud",
   ]
 
   waf_rules = [

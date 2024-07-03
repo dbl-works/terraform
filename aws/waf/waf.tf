@@ -95,28 +95,48 @@ resource "aws_wafv2_web_acl" "main" {
         allow {}
       }
 
-      statement {
-        or_statement {
-          dynamic "statement" {
-            for_each = var.permitted_domain_names
-            content {
-              byte_match_statement {
-                search_string = statement.value
-                field_to_match {
-                  single_header {
-                    name = "host"
+    statement {
+      or_statement {
+        dynamic "statement" {
+          for_each = var.permitted_domain_names
+          content {
+            or_statement {
+              statement {
+                byte_match_statement {
+                  search_string = statement.value
+                  field_to_match {
+                    single_header {
+                      name = "host"
+                    }
                   }
+                  text_transformation {
+                    priority = 0
+                    type     = "NONE"
+                  }
+                  # must use "exact match". If you use e.g. "ENDS_WITH" then "evil-example.com" matches "example.com"
+                  positional_constraint = "EXACTLY"
                 }
-                text_transformation {
-                  priority = 0
-                  type     = "NONE"
+              }
+              statement {
+                byte_match_statement {
+                  search_string = "." + statement.value
+                  field_to_match {
+                    single_header {
+                      name = "host"
+                    }
+                  }
+                  text_transformation {
+                    priority = 0
+                    type     = "NONE"
+                  }
+                  positional_constraint = "ENDS_WITH"
                 }
-                positional_constraint = "EXACTLY" # must use "exact match". If you use e.g. "ENDS_WITH" then "evil-example.com" matches "example.com"
               }
             }
           }
         }
       }
+    }
 
       visibility_config {
         cloudwatch_metrics_enabled = true
