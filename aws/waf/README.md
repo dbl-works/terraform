@@ -6,6 +6,15 @@ If you pass allowed domain names, it will add a rule to only allow traffic from 
 
 The WAF is regional, so it can be associated with all ALBs from one region (regardless of the environment).
 
+**Notes**:
+
+* Up to 50 ALBs can be attached to a single WebACL.
+* up to 100 Amazon CloudFront distributions, AWS AppSync GraphQL APIs, or Amazon API Gateway REST APIs can be associated with a single WebACL.
+* Any resource can only be attached to exactly one WebACL.
+* Maximum number of requests per second per web ACL: 25k
+
+Find more limites [here](https://docs.aws.amazon.com/waf/latest/developerguide/limits.html).
+
 ## Usage
 
 ```hcl
