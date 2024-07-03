@@ -231,6 +231,12 @@ variable "enable_waf" {
   default     = false
 }
 
+variable "waf_require_cloudflare" {
+  description = "Require Cloudflare header CF-RAY"
+  type        = bool
+  default     = true
+}
+
 variable "waf_rules" {
   description = "List of WAF rules to include in the Web ACL"
   type = list(object({

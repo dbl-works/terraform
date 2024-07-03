@@ -6,7 +6,6 @@ locals {
   waf_acl_name = "${var.project}-${var.environment}-alb-waf-acl"
 }
 
-# attach WAF to the ALB
 resource "aws_wafv2_web_acl_association" "alb_waf" {
   count = var.enable_waf ? 1 : 0
 
@@ -81,6 +80,40 @@ resource "aws_wafv2_web_acl" "alb" {
       visibility_config {
         cloudwatch_metrics_enabled = true
         metric_name                = rule.value.name
+        sampled_requests_enabled   = true
+      }
+    }
+  }
+
+  dynamic "rule" {
+    for_each = var.waf_require_cloudflare ? [1] : []
+    content {
+      name     = "RequireCloudflare"
+      priority = 0 # Ensure this runs before other rules
+
+      action {
+        allow {}
+      }
+
+      statement {
+        byte_match_statement {
+          search_string = ""
+          field_to_match {
+            single_header {
+              name = "CF-RAY"
+            }
+          }
+          text_transformation {
+            priority = 0
+            type     = "NONE"
+          }
+          positional_constraint = "PRESENT"
+        }
+      }
+
+      visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name                = "RequireCloudflare"
         sampled_requests_enabled   = true
       }
     }

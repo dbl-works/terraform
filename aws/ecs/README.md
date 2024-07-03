@@ -141,7 +141,8 @@ module "ecs" {
   }
 
   # WAF
-  enable_waf = false
+  enable_waf             = false
+  waf_require_cloudflare = true # Checks for the CF-RAY header
   waf_rules = [
     {
       name                  = "AllowCloudflare"
