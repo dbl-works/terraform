@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "lb_logs" {
       "s3:PutObject",
     ]
     effect    = "Allow"
-    resources = ["${var.access_logs_bucket}/${var.access_logs_prefix}/*"]
+    resources = ["arn:aws:s3:::${var.access_logs_bucket}/${var.access_logs_prefix}/*"]
 
     principals {
       identifiers = ["${data.aws_elb_service_account.main.arn}"]
@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "lb_logs" {
       "s3:PutObject"
     ]
     effect    = "Allow"
-    resources = ["${var.access_logs_bucket}/${var.access_logs_prefix}/*"]
+    resources = ["arn:aws:s3:::${var.access_logs_bucket}/${var.access_logs_prefix}/*"]
     principals {
       identifiers = ["delivery.logs.amazonaws.com"]
       type        = "Service"
@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "lb_logs" {
       "s3:GetBucketAcl"
     ]
     effect    = "Allow"
-    resources = ["${var.access_logs_bucket}"]
+    resources = ["arn:aws:s3:::${var.access_logs_bucket}"]
     principals {
       identifiers = ["delivery.logs.amazonaws.com"]
       type        = "Service"
