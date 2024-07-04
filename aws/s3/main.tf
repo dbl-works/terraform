@@ -20,31 +20,31 @@ data "aws_elb_service_account" "main" {}
 
 locals {
   writers_policy_json = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": flatten([
+    "Version" : "2012-10-17",
+    "Statement" : flatten([
       for writer in var.writers : [
         {
-          "Effect": "Allow",
-          "Action": "s3:PutObject",
-          "Resource": "${aws_s3_bucket.main.arn}/${writer.prefix}/*",
-          "Principal": {
-            "AWS": "${data.aws_elb_service_account.main.arn}"
+          "Effect" : "Allow",
+          "Action" : "s3:PutObject",
+          "Resource" : "${aws_s3_bucket.main.arn}/${writer.prefix}/*",
+          "Principal" : {
+            "AWS" : "${data.aws_elb_service_account.main.arn}"
           }
         },
         {
-          "Effect": "Allow",
-          "Action": "s3:PutObject",
-          "Resource": "${aws_s3_bucket.main.arn}/${writer.prefix}/*",
-          "Principal": {
-            "Service": "delivery.logs.amazonaws.com"
+          "Effect" : "Allow",
+          "Action" : "s3:PutObject",
+          "Resource" : "${aws_s3_bucket.main.arn}/${writer.prefix}/*",
+          "Principal" : {
+            "Service" : "delivery.logs.amazonaws.com"
           }
         },
         {
-          "Effect": "Allow",
-          "Action": "s3:GetBucketAcl",
-          "Resource": "${aws_s3_bucket.main.arn}",
-          "Principal": {
-            "Service": "delivery.logs.amazonaws.com"
+          "Effect" : "Allow",
+          "Action" : "s3:GetBucketAcl",
+          "Resource" : "${aws_s3_bucket.main.arn}",
+          "Principal" : {
+            "Service" : "delivery.logs.amazonaws.com"
           }
         }
       ]
