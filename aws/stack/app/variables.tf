@@ -431,7 +431,8 @@ variable "alb_access_logs" {
 }
 
 variable "waf_acl_arn" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "ecs_name" {

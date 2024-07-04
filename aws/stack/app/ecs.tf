@@ -34,7 +34,7 @@ module "ecs" {
   enable_container_insights   = var.enable_container_insights
 
   alb_access_logs = var.alb_access_logs
-  waf_alb_arn     = var.waf_alb_arn
+  waf_acl_arn     = var.waf_acl_arn
 
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
   allow_alb_traffic_to_ports      = var.allow_alb_traffic_to_ports
