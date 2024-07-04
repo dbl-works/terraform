@@ -231,20 +231,10 @@ variable "waf_acl_arn" {
   default     = null
 }
 
-variable "enable_access_logs" {
-  description = "Enable access logging for the ALB"
-  type        = bool
-  default     = false
-}
-
-variable "access_logs_bucket" {
-  description = "S3 bucket for ALB access logs"
-  type        = string
-  default     = ""
-}
-
-variable "access_logs_prefix" {
-  description = "S3 prefix for ALB access logs"
-  type        = string
-  default     = "lb-logs"
+variable "alb_access_logs" {
+  type = object({
+    bucket        = string                      # S3 bucket for ALB access logs
+    bucket_prefix = optional(string, "lb-logs") # S3 prefix for ALB access logs
+  })
+  default = null
 }

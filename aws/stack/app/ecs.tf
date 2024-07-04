@@ -33,6 +33,9 @@ module "ecs" {
   monitored_service_groups    = var.monitored_service_groups
   enable_container_insights   = var.enable_container_insights
 
+  alb_access_logs = var.alb_access_logs
+  waf_alb_arn     = var.waf_alb_arn
+
   allow_internal_traffic_to_ports = var.allow_internal_traffic_to_ports
   allow_alb_traffic_to_ports      = var.allow_alb_traffic_to_ports
   alb_listener_rules              = var.alb_listener_rules
