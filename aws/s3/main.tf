@@ -61,7 +61,7 @@ resource "aws_s3_bucket_policy" "writers" {
   policy = jsonencode({
     "Version": "2012-10-17",
     "Statement": flatten([
-      for policy in data.aws_iam_policy_document.writers : policy.statement
+      for policy in data.aws_iam_policy_document.writers : policy.json
     ])
   })
 }
