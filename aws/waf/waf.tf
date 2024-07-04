@@ -85,64 +85,61 @@ resource "aws_wafv2_web_acl" "main" {
     }
   }
 
-  dynamic "rule" {
-    for_each = [1]
-    content {
-      name     = "AllowedDomainsRule"
-      priority = 1 # Adjust the priority accordingly
+  rule {
+    name     = "AllowedDomainsRule"
+    priority = 1 # Adjust the priority accordingly
 
-      action {
-        allow {}
-      }
+    action {
+      allow {}
+    }
 
-      statement {
-        or_statement {
-          dynamic "statement" {
-            for_each = var.permitted_domain_names
-            content {
-              or_statement {
-                statement {
-                  byte_match_statement {
-                    search_string = statement.value
-                    field_to_match {
-                      single_header {
-                        name = "host"
-                      }
-                    }
-                    text_transformation {
-                      priority = 0
-                      type     = "NONE"
-                    }
-                    # must use "exact match". If you use e.g. "ENDS_WITH" then "evil-example.com" matches "example.com"
-                    positional_constraint = "EXACTLY"
-                  }
-                }
-                statement {
-                  byte_match_statement {
-                    search_string = ".${statement.value}"
-                    field_to_match {
-                      single_header {
-                        name = "host"
-                      }
-                    }
-                    text_transformation {
-                      priority = 0
-                      type     = "NONE"
-                    }
-                    positional_constraint = "ENDS_WITH"
-                  }
+    statement {
+      or_statement {
+        dynamic "statement" {
+          for_each = var.permitted_domain_names
+          content {
+            byte_match_statement {
+              search_string = statement.value
+              field_to_match {
+                single_header {
+                  name = "host"
                 }
               }
+              text_transformation {
+                priority = 0
+                type     = "NONE"
+              }
+              # must use "exact match". If you use e.g. "ENDS_WITH" then "evil-example.com" matches "example.com"
+              positional_constraint = "EXACTLY"
+            }
+          }
+        }
+
+        dynamic "statement" {
+          for_each = var.permitted_domain_names
+          content {
+            byte_match_statement {
+              search_string = ".${statement.value}"
+              field_to_match {
+                single_header {
+                  name = "host"
+                }
+              }
+              text_transformation {
+                priority = 0
+                type     = "NONE"
+              }
+              positional_constraint = "ENDS_WITH"
             }
           }
         }
       }
+    }
 
-      visibility_config {
-        cloudwatch_metrics_enabled = true
-        metric_name                = "allowed-domains-rule"
-        sampled_requests_enabled   = true
-      }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "allowed-domains-rule"
+      sampled_requests_enabled   = true
     }
   }
 
