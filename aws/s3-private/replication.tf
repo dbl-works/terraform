@@ -73,7 +73,7 @@ locals {
       ]
     },
   ]
-  encrypt-policy = compact([
+  encrypt-policy = [
     for replica in var.s3_replicas : {
       "Effect" : "Allow",
       "Action" : [
@@ -87,7 +87,7 @@ locals {
       },
       "Resource" : [replica.kms_arn]
     } if replica.kms_arn != null
-  ])
+  ]
 }
 
 resource "aws_iam_policy" "replication" {
