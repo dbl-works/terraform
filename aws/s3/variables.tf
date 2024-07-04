@@ -28,3 +28,10 @@ variable "multi_region_kms_key" {
   default = false
   type    = bool
 }
+
+variable "writers" {
+  type = list(object({
+    policy_id = string
+    prefix    = string
+  }))
+}
