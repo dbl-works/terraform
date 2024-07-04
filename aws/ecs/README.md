@@ -168,9 +168,80 @@ module "ecs" {
 
   # Access Logs, stored in S3
   # see: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
-  enable_access_logs = false
-  access_logs_bucket = ""
+  enable_access_logs = true
+  access_logs_bucket = local.access_logs_bucket
+  access_logs_prefix = local.access_logs_prefix
+}
+
+locals {
+  access_logs_bucket = "example-s3-bucket"
   access_logs_prefix = "lb-logs"
+}
+
+#  =================== To enable access logs in an ALB, access to an S3 bucket is required ======================
+data "aws_elb_service_account" "main" {}
+
+data "aws_iam_policy_document" "lb_logs" {
+  policy_id = "lb_logs"
+
+  statement {
+    actions = [
+      "s3:PutObject",
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::${local.access_logs_bucket}/${local.access_logs_prefix}/*"]
+
+    principals {
+      identifiers = ["${data.aws_elb_service_account.main.arn}"]
+      type        = "AWS"
+    }
+  }
+
+  statement {
+    actions = [
+      "s3:PutObject"
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::${local.access_logs_bucket}/${local.access_logs_prefix}/*"]
+    principals {
+      identifiers = ["delivery.logs.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+
+
+  statement {
+    actions = [
+      "s3:GetBucketAcl"
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::${local.access_logs_bucket}"]
+    principals {
+      identifiers = ["delivery.logs.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "lb-logs" {
+  bucket = local.access_logs_bucket
+  policy = data.aws_iam_policy_document.lb_logs.json
+}
+#  =================== To enable access logs in an ALB, access to an S3 bucket is required ======================
+
+resource "aws_alb_listener" "http" {
+  load_balancer_arn = aws_alb.alb.id
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
 }
 ```
 
