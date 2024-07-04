@@ -422,6 +422,19 @@ variable "alb_listener_rules" {
   default = []
 }
 
+variable "alb_access_logs" {
+  type = object({
+    bucket        = string
+    bucket_prefix = string
+  })
+  default = null
+}
+
+variable "waf_acl_arn" {
+  type    = string
+  default = null
+}
+
 variable "ecs_name" {
   type    = string
   default = null
@@ -464,7 +477,6 @@ variable "alb_subnet_type" {
     error_message = "subnet_type must be either public or private"
   }
 }
-
 
 variable "additional_certificate_arns" {
   description = "Additional certificates to add to the load balancer"

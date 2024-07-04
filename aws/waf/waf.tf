@@ -1,23 +1,7 @@
-locals {
-  # 1-128 characters, a-z, A-Z, 0-9, and _ (underscore)
-  # unique within the scope of the resource
-  #   i.e. unique per REGION if scope is REGIONAL
-  #        unique per ACCOUNT if scope is CLOUDFRONT
-  waf_acl_name = "${var.project}-${var.environment}-alb-waf-acl"
-}
-
-resource "aws_wafv2_web_acl_association" "alb_waf" {
-  count = var.enable_waf ? 1 : 0
-
-  resource_arn = aws_alb.alb.arn
-  web_acl_arn  = aws_wafv2_web_acl.alb[0].arn
-}
-
-resource "aws_wafv2_web_acl" "alb" {
-  count = var.enable_waf ? 1 : 0
-
-  name  = local.waf_acl_name
-  scope = "REGIONAL" # or "CLOUDFRONT", but we have 1 ALB per cluster
+resource "aws_wafv2_web_acl" "main" {
+  name        = local.waf_acl_name
+  scope       = "REGIONAL" # or "CLOUDFRONT", but we have 1 ALB per cluster
+  description = "Web ACL for ${var.project} in ${var.region}."
 
   default_action {
     block {}
@@ -101,37 +85,61 @@ resource "aws_wafv2_web_acl" "alb" {
     }
   }
 
-  dynamic "rule" {
-    for_each = [1]
-    content {
-      name     = "RequireSpecificHost"
-      priority = 1 # Adjust the priority accordingly
+  rule {
+    name     = "AllowedDomainsRule"
+    priority = 1 # Adjust the priority accordingly
 
-      action {
-        allow {}
-      }
+    action {
+      allow {}
+    }
 
-      statement {
-        byte_match_statement {
-          search_string = var.domain_name
-          field_to_match {
-            single_header {
-              name = "host"
+    statement {
+      or_statement {
+        dynamic "statement" {
+          for_each = var.permitted_domain_names
+          content {
+            byte_match_statement {
+              search_string = statement.value
+              field_to_match {
+                single_header {
+                  name = "host"
+                }
+              }
+              text_transformation {
+                priority = 0
+                type     = "NONE"
+              }
+              # must use "exact match". If you use e.g. "ENDS_WITH" then "evil-example.com" matches "example.com"
+              positional_constraint = "EXACTLY"
             }
           }
-          text_transformation {
-            priority = 0
-            type     = "NONE"
+        }
+
+        dynamic "statement" {
+          for_each = var.permitted_domain_names
+          content {
+            byte_match_statement {
+              search_string = ".${statement.value}"
+              field_to_match {
+                single_header {
+                  name = "host"
+                }
+              }
+              text_transformation {
+                priority = 0
+                type     = "NONE"
+              }
+              positional_constraint = "ENDS_WITH"
+            }
           }
-          positional_constraint = "ENDS_WITH"
         }
       }
+    }
 
-      visibility_config {
-        cloudwatch_metrics_enabled = true
-        metric_name                = "RequireSpecificHost"
-        sampled_requests_enabled   = true
-      }
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "allowed-domains-rule"
+      sampled_requests_enabled   = true
     }
   }
 
@@ -143,7 +151,7 @@ resource "aws_wafv2_web_acl" "alb" {
 
   tags = {
     Name        = local.waf_acl_name
-    Environment = var.environment
+    Environment = "regional-${var.region}"
     Project     = var.project
   }
 }

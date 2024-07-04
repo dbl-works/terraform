@@ -1,6 +1,6 @@
 {
   "[terraform]": {
-    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.defaultFormatter": "gamunu.opentofu",
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file"
   },

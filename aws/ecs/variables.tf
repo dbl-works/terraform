@@ -225,57 +225,17 @@ variable "nlb_subnet_ids" {
 }
 
 # WAF & Access Logs
-variable "enable_waf" {
-  description = "Enable WAF for the ALB"
-  type        = bool
-  default     = false
-}
-
-variable "domain_name" {
-  description = "Allowlisted domain name for the WAF"
+variable "waf_acl_arn" {
+  description = "ARN of the WAF Web ACL to associate with the ALB"
   type        = string
-  default     = ""
-
+  default     = null
+  nullable    = true
 }
 
-variable "waf_rules" {
-  description = "List of WAF rules to include in the Web ACL"
-  type = list(object({
-    name                  = string
-    priority              = number
-    action_type           = string # one of: ALLOW, BLOCK, COUNT
-    header_name           = optional(string)
-    header_value          = optional(string)
-    positional_constraint = optional(string, "EXACTLY")
-    text_transformation   = optional(string, "NONE")
-  }))
-  default = [
-    {
-      name                  = "AWSManagedRulesCommonRuleSet"
-      priority              = 1
-      action_type           = "COUNT"
-      header_name           = null
-      header_value          = null
-      positional_constraint = "EXACTLY"
-      text_transformation   = "NONE"
-    }
-  ]
-}
-
-variable "enable_access_logs" {
-  description = "Enable access logging for the ALB"
-  type        = bool
-  default     = false
-}
-
-variable "access_logs_bucket" {
-  description = "S3 bucket for ALB access logs"
-  type        = string
-  default     = ""
-}
-
-variable "access_logs_prefix" {
-  description = "S3 prefix for ALB access logs"
-  type        = string
-  default     = "lb-logs"
+variable "alb_access_logs" {
+  type = object({
+    bucket        = string                      # S3 bucket for ALB access logs
+    bucket_prefix = optional(string, "lb-logs") # S3 prefix for ALB access logs
+  })
+  default = null
 }
