@@ -34,4 +34,5 @@ variable "writers" {
     policy_id = string
     prefix    = string
   }))
+  default = []
 }
