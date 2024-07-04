@@ -93,3 +93,11 @@ variable "sse_algorithm" {
     error_message = "sse algorithm must be one of AES256, aws:kms, aws:kms:dsse"
   }
 }
+
+variable "writers" {
+  type = list(object({
+    policy_id = string
+    prefix    = string
+  }))
+  default = []
+}
