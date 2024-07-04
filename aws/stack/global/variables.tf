@@ -124,6 +124,7 @@ variable "private_buckets_list" {
     kms_deletion_window_in_days     = optional(number, 30)
     region                          = optional(string, null)
     regional                        = optional(bool, false)
+    sse_algorithm                   = optional(string, "AES256")
     replicas = optional(list(object({
       bucket_arn = string
       kms_arn    = string

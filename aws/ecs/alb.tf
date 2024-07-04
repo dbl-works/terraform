@@ -3,7 +3,7 @@ resource "aws_alb" "alb" {
   name = local.name
 
   # At least two subnets in two different Availability Zones must be specified
-  subnets = slice(var.subnet_public_ids, 0, var.no_of_subnets_in_alb)
+  subnets = var.alb_subnet_ids
 
   security_groups = [
     aws_security_group.alb.id,
@@ -15,6 +15,23 @@ resource "aws_alb" "alb" {
     Project     = var.project
     Environment = var.environment
   }
+
+  dynamic "access_logs" {
+    for_each = var.alb_access_logs == null ? [] : [1]
+    content {
+      bucket  = var.alb_access_logs.bucket
+      prefix  = var.alb_access_logs.bucket_prefix
+      enabled = true
+    }
+  }
+}
+
+# WAF
+resource "aws_wafv2_web_acl_association" "alb_waf" {
+  count = var.waf_acl_arn == null ? 0 : 1
+
+  resource_arn = aws_alb.alb.arn
+  web_acl_arn  = var.waf_acl_arn
 }
 
 resource "aws_alb_listener" "http" {

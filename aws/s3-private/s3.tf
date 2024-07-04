@@ -9,6 +9,7 @@ module "s3" {
   kms_deletion_window_in_days = var.kms_deletion_window_in_days
   multi_region_kms_key        = var.multi_region_kms_key
   enable_encryption           = var.sse_algorithm == "aws:kms"
+  writers                     = var.writers
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "main-bucket-lifecycle-rule" {

@@ -12,7 +12,10 @@ module "s3-cloudtrail" {
   environment = var.environment
   project     = var.project
   bucket_name = local.cloudtrail_target_bucket_name
+
+  sse_algorithm = "aws:kms"
 }
+
 resource "aws_s3_bucket_policy" "allow_access_from_cloudtrail_only" {
   bucket = module.s3-cloudtrail.bucket_name
   policy = data.aws_iam_policy_document.allow_access_from_cloudtrail_only.json

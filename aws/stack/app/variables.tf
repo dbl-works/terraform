@@ -197,8 +197,9 @@ variable "elasticache_node_count" {
 }
 
 variable "elasticache_parameter_group_name" {
-  type    = string
-  default = "default.redis7.cluster.on"
+  type        = string
+  default     = null
+  description = "Use default.redis7.cluster.on, for Redis (cluster mode enabled) clusters and replication groups. Use default.redis7, for Redis (cluster mode disabled) clusters and replication groups."
 }
 
 variable "elasticache_replicas_per_node_group" {
@@ -436,6 +437,19 @@ variable "alb_listener_rules" {
   default = []
 }
 
+variable "alb_access_logs" {
+  type = object({
+    bucket        = string
+    bucket_prefix = string
+  })
+  default = null
+}
+
+variable "waf_acl_arn" {
+  type    = string
+  default = null
+}
+
 variable "ecs_name" {
   type    = string
   default = null
@@ -470,15 +484,13 @@ variable "ecs_custom_policies" {
   default = []
 }
 
-variable "no_of_subnets_in_alb" {
-  type    = number
-  default = null
-}
-
-variable "ecs_multi_az" {
-  type        = bool
-  default     = false
-  description = "multi-az for load balancers"
+variable "alb_subnet_type" {
+  type    = string
+  default = "public"
+  validation {
+    condition     = contains(["public", "private"], var.alb_subnet_type)
+    error_message = "subnet_type must be either public or private"
+  }
 }
 
 variable "additional_certificate_arns" {
