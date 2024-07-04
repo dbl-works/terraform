@@ -1,6 +1,6 @@
 resource "aws_wafv2_web_acl" "main" {
-  name  = local.waf_acl_name
-  scope = "REGIONAL" # or "CLOUDFRONT", but we have 1 ALB per cluster
+  name        = local.waf_acl_name
+  scope       = "REGIONAL" # or "CLOUDFRONT", but we have 1 ALB per cluster
   description = "Web ACL for ${var.project} in ${var.region}."
 
   default_action {
@@ -95,48 +95,48 @@ resource "aws_wafv2_web_acl" "main" {
         allow {}
       }
 
-    statement {
-      or_statement {
-        dynamic "statement" {
-          for_each = var.permitted_domain_names
-          content {
-            or_statement {
-              statement {
-                byte_match_statement {
-                  search_string = statement.value
-                  field_to_match {
-                    single_header {
-                      name = "host"
+      statement {
+        or_statement {
+          dynamic "statement" {
+            for_each = var.permitted_domain_names
+            content {
+              or_statement {
+                statement {
+                  byte_match_statement {
+                    search_string = statement.value
+                    field_to_match {
+                      single_header {
+                        name = "host"
+                      }
                     }
+                    text_transformation {
+                      priority = 0
+                      type     = "NONE"
+                    }
+                    # must use "exact match". If you use e.g. "ENDS_WITH" then "evil-example.com" matches "example.com"
+                    positional_constraint = "EXACTLY"
                   }
-                  text_transformation {
-                    priority = 0
-                    type     = "NONE"
-                  }
-                  # must use "exact match". If you use e.g. "ENDS_WITH" then "evil-example.com" matches "example.com"
-                  positional_constraint = "EXACTLY"
                 }
-              }
-              statement {
-                byte_match_statement {
-                  search_string = "." + statement.value
-                  field_to_match {
-                    single_header {
-                      name = "host"
+                statement {
+                  byte_match_statement {
+                    search_string = ".${statement.value}"
+                    field_to_match {
+                      single_header {
+                        name = "host"
+                      }
                     }
+                    text_transformation {
+                      priority = 0
+                      type     = "NONE"
+                    }
+                    positional_constraint = "ENDS_WITH"
                   }
-                  text_transformation {
-                    priority = 0
-                    type     = "NONE"
-                  }
-                  positional_constraint = "ENDS_WITH"
                 }
               }
             }
           }
         }
       }
-    }
 
       visibility_config {
         cloudwatch_metrics_enabled = true
