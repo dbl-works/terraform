@@ -53,6 +53,8 @@ locals {
 }
 
 resource "aws_s3_bucket_policy" "writers" {
+  count = length(var.writers) > 0 ? 1 : 0
+
   bucket = aws_s3_bucket.main.id
   policy = local.writers_policy_json
 }
