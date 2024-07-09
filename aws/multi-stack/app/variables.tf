@@ -43,7 +43,7 @@ variable "project_settings" {
       worker_script_name = string
     })), {})
     host_header       = optional(list(string), null)
-    health_check_path = optional(string, null)
+    health_check_path = optional(string, "/livez")
     health_check_options = optional(
       object({
         healthy_threshold   = optional(number, 2)  # The number of consecutive health checks successes required before considering an unhealthy target healthy.
