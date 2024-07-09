@@ -59,13 +59,19 @@ variable "project_settings" {
 
 variable "tls_settings" {
   type = object({
-    min_tls_version          = optional(string, null)     # 1.0, 1.1, 1.2, 1.3
+    min_tls_version          = optional(string, "1.2")     # 1.0, 1.1, 1.2, 1.3
     tls_1_3                  = optional(string, "on")     # "on/off"
     automatic_https_rewrites = optional(string, "on")     # "on/off"
     ssl                      = optional(string, "strict") # "strict"
     always_use_https         = optional(string, "on")     # "on/off"
   })
-  default = null
+  default = {
+    min_tls_version           = "1.2"
+    tls_1_3                   = "on"
+    automatic_https_rewrites  = "on"
+    ssl                       = "strict"
+    always_use_https          = "on"
+  }
 }
 
 # HSTS protects HTTPS web servers from downgrade attacks.
@@ -79,7 +85,13 @@ variable "hsts_settings" {
     include_subdomains = optional(bool, null)
     nosniff            = optional(bool, null)
   })
-  default = null
+  default = {
+    enabled            =  true
+    preload            =  true
+    max_age            =  31536000 # Set it to least value for validating functionality.
+    include_subdomains =  true
+    nosniff            =  true
+  }
 }
 
 variable "kms_deletion_window_in_days" {
