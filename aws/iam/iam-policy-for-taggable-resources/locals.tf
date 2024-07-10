@@ -14,7 +14,7 @@ locals {
     "s3",
     "waf",
     "wafv2",
-    "waf-regional"
+    "waf-regional",
   ]
 
   admin_resources = [
