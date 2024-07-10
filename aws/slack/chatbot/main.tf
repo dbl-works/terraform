@@ -23,7 +23,7 @@ resource "awscc_iam_role" "chatbot" {
       }
     ]
   })
-  managed_policy_arns = [aws_iam_policy.chatbot_policy]
+  managed_policy_arns = [aws_iam_policy.chatbot_policy.arn]
 }
 
 resource "aws_iam_policy" "chatbot_policy" {
