@@ -23,6 +23,7 @@ resource "awscc_iam_role" "chatbot" {
       }
     ]
   })
+  managed_policy_arns = ["arn:aws:iam::aws:policy/aws-service-role/AWSChatbotServiceLinkedRolePolicy"]
 }
 
 resource "awscc_iam_role_policy" "chatbot" {
