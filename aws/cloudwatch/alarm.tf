@@ -19,6 +19,28 @@ resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "running_instance_count" {
+  count               = length(var.cluster_names)
+  alarm_name          = "${var.project}-${var.environment}-ecs-service-${var.database_identifiers[count.index]}"
+  alarm_description   = "Alert when zero running instance"
+  comparison_operator = "LessThanThreshold"
+  threshold           = 1
+  namespace           = "AWS/ECS"
+  period              = var.alarm_period
+  evaluation_periods  = var.alarm_evaluation_periods
+  metric_name         = "RunningTaskCount"
+  statistic           = "Average"
+  treat_missing_data  = var.treat_missing_data
+  alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
+  datapoints_to_alarm = var.datapoints_to_alarm
+
+  dimensions = {
+    ClusterName = var.cluster_names[count.index]
+    ServiceName = "web"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "cluster_memory" {
   count               = length(var.cluster_names)
   alarm_name          = "${var.project}-${var.environment}-cluster-${var.cluster_names[count.index]}-memory-utilization"
