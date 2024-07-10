@@ -11,7 +11,10 @@ locals {
     "elasticloadbalancing",
     "elasticache",
     "rds",
-    "s3"
+    "s3",
+    "waf",
+    "wafv2",
+    "waf-regional",
   ]
 
   admin_resources = [
