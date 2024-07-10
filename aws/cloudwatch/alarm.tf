@@ -24,7 +24,7 @@ resource "aws_cloudwatch_metric_alarm" "running_instance_count" {
   count               = var.enable_container_insights ? 1 : 0
 
   alarm_name          = "${var.project}-${var.environment}-ecs-service-${var.database_identifiers[count.index]}"
-  alarm_description   = "Alert when zero running instance"
+  alarm_description   = "Alert when zero instances are running."
   comparison_operator = "LessThanThreshold"
   threshold           = 1
   namespace           = "ECS/ContainerInsights"
