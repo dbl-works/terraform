@@ -19,7 +19,7 @@ resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
   }
 }
 
-# This alarm is only available when the container insights are enabled in the ECS
+# This alarm is only available when container insights for ECS are enabled.
 resource "aws_cloudwatch_metric_alarm" "running_instance_count" {
   count               = var.enable_container_insights ? 1 : 0
 
