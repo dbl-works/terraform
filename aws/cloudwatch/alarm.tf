@@ -19,17 +19,19 @@ resource "aws_cloudwatch_metric_alarm" "cluster_cpu" {
   }
 }
 
+# This alarm is only available when the container insights are enabled in the ECS
 resource "aws_cloudwatch_metric_alarm" "running_instance_count" {
-  count               = length(var.cluster_names)
+  count               = var.enable_container_insights
+
   alarm_name          = "${var.project}-${var.environment}-ecs-service-${var.database_identifiers[count.index]}"
   alarm_description   = "Alert when zero running instance"
   comparison_operator = "LessThanThreshold"
   threshold           = 1
-  namespace           = "AWS/ECS"
+  namespace           = "ECS/ContainerInsights"
+  statistic           = "Average"
   period              = var.alarm_period
   evaluation_periods  = var.alarm_evaluation_periods
   metric_name         = "RunningTaskCount"
-  statistic           = "Average"
   treat_missing_data  = var.treat_missing_data
   alarm_actions       = var.sns_topic_arns
   ok_actions          = var.sns_topic_arns
