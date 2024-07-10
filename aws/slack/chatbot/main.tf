@@ -1,6 +1,6 @@
 resource "awscc_chatbot_slack_channel_configuration" "chatbot" {
   configuration_name = var.chatbot_name
-  iam_role_arn       = aws_iam_role.chatbot.arn
+  iam_role_arn       = awscc_iam_role.chatbot.arn
   slack_channel_id   = var.slack_channel_id
   slack_workspace_id = var.slack_workspace_id
   user_role_required = false
@@ -8,10 +8,10 @@ resource "awscc_chatbot_slack_channel_configuration" "chatbot" {
   guardrail_policies = var.guardrail_policies
 }
 
-resource "aws_iam_role" "chatbot" {
-  name = "aws-chatbot-role"
+resource "awscc_iam_role" "chatbot" {
+  role_name = "aws-chatbot-role"
 
-  assume_role_policy = jsonencode({
+  assume_role_policy_document = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
@@ -23,11 +23,7 @@ resource "aws_iam_role" "chatbot" {
       }
     ]
   })
-}
-
-resource "aws_iam_role_policy_attachment" "chatbot" {
-  role       = aws_iam_role.chatbot.name
-  policy_arn = aws_iam_policy.chatbot_policy.arn
+  managed_policy_arns = [aws_iam_policy.chatbot_policy]
 }
 
 resource "aws_iam_policy" "chatbot_policy" {
