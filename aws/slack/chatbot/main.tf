@@ -23,46 +23,45 @@ resource "awscc_iam_role" "chatbot" {
       }
     ]
   })
-  managed_policy_arns = ["arn:aws:iam::aws:policy/AWSResourceExplorerReadOnlyAccess"]
 }
 
-# resource "aws_iam_policy" "chatbot_policy" {
-#   name = "chatbot-policy"
-#
-#   policy = jsonencode({
-#     "Version" : "2012-10-17",
-#     "Statement" : [
-#       {
-#         "Action" : [
-#           "SNS:ListSubscriptionsByTopic",
-#           "SNS:ListTopics",
-#           "SNS:Unsubscribe",
-#           "SNS:Subscribe",
-#           "SNS:ListSubscriptions"
-#         ],
-#         "Effect" : "Allow",
-#         "Resource" : "*"
-#       },
-#       {
-#         "Action" : [
-#           "cloudwatch:List*",
-#           "cloudwatch:Get*"
-#         ],
-#         "Effect" : "Allow",
-#         "Resource" : "*"
-#       },
-#       {
-#         "Effect" : "Allow",
-#         "Action" : [
-#           "logs:PutLogEvents",
-#           "logs:CreateLogStream",
-#           "logs:DescribeLogStreams",
-#           "logs:CreateLogGroup",
-#           "logs:DescribeLogGroups"
-#         ],
-#         "Resource" : "arn:aws:logs:*:*:log-group:/aws/chatbot/*"
-#       }
-#     ]
-#   })
-# }
-#
+resource "awscc_iam_role_policy" "chatbot" {
+  policy_name = "chatbot-policy"
+  role_name   = awscc_iam_role.chatbot.id
+
+  policy_document = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : [
+          "SNS:ListSubscriptionsByTopic",
+          "SNS:ListTopics",
+          "SNS:Unsubscribe",
+          "SNS:Subscribe",
+          "SNS:ListSubscriptions"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "*"
+      },
+      {
+        "Action" : [
+          "cloudwatch:List*",
+          "cloudwatch:Get*"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:PutLogEvents",
+          "logs:CreateLogStream",
+          "logs:DescribeLogStreams",
+          "logs:CreateLogGroup",
+          "logs:DescribeLogGroups"
+        ],
+        "Resource" : "arn:aws:logs:*:*:log-group:/aws/chatbot/*"
+      }
+    ]
+  })
+}
