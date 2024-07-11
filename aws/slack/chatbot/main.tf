@@ -1,36 +1,51 @@
-resource "awscc_chatbot_slack_channel_configuration" "chatbot" {
-  configuration_name = var.chatbot_name
-  iam_role_arn       = awscc_iam_role.chatbot.arn
-  slack_channel_id   = var.slack_channel_id
-  slack_workspace_id = var.slack_workspace_id
-  user_role_required = false
-  sns_topic_arns     = var.sns_topic_arns
-  guardrail_policies = var.guardrail_policies
+resource "aws_cloudformation_stack" "chatbot_slack_config" {
+  name = "aws-chatbot-slack-config"
+
+  template_body = jsonencode({
+    Resources = {
+      SlackChannelConfiguration = {
+        Type = "AWS::Chatbot::SlackChannelConfiguration"
+        Properties = {
+          ConfigurationName = var.chatbot_name
+          IamRoleArn        = aws_iam_role.chatbot.arn
+          SlackChannelId    = var.slack_channel_id
+          SlackWorkspaceId  = var.slack_workspace_id
+          SnsTopicArns      = var.sns_topic_arns
+        }
+      }
+    }
+  })
+
+  capabilities = ["CAPABILITY_IAM"]
 }
 
-resource "awscc_iam_role" "chatbot" {
-  role_name = "aws-chatbot-role"
+resource "aws_iam_role" "chatbot" {
+  name = "aws_chatbot_role"
 
-  assume_role_policy_document = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
       {
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "chatbot.amazonaws.com"
-        },
-        "Action" : "sts:AssumeRole"
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "chatbot.amazonaws.com"
+        }
       }
     ]
   })
-  managed_policy_arns = ["arn:aws:iam::aws:policy/aws-service-role/AWSChatbotServiceLinkedRolePolicy"]
 }
 
-resource "awscc_iam_role_policy" "chatbot" {
-  policy_name = "chatbot-policy"
-  role_name   = awscc_iam_role.chatbot.id
+# Attach necessary policies to the IAM role
+resource "aws_iam_role_policy_attachment" "chatbot_policy_attachment" {
+  policy_arn = aws_iam_policy.chatbot_policy.arn
+  role       = aws_iam_role.chatbot.name
+}
 
-  policy_document = jsonencode({
+resource "aws_iam_policy" "chatbot_policy" {
+  name = "chatbot-policy"
+
+  policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
       {
