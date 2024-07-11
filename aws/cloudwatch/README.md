@@ -26,6 +26,7 @@ module "cloudwatch" {
   db_allocated_storage_in_gb     = 100
 
   # optional
+  enable_container_insights = true
   custom_metrics           = [
     {
       "height" : 4,

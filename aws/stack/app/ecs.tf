@@ -90,4 +90,5 @@ module "cloudwatch" {
   db_allocated_storage_in_gb     = var.rds_allocated_storage
   db_is_read_replica             = var.rds_is_read_replica
   datapoints_to_alarm            = var.datapoints_to_alarm
+  enable_container_insights      = var.enable_container_insights
 }

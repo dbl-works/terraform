@@ -150,6 +150,10 @@ module "ecs" {
   enable_access_logs = false
   access_logs_bucket = ""
   access_logs_prefix = "lb-logs"
+
+  # Cloudwatch
+  # Container Insights will discover all the running containers in a cluster and collect performance data at every layer of the performance stack but it will also increase costs. The fees are charged as custom metrics.
+  enable_container_insights   = true
 }
 ```
 
