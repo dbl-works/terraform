@@ -88,8 +88,9 @@ variable "treat_missing_data" {
 }
 
 variable "enable_container_insights" {
-  type     = bool
-  default  = false
+  type        = bool
+  default     = false
+  description = "The alarm for running_instance_count will be created if container insights are enabled"
 }
 
 locals {
