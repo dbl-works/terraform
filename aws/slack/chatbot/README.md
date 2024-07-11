@@ -3,6 +3,10 @@
 Setup AWS chatbot that will pick SNS message from the SNS topic and sent them to selected Slack channel
 
 ## Usage
+1. Before applying the terraform changes, you must [Configure a Slack Client](https://docs.aws.amazon.com/chatbot/latest/adminguide/slack-setup.html) on AWS Chatbot.
+
+2.To retrieve your Slack channel ID and Workspace ID, visit your [workspace Slack URL](https://slack.com/help/articles/221769328-Locate-your-Slack-URL-or-ID).
+
 ```terraform
 module "chatbot" {
   source = "github.com/dbl-works/terraform//slack/chatbot?ref=v2021.07.05"
