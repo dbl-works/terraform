@@ -9,8 +9,17 @@ resource "cloudflare_zone_settings_override" "tls" {
 
   settings {
     tls_1_3                  = var.tls_settings.tls_1_3
+    min_tls_version          = var.tls_settings.min_tls_version
     automatic_https_rewrites = var.tls_settings.automatic_https_rewrites
     ssl                      = var.tls_settings.ssl
     always_use_https         = var.tls_settings.always_use_https
+
+    security_header {
+      enabled            = var.hsts_settings.enabled
+      include_subdomains = var.hsts_settings.include_subdomains
+      max_age            = var.hsts_settings.max_age
+      nosniff            = var.hsts_settings.nosniff
+      preload            = var.hsts_settings.preload
+    }
   }
 }

@@ -50,12 +50,39 @@ variable "s3_cloudflare_records" {
 
 variable "tls_settings" {
   type = object({
-    tls_1_3                  = string # "on/off"
-    automatic_https_rewrites = string # "on/off"
-    ssl                      = string # "strict"
-    always_use_https         = string # "on/off"
+    min_tls_version          = optional(string, "1.2")    # 1.0, 1.1, 1.2, 1.3
+    tls_1_3                  = optional(string, "off")    # "on/off"
+    automatic_https_rewrites = optional(string, "on")     # "on/off"
+    ssl                      = optional(string, "strict") # "strict"
+    always_use_https         = optional(string, "on")     # "on/off"
   })
-  default = null
+  default = {
+    min_tls_version          = "1.2"
+    tls_1_3                  = "off"
+    automatic_https_rewrites = "on"
+    ssl                      = "strict"
+    always_use_https         = "on"
+  }
+}
+
+# HSTS protects HTTPS web servers from downgrade attacks.
+# These attacks redirect web browsers from an HTTPS web server to an attacker-controlled server, allowing bad actors to compromise user data and cookies.
+# https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/
+variable "hsts_settings" {
+  type = object({
+    enabled            = optional(bool, null)
+    preload            = optional(bool, null)
+    max_age            = optional(number, null)
+    include_subdomains = optional(bool, null)
+    nosniff            = optional(bool, null)
+  })
+  default = {
+    enabled            = true
+    preload            = true
+    max_age            = 31536000 # Set it to least value for validating functionality.
+    include_subdomains = true
+    nosniff            = true
+  }
 }
 # =============== Cloudflare ================ #
 
