@@ -21,7 +21,7 @@ resource "azurerm_key_vault_access_policy" "main" {
   key_permissions = [
     "Get",
     "UnwrapKey",
-    "WrapKey"
+    "WrapKey",
   ]
 
   secret_permissions = [

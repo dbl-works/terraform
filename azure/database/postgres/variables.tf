@@ -129,6 +129,11 @@ variable "network_security_group_name" {
   description = "Defaults to 'project-environment-region-db'."
 }
 
+variable "public_network_access_enabled" {
+  type    = bool
+  default = false
+}
+
 variable "subnet_name" {
   type        = string
   default     = null

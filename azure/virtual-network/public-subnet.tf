@@ -9,7 +9,7 @@ resource "azurerm_subnet" "public" {
 }
 
 resource "azurerm_network_security_group" "public" {
-  name                = coalesce(var.private_network_security_group_name, "${local.default_name}-public")
+  name                = coalesce(var.public_network_security_group_name, "${local.default_name}-public")
   location            = var.region
   resource_group_name = var.resource_group_name
 

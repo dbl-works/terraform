@@ -14,6 +14,8 @@ module "virtual-network" {
   db_network_security_group_name      = var.virtual_network_config.db_network_security_group_name
   public_network_security_group_name  = var.virtual_network_config.public_network_security_group_name
   private_network_security_group_name = var.virtual_network_config.private_network_security_group_name
+  public_subnet_config                = var.virtual_network_config.public_subnet_config
+  private_subnet_config               = var.virtual_network_config.private_subnet_config
   network_interface_name              = var.virtual_network_config.network_interface_name
   db_dns_zone_name                    = var.virtual_network_config.db_dns_zone_name
 
