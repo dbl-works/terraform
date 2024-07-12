@@ -49,13 +49,14 @@ variable "container_registry_config" {
 
 variable "database_config" {
   type = object({
-    name                    = optional(string, null)
-    version                 = optional(string, null)
-    storage_mb              = optional(number, null)
-    storage_tier            = optional(string, null)
-    sku_name                = optional(string, null)
-    log_retention_period    = optional(number, null)
-    log_min_error_statement = optional(string, null)
+    name                          = optional(string, null)
+    version                       = optional(string, null)
+    storage_mb                    = optional(number, null)
+    storage_tier                  = optional(string, null)
+    sku_name                      = optional(string, null)
+    log_retention_period          = optional(number, null)
+    log_min_error_statement       = optional(string, null)
+    public_network_access_enabled = optional(bool, false)
   })
   default = {}
 }
@@ -129,6 +130,30 @@ variable "virtual_network_config" {
     private_network_security_group_name = optional(string, null)
     network_interface_name              = optional(string, null)
     db_dns_zone_name                    = optional(string, null)
+    public_subnet_config = optional(
+      list(object({
+        priority                   = number # Start from 100
+        direction                  = string // Inbound, Outbound
+        access                     = optional(string, "Allow")
+        protocol                   = optional(string, "Tcp")
+        source_port_range          = string // "*"
+        destination_port_range     = string
+        source_address_prefix      = string
+        destination_address_prefix = string
+      })), []
+    ),
+    private_subnet_config = optional(
+      list(object({
+        priority                   = number # Start from 100
+        direction                  = string // Inbound, Outbound
+        access                     = optional(string, "Allow")
+        protocol                   = optional(string, "Tcp")
+        source_port_range          = string // "*"
+        destination_port_range     = string
+        source_address_prefix      = string
+        destination_address_prefix = string
+      })), []
+    ),
   })
   default = {}
 }
