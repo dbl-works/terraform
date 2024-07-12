@@ -8,7 +8,6 @@ data "azurerm_key_vault_secret" "database_password" {
   key_vault_id = var.key_vault_id
 }
 
-# TODO: Make database shareable
 module "database" {
   source = "../../database/postgres"
 
@@ -19,6 +18,8 @@ module "database" {
   environment         = var.environment
   private_dns_zone_id = module.virtual-network.db_private_dns_zone_id
   delegated_subnet_id = module.virtual-network.db_subnet_id
+
+  public_network_access_enabled = var.database_config.public_network_access_enabled
 
   # Key vault must be created before database
   administrator_login    = data.azurerm_key_vault_secret.database_user.value
