@@ -85,10 +85,10 @@ variable "transit_encryption_mode" {
   type        = string
   default     = "required"
   description = "when migrating from no encryption to encryption, this must be set to 'preferred', then apply changes, then set to 'required'"
+
   validation {
     condition     = contains(["required", "preferred"], var.transit_encryption_mode)
     error_message = "transit_encryption_mode must be either 'required' or 'preferred'"
-
   }
 }
 
