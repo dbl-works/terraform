@@ -12,6 +12,7 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
   subnet_group_name           = aws_elasticache_subnet_group.main.name
   at_rest_encryption_enabled  = true
   transit_encryption_enabled  = var.transit_encryption_enabled # we should not allow setting this to false, but we have legacy apps that need to be upgraded
+  transit_encryption_mode     = var.transit_encryption_mode
   kms_key_id                  = var.kms_key_arn
   snapshot_retention_limit    = var.snapshot_retention_limit
   # When you change an attribute, such as engine_version,
@@ -55,6 +56,7 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
   subnet_group_name          = aws_elasticache_subnet_group.main.name
   at_rest_encryption_enabled = true
   transit_encryption_enabled = var.transit_encryption_enabled # we should not allow setting this to false, but we have legacy apps that need to be upgraded
+  transit_encryption_mode    = var.transit_encryption_mode
   kms_key_id                 = var.kms_key_arn
   snapshot_retention_limit   = var.snapshot_retention_limit
   apply_immediately          = true
