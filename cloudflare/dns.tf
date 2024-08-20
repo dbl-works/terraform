@@ -3,7 +3,7 @@ resource "cloudflare_record" "api" {
   zone_id = data.cloudflare_zone.default.id
   name    = "api"
   type    = "CNAME"
-  value   = var.alb_dns_name
+  content = var.alb_dns_name
   proxied = true
 }
 
@@ -14,7 +14,7 @@ resource "cloudflare_record" "bastion" {
   zone_id = data.cloudflare_zone.default.id
   name    = "bastion"
   type    = "CNAME"
-  value   = var.bastion_public_dns
+  content = var.bastion_public_dns
   proxied = false
 }
 
@@ -26,7 +26,7 @@ resource "cloudflare_record" "s3" {
   zone_id = data.cloudflare_zone.default.id
   name    = each.key
   type    = "CNAME"
-  value   = var.domain
+  content = var.domain
   proxied = true
 }
 
