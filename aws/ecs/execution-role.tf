@@ -149,10 +149,10 @@ resource "aws_iam_role_policy" "ecs-task-execution-policy" {
 }
 
 locals {
-  kms_and_secret_arns = flatten([
+  kms_and_secret_arns = compact(flatten([
     var.secrets_arns,
     var.kms_key_arns,
-  ])
+  ]))
 }
 
 # Making secret/kms ARNs optional was added later.
