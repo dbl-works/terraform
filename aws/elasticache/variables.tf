@@ -82,13 +82,13 @@ variable "transit_encryption_enabled" {
 }
 
 variable "transit_encryption_mode" {
-  type    = string
-  default = "required"
-  # nullable    = true
+  type        = string
+  default     = "required"
+  nullable    = true
   description = "when migrating from no encryption to encryption, this must be set to 'preferred', then apply changes, then set to 'required'"
 
   validation {
-    condition     = var.transit_encryption_mode == null || contains(["required", "preferred"], var.transit_encryption_mode)
+    condition     = var.transit_encryption_mode == null || var.transit_encryption_mode == "required" || var.transit_encryption_mode == "preferred"
     error_message = "transit_encryption_mode must be either 'required' or 'preferred'"
   }
 }
