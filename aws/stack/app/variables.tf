@@ -397,6 +397,18 @@ variable "rds_ca_cert_identifier" {
 # =============== ECS ================ #
 variable "health_check_path" { default = "/livez" }
 
+variable "elasticache_transit_encryption_mode" {
+  type        = string
+  default     = null
+  nullable    = true
+  description = "when migrating from no encryption to encryption, this must be set to 'preferred', then apply changes, then set to 'required'"
+
+  validation {
+    condition     = var.elasticache_transit_encryption_mode == null || var.elasticache_transit_encryption_mode == "required" || var.elasticache_transit_encryption_mode == "preferred"
+    error_message = "elasticache_transit_encryption_mode must be either 'required' or 'preferred'"
+  }
+}
+
 variable "enable_container_insights" {
   type    = bool
   default = null
