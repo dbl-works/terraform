@@ -84,6 +84,7 @@ variable "transit_encryption_enabled" {
 variable "transit_encryption_mode" {
   type        = string
   default     = "required"
+  nullable    = true
   description = "when migrating from no encryption to encryption, this must be set to 'preferred', then apply changes, then set to 'required'"
 
   validation {

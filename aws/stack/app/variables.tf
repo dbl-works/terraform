@@ -400,6 +400,7 @@ variable "health_check_path" { default = "/livez" }
 variable "elasticache_transit_encryption_mode" {
   type        = string
   default     = null
+  nullable    = true
   description = "when migrating from no encryption to encryption, this must be set to 'preferred', then apply changes, then set to 'required'"
 
   validation {
