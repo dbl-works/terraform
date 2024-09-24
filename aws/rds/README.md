@@ -52,7 +52,17 @@ To get a list of RDS versions, you can use the following command:
 aws rds describe-db-engine-versions --engine postgres --engine-version 13 --region us-east-1 --endpoint https://rds.us-east-1.amazonaws.com --output text --query 'DBEngineVersions[*].{Engine:Engine,EngineVersion:EngineVersion}'
 ```
 
+## RDS Engine Major Version Upgrade
 
+To upgrade your major engine version, follow the checklist:
+
+1. Communicate: Notify The Team about the upgrade to expect downtime or interruption.
+2. On Web UI: Enable Multi-AZ on the DB if not already enabled. Wait until changes are applied.
+3. On Web UI: Change `DB parameter group` value to be `defautl.postgresX` (where X is postgres version, i.e. `16`). Wait until changes are applied.
+4. Terraform Script: Update the `rds_engine_version` to the target major version `rds_engine_version = X`.
+5. On Web UI: Reboot Will be Required. (⚠️ There will be a downtime for a few seconds/minutes, make sure you still have Multi-AZ enabled to reduce the downtime).
+6. Run `terraform apply`. It should disable the Multi-AZ if not configured.
+7. Disable Mutli-AZ (As per your setup).
 
 ## Temporary password for AWS IAM role-based access
 
