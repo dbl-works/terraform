@@ -57,12 +57,12 @@ aws rds describe-db-engine-versions --engine postgres --engine-version 13 --regi
 To upgrade your major engine version, follow the checklist:
 
 1. Communicate: Notify The Team about the upgrade to expect downtime or interruption.
-2. On Web UI: Enable Multi-AZ on the DB if not already enabled. Wait until changes are applied.
-3. On Web UI: Change `DB parameter group` value to be `defautl.postgresX` (where X is postgres version, i.e. `16`). Wait until changes are applied.
+2. On Web UI: If Multi-AZ is not already enabled on the DB, enable it. Wait until the changes are applied.
+3. On Web UI, Change the `DB parameter group` value to `default.postgresX` (where X is the PostgreSQL version, i.e., `16`). Wait until the changes are applied. This is required since we have custom parameter groups that AWS can't auto-update.
 4. Terraform Script: Update the `rds_engine_version` to the target major version `rds_engine_version = X`.
-5. On Web UI: Reboot Will be Required. (⚠️ There will be a downtime for a few seconds/minutes, make sure you still have Multi-AZ enabled to reduce the downtime).
-6. Run `terraform apply`. It should disable the Multi-AZ if not configured.
-7. Disable Mutli-AZ (As per your setup).
+5. Run `terraform apply`. It should disable the Multi-AZ if not configured.
+6. On Web UI: Reboot the RDS Instance (required when changing the parameter group; terraform-apply will create a custom group for the new version). ⚠️ There will be a downtime for a few seconds/minutes; ensure you still have Multi-AZ enabled to reduce the downtime.
+7. [optional] revert enabling multi-AZ.
 
 ## Temporary password for AWS IAM role-based access
 
