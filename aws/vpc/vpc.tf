@@ -2,8 +2,10 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 locals {
-  account_id = data.aws_caller_identity.current.account_id
-  region     = data.aws_region.current.name
+  account_id   = data.aws_caller_identity.current.account_id
+  region       = data.aws_region.current.name
+  subnet_count = length(var.availability_zones)
+  subnet_keys  = [for i in range(local.subnet_count) : tostring(i)]
 }
 
 resource "aws_vpc" "vpc" {
@@ -26,6 +28,7 @@ resource "aws_internet_gateway" "main" {
     Project     = var.project
   }
 }
+
 resource "aws_route_table" "main" {
   vpc_id = aws_vpc.vpc.id
   tags = {
@@ -34,6 +37,7 @@ resource "aws_route_table" "main" {
     Project     = var.project
   }
 }
+
 resource "aws_route" "all" {
   route_table_id         = aws_route_table.main.id
   destination_cidr_block = "0.0.0.0/0"
@@ -43,21 +47,22 @@ resource "aws_route" "all" {
 # DEPRECATED: This is the existing public network that allows internet access
 # range 10.0.0.0 - 10.0.2.255
 resource "aws_subnet" "public" {
-  count                   = length(var.availability_zones)
+  for_each                = toset(local.subnet_keys)
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = cidrsubnet(var.cidr_block, 8, count.index + 1)
+  cidr_block              = cidrsubnet(var.cidr_block, 8, index(var.availability_zones, each.key) + 1)
   map_public_ip_on_launch = true
-  availability_zone       = var.availability_zones[count.index]
+  availability_zone       = var.availability_zones[tonumber(each.key)]
 
   tags = {
-    Name        = "${var.project}-${var.environment}-public-${count.index + 1}"
+    Name        = "${var.project}-${var.environment}-public-${index(var.availability_zones, each.key) + 1}"
     Environment = var.environment
     Project     = var.project
   }
 }
+
 resource "aws_route_table_association" "public" {
-  count          = length(aws_subnet.public)
-  subnet_id      = aws_subnet.public[count.index].id
+  for_each       = toset(local.subnet_keys)
+  subnet_id      = aws_subnet.public[each.key].id
   route_table_id = aws_route_table.main.id
 }
 
@@ -65,14 +70,14 @@ resource "aws_route_table_association" "public" {
 # All outgoing traffic must go via NAT gateway
 # range 10.0.100.0 - 10.0.102.255
 resource "aws_subnet" "private" {
-  count                   = length(var.availability_zones)
+  for_each                = toset(local.subnet_keys)
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = cidrsubnet(var.cidr_block, 8, count.index + 100)
+  cidr_block              = cidrsubnet(var.cidr_block, 8, tonumber(each.key) + 100)
   map_public_ip_on_launch = false
-  availability_zone       = var.availability_zones[count.index]
+  availability_zone       = var.availability_zones[tonumber(each.key)]
 
   tags = {
-    Name        = "${var.project}-${var.environment}-private-${count.index + 1}"
+    Name        = "${var.project}-${var.environment}-private-${tonumber(each.key) + 1}"
     Environment = var.environment
     Project     = var.project
   }
