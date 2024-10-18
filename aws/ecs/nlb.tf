@@ -1,5 +1,11 @@
+locals {
+  create_nlb = length(var.allowlisted_ssh_ips) > 0
+  nlb_count  = local.create_nlb ? 1 : 0
+  nlb_keys   = local.create_nlb ? ["0"] : []
+}
+
 resource "aws_lb" "nlb" {
-  count              = length(var.allowlisted_ssh_ips) > 0 ? 1 : 0
+  for_each           = toset(local.nlb_keys)
   name               = "${local.name}-nlb"
   load_balancer_type = "network"
   # The NLB is configured for single-region deployment as it serves developer-only purposes, and we accept the associated downtime risks.
@@ -14,7 +20,7 @@ resource "aws_lb" "nlb" {
 
 # Bastion is allowed, only from some IPs
 resource "aws_lb_target_group" "ssh" {
-  count       = length(aws_lb.nlb)
+  for_each    = toset(local.nlb_keys)
   name        = "${local.name}-ssh"
   port        = 22
   protocol    = "TCP"
@@ -23,13 +29,13 @@ resource "aws_lb_target_group" "ssh" {
 }
 
 resource "aws_lb_listener" "ssh" {
-  count             = length(aws_lb.nlb)
-  load_balancer_arn = aws_lb.nlb[count.index].id
+  for_each          = toset(local.nlb_keys)
+  load_balancer_arn = aws_lb.nlb[each.key].id
   port              = "22"
   protocol          = "TCP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.ssh[count.index].arn
+    target_group_arn = aws_lb_target_group.ssh[each.key].arn
     type             = "forward"
   }
 }
