@@ -49,12 +49,12 @@ resource "aws_route" "all" {
 resource "aws_subnet" "public" {
   for_each                = toset(local.subnet_keys)
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = cidrsubnet(var.cidr_block, 8, index(var.availability_zones, each.key) + 1)
+  cidr_block              = cidrsubnet(var.cidr_block, 8, tonumber(each.key) + 1)
   map_public_ip_on_launch = true
   availability_zone       = var.availability_zones[tonumber(each.key)]
 
   tags = {
-    Name        = "${var.project}-${var.environment}-public-${index(var.availability_zones, each.key) + 1}"
+    Name        = "${var.project}-${var.environment}-public-${tonumber(each.key) + 1}"
     Environment = var.environment
     Project     = var.project
   }

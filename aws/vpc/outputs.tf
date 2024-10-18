@@ -8,13 +8,13 @@ output "cidr_block" {
 }
 
 output "subnet_public_ids" {
-  value = aws_subnet.public.*.id
+  value = [for subnet in aws_subnet.public : subnet.id]
 }
 
 output "subnet_private_ids" {
-  value = aws_subnet.private.*.id
+  value = [for subnet in aws_subnet.private : subnet.id]
 }
 
 output "route_table_ids" {
-  value = aws_route_table.main[*].id
+  value = [for route_table in aws_route_table.main : route_table]
 }
