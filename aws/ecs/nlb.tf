@@ -1,6 +1,5 @@
 locals {
   create_nlb = length(var.allowlisted_ssh_ips) > 0
-  nlb_count  = local.create_nlb ? 1 : 0
   nlb_keys   = local.create_nlb ? ["0"] : []
 }
 
