@@ -14,7 +14,7 @@ resource "aws_cloudwatch_event_rule" "rotate_circleci_token" {
 
 resource "aws_cloudwatch_log_group" "rotate_circleci_token" {
   name              = "/aws/events/${local.name}"
-  retention_in_days = 14
+  retention_in_days = var.cloudwatch_logs_retention_in_days
 
   tags = {
     Project = var.project

@@ -43,3 +43,9 @@ variable "memory_size" {
   description = "The amount of memory that your function has access to."
   default     = 128
 }
+
+variable "cloudwatch_logs_retention_in_days" {
+  type     = number
+  default  = 14
+  nullable = false
+}
