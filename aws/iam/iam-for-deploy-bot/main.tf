@@ -174,6 +174,7 @@ resource "aws_iam_policy" "deploy-bot-lambda-access" {
       {
         Effect = "Allow"
         Action = [
+          "lambda:AddPermission",
           "lambda:GetPolicy",
           "lambda:GetFunction",
           "lambda:ListFunctions",
@@ -189,7 +190,8 @@ resource "aws_iam_policy" "deploy-bot-lambda-access" {
           "lambda:UntagResource",
           "iam:ListRolePolicies",
           "iam:GetRolePolicy",
-          "iam:GetRole"
+          "iam:GetRole",
+          "iam:PassRole"
         ]
         Resource = "*"
       }
