@@ -163,6 +163,42 @@ resource "aws_iam_policy" "service-discovery-access" {
   })
 }
 
+resource "aws_iam_policy" "deploy-bot-lambda-access" {
+  name        = "DeployBot_LambdaAccess"
+  path        = "/"
+  description = "Allow Lambda access for deploy-bot"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:AddPermission",
+          "lambda:GetPolicy",
+          "lambda:GetFunction",
+          "lambda:ListFunctions",
+          "lambda:ListVersionsByFunction",
+          "lambda:GetFunctionConfiguration",
+          "lambda:GetFunctionCodeSigningConfig",
+          "lambda:UpdateFunctionCode",
+          "lambda:UpdateFunctionConfiguration",
+          "lambda:PublishVersion",
+          "lambda:CreateFunction",
+          "lambda:DeleteFunction",
+          "lambda:TagResource",
+          "lambda:UntagResource",
+          "iam:ListRolePolicies",
+          "iam:GetRolePolicy",
+          "iam:GetRole",
+          "iam:PassRole"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_group_policy_attachment" "deploy-bot-ecs-access" {
   group      = aws_iam_group.deploy-bot-deploy-access.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
@@ -191,4 +227,9 @@ resource "aws_iam_group_policy_attachment" "deploy-bot-s3-access" {
 resource "aws_iam_group_policy_attachment" "service-discovery-access" {
   group      = aws_iam_group.deploy-bot-deploy-access.name
   policy_arn = aws_iam_policy.service-discovery-access.arn
+}
+
+resource "aws_iam_group_policy_attachment" "deploy-bot-lambda-access" {
+  group      = aws_iam_group.deploy-bot-deploy-access.name
+  policy_arn = aws_iam_policy.deploy-bot-lambda-access.arn
 }
