@@ -28,9 +28,9 @@ data "aws_iam_policy_document" "s3" {
   }
 }
 
-resource "aws_iam_user_policy" "s3" {
+resource "aws_iam_group_policy" "s3" {
   name   = "s3-access-for-${module.s3.bucket_name}"
-  user   = aws_iam_user.guest.name
+  group  = "guest-humans"
   policy = data.aws_iam_policy_document.s3.json
 }
 
