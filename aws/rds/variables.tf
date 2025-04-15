@@ -29,6 +29,12 @@ variable "engine_version" {
   nullable = false
 }
 
+variable "storage_type" {
+  default  = "gp2"
+  type     = string
+  nullable = false
+}
+
 variable "allocated_storage" {
   type    = number
   default = 10
