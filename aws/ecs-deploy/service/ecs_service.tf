@@ -103,6 +103,12 @@ resource "aws_ecs_service" "main" {
     ignore_changes = [
       desired_count # We should not care about the desired count after the first deployment
     ]
+
+    #
+    # If set to true, the resource will be protected from destruction via Terraform.
+    # Destroying the resource will require doing so manually via the AWS console or CLI.
+    #
+    prevent_destroy = true
   }
 }
 
