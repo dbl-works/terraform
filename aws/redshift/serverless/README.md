@@ -201,3 +201,5 @@ connection = PG.connect(ENV["REDSHIFT_CONNECTION_URL"])
 **Human Access**: Developers should connect through a bastion host deployed in ECS using IAM authentication. Access is managed through the separate `iam/iam-policy-for-redshift-serverless` module which uses tag-based access control. Users with matching Project/Environment tags automatically get access to Redshift Serverless resources.
 
 **Tagging**: The Redshift Serverless resources (namespace, workgroup) are automatically tagged with Project and Environment values to enable tag-based access control.
+
+**Note**: If you're using the NAT module and adding a third subnet, ensure you're using a version that includes the fix for dynamic subnet creation. Older versions may fail with "Invalid for_each argument" errors.
