@@ -7,6 +7,9 @@ resource "aws_redshiftserverless_namespace" "main" {
   # IAM role for Redshift to access other AWS services (for zero-ETL integration)
   default_iam_role_arn = aws_iam_role.redshift_serverless_default.arn
 
+  # AWS requires the default IAM role to also be included in the iam_roles list
+  iam_roles = [aws_iam_role.redshift_serverless_default.arn]
+
   tags = {
     Name        = "${var.project}-${var.environment}"
     Project     = var.project

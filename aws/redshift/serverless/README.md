@@ -9,12 +9,22 @@
 1. Create or update your app secrets in AWS Secrets Manager with the path: `{project}/infra/{environment}`
 2. Add a key called `redshift_root_password` with a secure password value
 
+### Password Requirements
+
+The Redshift admin password must meet AWS requirements:
+- **Maximum length**: 64 characters
+- **Minimum length**: 8 characters
+- Must contain at least one uppercase letter, one lowercase letter, and one number
+- Can contain printable ASCII characters except `"` (double quote), `\` (backslash), `'` (single quote), `/` (forward slash), `@`, and space
+
 Example AWS CLI command:
 ```bash
 aws secretsmanager put-secret-value \
   --secret-id "myproject/infra/staging" \
   --secret-string '{"redshift_root_password":"your-secure-password-here"}'
 ```
+
+⚠️ **Warning**: Passwords longer than 64 characters will cause deployment to fail with a validation error.
 
 The module will automatically read this password from your existing app secrets vault.
 
@@ -42,6 +52,29 @@ module "redshift_serverless" {
 
 # Your application connects using password from Secrets Manager
 # Developers connect via bastion host using IAM authentication (see separate IAM module)
+```
+
+if you are using the `stack/app` module:
+
+```terraform
+module "redshift_serverless" {
+  source = "github.com/dbl-works/terraform//aws/redshift/serverless?ref=v2021.07.01"
+
+  region      = local.region
+  project     = local.project
+  environment = local.environment
+
+  # VPC Configuration
+  vpc_id     = module.stack.vpc_id
+  subnet_ids = module.stack.subnet_private_ids
+
+  # RDS Configuration (for zero-ETL)
+  source_rds_arn               = module.stack.database_arn
+  source_rds_security_group_id = module.stack.database_security_group_id
+
+  # ECS Configuration
+  ecs_security_group_id = module.stack.ecs_security_group_id
+}
 ```
 
 ### Connection URL Setup
