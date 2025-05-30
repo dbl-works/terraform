@@ -24,8 +24,6 @@ RDS zero-ETL integration is **only supported** for:
 
 ❌ **Not supported**: Regular RDS PostgreSQL instances
 
-Set `create_rds_integration = true` only if your RDS instance supports zero-ETL.
-
 **For Aurora clusters**: Use the **cluster ARN** (from `aws_rds_cluster`), not the instance ARN (from `aws_rds_cluster_instance`). Aurora creates both a cluster and instances, but the zero-ETL integration requires the cluster ARN.
 
 ### Password Requirements
@@ -68,7 +66,6 @@ module "redshift_serverless" {
   ecs_security_group_id = module.ecs.ecs_security_group_id
 
   # RDS Integration (optional - only for Aurora MySQL/PostgreSQL or RDS MySQL)
-  create_rds_integration           = false  # Set to true if your RDS supports zero-ETL
   source_rds_arn                   = module.rds.cluster_arn              # Use cluster_arn for Aurora
   source_rds_security_group_id     = module.rds.database_security_group_id
 }
@@ -95,7 +92,6 @@ module "redshift_serverless" {
   ecs_security_group_id = module.stack.ecs_security_group_id
 
   # RDS Integration (optional - only for Aurora MySQL/PostgreSQL or RDS MySQL)
-  create_rds_integration           = false  # Set to true if your RDS supports zero-ETL
   source_rds_arn                   = module.stack.cluster_arn            # Use cluster_arn for Aurora
   source_rds_security_group_id     = module.stack.database_security_group_id
 }
