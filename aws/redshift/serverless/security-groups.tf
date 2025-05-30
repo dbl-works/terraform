@@ -1,7 +1,3 @@
-locals {
-  name = "${var.project}-${var.environment}"
-}
-
 resource "aws_security_group" "redshift" {
   name        = "${local.name}-redshift"
   description = "Security group for Redshift Serverless ${local.name}"

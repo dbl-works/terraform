@@ -1,5 +1,9 @@
 data "aws_caller_identity" "current" {}
 
+locals {
+  name = "${var.project}-${var.environment}"
+}
+
 variable "vpc_id" {}
 variable "project" {}
 variable "environment" {}
