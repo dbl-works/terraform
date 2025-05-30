@@ -26,6 +26,8 @@ RDS zero-ETL integration is **only supported** for:
 
 Set `create_rds_integration = true` only if your RDS instance supports zero-ETL.
 
+**For Aurora clusters**: Use the **cluster ARN** (from `aws_rds_cluster`), not the instance ARN (from `aws_rds_cluster_instance`). Aurora creates both a cluster and instances, but the zero-ETL integration requires the cluster ARN.
+
 ### Password Requirements
 
 The Redshift admin password must meet AWS requirements:
@@ -67,7 +69,7 @@ module "redshift_serverless" {
 
   # RDS Integration (optional - only for Aurora MySQL/PostgreSQL or RDS MySQL)
   create_rds_integration           = false  # Set to true if your RDS supports zero-ETL
-  source_rds_arn                   = module.rds.database_arn
+  source_rds_arn                   = module.rds.cluster_arn              # Use cluster_arn for Aurora
   source_rds_security_group_id     = module.rds.database_security_group_id
 }
 
@@ -94,7 +96,7 @@ module "redshift_serverless" {
 
   # RDS Integration (optional - only for Aurora MySQL/PostgreSQL or RDS MySQL)
   create_rds_integration           = false  # Set to true if your RDS supports zero-ETL
-  source_rds_arn                   = module.stack.database_arn
+  source_rds_arn                   = module.stack.cluster_arn            # Use cluster_arn for Aurora
   source_rds_security_group_id     = module.stack.database_security_group_id
 }
 ```
@@ -165,7 +167,7 @@ connection = PG.connect(ENV["REDSHIFT_CONNECTION_URL"])
   - `subnet_ids`: From `module.vpc.subnet_private_ids`
 
 - **RDS (already in place)**
-  - `source_rds_arn`: From `module.rds.database_arn`
+  - `source_rds_arn`: From `module.rds.cluster_arn`
   - `source_rds_security_group_id`: From `module.rds.database_security_group_id`
 
 - **ECS (already in place)**
