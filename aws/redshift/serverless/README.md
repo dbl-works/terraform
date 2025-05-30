@@ -2,6 +2,22 @@
 
 [Docs](https://registry.terraform.io/providers/hashicorp/aws/5.99.0/docs/resources/redshiftserverless_workgroup)
 
+## Prerequisites
+
+**IMPORTANT**: Before using this module, you must create a master password for Redshift and store it in AWS Secrets Manager.
+
+1. Create or update your app secrets in AWS Secrets Manager with the path: `{project}/infra/{environment}`
+2. Add a key called `redshift_root_password` with a secure password value
+
+Example AWS CLI command:
+```bash
+aws secretsmanager put-secret-value \
+  --secret-id "myproject/infra/staging" \
+  --secret-string '{"redshift_root_password":"your-secure-password-here"}'
+```
+
+The module will automatically read this password from your existing app secrets vault.
+
 ## Usage
 
 ```terraform
@@ -11,9 +27,6 @@ module "redshift_serverless" {
   region      = "eu-central-1"
   project     = "someproject"
   environment = "staging"
-
-  # Authentication
-  admin_password = var.redshift_password  # For application access (store in AWS Secrets Manager)
 
   # VPC Configuration
   vpc_id     = module.vpc.id
@@ -34,12 +47,17 @@ module "redshift_serverless" {
 In a Ruby app:
 
 ```ruby
+# Read password from your app secrets (same source as Terraform)
+app_secrets = JSON.parse(
+  aws_secrets_client.get_secret_value(secret_id: "#{project}/app/#{environment}").secret_string
+)
+
 connection = PG.connect(
   host: "module.redshift_serverless.endpoint",
   port: 5439,
-  dbname: "mydb",
-  user: "admin",
-  password: "var.redshift_password",
+  dbname: module.redshift_serverless.database_name,
+  user: module.redshift_serverless.admin_username,
+  password: app_secrets["redshift_root_password"]
 )
 ```
 
@@ -57,9 +75,6 @@ connection = PG.connect(
 - **Human Users (Developers)**: Use IAM authentication via bastion host. Access is controlled by tag-based IAM policies in the separate `iam/iam-policy-for-redshift-serverless` module.
 
 ### Variables to Pass In
-
-- **Authentication**
-  - `admin_password`: Password for the admin user (applications will use this)
 
 - **VPC (already in place)**
   - `vpc_id`: From `module.vpc.id`

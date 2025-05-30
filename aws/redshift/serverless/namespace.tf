@@ -1,7 +1,7 @@
 resource "aws_redshiftserverless_namespace" "main" {
   namespace_name      = "${var.project}-${var.environment}"
   admin_username      = "admin"
-  admin_user_password = var.admin_password
+  admin_user_password = local.infra_credentials.redshift_root_password
   db_name             = replace("${var.project}_${var.environment}", "/[^0-9A-Za-z_]/", "_")
 
   # IAM role for Redshift to access other AWS services (for zero-ETL integration)

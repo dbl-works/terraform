@@ -1,7 +1,12 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_secretsmanager_secret_version" "app" {
+  secret_id = "${var.project}/infra/${var.environment}"
+}
+
 locals {
-  name = "${var.project}-${var.environment}"
+  name            = "${var.project}-${var.environment}"
+  infra_credentials = jsondecode(data.aws_secretsmanager_secret_version.app.secret_string)
 }
 
 variable "vpc_id" {}
@@ -16,12 +21,6 @@ variable "subnet_ids" {
 variable "region" {
   type    = string
   default = "eu-central-1"
-}
-
-variable "admin_password" {
-  type        = string
-  description = "The password for the admin user"
-  sensitive   = true
 }
 
 variable "source_rds_arn" {
