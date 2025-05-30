@@ -44,21 +44,46 @@ module "redshift_serverless" {
 # Developers connect via bastion host using IAM authentication (see separate IAM module)
 ```
 
-In a Ruby app:
+### Connection URL Setup
+
+After deploying this module, Terraform will output a complete connection URL. Copy this URL to your app secrets:
+
+```bash
+# 1. Get the connection URL from Terraform output (it's marked as sensitive)
+terraform output -raw connection_url
+
+# 2. Add it to your app secrets
+aws secretsmanager put-secret-value \
+  --secret-id "myproject/app/staging" \
+  --secret-string '{"REDSHIFT_CONNECTION_URL":"postgresql://admin:password@endpoint:5439/database"}'
+```
+
+### ECS Deployment Configuration
+
+Add `REDSHIFT_CONNECTION_URL` to your ECS deployment secrets:
+
+```terraform
+module "ecs-deploy" {
+  source = "github.com/dbl-works/terraform//ecs-deploy/service?ref=main"
+
+  project     = "myproject"
+  environment = "staging"
+
+  app_config = {
+    name    = "web"
+    secrets = [
+      "REDSHIFT_CONNECTION_URL"  # Add this to make it available as ENV var
+    ]
+    # ... other config
+  }
+}
+```
+
+### In your Ruby app:
 
 ```ruby
-# Read password from your app secrets (same source as Terraform)
-app_secrets = JSON.parse(
-  aws_secrets_client.get_secret_value(secret_id: "#{project}/app/#{environment}").secret_string
-)
-
-connection = PG.connect(
-  host: "module.redshift_serverless.endpoint",
-  port: 5439,
-  dbname: module.redshift_serverless.database_name,
-  user: module.redshift_serverless.admin_username,
-  password: app_secrets["redshift_root_password"]
-)
+# The connection URL is now available as an environment variable
+connection = PG.connect(ENV["REDSHIFT_CONNECTION_URL"])
 ```
 
 ### Module Outputs
@@ -66,12 +91,13 @@ connection = PG.connect(
 - `endpoint`: Redshift Serverless endpoint for connections
 - `database_name`: Name of the database
 - `admin_username`: Admin username for password authentication
+- `connection_url`: Complete PostgreSQL connection URL (copy this to your app secrets)
 
 ## Implementation Plan
 
 ### Authentication Strategy
 
-- **Applications (ECS)**: Use password authentication with credentials stored in AWS Secrets Manager
+- **Applications (ECS)**: Use a complete connection URL containing all credentials, stored in app secrets and made available as environment variables via ECS secrets
 - **Human Users (Developers)**: Use IAM authentication via bastion host. Access is controlled by tag-based IAM policies in the separate `iam/iam-policy-for-redshift-serverless` module.
 
 ### Variables to Pass In
@@ -112,7 +138,7 @@ connection = PG.connect(
 
 ### Note
 
-**Application Access**: Applications should retrieve the Redshift password from AWS Secrets Manager at runtime.
+**Application Access**: After deploying this module, copy the `connection_url` output to your app secrets as `REDSHIFT_CONNECTION_URL`. Then add `REDSHIFT_CONNECTION_URL` to your ECS deployment secrets to make it available as an environment variable.
 
 **Human Access**: Developers should connect through a bastion host deployed in ECS using IAM authentication. Access is managed through the separate `iam/iam-policy-for-redshift-serverless` module which uses tag-based access control. Users with matching Project/Environment tags automatically get access to Redshift Serverless resources.
 

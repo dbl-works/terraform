@@ -1,12 +1,12 @@
 data "aws_caller_identity" "current" {}
 
-data "aws_secretsmanager_secret_version" "app" {
+data "aws_secretsmanager_secret_version" "infra" {
   secret_id = "${var.project}/infra/${var.environment}"
 }
 
 locals {
-  name            = "${var.project}-${var.environment}"
-  infra_credentials = jsondecode(data.aws_secretsmanager_secret_version.app.secret_string)
+  name             = "${var.project}-${var.environment}"
+  infra_credentials = jsondecode(data.aws_secretsmanager_secret_version.infra.secret_string)
 }
 
 variable "vpc_id" {}
