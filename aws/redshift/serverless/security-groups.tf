@@ -38,14 +38,7 @@ resource "aws_security_group_rule" "redshift_from_rds" {
   description              = "Redshift access from RDS for zero-ETL integration"
 }
 
-# Allow all outbound traffic
-# Redshift may need to communicate with AWS services for management and data operations
-resource "aws_security_group_rule" "redshift_egress" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = -1
-  security_group_id = aws_security_group.redshift.id
-  cidr_blocks       = ["0.0.0.0/0"]
-  description       = "All outbound traffic"
-}
+# Note: No egress rules defined
+# Redshift Serverless is a fully managed service where AWS handles service-to-service
+# communication through their managed infrastructure. Explicit egress rules are not
+# required for normal operation including zero-ETL integration.
