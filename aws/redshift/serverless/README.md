@@ -4,10 +4,27 @@
 
 ## Prerequisites
 
-**IMPORTANT**: Before using this module, you must create a master password for Redshift and store it in AWS Secrets Manager.
+**IMPORTANT**: Before using this module, you must ensure your infrastructure meets AWS requirements.
 
-1. Create or update your app secrets in AWS Secrets Manager with the path: `{project}/infra/{environment}`
-2. Add a key called `redshift_root_password` with a secure password value
+### VPC and Subnet Requirements
+
+Redshift Serverless has **strict requirements**:
+- **Minimum 3 subnets** in **3 different Availability Zones**
+- **Minimum 3 free IP addresses per subnet**
+- Exception: US West (N. California) requires 3 subnets across only 2 AZs
+
+If your VPC only has 2 subnets (our default), you must create a third subnet in a different AZ before deploying this module.
+
+### RDS Zero-ETL Integration Requirements
+
+RDS zero-ETL integration is **only supported** for:
+- **Aurora MySQL** (version 3.05.2+)
+- **Aurora PostgreSQL** (version 16.4+)
+- **RDS for MySQL** (versions 8.0 and 8.4)
+
+❌ **Not supported**: Regular RDS PostgreSQL instances
+
+Set `create_rds_integration = true` only if your RDS instance supports zero-ETL.
 
 ### Password Requirements
 
@@ -16,6 +33,9 @@ The Redshift admin password must meet AWS requirements:
 - **Minimum length**: 8 characters
 - Must contain at least one uppercase letter, one lowercase letter, and one number
 - Can contain printable ASCII characters except `"` (double quote), `\` (backslash), `'` (single quote), `/` (forward slash), `@`, and space
+
+1. Create or update your app secrets in AWS Secrets Manager with the path: `{project}/infra/{environment}`
+2. Add a key called `redshift_root_password` with a secure password value
 
 Example AWS CLI command:
 ```bash
@@ -38,16 +58,17 @@ module "redshift_serverless" {
   project     = "someproject"
   environment = "staging"
 
-  # VPC Configuration
+  # VPC Configuration (requires 3 subnets in 3 AZs)
   vpc_id     = module.vpc.id
-  subnet_ids = module.vpc.subnet_private_ids
-
-  # RDS Configuration (for zero-ETL)
-  source_rds_arn               = module.rds.database_arn
-  source_rds_security_group_id = module.rds.database_security_group_id
+  subnet_ids = module.vpc.subnet_private_ids  # Must have 3 subnets
 
   # ECS Configuration
   ecs_security_group_id = module.ecs.ecs_security_group_id
+
+  # RDS Integration (optional - only for Aurora MySQL/PostgreSQL or RDS MySQL)
+  create_rds_integration           = false  # Set to true if your RDS supports zero-ETL
+  source_rds_arn                   = module.rds.database_arn
+  source_rds_security_group_id     = module.rds.database_security_group_id
 }
 
 # Your application connects using password from Secrets Manager
@@ -64,16 +85,17 @@ module "redshift_serverless" {
   project     = local.project
   environment = local.environment
 
-  # VPC Configuration
+  # VPC Configuration (requires 3 subnets in 3 AZs)
   vpc_id     = module.stack.vpc_id
-  subnet_ids = module.stack.subnet_private_ids
-
-  # RDS Configuration (for zero-ETL)
-  source_rds_arn               = module.stack.database_arn
-  source_rds_security_group_id = module.stack.database_security_group_id
+  subnet_ids = module.stack.subnet_private_ids  # Must have 3 subnets
 
   # ECS Configuration
   ecs_security_group_id = module.stack.ecs_security_group_id
+
+  # RDS Integration (optional - only for Aurora MySQL/PostgreSQL or RDS MySQL)
+  create_rds_integration           = false  # Set to true if your RDS supports zero-ETL
+  source_rds_arn                   = module.stack.database_arn
+  source_rds_security_group_id     = module.stack.database_security_group_id
 }
 ```
 
