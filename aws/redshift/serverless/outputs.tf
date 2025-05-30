@@ -14,9 +14,15 @@ output "admin_username" {
 }
 
 output "connection_url" {
-  description = "Complete PostgreSQL connection URL for Redshift Serverless (copy this to your app secrets as REDSHIFT_CONNECTION_URL)"
+  description = "PostgreSQL-compatible connection URL for Redshift Serverless (for use with pg gem and similar PostgreSQL drivers - copy this to your app secrets as REDSHIFT_CONNECTION_URL)"
   value       = "postgresql://${aws_redshiftserverless_namespace.main.admin_username}:${local.infra_credentials.redshift_root_password}@${aws_redshiftserverless_workgroup.main.endpoint[0].address}:5439/${aws_redshiftserverless_namespace.main.db_name}"
   sensitive   = true
+}
+
+output "jdbc_url" {
+  description = "JDBC URL for Redshift Serverless (for native Redshift drivers)"
+  value       = "jdbc:redshift://${aws_redshiftserverless_workgroup.main.endpoint[0].address}:5439/${aws_redshiftserverless_namespace.main.db_name}"
+  sensitive   = false
 }
 
 output "namespace_arn" {

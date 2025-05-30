@@ -46,10 +46,10 @@ module "redshift_serverless" {
 
 ### Connection URL Setup
 
-After deploying this module, Terraform will output a complete connection URL. Copy this URL to your app secrets:
+After deploying this module, Terraform will output connection URLs. For Ruby applications using the `pg` gem, use the PostgreSQL-compatible connection URL:
 
 ```bash
-# 1. Get the connection URL from Terraform output (it's marked as sensitive)
+# 1. Get the PostgreSQL-compatible connection URL from Terraform output (it's marked as sensitive)
 terraform output -raw connection_url
 
 # 2. Add it to your app secrets
@@ -57,6 +57,8 @@ aws secretsmanager put-secret-value \
   --secret-id "myproject/app/staging" \
   --secret-string '{"REDSHIFT_CONNECTION_URL":"postgresql://admin:password@endpoint:5439/database"}'
 ```
+
+**Note**: Redshift Serverless is PostgreSQL-compatible, so the `postgresql://` connection string format works with the Ruby `pg` gem and other PostgreSQL drivers. For native Redshift JDBC drivers, use `terraform output jdbc_url` instead.
 
 ### ECS Deployment Configuration
 
@@ -91,7 +93,8 @@ connection = PG.connect(ENV["REDSHIFT_CONNECTION_URL"])
 - `endpoint`: Redshift Serverless endpoint for connections
 - `database_name`: Name of the database
 - `admin_username`: Admin username for password authentication
-- `connection_url`: Complete PostgreSQL connection URL (copy this to your app secrets)
+- `connection_url`: PostgreSQL-compatible connection URL (copy this to your app secrets for Ruby pg gem)
+- `jdbc_url`: JDBC URL for native Redshift drivers
 
 ## Implementation Plan
 
