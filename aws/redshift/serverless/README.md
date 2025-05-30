@@ -28,7 +28,7 @@ module "redshift_serverless" {
 }
 
 # Your application connects using password from Secrets Manager
-# Developers connect via bastion host using IAM authentication
+# Developers connect via bastion host using IAM authentication (see separate IAM module)
 ```
 
 In a Ruby app:
@@ -48,15 +48,13 @@ connection = PG.connect(
 - `endpoint`: Redshift Serverless endpoint for connections
 - `database_name`: Name of the database
 - `admin_username`: Admin username for password authentication
-- `iam_role_arn_admin`: IAM role ARN for admin access (human users)
-- `iam_role_arn_readonly`: IAM role ARN for readonly access (human users)
 
 ## Implementation Plan
 
 ### Authentication Strategy
 
 - **Applications (ECS)**: Use password authentication with credentials stored in AWS Secrets Manager
-- **Human Users (Developers)**: Use IAM authentication via bastion host running in ECS
+- **Human Users (Developers)**: Use IAM authentication via bastion host. Access is controlled by tag-based IAM policies in the separate `iam/iam-policy-for-redshift-serverless` module.
 
 ### Variables to Pass In
 
@@ -95,14 +93,12 @@ connection = PG.connect(
   - Ingress from `ecs_security_group_id` on port 5439 (for both apps and bastion)
   - Ingress from `source_rds_security_group_id` (for zero-ETL)
 
-- `aws_iam_group` and `aws_iam_policy` (for human access):
-  Creates IAM groups and policies for developers to connect via bastion host:
-  - `redshift-serverless-admin`: Full access for admin users
-  - `redshift-serverless-readonly`: Read-only access for developers
-  - Policies grant `redshift-serverless:GetCredentials` for IAM authentication
-
 ---
 
 ### Note
 
-Applications should retrieve the Redshift password from AWS Secrets Manager at runtime. Human users should connect through a bastion host deployed in ECS using IAM authentication, similar to the RDS access pattern.
+**Application Access**: Applications should retrieve the Redshift password from AWS Secrets Manager at runtime.
+
+**Human Access**: Developers should connect through a bastion host deployed in ECS using IAM authentication. Access is managed through the separate `iam/iam-policy-for-redshift-serverless` module which uses tag-based access control. Users with matching Project/Environment tags automatically get access to Redshift Serverless resources.
+
+**Tagging**: The Redshift Serverless resources (namespace, workgroup) are automatically tagged with Project and Environment values to enable tag-based access control.
