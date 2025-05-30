@@ -10,7 +10,7 @@ Either project_name and project_tag needs to be present.
 
 ```terraform
 module "iam_redshift_serverless_taggable_resources" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-redshift-serverless/taggable-resources?ref=v2025.05.18"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-redshift-serverless/taggable-resources?ref=v2025.05.18"
 
   region       = "eu-central-1"
   environment  = "staging"

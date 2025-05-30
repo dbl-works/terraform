@@ -22,7 +22,7 @@ The module will automatically read this password from your existing app secrets 
 
 ```terraform
 module "redshift_serverless" {
-  source = "github.com/dbl-works/terraform//redshift/serverless?ref=v2021.07.01"
+  source = "github.com/dbl-works/terraform//aws/redshift/serverless?ref=v2021.07.01"
 
   region      = "eu-central-1"
   project     = "someproject"
