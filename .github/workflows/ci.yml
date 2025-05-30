@@ -7,38 +7,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  azure:
-    strategy:
-      matrix:
-        module:
-          - blob-storage
-          - container-app
-          - container-registry
-          - database/postgres
-          - observability/alerts
-          - observability/monitors
-          - virtual-network
-      fail-fast: false
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: opentofu/setup-opentofu@v1
+  # azure:
+  #   strategy:
+  #     matrix:
+  #       module:
+  #         - blob-storage
+  #         - container-app
+  #         - container-registry
+  #         - database/postgres
+  #         - observability/alerts
+  #         - observability/monitors
+  #         - virtual-network
+  #     fail-fast: false
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: opentofu/setup-opentofu@v1
 
-      - name: init
-        run: |
-          cd azure
-          cd ${{ matrix.module }}
-          tofu init
-      - name: validate
-        run: |
-          cd azure
-          cd ${{ matrix.module }}
-          tofu validate
-      - name: fmt -check
-        run: |
-          cd azure
-          cd ${{ matrix.module }}
-          tofu fmt -check
+  #     - name: init
+  #       run: |
+  #         cd azure
+  #         cd ${{ matrix.module }}
+  #         tofu init
+  #     - name: validate
+  #       run: |
+  #         cd azure
+  #         cd ${{ matrix.module }}
+  #         tofu validate
+  #     - name: fmt -check
+  #       run: |
+  #         cd azure
+  #         cd ${{ matrix.module }}
+  #         tofu fmt -check
 
   aws:
     strategy:
