@@ -4,7 +4,7 @@ output "cluster_arn" {
   description = "Aurora cluster ARN (use this for zero-ETL integration source_rds_arn)"
 }
 
-output "cluster_endpoint" {
+output "cluster_writer_endpoint" {
   value = aws_rds_cluster.main.endpoint
   description = "Aurora cluster writer endpoint"
 }
@@ -37,11 +37,6 @@ output "database_name" {
 output "security_group_id" {
   value = aws_security_group.db.id
   description = "Security group ID for Aurora cluster"
-}
-
-output "database_url" {
-  value = aws_rds_cluster.main.endpoint
-  description = "Database endpoint URL (alias for cluster_endpoint)"
 }
 
 output "database_arn" {

@@ -134,22 +134,12 @@ module "redshift_serverless" {
 | Name | Description |
 |------|-------------|
 | `cluster_arn` | Aurora cluster ARN (use for zero-ETL integration) |
-| `cluster_endpoint` | Aurora cluster writer endpoint |
+| `cluster_writer_endpoint` | Aurora cluster writer endpoint |
 | `cluster_reader_endpoint` | Aurora cluster reader endpoint |
 | `cluster_identifier` | Aurora cluster identifier |
 | `cluster_members` | List of Aurora cluster members |
 | `cluster_resource_id` | Aurora cluster resource ID (for IAM auth) |
 | `security_group_id` | Aurora security group ID |
-
-### Compatibility Outputs
-
-These outputs maintain compatibility with the RDS module for easier migration:
-
-| Name | Description |
-|------|-------------|
-| `database_url` | Database endpoint (alias for cluster_endpoint) |
-| `database_arn` | Database ARN (alias for cluster_arn) |
-| `database_security_group_id` | Security group ID (alias for security_group_id) |
 
 ### IAM Outputs
 
