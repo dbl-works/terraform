@@ -1,12 +1,13 @@
 locals {
   major_engine_version      = split(".", var.engine_version)[0]
   final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}"
+  cluster_name              = "${var.project}-${var.environment}-cluster"
   name                      = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
 }
 
 # Aurora PostgreSQL Cluster
 resource "aws_rds_cluster" "main" {
-  cluster_identifier              = var.identifier == null ? local.name : var.identifier
+  cluster_identifier              = var.identifier == null ? local.cluster_name : var.identifier
   engine                         = "aurora-postgresql"
   engine_version                 = var.engine_version
   database_name                  = replace("${var.project}_${var.environment}", "/[^0-9A-Za-z_]/", "_")
@@ -41,7 +42,7 @@ resource "aws_rds_cluster" "main" {
   manage_master_user_password = false
 
   tags = {
-    Name        = local.name
+    Name        = local.cluster_name
     Project     = var.project
     Environment = var.environment
   }
@@ -57,11 +58,11 @@ resource "aws_rds_cluster" "main" {
   }
 }
 
-# Aurora PostgreSQL Cluster Instances
+# Aurora PostgreSQL Cluster Instances with updated naming
 resource "aws_rds_cluster_instance" "cluster_instances" {
   count = var.instance_count
 
-  identifier              = "${aws_rds_cluster.main.cluster_identifier}-${count.index}"
+  identifier              = "${var.project}-${var.environment}-node-${count.index}"
   cluster_identifier      = aws_rds_cluster.main.id
   instance_class          = var.instance_class
   engine                  = aws_rds_cluster.main.engine
@@ -77,7 +78,7 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
   ca_cert_identifier = var.ca_cert_identifier
 
   tags = {
-    Name        = "${local.name}-${count.index}"
+    Name        = "${var.project}-${var.environment}-node-${count.index}"
     Project     = var.project
     Environment = var.environment
   }
