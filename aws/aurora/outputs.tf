@@ -39,15 +39,9 @@ output "security_group_id" {
   description = "Security group ID for Aurora cluster"
 }
 
-# Compatibility outputs (for easier migration from RDS module)
 output "database_url" {
   value = aws_rds_cluster.main.endpoint
   description = "Database endpoint URL (alias for cluster_endpoint)"
-}
-
-output "database_address" {
-  value = aws_rds_cluster.main.endpoint
-  description = "Database address (alias for cluster_endpoint)"
 }
 
 output "database_arn" {
