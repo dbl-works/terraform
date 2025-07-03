@@ -23,6 +23,10 @@ output "ecs_security_group_id" {
   value = module.ecs.ecs_security_group_id
 }
 
+output "rds_security_group_id" {
+  value = var.skip_rds ? "" : module.rds[0].database_security_group_id
+}
+
 output "subnet_public_ids" {
   value = module.vpc.subnet_public_ids
 }

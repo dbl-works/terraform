@@ -255,9 +255,46 @@ variable "elasticache_automatic_failover_enabled" {
   type    = bool
   default = true
 }
-# =============== Elasticache ================ #
+# =============== Elasticache - END ================ #
 
-# =============== RDS ================ #
+# =============== AURORA - START ================ #
+variable "skip_aurora" {
+  type    = bool
+  default = true
+}
+
+variable "aurora_allow_from_cidr_blocks" {
+  type    = list(string)
+  default = []
+}
+
+variable "aurora_instance_count" {
+  type    = number
+  default = 1
+}
+
+variable "aurora_instance_class" {
+  default = "db.serverless"
+  type    = string
+}
+
+variable "aurora_max_capacity" {
+  type    = number
+  default = 2.0
+}
+
+variable "aurora_seconds_until_auto_pause" {
+  type    = number
+  default = 300
+}
+
+variable "aurora_engine_version" {
+  type    = string
+  default = "17.4"
+}
+# =============== AURORA - END ================ #
+
+# =============== RDS - START ================ #
 variable "skip_rds" {
   type    = bool
   default = false
