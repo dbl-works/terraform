@@ -19,21 +19,21 @@ variable "backup_retention_period" {
 }
 
 variable "instance_class" {
-  default = "db.r6g.large"
-  type    = string
+  default     = "db.r6g.large"
+  type        = string
   description = "Instance class for Aurora cluster instances"
 }
 
 variable "instance_count" {
   type        = number
   default     = 1
-  description = "Number of Aurora cluster instances"
+  description = "Number of Nodes in the Aurora cluster. Use 2 for separate writer/reader nodes."
 }
 
 variable "engine_version" {
-  default  = "16.4"
-  type     = string
-  nullable = false
+  default     = "16.4"
+  type        = string
+  nullable    = false
   description = "Aurora PostgreSQL engine version (e.g., '16.4', '15.4')"
 }
 
@@ -94,14 +94,14 @@ variable "regional" {
 }
 
 variable "snapshot_identifier" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
   description = "DB snapshot to create Aurora cluster from"
 }
 
 variable "delete_automated_backups" {
-  type    = bool
-  default = true
+  type        = bool
+  default     = true
   description = "Whether to delete automated backups immediately after the DB cluster is deleted"
 }
 

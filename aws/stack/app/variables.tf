@@ -255,9 +255,27 @@ variable "elasticache_automatic_failover_enabled" {
   type    = bool
   default = true
 }
-# =============== Elasticache ================ #
+# =============== Elasticache - END ================ #
 
-# =============== RDS ================ #
+# =============== AURORA - START ================ #
+variable "skip_aurora" {
+  type    = bool
+  default = true
+}
+
+variable "aurora_instance_count" {
+  type    = number
+  default = 1
+}
+
+variable "aurora_instance_class" {
+  default     = "db.t4g.medium"
+  type        = string
+  description = "Instance class for Aurora cluster instances"
+}
+# =============== AURORA - END ================ #
+
+# =============== RDS - START ================ #
 variable "skip_rds" {
   type    = bool
   default = false
