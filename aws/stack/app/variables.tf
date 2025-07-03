@@ -274,7 +274,7 @@ variable "aurora_instance_count" {
 }
 
 variable "aurora_instance_class" {
-  default     = "db.t4g.medium"
+  default     = "db.serverless"
   type        = string
   description = "Instance class for Aurora cluster instances"
 }
