@@ -28,6 +28,8 @@ module "aurora" {
   kms_key_arn = module.aurora-kms-key[0].arn
   password    = local.credentials.db_root_password
 
+  engine_version = var.aurora_engine_version
+
   allow_from_cidr_blocks = var.aurora_allow_from_cidr_blocks
   allow_from_security_groups = [
     module.ecs.ecs_security_group_id

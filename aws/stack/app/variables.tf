@@ -287,6 +287,11 @@ variable "aurora_seconds_until_auto_pause" {
   type    = number
   default = 300
 }
+
+variable "aurora_engine_version" {
+  type    = string
+  default = "17.4"
+}
 # =============== AURORA - END ================ #
 
 # =============== RDS - START ================ #

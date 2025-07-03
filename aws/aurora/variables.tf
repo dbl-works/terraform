@@ -43,10 +43,10 @@ variable "instance_count" {
 }
 
 variable "engine_version" {
-  default     = "16.4"
+  default     = "17.4"
   type        = string
   nullable    = false
-  description = "Aurora PostgreSQL engine version (e.g., '16.4', '15.4')"
+  description = "Aurora PostgreSQL engine version (e.g., '16.4', '17.4')"
 }
 
 # Credentials for the root Aurora user
