@@ -263,6 +263,11 @@ variable "skip_aurora" {
   default = true
 }
 
+variable "aurora_allow_from_cidr_blocks" {
+  type    = list(string)
+  default = []
+}
+
 variable "aurora_instance_count" {
   type    = number
   default = 1
@@ -272,6 +277,18 @@ variable "aurora_instance_class" {
   default     = "db.t4g.medium"
   type        = string
   description = "Instance class for Aurora cluster instances"
+}
+
+variable "aurora_max_capacity" {
+  type        = number
+  default     = 2.0
+  description = "Maximum capacity for serverless instances (e.g., 1.0, 1.5, 2.0, 2.5, etc.). Only used if instance_class is 'db.serverless'."
+}
+
+variable "aurora_seconds_until_auto_pause" {
+  type        = number
+  default     = 300
+  description = "Time in seconds until serverless instances automatically pause (from 5 minutes to 24 hours). Only used if instance_class is 'db.serverless'."
 }
 # =============== AURORA - END ================ #
 

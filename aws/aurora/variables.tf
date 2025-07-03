@@ -19,9 +19,21 @@ variable "backup_retention_period" {
 }
 
 variable "instance_class" {
-  default     = "db.r6g.large"
+  default     = "db.serverless"
   type        = string
-  description = "Instance class for Aurora cluster instances"
+  description = "Instance class for Aurora cluster instances, e.g. 'db.serverless', 'db.t3.medium', 'db.r5.large'."
+}
+
+variable "max_capacity" {
+  type        = number
+  default     = 2.0
+  description = "Maximum capacity for serverless instances (e.g., 1.0, 1.5, 2.0, 2.5, etc.). Only used if instance_class is 'db.serverless'."
+}
+
+variable "seconds_until_auto_pause" {
+  type        = number
+  default     = 300
+  description = "Time in seconds until serverless instances automatically pause (from 5 minutes to 24 hours). Only used if instance_class is 'db.serverless'."
 }
 
 variable "instance_count" {

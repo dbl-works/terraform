@@ -8,28 +8,28 @@ locals {
 # Aurora PostgreSQL Cluster
 resource "aws_rds_cluster" "main" {
   cluster_identifier              = var.identifier == null ? local.cluster_name : var.identifier
-  engine                         = "aurora-postgresql"
-  engine_version                 = var.engine_version
-  database_name                  = replace("${var.project}_${var.environment}", "/[^0-9A-Za-z_]/", "_")
-  master_username                = var.username
-  master_password                = var.password
+  engine                          = "aurora-postgresql"
+  engine_version                  = var.engine_version
+  database_name                   = replace("${var.project}_${var.environment}", "/[^0-9A-Za-z_]/", "_")
+  master_username                 = var.username
+  master_password                 = var.password
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.main.name
-  db_subnet_group_name           = aws_db_subnet_group.main.name
+  db_subnet_group_name            = aws_db_subnet_group.main.name
   vpc_security_group_ids = [
     aws_security_group.db.id,
   ]
 
-  backup_retention_period         = var.backup_retention_period
-  preferred_backup_window         = "03:00-04:00"
-  preferred_maintenance_window    = "sun:04:00-sun:05:00"
-  storage_encrypted              = true
-  kms_key_id                     = var.kms_key_arn
-  deletion_protection            = true
-  skip_final_snapshot           = var.skip_final_snapshot
-  final_snapshot_identifier     = var.final_snapshot_identifier == null ? local.final_snapshot_identifier : var.final_snapshot_identifier
-  apply_immediately              = true
-  snapshot_identifier            = var.snapshot_identifier
-  delete_automated_backups       = var.delete_automated_backups
+  backup_retention_period      = var.backup_retention_period
+  preferred_backup_window      = "03:00-04:00"
+  preferred_maintenance_window = "sun:04:00-sun:05:00"
+  storage_encrypted            = true
+  kms_key_id                   = var.kms_key_arn
+  deletion_protection          = true
+  skip_final_snapshot          = var.skip_final_snapshot
+  final_snapshot_identifier    = var.final_snapshot_identifier == null ? local.final_snapshot_identifier : var.final_snapshot_identifier
+  apply_immediately            = true
+  snapshot_identifier          = var.snapshot_identifier
+  delete_automated_backups     = var.delete_automated_backups
 
   enabled_cloudwatch_logs_exports = [
     "postgresql"
@@ -40,6 +40,16 @@ resource "aws_rds_cluster" "main" {
 
   # Zero-ETL integration support
   manage_master_user_password = false
+
+  dynamic "serverlessv2_scaling_configuration" {
+    for_each = var.instance_class == "db.serverless" ? [1] : []
+
+    content {
+      min_capacity             = 0.0
+      max_capacity             = var.max_capacity
+      seconds_until_auto_pause = var.seconds_until_auto_pause
+    }
+  }
 
   tags = {
     Name        = local.cluster_name
@@ -73,7 +83,7 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
   performance_insights_kms_key_id = var.kms_key_arn
   monitoring_interval             = 5
   monitoring_role_arn             = aws_iam_role.rds-enhanced-monitoring.arn
-  apply_immediately              = true
+  apply_immediately               = true
 
   ca_cert_identifier = var.ca_cert_identifier
 
