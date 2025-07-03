@@ -35,11 +35,7 @@ resource "aws_rds_cluster" "main" {
     "postgresql"
   ]
 
-  # Enable IAM authentication
   iam_database_authentication_enabled = true
-
-  # Zero-ETL integration support
-  manage_master_user_password = true
 
   dynamic "serverlessv2_scaling_configuration" {
     for_each = var.instance_class == "db.serverless" ? [1] : []
