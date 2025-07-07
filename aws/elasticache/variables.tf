@@ -43,7 +43,7 @@ variable "major_version" {
   default = 7
   validation {
     condition     = var.major_version >= local.major_version_bounds[0] && var.major_version <= local.major_version_bounds[1]
-    error_message = "major_version must be ${major_version_bounds[0]} or ${major_version_bounds[1]}"
+    error_message = "major_version must be ${local.major_version_bounds[0]} or ${local.major_version_bounds[1]}"
   }
 }
 
