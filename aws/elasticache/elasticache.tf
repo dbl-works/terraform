@@ -108,4 +108,8 @@ resource "aws_elasticache_parameter_group" "main" {
     name  = "cluster-enabled"
     value = var.cluster_mode ? "yes" : "no"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
