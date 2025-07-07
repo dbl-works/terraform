@@ -1,7 +1,7 @@
 resource "aws_elasticache_replication_group" "non_cluster_mode" {
   count                       = var.cluster_mode ? 0 : 1
   replication_group_id        = local.cluster_name
-  description                 = "Collection ${var.engine} (cluster mode disabled) for ${var.project}-${var.environment}"
+  description                 = "Collection of ${var.engine} (cluster mode disabled) for ${var.project}-${var.environment}"
   engine                      = var.engine
   node_type                   = var.node_type
   num_cache_clusters          = var.node_count
