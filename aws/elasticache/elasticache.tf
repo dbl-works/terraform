@@ -96,7 +96,7 @@ locals {
 resource "aws_elasticache_parameter_group" "main" {
   count = var.parameter_group_name == null ? 1 : 0
 
-  name   = local.cluster_name
+  name   = "${local.cluster_name}-${var.engine}"
   family = local.family
 
   parameter {
