@@ -38,7 +38,6 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
   # Ignore engine version changes since AWS will auto-update minor version changes
   lifecycle {
     ignore_changes = [
-      engine_version,
       num_cache_clusters
     ]
   }
