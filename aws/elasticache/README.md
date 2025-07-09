@@ -43,6 +43,13 @@ module "elasticache" {
   # Compulsory for Cluster Mode
   shard_count = 2
   replicas_per_node_group = 1 # if set to 0, must disable multi-AZ
+
+  # Ignore engine version changes since AWS will auto-update minor version changes
+  lifecycle {
+    ignore_changes = [
+      engine_version,
+    ]
+  }
 }
 ```
 
@@ -62,7 +69,10 @@ Sidekiq does not work with cluster mode. The recommended setup is to have:
 * ca-central-1
 * sa-east-1
 
-As of July 2022. Also, you **must** use Reds `6.2` or later.
+As of July 2025. Also, you **must** use following versions of elasticache:
+
+- Redis `7.1` or later
+- Valkey `8.0` or later
 
 ## Outputs
 
