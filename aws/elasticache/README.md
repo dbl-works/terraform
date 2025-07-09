@@ -77,6 +77,8 @@ As of July 2025. Also, you **must** use following versions of elasticache:
 
 ## Migration from Redis 6.2.6
 
+> 💡 We highly recommned migrating to a desired  engine and version right away to save time.
+
 If you're trying to migrate from <7 Redis version to any new version, you'll likely get an error like this:
 
 ```
@@ -89,6 +91,8 @@ In order to successfully migrate you'll have to explicitly set this param to `nu
 # this will ensure that you'll update engine version successfully
 transit_encryption_mode = null
 ```
+
+Once migrated you can enable `transit_encryption_mode` without replacing resource
 
 ## Outputs
 
