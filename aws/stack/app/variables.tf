@@ -185,6 +185,15 @@ variable "elasticache_node_type" {
   default = "cache.t3.micro"
 }
 
+variable "elasticache_engine" {
+  type    = string
+  default = "redis"
+  validation {
+    condition     = contains(["redis", "valkey"], var.elasticache_engine)
+    error_message = "elasticache engine must be either 'redis' or 'valkey'"
+  }
+}
+
 variable "elasticache_major_version" {
   type    = number
   default = 7

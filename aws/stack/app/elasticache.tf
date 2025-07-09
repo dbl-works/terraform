@@ -14,6 +14,7 @@ module "elasticache" {
   ])))
 
   # optional
+  engine                     = var.elasticache_engine
   name                       = var.elasticache_name
   major_version              = var.elasticache_major_version
   node_type                  = var.elasticache_node_type
