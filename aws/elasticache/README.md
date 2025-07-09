@@ -74,6 +74,22 @@ As of July 2025. Also, you **must** use following versions of elasticache:
 - Redis `7.1` or later
 - Valkey `8.0` or later
 
+
+## Migration from Redis 6.2.6
+
+If you're trying to migrate from <7 Redis version to any new version, you'll likely get an error like this:
+
+```
+Transit encryption mode is not supported for engine version 6.2.6. Please use engine version 7.0.5 or higher.
+```
+
+In order to successfully migrate you'll have to explicitly set this param to `null`:
+
+```
+# this will ensure that you'll update engine version successfully
+transit_encryption_mode = null
+```
+
 ## Outputs
 
 * `endpoint`
