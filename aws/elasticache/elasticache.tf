@@ -1,8 +1,8 @@
 resource "aws_elasticache_replication_group" "non_cluster_mode" {
   count                       = var.cluster_mode ? 0 : 1
   replication_group_id        = local.cluster_name
-  description                 = "Collection of Redis (cluster mode disabled) for ${var.project}-${var.environment}"
-  engine                      = "redis"
+  description                 = "Collection of ${var.engine} (cluster mode disabled) for ${var.project}-${var.environment}"
+  engine                      = var.engine
   node_type                   = var.node_type
   num_cache_clusters          = var.node_count
   preferred_cache_cluster_azs = var.availability_zones
@@ -38,7 +38,6 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
   # Ignore engine version changes since AWS will auto-update minor version changes
   lifecycle {
     ignore_changes = [
-      engine_version,
       num_cache_clusters
     ]
   }
@@ -47,8 +46,8 @@ resource "aws_elasticache_replication_group" "non_cluster_mode" {
 resource "aws_elasticache_replication_group" "cluster_mode" {
   count                      = var.cluster_mode ? 1 : 0
   replication_group_id       = local.cluster_name
-  description                = "Collection of Redis (clusters mode) for ${var.project}-${var.environment}"
-  engine                     = "redis"
+  description                = "Collection of ${var.engine} (clusters mode) for ${var.project}-${var.environment}"
+  engine                     = var.engine
   node_type                  = var.node_type
   parameter_group_name       = var.parameter_group_name == null ? aws_elasticache_parameter_group.main[0].id : var.parameter_group_name
   engine_version             = "${var.major_version}.${var.minor_version}"
@@ -86,15 +85,17 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
 }
 
 locals {
-  # the format is different for different major Redis versions, see: https://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheParameterGroup.html
-  family = "redis${var.major_version == 6 ? "6.x" : "7"}"
-
+  family = var.engine == "valkey" ? (
+    var.major_version == 7 ? "valkey7" : "valkey8"
+  ) : (
+    var.major_version == 6 ? "redis6.x" : "redis7"
+  )
 }
 
 resource "aws_elasticache_parameter_group" "main" {
   count = var.parameter_group_name == null ? 1 : 0
 
-  name   = local.cluster_name
+  name   = "${local.cluster_name}-${var.engine}"
   family = local.family
 
   parameter {
@@ -105,5 +106,9 @@ resource "aws_elasticache_parameter_group" "main" {
   parameter {
     name  = "cluster-enabled"
     value = var.cluster_mode ? "yes" : "no"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
