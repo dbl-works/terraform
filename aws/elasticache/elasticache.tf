@@ -75,13 +75,6 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
     Project     = var.project
     Environment = var.environment
   }
-
-  # Ignore engine version changes since AWS will auto-update minor version changes
-  lifecycle {
-    ignore_changes = [
-      engine_version,
-    ]
-  }
 }
 
 locals {

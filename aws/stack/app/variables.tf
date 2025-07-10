@@ -185,12 +185,24 @@ variable "elasticache_node_type" {
   default = "cache.t3.micro"
 }
 
+variable "elasticache_engine" {
+  type    = string
+  default = "redis"
+  validation {
+    condition     = contains(["redis", "valkey"], var.elasticache_engine)
+    error_message = "elasticache engine must be either 'redis' or 'valkey'"
+  }
+}
+
+locals {
+  major_version_bounds = var.elasticache_engine == "valkey" ? [7, 8] : [6, 7]
+}
 variable "elasticache_major_version" {
   type    = number
   default = 7
   validation {
-    condition     = var.elasticache_major_version >= 6 && var.elasticache_major_version <= 7
-    error_message = "elasticache major_version must be 6 or 7"
+    condition     = var.elasticache_major_version >= local.major_version_bounds[0] && var.elasticache_major_version <= local.major_version_bounds[1]
+    error_message = "elasticache_major_version must be ${local.major_version_bounds[0]} or ${local.major_version_bounds[1]}"
   }
 }
 
