@@ -194,16 +194,9 @@ variable "elasticache_engine" {
   }
 }
 
-locals {
-  major_version_bounds = var.elasticache_engine == "valkey" ? [7, 8] : [6, 7]
-}
 variable "elasticache_major_version" {
   type    = number
   default = 7
-  validation {
-    condition     = var.elasticache_major_version >= local.major_version_bounds[0] && var.elasticache_major_version <= local.major_version_bounds[1]
-    error_message = "elasticache_major_version must be ${local.major_version_bounds[0]} or ${local.major_version_bounds[1]}"
-  }
 }
 
 variable "elasticache_minor_version" {

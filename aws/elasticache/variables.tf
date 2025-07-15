@@ -35,16 +35,9 @@ variable "parameter_group_name" {
   description = "Use default.redis7.cluster.on, for Redis (cluster mode enabled) clusters and replication groups. Use default.redis7, for Redis (cluster mode disabled) clusters and replication groups."
 }
 
-locals {
-  major_version_bounds = var.engine == "valkey" ? [7, 8] : [6, 7]
-}
 variable "major_version" {
   type    = number
   default = 7
-  validation {
-    condition     = var.major_version >= local.major_version_bounds[0] && var.major_version <= local.major_version_bounds[1]
-    error_message = "major_version must be ${local.major_version_bounds[0]} or ${local.major_version_bounds[1]}"
-  }
 }
 
 variable "minor_version" {

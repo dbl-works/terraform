@@ -78,11 +78,9 @@ resource "aws_elasticache_replication_group" "cluster_mode" {
 }
 
 locals {
-  family = var.engine == "valkey" ? (
-    var.major_version == 7 ? "valkey7" : "valkey8"
-  ) : (
+  family = var.engine == "redis" ? (
     var.major_version == 6 ? "redis6.x" : "redis7"
-  )
+  ) : "valkey${var.major_version}"
 }
 
 resource "aws_elasticache_parameter_group" "main" {
