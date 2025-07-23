@@ -69,7 +69,7 @@ resource "aws_rds_cluster_instance" "cluster_instances" {
   count = var.instance_count
 
   identifier              = "${var.project}-${var.environment}-node-${count.index}"
-  cluster_identifier      = aws_rds_cluster.main.id
+  cluster_identifier      = aws_rds_cluster.main.cluster_identifier
   instance_class          = var.instance_class
   engine                  = aws_rds_cluster.main.engine
   engine_version          = aws_rds_cluster.main.engine_version
