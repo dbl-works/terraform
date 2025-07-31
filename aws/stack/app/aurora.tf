@@ -39,4 +39,6 @@ module "aurora" {
   # optional
   instance_count = var.aurora_instance_count
   instance_class = var.aurora_instance_class
+  max_capacity   = var.aurora_max_capacity
+  min_capacity   = var.aurora_min_capacity
 }
