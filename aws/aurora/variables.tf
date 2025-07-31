@@ -27,13 +27,19 @@ variable "instance_class" {
 variable "max_capacity" {
   type        = number
   default     = 2.0
-  description = "Maximum capacity for serverless instances (e.g., 1.0, 1.5, 2.0, 2.5, etc.). Only used if instance_class is 'db.serverless'."
+  description = "[db.serverless] Maximum capacity for serverless instances (e.g., 1.0, 1.5, 2.0, 2.5, etc.)."
+}
+
+variable "min_capacity" {
+  type        = number
+  default     = 0.0
+  description = "[db.serverless] Minimum capacity for serverless instances (e.g., 0.0, 0.5, 1.0, 1.5, etc.). 0.0 means the DB can pause (expect some seconds cold-start)."
 }
 
 variable "seconds_until_auto_pause" {
   type        = number
   default     = 300
-  description = "Time in seconds until serverless instances automatically pause (from 5 minutes to 24 hours). Only used if instance_class is 'db.serverless'."
+  description = "[db.serverless] Time in seconds until serverless instances automatically pause (from 5 minutes to 24 hours)."
 }
 
 variable "instance_count" {

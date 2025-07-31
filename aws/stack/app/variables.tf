@@ -288,6 +288,11 @@ variable "aurora_max_capacity" {
   default = 2.0
 }
 
+variable "aurora_min_capacity" {
+  type    = number
+  default = 0.0
+}
+
 variable "aurora_seconds_until_auto_pause" {
   type    = number
   default = 300

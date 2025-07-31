@@ -41,7 +41,7 @@ resource "aws_rds_cluster" "main" {
     for_each = var.instance_class == "db.serverless" ? [1] : []
 
     content {
-      min_capacity             = 0.0
+      min_capacity             = var.min_capacity
       max_capacity             = var.max_capacity
       seconds_until_auto_pause = var.seconds_until_auto_pause
     }
