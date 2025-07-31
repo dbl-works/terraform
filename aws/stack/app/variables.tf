@@ -288,6 +288,11 @@ variable "aurora_max_capacity" {
   default = 2.0
 }
 
+variable "aurora_min_capacity" {
+  type    = number
+  default = 0.0
+}
+
 variable "aurora_seconds_until_auto_pause" {
   type    = number
   default = 300
@@ -366,6 +371,11 @@ variable "rds_allow_from_cidr_blocks" {
 }
 
 variable "rds_subnet_group_name" {
+  type    = string
+  default = null
+}
+
+variable "aurora_subnet_group_name" {
   type    = string
   default = null
 }
