@@ -370,6 +370,11 @@ variable "rds_subnet_group_name" {
   default = null
 }
 
+variable "aurora_subnet_group_name" {
+  type    = string
+  default = null
+}
+
 variable "rds_backup_retention_period" {
   default = 7
   type    = number
