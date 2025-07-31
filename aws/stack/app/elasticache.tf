@@ -17,6 +17,7 @@ module "elasticache" {
   engine                     = var.elasticache_engine
   name                       = var.elasticache_name
   major_version              = var.elasticache_major_version
+  minor_version              = var.elasticache_minor_version
   node_type                  = var.elasticache_node_type
   node_count                 = var.elasticache_node_count == null ? (var.elasticache_automatic_failover_enabled ? 2 : 1) : var.elasticache_node_count
   snapshot_retention_limit   = var.elasticache_snapshot_retention_limit
