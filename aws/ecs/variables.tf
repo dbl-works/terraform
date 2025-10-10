@@ -181,6 +181,14 @@ variable "alb_listener_rules" {
   default = []
 }
 
+# https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html
+variable "alb_ssl_policy" {
+  description = "SSL policy for the HTTPS listener"
+  type        = string
+  default     = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
+  nullable    = false
+}
+
 variable "service_discovery_enabled" {
   type     = bool
   default  = true
