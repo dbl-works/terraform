@@ -365,6 +365,10 @@ variable "rds_allocated_storage" {
   type    = number
   default = 10
 }
+variable "rds_storage_type" {
+  type    = string
+  default = "gp2"
+}
 variable "rds_allow_from_cidr_blocks" {
   type    = list(string)
   default = []
