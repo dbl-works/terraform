@@ -6,7 +6,7 @@ Configuration to deploy a set of ECS services.
 
 ```terraform
 module "ecs_cluster_services" {
-  source = "github.com/dbl-works/terraform//ecs-deploy/cluster?ref=main"
+  source = "github.com/dbl-works/terraform//aws/ecs-deploy/cluster?ref=main"
 
   environment = "staging"
   project     = module.shared.project

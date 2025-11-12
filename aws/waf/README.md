@@ -19,7 +19,7 @@ Find more limites [here](https://docs.aws.amazon.com/waf/latest/developerguide/l
 
 ```hcl
 module "waf" {
-  source = "github.com/dbl-works/terraform//aws/waf?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/aws/waf?ref=main"
 
   project = local.project
   region  = local.region # or region_name

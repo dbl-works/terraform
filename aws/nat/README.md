@@ -6,7 +6,7 @@ A repository for setting up network address translation (NAT).
 
 ```terraform
 module "nat" {
-  source = "github.com/dbl-works/terraform//nat?ref=v2021.07.12"
+  source = "github.com/dbl-works/terraform//aws/nat?ref=main"
 
   project            = "my-project"
   environment        = "production"

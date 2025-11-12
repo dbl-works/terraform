@@ -9,7 +9,7 @@ Setup AWS chatbot that will pick SNS message from the SNS topic and sent them to
 
 ```terraform
 module "chatbot" {
-  source = "github.com/dbl-works/terraform//slack/chatbot?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/slack/chatbot?ref=main"
 
   chatbot_name       = "facebook-staging-chatbot"
 

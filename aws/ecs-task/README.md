@@ -37,7 +37,7 @@ locals {
 }
 
 module "ecs-task" {
-  source = "github.com/dbl-works/terraform//ecs-task?ref=main"
+  source = "github.com/dbl-works/terraform//aws/ecs-task?ref=main"
 
   for_each = { for idx, name in keys(local.task_list) :
     idx => {

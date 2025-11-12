@@ -9,7 +9,7 @@ Used for any private files from an application, e.g. PDF files linked to a recor
 
 ```terraform
 module "s3-storage" {
-  source = "github.com/dbl-works/terraform//s3-private?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//aws/s3-private?ref=main"
 
   # Required
   environment = "staging"
@@ -41,7 +41,7 @@ module "s3-storage" {
 ### With replica
 ```terraform
 module "s3-private" {
-  source = "github.com/dbl-works/terraform//s3-private?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//aws/s3-private?ref=main"
 
   # Required
   environment = "staging"
@@ -74,7 +74,7 @@ provider "aws" {
 }
 
 module "s3-replica-for-private-bucket-eu-central-1" {
-  source = "github.com/dbl-works/terraform//s3-private?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//aws/s3-private?ref=main"
   providers = {
     aws = aws.eu
   }
@@ -112,7 +112,7 @@ provider "aws" {
 }
 
 module "s3-replica-for-private-bucket-us-east-1" {
-  source = "github.com/dbl-works/terraform//s3-private?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//aws/s3-private?ref=main"
   providers = {
     aws = aws.us
   }

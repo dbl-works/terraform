@@ -51,7 +51,7 @@ resource "aws_iam_user" "user" {
 }
 
 module "iam_ecs_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs/core?ref=v2022.05.18"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-ecs/core?ref=main"
 
   for_each = local.users
 

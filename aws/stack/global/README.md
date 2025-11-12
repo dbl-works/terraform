@@ -22,7 +22,7 @@ provider "aws" {
 }
 
 module "stack-global" {
-  source = "github.com/dbl-works/terraform//stack/global?ref=v2022.11.27"
+  source = "github.com/dbl-works/terraform//aws/stack/global?ref=main"
 
   providers = {
     aws           = aws

@@ -6,7 +6,7 @@ Used for managing lambda functions.
 
 ```terraform
 module "lambda" {
-  source = "github.com/dbl-works/terraform//lambda?ref=main"
+  source = "github.com/dbl-works/terraform//aws/lambda?ref=main"
 
   function_name   = "lambda"
   project         = "dbl"

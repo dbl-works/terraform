@@ -10,7 +10,7 @@ Either project_name and project_tag needs to be present.
 
 ```terraform
 module "iam_ecs_taggable_resources" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs/taggable-resources?ref=v2022.05.18"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-ecs/taggable-resources?ref=main"
 
   region       = "eu-central-1"
   environment  = "staging"

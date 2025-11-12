@@ -15,7 +15,7 @@ Before launching this resource, create a key-pair; read the [docs](https://docs.
 
 ```terraform
 module "http-proxy" {
-  source = "github.com/dbl-works/terraform//http-proxy?ref=v2021.08.24"
+  source = "github.com/dbl-works/terraform//aws/http-proxy?ref=main"
 
   project          = "dbl-works"
   environment      = "production"

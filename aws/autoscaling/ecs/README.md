@@ -7,11 +7,11 @@ This module should allow the ECS to autoscale based on the metric threshold valu
 
 ```terraform
 module "iam_role_for_ecs_scaling" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-ecs-scaling?ref=v2022.10.04"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-ecs-scaling?ref=main"
 }
 
 module "ecs-autoscaling-cpu" {
-  source = "github.com/dbl-works/terraform//autoscaling/ecs?ref=v2022.10.04"
+  source = "github.com/dbl-works/terraform//aws/autoscaling/ecs?ref=main"
 
   # Required
   ecs_service_name = "web"

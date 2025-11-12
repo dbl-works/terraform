@@ -49,7 +49,7 @@ resource "aws_iam_user" "user" {
 }
 
 module "iam_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-s3?ref=v2022.05.18"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-s3?ref=main"
 
   project_access = local.users["gh-user"]["project_access"]
   username       = local.users["gh-user"]["iam"]

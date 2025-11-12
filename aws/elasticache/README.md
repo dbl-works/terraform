@@ -6,7 +6,7 @@ A repository for setting up an elasticache cluster.
 
 ```terraform
 module "elasticache" {
-  source = "github.com/dbl-works/terraform//elasticache?ref=v2021.08.24"
+  source = "github.com/dbl-works/terraform//aws/elasticache?ref=main"
 
   project                = local.project
   environment            = local.environment

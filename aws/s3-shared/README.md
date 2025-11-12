@@ -8,7 +8,7 @@ This depends on [iam-for-humans](iam/iam-for-guest-humans/README.md), because th
 
 ```terraform
 module "s3-shared-client_A" {
-  source = "github.com/dbl-works/terraform//s3-shared?ref=v2024.01.31"
+  source = "github.com/dbl-works/terraform//aws/s3-shared?ref=main"
 
   environment        = "staging"
   project            = "someproject"
@@ -26,7 +26,7 @@ pass the S3 bucket ARN to the ECS module to grant access to it for the apps
 
 ```terraform
 module "ecs" {
-  source = "github.com/dbl-works/terraform//ecs?ref=v2024.01.25
+  source = "github.com/dbl-works/terraform//aws/ecs?ref=main"
 
   grant_read_access_to_s3_arns  = [
     module.s3-shared-client_A.arn
