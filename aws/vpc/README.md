@@ -8,7 +8,7 @@ Creates a VPC in AWS account. Also generates a group of public and private subne
 
 ```terraform
 module "vpc" {
-  source = "github.com/dbl-works/terraform//vpc?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/vpc?ref=main"
 
   account_id         = "12345678"
   availability_zones = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]

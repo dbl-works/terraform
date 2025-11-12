@@ -7,7 +7,7 @@ A repository for storing built docker images.
 
 ```terraform
 module "ecr" {
-  source = "github.com/dbl-works/terraform//ecr?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/ecr?ref=main"
 
   project = local.project
 

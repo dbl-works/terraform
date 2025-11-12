@@ -12,7 +12,7 @@ You should generate the token from a bot-account, not any personal account. Ensu
 
 ```terraform
 module "github-backup" {
-  source = "github.com/dbl-works/terraform//github-backup?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/github-backup?ref=main"
 
   github_org = "dbl-works"
 

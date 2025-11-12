@@ -43,7 +43,7 @@ resource "aws_alb_target_group" "facebook" {
 }
 
 module "stack" {
-  source = "github.com/dbl-works/terraform//stack/app?ref=v2022.05.18"
+  source = "github.com/dbl-works/terraform//aws/stack/app?ref=main"
 
   project            = "someproject"
   environment        = "staging"

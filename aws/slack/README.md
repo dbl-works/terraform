@@ -5,14 +5,14 @@ Creates Chatbot and SNS topic required to setup Slack message
 ## Usage
 ```terraform
 module "slack-sns" {
-  source = "github.com/dbl-works/terraform//slack/sns?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/slack/sns?ref=main"
 
   # Optional
   sns_topic_name = "slack-sns"
 }
 
 module "chatbot" {
-  source = "github.com/dbl-works/terraform//slack/chatbot?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/slack/chatbot?ref=main"
 
   chatbot_name       = "facebook-staging-chatbot"
 

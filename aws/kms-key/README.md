@@ -8,7 +8,7 @@ Encryption keys for securing various AWS resources.
 
 ```terraform
 module "kms-key" {
-  source = "github.com/dbl-works/terraform//kms-key?ref=v2021.07.01"
+  source = "github.com/dbl-works/terraform//aws/kms-key?ref=main"
 
   # Required
   environment = "staging"

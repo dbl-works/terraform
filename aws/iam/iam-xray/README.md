@@ -11,7 +11,7 @@ This module creates the following groups:
 
 ```terraform
 module "xray_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-xray?ref=v2022.05.27"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-xray?ref=main"
 }
 ```
 

@@ -36,7 +36,7 @@ resource "aws_alb_target_group" "facebook" {
 }
 
 module "ecs" {
-  source = "github.com/dbl-works/terraform//ecs?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/ecs?ref=main"
 
   project            = local.project
   environment        = local.environment
