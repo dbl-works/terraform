@@ -120,6 +120,7 @@ module "stack" {
   rds_skip_final_snapshot = false
   rds_instance_class      = "db.t3.micro"
   rds_engine_version      = "13"
+  rds_storage_type        = "gp3"
   rds_allocated_storage   = 100
   rds_multi_az            = true
 

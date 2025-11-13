@@ -12,7 +12,8 @@ This is our stack convention which brings multiple projects together, including:
 - Shared VPC
 
 ## Getting Started
-```
+
+```terraform
 module "multi-stack-setup" {
   source = "github.com/dbl-works/terraform//multi-stack/setup"
 
@@ -32,7 +33,7 @@ module "multi-stack-setup" {
 }
 ```
 
-```
+```terraform
 module "multi-stack" {
   source = "github.com/dbl-works/terraform//multi-stack/app"
 
@@ -71,6 +72,7 @@ module "multi-stack" {
   rds_config = {
     instance_class    = "db.t3.micro"
     allocated_storage = 10
+    storage_type      = "gp3"
   }
 
   # ECS
