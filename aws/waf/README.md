@@ -81,6 +81,10 @@ The module outputs the WAF ARN. Pass this ARN to the ECS module to associate the
 
 The `waf_rules` variable supports two rule types:
 
+Notes:
+- `rule_type` is optional. If omitted, it defaults to `"byte_match"` unless `managed_rule_group_name` is set, in which case it is treated as `"managed_rule_group"`.
+- `header_value` is accepted as a legacy alias for `match_value`.
+
 ### 1. Managed Rule Groups (`rule_type = "managed_rule_group"`)
 
 AWS-managed rule sets that provide protection against common threats:
