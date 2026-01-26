@@ -8,10 +8,10 @@ resource "aws_wafv2_web_acl" "main" {
   }
 
   dynamic "rule" {
-    for_each = var.waf_rules
+    for_each = local.waf_rules_normalized
     content {
       name     = rule.value.name
-      priority = rule.value.priority + 1 # prio must be unique. Hardcoded rules: see below
+      priority = rule.value.priority
 
       # Action block for byte_match rules
       dynamic "action" {
@@ -106,7 +106,7 @@ resource "aws_wafv2_web_acl" "main" {
 
   rule {
     name     = "AllowedDomainsRule"
-    priority = 1 # Adjust the priority accordingly
+    priority = var.allowed_domains_rule_priority
 
     action {
       allow {}
