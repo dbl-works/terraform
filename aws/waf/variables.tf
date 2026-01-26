@@ -70,7 +70,7 @@ locals {
         rule.managed_rule_group_name != null ? "managed_rule_group" : null,
         "byte_match"
       )
-      match_value = coalesce(rule.match_value, rule.header_value)
+      match_value = try(coalesce(rule.match_value, rule.header_value), null)
     })
   ]
 }
