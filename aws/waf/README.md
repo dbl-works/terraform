@@ -19,41 +19,101 @@ Find more limites [here](https://docs.aws.amazon.com/waf/latest/developerguide/l
 
 ```hcl
 module "waf" {
-  source = "github.com/dbl-works/terraform//aws/aws/waf?ref=main"
+  source = "github.com/dbl-works/terraform//aws/waf?ref=main"
 
   project = local.project
   region  = local.region # or region_name
 
-  # NOTE: all subdomans are permitted
+  # NOTE: all subdomains are permitted
   permitted_domain_names = [
     "example.com",
     "example.cloud",
   ]
 
   waf_rules = [
+    # AWS Managed Rule Groups
+    {
+      name                    = "AWSManagedRulesCommonRuleSet"
+      priority                = 1
+      rule_type               = "managed_rule_group"
+      action_type             = "NONE" # Use "COUNT" to only count matches without blocking
+      managed_rule_group_name = "AWSManagedRulesCommonRuleSet"
+    },
+    {
+      name                    = "AWSManagedRulesKnownBadInputsRuleSet"
+      priority                = 2
+      rule_type               = "managed_rule_group"
+      action_type             = "NONE"
+      managed_rule_group_name = "AWSManagedRulesKnownBadInputsRuleSet"
+    },
+
+    # Block exploit file extensions via URI path matching
+    {
+      name                  = "BlockPHP"
+      priority              = 10
+      rule_type             = "byte_match"
+      action_type           = "BLOCK"
+      field_to_match        = "uri_path"
+      match_value           = ".php"
+      positional_constraint = "ENDS_WITH"
+      text_transformation   = "LOWERCASE"
+    },
+
+    # Header-based rules
     {
       name                  = "AllowCloudflare"
-      priority              = 1
+      priority              = 50
+      rule_type             = "byte_match"
       action_type           = "ALLOW"
+      field_to_match        = "header"
       header_name           = "X-Custom-Header"
-      header_value          = "your-secret-value" # inject some secret to the headers in CF
+      match_value           = "your-secret-value"
       positional_constraint = "EXACTLY"
       text_transformation   = "NONE"
     },
-    {
-      name                  = "BlockOtherTraffic"
-      priority              = 2
-      action_type           = "BLOCK"
-      header_name           = "X-Other-Header"
-      header_value          = "block-value"
-      positional_constraint = "CONTAINS"
-      text_transformation   = "LOWERCASE"
-    }
   ]
 }
 ```
 
 The module outputs the WAF ARN. Pass this ARN to the ECS module to associate the WAF with the ALB.
+
+## Rule Types
+
+The `waf_rules` variable supports two rule types:
+
+### 1. Managed Rule Groups (`rule_type = "managed_rule_group"`)
+
+AWS-managed rule sets that provide protection against common threats:
+
+| Rule Group | Description |
+|-----------|-------------|
+| `AWSManagedRulesCommonRuleSet` | General web application protection |
+| `AWSManagedRulesKnownBadInputsRuleSet` | Log4j, Java deserialization, and other known exploits |
+| `AWSManagedRulesSQLiRuleSet` | SQL injection protection |
+| `AWSManagedRulesLinuxRuleSet` | Linux-specific attacks (LFI, command injection) |
+| `AWSManagedRulesUnixRuleSet` | Unix-specific attacks |
+| `AWSManagedRulesPHPRuleSet` | PHP-specific attacks |
+
+For managed rules, use `action_type`:
+- `"NONE"` - Respect the rule group's default actions (block)
+- `"COUNT"` - Override all rules to count only (useful for testing)
+
+### 2. Byte Match Rules (`rule_type = "byte_match"`)
+
+Custom rules that match specific patterns in requests:
+
+| Field | Description |
+|-------|-------------|
+| `field_to_match` | `"header"` or `"uri_path"` |
+| `header_name` | Header name (required when `field_to_match = "header"`) |
+| `match_value` | The string to match against |
+| `positional_constraint` | `"EXACTLY"`, `"STARTS_WITH"`, `"ENDS_WITH"`, `"CONTAINS"` |
+| `text_transformation` | `"NONE"`, `"LOWERCASE"`, `"URL_DECODE"`, etc. |
+
+For byte match rules, use `action_type`:
+- `"ALLOW"` - Allow matching requests
+- `"BLOCK"` - Block matching requests
+- `"COUNT"` - Count but don't block
 
 ## Rules
 
