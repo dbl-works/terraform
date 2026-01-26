@@ -92,6 +92,16 @@ resource "aws_wafv2_web_acl" "main" {
           content {
             name        = rule.value.managed_rule_group_name
             vendor_name = coalesce(rule.value.vendor_name, "AWS")
+
+            dynamic "rule_action_override" {
+              for_each = coalesce(rule.value.excluded_rules, [])
+              content {
+                name = rule_action_override.value
+                action_to_use {
+                  count {}
+                }
+              }
+            }
           }
         }
       }

@@ -42,8 +42,9 @@ variable "waf_rules" {
     text_transformation   = optional(string, "NONE")
 
     # For managed_rule_group rules
-    managed_rule_group_name = optional(string) # e.g., "AWSManagedRulesCommonRuleSet"
+    managed_rule_group_name = optional(string)       # e.g., "AWSManagedRulesCommonRuleSet"
     vendor_name             = optional(string, "AWS")
+    excluded_rules          = optional(list(string), []) # Rules to exclude (set to COUNT), e.g., ["NoUserAgent_HEADER"]
   }))
   default = [
     {
