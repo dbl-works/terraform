@@ -15,25 +15,36 @@ variable "permitted_domain_names" {
 }
 
 variable "waf_rules" {
-  description = "List of WAF rules to include in the Web ACL"
+  description = "List of WAF rules to include in the Web ACL. Supports byte_match and managed_rule_group rule types."
   type = list(object({
-    name                  = string
-    priority              = number
-    action_type           = string # one of: ALLOW, BLOCK, COUNT
-    header_name           = optional(string)
-    header_value          = optional(string)
+    name     = string
+    priority = number
+
+    # Rule type: "byte_match" or "managed_rule_group"
+    rule_type = string
+
+    # Action: ALLOW, BLOCK, COUNT for byte_match rules
+    # For managed_rule_group: use "NONE" to respect rule group defaults, or "COUNT" to override all to count
+    action_type = string
+
+    # For byte_match rules
+    field_to_match        = optional(string, "header") # "header" or "uri_path"
+    header_name           = optional(string)           # Required when field_to_match = "header"
+    match_value           = optional(string)           # The value to match
     positional_constraint = optional(string, "EXACTLY")
     text_transformation   = optional(string, "NONE")
+
+    # For managed_rule_group rules
+    managed_rule_group_name = optional(string) # e.g., "AWSManagedRulesCommonRuleSet"
+    vendor_name             = optional(string, "AWS")
   }))
   default = [
     {
-      name                  = "AWSManagedRulesCommonRuleSet"
-      priority              = 1
-      action_type           = "COUNT"
-      header_name           = null
-      header_value          = null
-      positional_constraint = "EXACTLY"
-      text_transformation   = "NONE"
+      name                    = "AWSManagedRulesCommonRuleSet"
+      priority                = 1
+      rule_type               = "managed_rule_group"
+      action_type             = "COUNT"
+      managed_rule_group_name = "AWSManagedRulesCommonRuleSet"
     }
   ]
 }

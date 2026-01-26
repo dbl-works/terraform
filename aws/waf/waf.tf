@@ -11,10 +11,11 @@ resource "aws_wafv2_web_acl" "main" {
     for_each = var.waf_rules
     content {
       name     = rule.value.name
-      priority = rule.value.priority + 1 # prio must be unqiue. Hardcoded rules: see below
+      priority = rule.value.priority + 1 # prio must be unique. Hardcoded rules: see below
 
+      # Action block for byte_match rules
       dynamic "action" {
-        for_each = rule.value.name != "AWSManagedRulesCommonRuleSet" ? [1] : []
+        for_each = rule.value.rule_type == "byte_match" ? [1] : []
 
         content {
           dynamic "allow" {
@@ -34,9 +35,9 @@ resource "aws_wafv2_web_acl" "main" {
         }
       }
 
+      # Override action for managed_rule_group rules
       dynamic "override_action" {
-        # TODO: We should match the rule set name here
-        for_each = rule.value.name == "AWSManagedRulesCommonRuleSet" ? [1] : []
+        for_each = rule.value.rule_type == "managed_rule_group" ? [1] : []
 
         content {
           dynamic "none" {
@@ -51,10 +52,11 @@ resource "aws_wafv2_web_acl" "main" {
       }
 
       statement {
+        # Byte match on header
         dynamic "byte_match_statement" {
-          for_each = rule.value.header_name != null ? [1] : []
+          for_each = rule.value.rule_type == "byte_match" && coalesce(rule.value.field_to_match, "header") == "header" ? [1] : []
           content {
-            search_string = rule.value.header_value
+            search_string = rule.value.match_value
             field_to_match {
               single_header {
                 name = rule.value.header_name
@@ -62,17 +64,34 @@ resource "aws_wafv2_web_acl" "main" {
             }
             text_transformation {
               priority = 0
-              type     = rule.value.text_transformation
+              type     = coalesce(rule.value.text_transformation, "NONE")
             }
-            positional_constraint = rule.value.positional_constraint
+            positional_constraint = coalesce(rule.value.positional_constraint, "EXACTLY")
           }
         }
 
-        dynamic "managed_rule_group_statement" {
-          for_each = rule.value.name == "AWSManagedRulesCommonRuleSet" ? [1] : []
+        # Byte match on URI path
+        dynamic "byte_match_statement" {
+          for_each = rule.value.rule_type == "byte_match" && coalesce(rule.value.field_to_match, "header") == "uri_path" ? [1] : []
           content {
-            name        = "AWSManagedRulesCommonRuleSet"
-            vendor_name = "AWS"
+            search_string = rule.value.match_value
+            field_to_match {
+              uri_path {}
+            }
+            text_transformation {
+              priority = 0
+              type     = coalesce(rule.value.text_transformation, "NONE")
+            }
+            positional_constraint = coalesce(rule.value.positional_constraint, "EXACTLY")
+          }
+        }
+
+        # Managed rule group
+        dynamic "managed_rule_group_statement" {
+          for_each = rule.value.rule_type == "managed_rule_group" ? [1] : []
+          content {
+            name        = rule.value.managed_rule_group_name
+            vendor_name = coalesce(rule.value.vendor_name, "AWS")
           }
         }
       }
