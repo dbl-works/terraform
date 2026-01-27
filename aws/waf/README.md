@@ -47,6 +47,17 @@ module "waf" {
       managed_rule_group_name = "AWSManagedRulesKnownBadInputsRuleSet"
     },
 
+    # AWS Managed Rule Group with override
+    # Rules which are excluded will change action to COUNT instead of BLOCK
+    {
+      name                    = "AWSManagedRulesCommonRuleSet"
+      priority                = 1
+      rule_type               = "managed_rule_group"
+      action_type             = "NONE"
+      managed_rule_group_name = "AWSManagedRulesCommonRuleSet"
+      excluded_rules          = ["NoUserAgent_HEADER"]
+    },
+
     # Block exploit file extensions via URI path matching
     {
       name                  = "BlockPHP"
