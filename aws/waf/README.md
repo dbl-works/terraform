@@ -51,7 +51,7 @@ module "waf" {
     # Rules listed in `excluded_rules` keep their rule logic but override the default BLOCK action to COUNT
     {
       name                    = "AWSManagedRulesCommonRuleSet"
-      priority                = 1
+      priority                = 3
       rule_type               = "managed_rule_group"
       action_type             = "NONE"
       managed_rule_group_name = "AWSManagedRulesCommonRuleSet"
