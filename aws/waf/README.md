@@ -48,7 +48,7 @@ module "waf" {
     },
 
     # AWS Managed Rule Group with override
-    # Rules which are excluded will change action to COUNT instead of BLOCK
+    # Rules listed in `excluded_rules` keep their rule logic but override the default BLOCK action to COUNT
     {
       name                    = "AWSManagedRulesCommonRuleSet"
       priority                = 1
