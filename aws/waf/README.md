@@ -82,6 +82,52 @@ module "waf" {
       positional_constraint = "EXACTLY"
       text_transformation   = "NONE"
     },
+
+    # Block internal-api unless Origin matches its environment domain
+    {
+      name        = "BlockInternalApiBadOriginStaging"
+      priority    = 20
+      rule_type   = "and_statement"
+      action_type = "BLOCK"
+      and_statements = [
+        {
+          field_to_match        = "header"
+          header_name           = "host"
+          match_value           = "internal-api.example.staing"
+          positional_constraint = "EXACTLY"
+        },
+        {
+          field_to_match        = "header"
+          header_name           = "origin"
+          match_value           = ".example.staing"
+          positional_constraint = "ENDS_WITH"
+          text_transformation   = "LOWERCASE"
+          negate                = true
+        },
+      ]
+    },
+    {
+      name        = "BlockInternalApiBadOriginProd"
+      priority    = 21
+      rule_type   = "and_statement"
+      action_type = "BLOCK"
+      and_statements = [
+        {
+          field_to_match        = "header"
+          header_name           = "host"
+          match_value           = "internal-api.example.prod"
+          positional_constraint = "EXACTLY"
+        },
+        {
+          field_to_match        = "header"
+          header_name           = "origin"
+          match_value           = ".example.prod"
+          positional_constraint = "ENDS_WITH"
+          text_transformation   = "LOWERCASE"
+          negate                = true
+        },
+      ]
+    },
   ]
 }
 ```
@@ -90,7 +136,7 @@ The module outputs the WAF ARN. Pass this ARN to the ECS module to associate the
 
 ## Rule Types
 
-The `waf_rules` variable supports two rule types:
+The `waf_rules` variable supports four rule types:
 
 Notes:
 - `rule_type` is optional. If omitted, it defaults to `"byte_match"` unless `managed_rule_group_name` is set, in which case it is treated as `"managed_rule_group"`.
@@ -129,6 +175,81 @@ For byte match rules, use `action_type`:
 - `"ALLOW"` - Allow matching requests
 - `"BLOCK"` - Block matching requests
 - `"COUNT"` - Count but don't block
+
+### 3. And Statement Rules (`rule_type = "and_statement"`)
+
+Combine multiple byte match statements with AND. Each statement can optionally be negated.
+
+Example: block `internal-api` unless Origin ends with your domains. Use OR for host matching and AND + NOT for Origin:
+
+```hcl
+{
+  name        = "BlockInternalApiBadOrigin"
+  priority    = 20
+  rule_type   = "and_statement"
+  action_type = "BLOCK"
+  or_statements = [
+    {
+      field_to_match        = "header"
+      header_name           = "host"
+      match_value           = "internal-api.example.cloud"
+      positional_constraint = "EXACTLY"
+    },
+    {
+      field_to_match        = "header"
+      header_name           = "host"
+      match_value           = "internal-api.example.earth"
+      positional_constraint = "EXACTLY"
+    },
+  ]
+  and_statements = [
+    {
+      field_to_match        = "header"
+      header_name           = "origin"
+      match_value           = ".example.cloud"
+      positional_constraint = "ENDS_WITH"
+      text_transformation   = "LOWERCASE"
+      negate                = true
+    },
+    {
+      field_to_match        = "header"
+      header_name           = "origin"
+      match_value           = ".example.earth"
+      positional_constraint = "ENDS_WITH"
+      text_transformation   = "LOWERCASE"
+      negate                = true
+    },
+  ]
+}
+```
+
+Note: missing `Origin` will not match the byte match statements, so the negated statements evaluate to true and the request is blocked (as intended).
+
+### 4. Or Statement Rules (`rule_type = "or_statement"`)
+
+Match any of the provided byte match statements:
+
+```hcl
+{
+  name        = "AllowHealthcheckPaths"
+  priority    = 5
+  rule_type   = "or_statement"
+  action_type = "ALLOW"
+  or_statements = [
+    {
+      field_to_match        = "uri_path"
+      match_value           = "/health"
+      positional_constraint = "EXACTLY"
+    },
+    {
+      field_to_match        = "uri_path"
+      match_value           = "/metrics"
+      positional_constraint = "EXACTLY"
+    },
+  ]
+}
+```
+
 
 ## Rules
 

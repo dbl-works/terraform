@@ -13,9 +13,9 @@ resource "aws_wafv2_web_acl" "main" {
       name     = rule.value.name
       priority = rule.value.priority
 
-      # Action block for byte_match rules
+      # Action block for byte_match and statement rules
       dynamic "action" {
-        for_each = rule.value.rule_type == "byte_match" ? [1] : []
+        for_each = contains(["byte_match", "and_statement", "or_statement"], rule.value.rule_type) ? [1] : []
 
         content {
           dynamic "allow" {
@@ -83,6 +83,333 @@ resource "aws_wafv2_web_acl" "main" {
               type     = coalesce(rule.value.text_transformation, "NONE")
             }
             positional_constraint = coalesce(rule.value.positional_constraint, "EXACTLY")
+          }
+        }
+
+        # And statement with byte match statements
+        dynamic "and_statement" {
+          for_each = rule.value.rule_type == "and_statement" ? [1] : []
+          content {
+            dynamic "statement" {
+              for_each = coalesce(rule.value.and_statements, [])
+              iterator = and_stmt
+              content {
+                dynamic "not_statement" {
+                  for_each = and_stmt.value.negate ? [1] : []
+                  content {
+                    statement {
+                      dynamic "byte_match_statement" {
+                        for_each = coalesce(and_stmt.value.field_to_match, "header") == "header" ? [1] : []
+                        content {
+                          search_string = and_stmt.value.match_value
+                          field_to_match {
+                            single_header {
+                              name = and_stmt.value.header_name
+                            }
+                          }
+                          text_transformation {
+                            priority = 0
+                            type     = coalesce(and_stmt.value.text_transformation, "NONE")
+                          }
+                          positional_constraint = coalesce(and_stmt.value.positional_constraint, "EXACTLY")
+                        }
+                      }
+
+                      dynamic "byte_match_statement" {
+                        for_each = coalesce(and_stmt.value.field_to_match, "header") == "uri_path" ? [1] : []
+                        content {
+                          search_string = and_stmt.value.match_value
+                          field_to_match {
+                            uri_path {}
+                          }
+                          text_transformation {
+                            priority = 0
+                            type     = coalesce(and_stmt.value.text_transformation, "NONE")
+                          }
+                          positional_constraint = coalesce(and_stmt.value.positional_constraint, "EXACTLY")
+                        }
+                      }
+                    }
+                  }
+                }
+
+                dynamic "byte_match_statement" {
+                  for_each = and_stmt.value.negate ? [] : (coalesce(and_stmt.value.field_to_match, "header") == "header" ? [1] : [])
+                  content {
+                    search_string = and_stmt.value.match_value
+                    field_to_match {
+                      single_header {
+                        name = and_stmt.value.header_name
+                      }
+                    }
+                    text_transformation {
+                      priority = 0
+                      type     = coalesce(and_stmt.value.text_transformation, "NONE")
+                    }
+                    positional_constraint = coalesce(and_stmt.value.positional_constraint, "EXACTLY")
+                  }
+                }
+
+                dynamic "byte_match_statement" {
+                  for_each = and_stmt.value.negate ? [] : (coalesce(and_stmt.value.field_to_match, "header") == "uri_path" ? [1] : [])
+                  content {
+                    search_string = and_stmt.value.match_value
+                    field_to_match {
+                      uri_path {}
+                    }
+                    text_transformation {
+                      priority = 0
+                      type     = coalesce(and_stmt.value.text_transformation, "NONE")
+                    }
+                    positional_constraint = coalesce(and_stmt.value.positional_constraint, "EXACTLY")
+                  }
+                }
+              }
+            }
+
+            dynamic "statement" {
+              for_each = length(coalesce(rule.value.or_statements, [])) > 1 ? [1] : []
+              content {
+                or_statement {
+                  dynamic "statement" {
+                    for_each = coalesce(rule.value.or_statements, [])
+                    iterator = or_stmt
+                    content {
+                      dynamic "not_statement" {
+                        for_each = or_stmt.value.negate ? [1] : []
+                        content {
+                          statement {
+                            dynamic "byte_match_statement" {
+                              for_each = coalesce(or_stmt.value.field_to_match, "header") == "header" ? [1] : []
+                              content {
+                                search_string = or_stmt.value.match_value
+                                field_to_match {
+                                  single_header {
+                                    name = or_stmt.value.header_name
+                                  }
+                                }
+                                text_transformation {
+                                  priority = 0
+                                  type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                                }
+                                positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                              }
+                            }
+
+                            dynamic "byte_match_statement" {
+                              for_each = coalesce(or_stmt.value.field_to_match, "header") == "uri_path" ? [1] : []
+                              content {
+                                search_string = or_stmt.value.match_value
+                                field_to_match {
+                                  uri_path {}
+                                }
+                                text_transformation {
+                                  priority = 0
+                                  type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                                }
+                                positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                              }
+                            }
+                          }
+                        }
+                      }
+
+                      dynamic "byte_match_statement" {
+                        for_each = or_stmt.value.negate ? [] : (coalesce(or_stmt.value.field_to_match, "header") == "header" ? [1] : [])
+                        content {
+                          search_string = or_stmt.value.match_value
+                          field_to_match {
+                            single_header {
+                              name = or_stmt.value.header_name
+                            }
+                          }
+                          text_transformation {
+                            priority = 0
+                            type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                          }
+                          positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                        }
+                      }
+
+                      dynamic "byte_match_statement" {
+                        for_each = or_stmt.value.negate ? [] : (coalesce(or_stmt.value.field_to_match, "header") == "uri_path" ? [1] : [])
+                        content {
+                          search_string = or_stmt.value.match_value
+                          field_to_match {
+                            uri_path {}
+                          }
+                          text_transformation {
+                            priority = 0
+                            type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                          }
+                          positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            dynamic "statement" {
+              for_each = length(coalesce(rule.value.or_statements, [])) == 1 ? rule.value.or_statements : []
+              iterator = or_stmt
+              content {
+                dynamic "not_statement" {
+                  for_each = or_stmt.value.negate ? [1] : []
+                  content {
+                    statement {
+                      dynamic "byte_match_statement" {
+                        for_each = coalesce(or_stmt.value.field_to_match, "header") == "header" ? [1] : []
+                        content {
+                          search_string = or_stmt.value.match_value
+                          field_to_match {
+                            single_header {
+                              name = or_stmt.value.header_name
+                            }
+                          }
+                          text_transformation {
+                            priority = 0
+                            type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                          }
+                          positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                        }
+                      }
+
+                      dynamic "byte_match_statement" {
+                        for_each = coalesce(or_stmt.value.field_to_match, "header") == "uri_path" ? [1] : []
+                        content {
+                          search_string = or_stmt.value.match_value
+                          field_to_match {
+                            uri_path {}
+                          }
+                          text_transformation {
+                            priority = 0
+                            type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                          }
+                          positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                        }
+                      }
+                    }
+                  }
+                }
+
+                dynamic "byte_match_statement" {
+                  for_each = or_stmt.value.negate ? [] : (coalesce(or_stmt.value.field_to_match, "header") == "header" ? [1] : [])
+                  content {
+                    search_string = or_stmt.value.match_value
+                    field_to_match {
+                      single_header {
+                        name = or_stmt.value.header_name
+                      }
+                    }
+                    text_transformation {
+                      priority = 0
+                      type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                    }
+                    positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                  }
+                }
+
+                dynamic "byte_match_statement" {
+                  for_each = or_stmt.value.negate ? [] : (coalesce(or_stmt.value.field_to_match, "header") == "uri_path" ? [1] : [])
+                  content {
+                    search_string = or_stmt.value.match_value
+                    field_to_match {
+                      uri_path {}
+                    }
+                    text_transformation {
+                      priority = 0
+                      type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                    }
+                    positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        # Or statement with byte match statements
+        dynamic "or_statement" {
+          for_each = rule.value.rule_type == "or_statement" ? [1] : []
+          content {
+            dynamic "statement" {
+              for_each = coalesce(rule.value.or_statements, [])
+              iterator = or_stmt
+              content {
+                dynamic "not_statement" {
+                  for_each = or_stmt.value.negate ? [1] : []
+                  content {
+                    statement {
+                      dynamic "byte_match_statement" {
+                        for_each = coalesce(or_stmt.value.field_to_match, "header") == "header" ? [1] : []
+                        content {
+                          search_string = or_stmt.value.match_value
+                          field_to_match {
+                            single_header {
+                              name = or_stmt.value.header_name
+                            }
+                          }
+                          text_transformation {
+                            priority = 0
+                            type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                          }
+                          positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                        }
+                      }
+
+                      dynamic "byte_match_statement" {
+                        for_each = coalesce(or_stmt.value.field_to_match, "header") == "uri_path" ? [1] : []
+                        content {
+                          search_string = or_stmt.value.match_value
+                          field_to_match {
+                            uri_path {}
+                          }
+                          text_transformation {
+                            priority = 0
+                            type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                          }
+                          positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                        }
+                      }
+                    }
+                  }
+                }
+
+                dynamic "byte_match_statement" {
+                  for_each = or_stmt.value.negate ? [] : (coalesce(or_stmt.value.field_to_match, "header") == "header" ? [1] : [])
+                  content {
+                    search_string = or_stmt.value.match_value
+                    field_to_match {
+                      single_header {
+                        name = or_stmt.value.header_name
+                      }
+                    }
+                    text_transformation {
+                      priority = 0
+                      type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                    }
+                    positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                  }
+                }
+
+                dynamic "byte_match_statement" {
+                  for_each = or_stmt.value.negate ? [] : (coalesce(or_stmt.value.field_to_match, "header") == "uri_path" ? [1] : [])
+                  content {
+                    search_string = or_stmt.value.match_value
+                    field_to_match {
+                      uri_path {}
+                    }
+                    text_transformation {
+                      priority = 0
+                      type     = coalesce(or_stmt.value.text_transformation, "NONE")
+                    }
+                    positional_constraint = coalesce(or_stmt.value.positional_constraint, "EXACTLY")
+                  }
+                }
+              }
+            }
           }
         }
 

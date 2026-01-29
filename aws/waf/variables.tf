@@ -15,7 +15,7 @@ variable "permitted_domain_names" {
 }
 
 variable "allowed_domains_rule_priority" {
-  description = "Priority for the AllowedDomainsRule. Set higher than block rules so they evaluate first."
+  description = "Priority for the AllowedDomainsRule. Set higher than block rules so they evaluate after them."
   type        = number
   default     = 1
 }
@@ -26,7 +26,7 @@ variable "waf_rules" {
     name     = string
     priority = number
 
-    # Rule type: "byte_match" or "managed_rule_group"
+    # Rule type: "byte_match", "managed_rule_group", "and_statement", or "or_statement"
     rule_type = optional(string)
 
     # Action: ALLOW, BLOCK, COUNT for byte_match rules
@@ -45,6 +45,28 @@ variable "waf_rules" {
     managed_rule_group_name = optional(string)       # e.g., "AWSManagedRulesCommonRuleSet"
     vendor_name             = optional(string, "AWS")
     excluded_rules          = optional(list(string), []) # Rules to exclude (set to COUNT), e.g., ["NoUserAgent_HEADER"]
+
+    # For and_statement rules (byte_match only)
+    and_statements = optional(list(object({
+      field_to_match        = optional(string, "header") # "header" or "uri_path"
+      header_name           = optional(string)           # Required when field_to_match = "header"
+      match_value           = string                     # The value to match
+      positional_constraint = optional(string, "EXACTLY")
+      text_transformation   = optional(string, "NONE")
+      negate                = optional(bool, false)      # Wraps the statement in not_statement
+    })), [])
+
+    # For or_statement rules (byte_match only)
+    # Also used by and_statement rules to inject a single OR group.
+    or_statements = optional(list(object({
+      field_to_match        = optional(string, "header") # "header" or "uri_path"
+      header_name           = optional(string)           # Required when field_to_match = "header"
+      match_value           = string                     # The value to match
+      positional_constraint = optional(string, "EXACTLY")
+      text_transformation   = optional(string, "NONE")
+      negate                = optional(bool, false)      # Wraps the statement in not_statement
+    })), [])
+
   }))
   default = [
     {
@@ -55,6 +77,14 @@ variable "waf_rules" {
       managed_rule_group_name = "AWSManagedRulesCommonRuleSet"
     }
   ]
+
+  validation {
+    condition = alltrue([
+      for rule in var.waf_rules :
+      !(try(rule.rule_type, null) == "or_statement" && length(try(rule.or_statements, [])) < 2)
+    ])
+    error_message = "Rules with rule_type = \"or_statement\" must include at least two or_statements."
+  }
 }
 
 locals {
