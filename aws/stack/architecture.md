@@ -13,14 +13,14 @@ graph TD
     
     subgraph AWS_VPC [AWS Region & VPC]
         ALB[ALB <br/> Load Balancer]:::aws
-        ECS[ECS Compute<br/>Dockerized App]:::aws
+        ECS[ECS Compute<br/>Dockerized App w/ Autoscaling]:::aws
         RDS[(RDS<br/>PostgreSQL)]:::aws
         ElastiCache[(ElastiCache<br/>Redis)]:::aws
         
         SM[Secrets Manager]:::aws
         S3[S3 <br/> Public/Private Storage]:::aws
         KMS[KMS <br/> Encryption Keys]:::aws
-        ECR[ECR <br/> Container Registry]:::aws
+        ECR[ECR Container Registry <br/> Image Scanning for Vulnerabilities]:::aws
         CW[CloudWatch <br/> Logs & Metrics]:::aws
     end
 
@@ -42,4 +42,48 @@ graph TD
     S3 -. "API / HTTPS" .-> KMS
     SM -. "API / HTTPS" .-> KMS
     CW -. "API / HTTPS" .-> KMS
+
+    subgraph CICD_Pipeline [CI/CD Pipeline]
+        Git[Git <br/> Source Code]:::external
+        Pipeline[Generic CI/CD Pipeline]:::external
+        Deploy[Terraform Deploy <br/> ecs-deploy/cluster & service]:::aws
+    end
+
+    %% Deployment flow
+    Git -- "Push" --> Pipeline
+    Pipeline -- "Build & Scanner" --> ECR
+    Pipeline -- "Trigger Deploy" --> Deploy
+    Deploy -- "Update Service" --> ECS
+```
+
+## IAM Access Control
+
+We utilize role-based access with only the minimum necessary privileges.
+
+```mermaid
+graph TD
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#232F3E;
+    classDef external fill:#f6f6f6,stroke:#333,stroke-width:2px;
+
+    DeployRole[Deploy Role <br/> Pipeline Access]:::aws
+    ECSRole[ECS Task Role <br/> Service Access]:::aws
+    HumanRole[Human/Guest Roles <br/> Scoped Access]:::aws
+
+    Pipeline[Generic CI/CD Pipeline]:::external
+    Deploy[Terraform Deploy <br/> ecs-deploy/cluster & service]:::aws
+    ECS[ECS Compute<br/>Dockerized App w/ Autoscaling]:::aws
+    
+    SM[Secrets Manager]:::aws
+    S3[S3 <br/> Public/Private Storage]:::aws
+    CW[CloudWatch <br/> Logs & Metrics]:::aws
+
+    %% IAM Access flows
+    Pipeline -. "Assumes" .-> DeployRole
+    DeployRole -. "Has Permission" .-> Deploy
+    ECS -. "Assumes" .-> ECSRole
+    
+    %% Showing ECS Role enforcing least privilege
+    ECSRole -. "Permits Access" .-> SM
+    ECSRole -. "Permits Access" .-> S3
+    ECSRole -. "Permits Access" .-> CW
 ```
