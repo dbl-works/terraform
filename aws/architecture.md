@@ -1,6 +1,6 @@
 # AWS Architecture
 
-The `aws/stack` is one such module in this repository that serves as an example of how these modules can be combined. It combines the resources one needs for a standard app that uses a postgres DB, redis, and runs a dockerized app in ECS.
+The [`aws/stack`](./stack/README.md) is one such module in this repository that serves as an example of how these modules can be combined. It combines the resources one needs for a standard app that uses a postgres DB, redis, and runs a dockerized app in ECS.
 
 ```mermaid
 graph TD
@@ -59,6 +59,8 @@ graph TD
 ## Global Distribution & VPC Peering
 
 The stack infrastructure is multi-data-center ready. By leveraging the `global-accelerator` and `vpc-peering` modules alongside multiple stack deployments, cross-datacenter traffic distribution and geographic failover can be effortlessly achieved.
+
+Have a look at the [multi-stack](./multi-stack/README.md) module for an example implementation of the Global Distribution setup.
 
 ```mermaid
 graph TD
