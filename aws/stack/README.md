@@ -4,10 +4,12 @@ Launches all resources required to deploy and operate an application with a cont
 
 This includes:
 
-- Container Orchestration (ECS) and Container Registry (ECR) as well as all networking requied to run the containers (e.g. Load Balancer, VPC, Subnets, Security Groups, ...)
+- Container Orchestration (ECS) and Container Registry (ECR) as well as all networking required to run the containers (e.g. Load Balancer, VPC, Subnets, Security Groups, ...)
 - DNS and CDN via Cloudflare and S3 for the frontend
 - IAM Roles and Policies for the backend to access other AWS services
 - Various supporting resources such as CloudTrail, GitHub backups, alerts, etc.
+
+Have a look at the [architecture diagram](./architecture.md) for a general overview of the connections and resources in a complete stack.
 
 ## Usage
 
