@@ -134,15 +134,18 @@ graph TD
 
 ## Network Topology & Security
 
-The environment generates a VPC containing isolated subnets. Incoming internet traffic must pass through the Load Balancer, while private resources like ECS tasks and Databases are placed in Private subnets with zero direct inbound internet access. Outbound traffic from the private subnet routes through an optional NAT Gateway.
+The environment generates a VPC containing isolated subnets. Incoming internet traffic is filtered by **AWS WAF (Web Application Firewall)** to block malicious requests before they pass through the Load Balancer. Private resources like ECS tasks and Databases are placed in Private subnets with zero direct inbound internet access. Outbound traffic from the private subnet routes through an optional NAT Gateway.
 
 ```mermaid
 graph TD
     classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#232F3E;
     classDef external fill:#f6f6f6,stroke:#333,stroke-width:2px;
+    classDef security fill:#DD344C,stroke:#232F3E,stroke-width:2px,color:#fff;
 
     Internet((Internet)):::external
     
+    WAF[AWS WAF <br/> Web Application Firewall]:::security
+
     subgraph VPC [AWS VPC]
         IGW[Internet Gateway]:::aws
         
@@ -158,8 +161,9 @@ graph TD
         end
     end
 
-    %% Routing
-    Internet -- "Inbound HTTP/S via IGW" --> ALB
+    %% Security & Routing
+    Internet -- "Inbound HTTP/S via IGW" --> WAF
+    WAF -- "Traffic Inspected & Allowed" --> ALB
     ALB -- "Forwards to" --> ECS
     
     ECS -. "Outbound Internet via" .-> NAT
