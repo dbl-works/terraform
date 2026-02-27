@@ -1,6 +1,6 @@
-# AWS Stack Architecture
+# AWS Architecture
 
-The `aws/stack` module combines the resources one needs for a standard app that uses a postgres DB, redis, and runs a dockerized app in ECS.
+The `aws/stack` is one such module in this repository that serves as an example of how these modules can be combined. It combines the resources one needs for a standard app that uses a postgres DB, redis, and runs a dockerized app in ECS.
 
 ```mermaid
 graph TD
@@ -86,4 +86,74 @@ graph TD
     ECSRole -. "Permits Access" .-> SM
     ECSRole -. "Permits Access" .-> S3
     ECSRole -. "Permits Access" .-> CW
+```
+
+## Network Topology & Security
+
+The environment generates a VPC containing isolated subnets. Incoming internet traffic must pass through the Load Balancer, while private resources like ECS tasks and Databases are placed in Private subnets with zero direct inbound internet access. Outbound traffic from the private subnet routes through an optional NAT Gateway.
+
+```mermaid
+graph TD
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#232F3E;
+    classDef external fill:#f6f6f6,stroke:#333,stroke-width:2px;
+
+    Internet((Internet)):::external
+    
+    subgraph VPC [AWS VPC]
+        IGW[Internet Gateway]:::aws
+        
+        subgraph PublicSubnet [Public Subnet]
+            ALB[Application Load Balancer]:::aws
+            NAT[NAT Gateway]:::aws
+        end
+        
+        subgraph PrivateSubnet [Private Subnet]
+            ECS[ECS Compute Tasks]:::aws
+            RDS[(RDS Database)]:::aws
+            Redis[(ElastiCache)]:::aws
+        end
+    end
+
+    %% Routing
+    Internet -- "Inbound HTTP/S via IGW" --> ALB
+    ALB -- "Forwards to" --> ECS
+    
+    ECS -. "Outbound Internet via" .-> NAT
+    NAT -. "via IGW" .-> Internet
+    
+    %% Internal Connections
+    ECS -- "Internal TCP" --> RDS
+    ECS -- "Internal TCP" --> Redis
+```
+
+## Monitoring & Alerting Flow
+
+Comprehensive observability is integrated throughout the stack. Components push logs and metrics to CloudWatch, where thresholds and alarms trigger SNS Topics. These topics forward critical alerts via AWS Chatbot or Lambda directly into Slack.
+
+```mermaid
+graph LR
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#232F3E;
+    classDef external fill:#f6f6f6,stroke:#333,stroke-width:2px;
+
+    %% Data Sources
+    ECS[ECS / Fargate]:::aws
+    RDS[(RDS)]:::aws
+    ALB[Load Balancers]:::aws
+
+    %% AWS Monitoring
+    CW[CloudWatch <br/> Alarms & Logs]:::aws
+    SNS[SNS Topic <br/> Alarms/Events]:::aws
+    Chatbot[AWS Chatbot / <br/> Lambda]:::aws
+    
+    %% Slack
+    Slack[Slack Channel]:::external
+
+    %% Flow
+    ECS -. "Logs & Metrics" .-> CW
+    RDS -. "Metrics" .-> CW
+    ALB -. "Metrics" .-> CW
+    
+    CW -- "Triggers on Threshold" --> SNS
+    SNS -- "Invokes" --> Chatbot
+    Chatbot -- "Posts Message" --> Slack
 ```

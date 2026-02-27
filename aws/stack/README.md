@@ -8,9 +8,6 @@ This includes:
 - DNS and CDN via Cloudflare and S3 for the frontend
 - IAM Roles and Policies for the backend to access other AWS services
 - Various supporting resources such as CloudTrail, GitHub backups, alerts, etc.
-
-Have a look at the [architecture diagram](./architecture.md) for a general overview of the connections and resources in a complete stack.
-
 ## Usage
 
 Launch the module `stack/global` exactly once per project (regardless of the number of environments/clusters).
