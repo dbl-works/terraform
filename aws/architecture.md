@@ -56,6 +56,48 @@ graph TD
     Deploy -- "Update Service" --> ECS
 ```
 
+## Global Distribution & VPC Peering
+
+The stack infrastructure is multi-data-center ready. By leveraging the `global-accelerator` and `vpc-peering` modules alongside multiple stack deployments, cross-datacenter traffic distribution and geographic failover can be effortlessly achieved.
+
+```mermaid
+graph TD
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#232F3E;
+    classDef external fill:#f6f6f6,stroke:#333,stroke-width:2px;
+
+    Users((Global Users)):::external
+    
+    GA[AWS Global Accelerator <br/> Anycast IP Distribution]:::aws
+    
+    subgraph Primary [Primary Region Data Center]
+        ALB_P[Application Load Balancer]:::aws
+        ECS_P[ECS Stack App]:::aws
+        RDS_M[(RDS Master DB)]:::aws
+    end
+
+    subgraph Secondary [Secondary / Failover Region Data Center]
+        ALB_S[Application Load Balancer]:::aws
+        ECS_S[ECS Stack App]:::aws
+        RDS_R[(RDS Read Replica)]:::aws
+    end
+
+    %% Network Routing
+    Users -- "Optimal Edge Routing" --> GA
+    GA -- "Cross-Datacenter Traffic Distribution" --> ALB_P
+    GA -- "Cross-Datacenter Traffic Distribution" --> ALB_S
+    
+    ALB_P --> ECS_P
+    ALB_S --> ECS_S
+
+    %% Master and Replica
+    ECS_P -- "Internal TCP" --> RDS_M
+    ECS_S -- "Internal TCP" --> RDS_R
+
+    %% Peering & Replication
+    ECS_S -. "VPC Peering" .-> RDS_M
+    RDS_M =="Replication"==> RDS_R
+```
+
 ## IAM Access Control
 
 We utilize role-based access with only the minimum necessary privileges.
@@ -166,4 +208,44 @@ graph LR
     %% Telemetry Flow
     CW -- "Streams Telemetry" --> Kin
     Kin -- "Loads Data" --> SF
+```
+
+## Data & Database Services
+
+We support a variety of data stores depending on the application's consistency, compute, and caching needs.
+
+*   **Amazon Aurora**: For high-performance, auto-scaling relational database workloads (serverless compute & storage).
+*   **Amazon RDS (PostgreSQL)**: The standard managed relational database.
+*   **Amazon ElastiCache (Redis)**: Fully managed, in-memory caching service for fast data retrieval.
+*   **Amazon Redshift**: Highly scalable data warehouse optimized for analytics.
+
+```mermaid
+graph TD
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#232F3E;
+    classDef data fill:#3B48CC,stroke:#232F3E,stroke-width:2px,color:#fff;
+    classDef cache fill:#C92519,stroke:#232F3E,stroke-width:2px,color:#fff;
+    
+    App[ECS Applications <br/> / API Services]:::aws
+
+    subgraph Relational_Databases [Relational Databases]
+        Aurora[(Aurora Serverless <br/> Auto-scaling Compute)]:::data
+        RDS[(RDS PostgreSQL <br/> Standard Managed DB)]:::data
+    end
+
+    subgraph Caching [In-Memory Caching]
+        Redis[(ElastiCache Redis <br/> Key-Value Store)]:::cache
+    end
+
+    subgraph Analytics [Data Warehousing]
+        Redshift[(Redshift <br/> Analytics Cluster)]:::data
+    end
+
+    %% Application Access
+    App -- "SQL/TCP" --> Aurora
+    App -- "SQL/TCP" --> RDS
+    App -- "Redis Protocol" --> Redis
+
+    %% Analytics flows
+    RDS -. "Replication/ETL" .-> Redshift
+    Aurora -. "Replication/ETL" .-> Redshift
 ```
