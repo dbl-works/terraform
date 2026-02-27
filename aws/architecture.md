@@ -130,6 +130,8 @@ graph TD
 
 Comprehensive observability is integrated throughout the stack. Components push logs and metrics to CloudWatch, where thresholds and alarms trigger SNS Topics. These topics forward critical alerts via AWS Chatbot or Lambda directly into Slack.
 
+We also integrate `cloudwatch-kinesis` and `cloudwatch-snowflake` to push telemetry data out of CloudWatch and into Snowflake for ultra-fast querying of metrics.
+
 ```mermaid
 graph LR
     classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#232F3E;
@@ -145,6 +147,10 @@ graph LR
     SNS[SNS Topic <br/> Alarms/Events]:::aws
     Chatbot[AWS Chatbot / <br/> Lambda]:::aws
     
+    %% Analytics
+    Kin[Kinesis Data Firehose]:::aws
+    SF[(Snowflake <br/> Data Warehouse)]:::external
+
     %% Slack
     Slack[Slack Channel]:::external
 
@@ -156,4 +162,8 @@ graph LR
     CW -- "Triggers on Threshold" --> SNS
     SNS -- "Invokes" --> Chatbot
     Chatbot -- "Posts Message" --> Slack
+    
+    %% Telemetry Flow
+    CW -- "Streams Telemetry" --> Kin
+    Kin -- "Loads Data" --> SF
 ```
