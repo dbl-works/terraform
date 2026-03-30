@@ -25,3 +25,15 @@ variable "s3_replicas" {
     bucket_arn = string,
   }))
 }
+
+variable "file_malwarescanning" {
+  description = "Configuration for AWS GuardDuty Malware Protection for S3."
+  type = object({
+    enabled                           = bool
+    allow_downloading_unscanned_files = bool
+  })
+  default = {
+    enabled                           = false
+    allow_downloading_unscanned_files = true
+  }
+}

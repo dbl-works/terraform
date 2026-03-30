@@ -42,7 +42,7 @@ variable "waf_rules" {
     text_transformation   = optional(string, "NONE")
 
     # For managed_rule_group rules
-    managed_rule_group_name = optional(string)       # e.g., "AWSManagedRulesCommonRuleSet"
+    managed_rule_group_name = optional(string) # e.g., "AWSManagedRulesCommonRuleSet"
     vendor_name             = optional(string, "AWS")
     excluded_rules          = optional(list(string), []) # Rules to exclude (set to COUNT), e.g., ["NoUserAgent_HEADER"]
 
@@ -53,7 +53,7 @@ variable "waf_rules" {
       match_value           = string                     # The value to match
       positional_constraint = optional(string, "EXACTLY")
       text_transformation   = optional(string, "NONE")
-      negate                = optional(bool, false)      # Wraps the statement in not_statement
+      negate                = optional(bool, false) # Wraps the statement in not_statement
     })), [])
 
     # For or_statement rules (byte_match only)
@@ -64,7 +64,7 @@ variable "waf_rules" {
       match_value           = string                     # The value to match
       positional_constraint = optional(string, "EXACTLY")
       text_transformation   = optional(string, "NONE")
-      negate                = optional(bool, false)      # Wraps the statement in not_statement
+      negate                = optional(bool, false) # Wraps the statement in not_statement
     })), [])
 
   }))

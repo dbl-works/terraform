@@ -30,8 +30,8 @@ When enabled, every newly uploaded object is automatically scanned and tagged wi
 
 | Variable | Type | Default | Description |
 |---|---|---|---|
-| `file_malwarescanning_enabled` | `bool` | `false` | Enable GuardDuty Malware Protection for S3 on this bucket. |
-| `allow_downloading_unscanned_files` | `bool` | `true` | If `true`, only blocks downloads of files tagged as `THREATS_FOUND`. If `false`, blocks any file not explicitly tagged as `NO_THREATS_FOUND`. |
+| `file_malwarescanning.enabled` | `bool` | `false` | Enable GuardDuty Malware Protection for S3 on this bucket. |
+| `file_malwarescanning.allow_downloading_unscanned_files` | `bool` | `true` | If `true`, only blocks downloads of files tagged as `THREATS_FOUND`. If `false`, blocks any file not explicitly tagged as `NO_THREATS_FOUND`. |
 
 ```terraform
 module "s3" {
@@ -41,8 +41,10 @@ module "s3" {
   project     = "someproject"
   bucket_name = "someproject-staging-uploads"
 
-  file_malwarescanning_enabled      = true
-  allow_downloading_unscanned_files = true  # Set to false after backfilling scans
+  file_malwarescanning = {
+    enabled                           = true
+    allow_downloading_unscanned_files = true  # Set to false after backfilling scans
+  }
 }
 ```
 

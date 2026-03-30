@@ -35,6 +35,10 @@ module "s3-storage" {
       kms_arn = "arn:aws:kms:us-east-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
     }
    ]
+  file_malwarescanning = {
+    enabled                           = true
+    allow_downloading_unscanned_files = true
+  }
 }
 ```
 

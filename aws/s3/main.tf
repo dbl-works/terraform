@@ -20,10 +20,10 @@ data "aws_elb_service_account" "main" {}
 
 locals {
   has_writers            = length(var.writers) > 0
-  has_malware_policy     = var.file_malwarescanning_enabled
+  has_malware_policy     = var.file_malwarescanning.enabled
   has_bucket_policy      = local.has_writers || local.has_malware_policy
-  block_infected_only    = var.file_malwarescanning_enabled && var.allow_downloading_unscanned_files
-  block_all_except_clean = var.file_malwarescanning_enabled && !var.allow_downloading_unscanned_files
+  block_infected_only    = var.file_malwarescanning.enabled && var.file_malwarescanning.allow_downloading_unscanned_files
+  block_all_except_clean = var.file_malwarescanning.enabled && !var.file_malwarescanning.allow_downloading_unscanned_files
 }
 
 # --- Writers policy statements ---

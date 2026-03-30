@@ -3,7 +3,7 @@ resource "aws_redshiftserverless_workgroup" "main" {
   workgroup_name = "${var.project}-${var.environment}"
 
   # Compute capacity (RPUs - Redshift Processing Units)
-  base_capacity = 32  # Start with minimum capacity, can be adjusted
+  base_capacity = 32 # Start with minimum capacity, can be adjusted
 
   # Database configuration parameters
   # Enable automatic materialized views - Redshift automatically creates and maintains

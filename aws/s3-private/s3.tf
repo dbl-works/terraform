@@ -10,6 +10,7 @@ module "s3" {
   multi_region_kms_key        = var.multi_region_kms_key
   enable_encryption           = var.sse_algorithm == "aws:kms"
   writers                     = var.writers
+  file_malwarescanning        = var.file_malwarescanning
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "main-bucket-lifecycle-rule" {
