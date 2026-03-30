@@ -127,6 +127,11 @@ data "aws_iam_policy_document" "bucket_policy" {
         variable = "s3:ExistingObjectTag/GuardDutyMalwareScanStatus"
         values   = ["NO_THREATS_FOUND"]
       }
+      condition {
+        test     = "StringNotLike"
+        variable = "aws:PrincipalArn"
+        values   = [aws_iam_role.guardduty_malware_protection[0].arn]
+      }
     }
   }
 
@@ -151,6 +156,11 @@ data "aws_iam_policy_document" "bucket_policy" {
         test     = "Null"
         variable = "s3:ExistingObjectTag/GuardDutyMalwareScanStatus"
         values   = ["true"]
+      }
+      condition {
+        test     = "StringNotLike"
+        variable = "aws:PrincipalArn"
+        values   = [aws_iam_role.guardduty_malware_protection[0].arn]
       }
     }
   }

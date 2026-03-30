@@ -255,3 +255,40 @@ graph TD
     RDS -. "Replication/ETL" .-> Redshift
     Aurora -. "Replication/ETL" .-> Redshift
 ```
+
+## Cloud Storage Security (S3 Malware Scanning)
+
+To protect downstream users and internal systems from malicious files uploaded to our buckets, we employ **AWS GuardDuty Malware Protection for S3**. This operates natively at the bucket level without requiring the broader GuardDuty account service.
+
+When a file is uploaded, GuardDuty automatically reads and scans the object, then applies a Tag-Based Access Control (TBAC) tag (`GuardDutyMalwareScanStatus`) to the object. A strict bucket policy actively denies read access (like `s3:GetObject`) if the file is tagged as infected or hasn't successfully passed a scan yet.
+
+```mermaid
+flowchart TD
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:#232F3E;
+    classDef external fill:#f6f6f6,stroke:#333,stroke-width:2px;
+    classDef security fill:#DD344C,stroke:#232F3E,stroke-width:2px,color:#fff;
+    classDef clean fill:#228B22,stroke:#006400,stroke-width:2px,color:#fff;
+
+    User((User / Application)):::external
+    S3[S3 Bucket <br/> Public/Private Storage]:::aws
+    
+    GD[GuardDuty Malware <br/> Protection Plan]:::security
+    EventBus[EventBridge <br/> Default Bus]:::aws
+    
+    TBAC{S3 Bucket Policy <br/> TBAC Evaluation}
+    CleanFile[Clean File <br/> Tag: NO_THREATS_FOUND]:::clean
+    InfectedFile[Infected File <br/> Tag: THREATS_FOUND]:::security
+    
+    User -- "Uploads File" --> S3
+    S3 -. "Triggers Scan" .-> GD
+    
+    GD -- "Publishes Scan Metric" --> EventBus
+    GD -- "Applies Tag Result" --> S3
+    
+    S3 --> CleanFile
+    S3 --> InfectedFile
+    
+    User -- "Requests Download" --> TBAC
+    TBAC -- "Allows `s3:GetObject`" --> CleanFile
+    TBAC -- "Denies `s3:GetObject`" --> InfectedFile
+```
