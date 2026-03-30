@@ -41,7 +41,7 @@ echo "**/terraform-secrets.json" >> .gitignore
 
 ```terraform
 module "stack-setup" {
-  source = "github.com/dbl-works/terraform//stack/setup?ref=v2022.05.18"
+  source = "github.com/dbl-works/terraform//aws/stack/setup?ref=main"
 
   project            = "someproject"
   environment        = "staging"

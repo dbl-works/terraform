@@ -11,7 +11,7 @@ It also create cloudwatch alarms that monitor on the above metrics and notify Sl
 
 ```terraform
 module "cloudwatch" {
-  source = "github.com/dbl-works/terraform//cloudwatch?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/cloudwatch?ref=main"
 
   # Required
   region                         = "eu-central-1"

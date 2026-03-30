@@ -141,6 +141,7 @@ variable "rds_config" {
     instance_class                  = optional(string, "db.t3.micro")
     engine_version                  = optional(string, "16")
     allocated_storage               = optional(number, 10)
+    storage_type                    = optional(string, "gp2")
     allow_from_cidr_blocks          = optional(list(string), [])
     subnet_group_name               = optional(string, null)
     backup_retention_period         = optional(number, 7)

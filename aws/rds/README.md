@@ -12,7 +12,7 @@ Will create an initial database named `{project}_{environment}`.
 
 ```terraform
 module "db" {
-  source = "github.com/dbl-works/terraform//rds?ref=v2021.07.01"
+  source = "github.com/dbl-works/terraform//aws/rds?ref=main"
 
   region                     = "eu-central-1"
   vpc_id                     = "vpc-123"
@@ -208,7 +208,7 @@ We need to create a replication slot to enable usage of `test_decoding` plugin:
 1. Set enable_replication = true in RDS terraform
 ```terraform
 module "rds" {
-  source = "github.com/dbl-works/terraform//rds?ref=x"
+  source = "github.com/dbl-works/terraform//aws/rds?ref=main"
   ...
   enable_replication = true
 }

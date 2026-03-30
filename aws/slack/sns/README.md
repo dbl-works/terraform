@@ -5,7 +5,7 @@ SNS used for Slack chatbot. SNS need to sit in the same region with the resource
 ## Usage
 ```terraform
 module "slack-sns" {
-  source = "github.com/dbl-works/terraform//slack/sns?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/slack/sns?ref=main"
 
   # Optional
   sns_topic_name = "slack-sns"

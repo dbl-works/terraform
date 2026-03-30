@@ -8,7 +8,7 @@ Create user pools for use with authentication.
 
 ```terraform
 module "cognito" {
-  source = "github.com/dbl-works/terraform//cognito?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/cognito?ref=main"
 
   project         = local.project
   environment     = local.environment

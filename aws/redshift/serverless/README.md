@@ -52,7 +52,7 @@ The module will automatically read this password from your existing app secrets 
 
 ```terraform
 module "redshift_serverless" {
-  source = "github.com/dbl-works/terraform//aws/redshift/serverless?ref=v2021.07.01"
+  source = "github.com/dbl-works/terraform//aws/aws/redshift/serverless?ref=main"
 
   region      = "eu-central-1"
   project     = "someproject"
@@ -78,7 +78,7 @@ if you are using the `stack/app` module:
 
 ```terraform
 module "redshift_serverless" {
-  source = "github.com/dbl-works/terraform//aws/redshift/serverless?ref=v2021.07.01"
+  source = "github.com/dbl-works/terraform//aws/aws/redshift/serverless?ref=main"
 
   region      = local.region
   project     = local.project
@@ -119,7 +119,7 @@ Add `REDSHIFT_CONNECTION_URL` to your ECS deployment secrets:
 
 ```terraform
 module "ecs-deploy" {
-  source = "github.com/dbl-works/terraform//ecs-deploy/service?ref=main"
+  source = "github.com/dbl-works/terraform//aws/ecs-deploy/service?ref=main"
 
   project     = "myproject"
   environment = "staging"

@@ -38,7 +38,7 @@ provider "aws" {
 # main.tf
 
 module "vpc-peering" {
-  source = "github.com/dbl-works/terraform//vpc-peering?ref=v2021.07.01"
+  source = "github.com/dbl-works/terraform//aws/vpc-peering?ref=main"
 
   providers = {
     aws      = aws

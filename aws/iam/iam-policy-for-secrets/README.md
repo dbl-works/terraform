@@ -35,7 +35,7 @@ resource "aws_iam_user" "user" {
 }
 
 module "iam_secrets_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-secrets?ref=v2022.12.12"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-secrets?ref=main"
 
   for_each = local.users
 

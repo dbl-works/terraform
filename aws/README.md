@@ -2,6 +2,8 @@
 
 Terraform modules for Amazon Web Services (AWS).
 
+Have a look at the [architecture diagram](./architecture.md) for a general overview of how the different modules can be connected.
+
 ## Modules
 
 - [certificate](certificate/README.md) - Requests a certificate from the Amazon Certificate Manager.

@@ -7,7 +7,7 @@ NOTE: The Xray group and sampling is shared within the whole region so this modu
 
 ```terraform
 module "xray" {
-  source = "github.com/dbl-works/terraform//xray?ref=v2021.08.24"
+  source = "github.com/dbl-works/terraform//aws/xray?ref=main"
 
   # optional
   response_time_threshold = 0.2

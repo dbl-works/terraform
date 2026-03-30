@@ -6,7 +6,7 @@ Slack notifier for AWS Elastic Container Registry (ECR) image scans. It automati
 
 ```terraform
 module "ecr-scanner-notifier" {
-  source = "github.com/dbl-works/terraform//slack/ecr-scanner-notifier?ref=v2023.03.06"
+  source = "github.com/dbl-works/terraform//aws/slack/ecr-scanner-notifier?ref=main"
 
   project = local.project
   slack_webhook_url = "https://hooks.slack.com/services/x/y/z"

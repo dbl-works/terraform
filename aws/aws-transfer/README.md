@@ -7,7 +7,7 @@ A repository for setting up AWS Transfer with users
 
 ```terraform
 module "aws-transfer" {
-  source = "github.com/dbl-works/terraform//aws-transfer?ref=v2023.03.30"
+  source = "github.com/dbl-works/terraform//aws/aws-transfer?ref=main"
 
   project = local.project
   environment = local.environment

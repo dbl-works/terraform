@@ -7,7 +7,7 @@ Sending message to Slack when there is new sentry issues
 
 ```terraform
 module "sentry_slack_alert" {
-  source = "github.com/dbl-works/terraform//slack/sentry?ref=v2023.03.06"
+  source = "github.com/dbl-works/terraform//aws/slack/sentry?ref=main"
 
   project = "metaverse"
   sentry_organization = "facebook"

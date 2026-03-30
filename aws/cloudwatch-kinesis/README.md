@@ -20,7 +20,7 @@ locals {
 }
 
 module "cloudwatch-kinesis" {
-  source = "github.com/dbl-works/terraform//cloudwatch-kinesis?ref=v2023.03.30"
+  source = "github.com/dbl-works/terraform//aws/cloudwatch-kinesis?ref=main"
 
   project = local.project
   environment = local.environment

@@ -10,7 +10,7 @@ If you want to host multiple apps, you can use the [DBL Cloudflare Router](https
 
 ```terraform
 module "s3-frontend" {
-  source = "github.com/dbl-works/terraform//s3-public?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//aws/s3-public?ref=main"
 
   # Required
   environment = "staging"
@@ -27,7 +27,7 @@ module "s3-frontend" {
 ### With replica
 ```terraform
 module "s3-public" {
-  source = "github.com/dbl-works/terraform//s3-public?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//aws/s3-public?ref=main"
 
   # Required
   environment = "staging"
@@ -53,7 +53,7 @@ provider "aws" {
 }
 
 module "s3-public-eu-central-1" {
-  source = "github.com/dbl-works/terraform//s3-public?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//aws/s3-public?ref=main"
   providers = {
     aws = aws.eu
   }
@@ -80,7 +80,7 @@ provider "aws" {
 }
 
 module "s3-public-us-east-1" {
-  source = "github.com/dbl-works/terraform//s3-public?ref=v2021.11.13"
+  source = "github.com/dbl-works/terraform//aws/s3-public?ref=main"
 
   # Required
   environment = "staging"

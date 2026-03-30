@@ -8,7 +8,7 @@ Used for creating a new secret.
 
 ```terraform
 module "secrets" {
-  source = "github.com/dbl-works/terraform//secrets?ref=v2021.07.05"
+  source = "github.com/dbl-works/terraform//aws/secrets?ref=main"
 
   project     = "someproject"
   environment = "staging"

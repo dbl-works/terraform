@@ -9,7 +9,7 @@ In addition, users don't have to sign out of one account and sign in to another 
 #### Account 1: Admin Access
 ```terraform
 module "iam_cross_account_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-cross-account-access/destination-account?ref=main"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-cross-account-access/destination-account?ref=main"
 
   origin_aws_account_id = "xxxxxxxxxxxxxx"
   policy_name = "AdministratorAccess"
@@ -23,7 +23,7 @@ module "iam_cross_account_policies" {
 #### Account 2: Developer Access
 ```terraform
 module "iam_cross_account_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-cross-account-access/destination-account?ref=main"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-cross-account-access/destination-account?ref=main"
 
   origin_aws_account_id = "yyyyyyyyyyyyyy"
   policy_name = "DeveloperAccess" # Prepare a policy named DeveloperAccess with the relevant access rights
@@ -45,7 +45,7 @@ locals {
 }
 
 module "iam_cross_account_policies" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-cross-account-access/origin-account?ref=main"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-cross-account-access/origin-account?ref=main"
   for_each = local.aws_accounts
 
   usernames = ["muthu", "ali"]
@@ -54,7 +54,7 @@ module "iam_cross_account_policies" {
 }
 
 module "iam_cross_account_policies_developer" {
-  source = "github.com/dbl-works/terraform//iam/iam-policy-for-cross-account-access/origin-account?ref=main"
+  source = "github.com/dbl-works/terraform//aws/iam/iam-policy-for-cross-account-access/origin-account?ref=main"
 
   usernames = ["muthu"]
   destination_aws_account_id = "yyyyyyyyyyyyy"
