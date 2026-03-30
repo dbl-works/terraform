@@ -33,7 +33,7 @@ variable "file_malwarescanning" {
     allow_downloading_unscanned_files = bool
   })
   default = {
-    enabled                           = false
-    allow_downloading_unscanned_files = true
+    enabled                           = true
+    allow_downloading_unscanned_files = false
   }
 }

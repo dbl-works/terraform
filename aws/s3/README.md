@@ -30,8 +30,8 @@ When enabled, every newly uploaded object is automatically scanned and tagged wi
 
 | Variable | Type | Default | Description |
 |---|---|---|---|
-| `file_malwarescanning.enabled` | `bool` | `false` | Enable GuardDuty Malware Protection for S3 on this bucket. |
-| `file_malwarescanning.allow_downloading_unscanned_files` | `bool` | `true` | If `true`, only blocks downloads of files tagged as `THREATS_FOUND`. If `false`, blocks any file not explicitly tagged as `NO_THREATS_FOUND`. |
+| `file_malwarescanning.enabled` | `bool` | `true` | Enable GuardDuty Malware Protection for S3 on this bucket. |
+| `file_malwarescanning.allow_downloading_unscanned_files` | `bool` | `false` | If `true`, only blocks downloads of files tagged as `THREATS_FOUND`. If `false` (default for security), blocks any file not explicitly tagged as `NO_THREATS_FOUND`. |
 
 ```terraform
 module "s3" {
@@ -41,9 +41,10 @@ module "s3" {
   project     = "someproject"
   bucket_name = "someproject-staging-uploads"
 
+  # Override defaults if you are migrating an existing bucket
   file_malwarescanning = {
     enabled                           = true
-    allow_downloading_unscanned_files = true  # Set to false after backfilling scans
+    allow_downloading_unscanned_files = true  # Switch back to false (default) after backfilling scans
   }
 }
 ```
@@ -52,7 +53,7 @@ module "s3" {
 
 When enabling malware scanning on a bucket that already contains files, follow these steps:
 
-1. **Deploy with scanning enabled** and `allow_downloading_unscanned_files = true` (the default). This ensures new uploads are scanned while existing files remain downloadable.
+1. **Deploy with scanning enabled** and explicitly set `allow_downloading_unscanned_files = true` (overriding the default `false`). This ensures new uploads are scanned while existing files remain downloadable.
 
 2. **Backfill scans for historical files** using the provided utility script:
    ```sh
@@ -65,7 +66,7 @@ When enabling malware scanning on a bucket that already contains files, follow t
    ./script/backfill_s3_malware_scan.sh <bucket-name> --prefix uploads/ --region eu-central-1
    ```
 
-3. **Once all objects are tagged**, change `allow_downloading_unscanned_files = false` and apply. Only confirmed clean files will be downloadable from this point on.
+3. **Once all objects are tagged**, you can safely remove the `allow_downloading_unscanned_files` override from your Terraform code, allowing it to fall back to the secure `false` default. Only confirmed clean files will be downloadable from this point on.
 
 ### Pricing
 
