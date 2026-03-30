@@ -65,7 +65,7 @@ resource "aws_rds_cluster_parameter_group" "main" {
     for_each = var.enable_replication ? [1] : []
     content {
       name         = "max_replication_slots"
-      value        = "10"  # AWS recommends at least equal to planned publications + subscriptions
+      value        = "10" # AWS recommends at least equal to planned publications + subscriptions
       apply_method = "pending-reboot"
     }
   }
@@ -74,7 +74,7 @@ resource "aws_rds_cluster_parameter_group" "main" {
     for_each = var.enable_replication ? [1] : []
     content {
       name         = "max_wal_senders"
-      value        = "10"  # Should be at least equal to active replication slots
+      value        = "10" # Should be at least equal to active replication slots
       apply_method = "pending-reboot"
     }
   }
@@ -83,7 +83,7 @@ resource "aws_rds_cluster_parameter_group" "main" {
     for_each = var.enable_replication ? [1] : []
     content {
       name         = "max_logical_replication_workers"
-      value        = "4"  # Default is typically 4
+      value        = "4" # Default is typically 4
       apply_method = "pending-reboot"
     }
   }
