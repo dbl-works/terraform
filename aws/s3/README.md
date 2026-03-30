@@ -55,18 +55,14 @@ When enabling malware scanning on a bucket that already contains files, follow t
 
 1. **Deploy with scanning enabled** and explicitly set `allow_downloading_unscanned_files = true` (overriding the default `false`). This ensures new uploads are scanned while existing files remain downloadable.
 
-2. **Backfill scans for historical files** using the provided utility script:
+2. **Backfill scans for historical files** using the provided script. This creates an S3 Batch Operations job that runs entirely server-side in AWS — you can close your terminal after launching:
    ```sh
    export AWS_PROFILE=your-profile
-
-   # Scan the entire bucket (skips already-tagged objects, safe to stop and re-run)
-   ./script/backfill_s3_malware_scan.sh <bucket-name>
-
-   # Scan a specific prefix
-   ./script/backfill_s3_malware_scan.sh <bucket-name> --prefix uploads/ --region eu-central-1
+   ./script/backfill_s3_malware_scan.sh <bucket-name> --region eu-central-1
    ```
+   Monitor progress in the AWS Console → S3 → Batch Operations.
 
-3. **Once all objects are tagged**, you can safely remove the `allow_downloading_unscanned_files` override from your Terraform code, allowing it to fall back to the secure `false` default. Only confirmed clean files will be downloadable from this point on.
+3. **Once all objects are tagged**, remove the `allow_downloading_unscanned_files` override from your Terraform code, allowing it to fall back to the secure `false` default. Only confirmed clean files will be downloadable from this point on.
 
 ### Pricing
 
