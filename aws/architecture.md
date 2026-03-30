@@ -273,7 +273,7 @@ flowchart TD
     S3[S3 Bucket <br/> Public/Private Storage]:::aws
     
     GD[GuardDuty Malware <br/> Protection Plan]:::security
-    EventBus[EventBridge <br/> Default Bus]:::aws
+    EventBus[EventBridge Default Bus <br/> exists automatically]:::aws
     
     TBAC{S3 Bucket Policy <br/> TBAC Evaluation}
     CleanFile[Clean File <br/> Tag: NO_THREATS_FOUND]:::clean
