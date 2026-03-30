@@ -37,7 +37,7 @@ module "s3-storage" {
    ]
   file_malwarescanning = {
     enabled                           = true
-    allow_downloading_unscanned_files = true
+    allow_downloading_unscanned_files = false
   }
 }
 ```

@@ -23,7 +23,7 @@ module "s3-frontend" {
   s3_replicas                     = []
   file_malwarescanning = {
     enabled                           = true
-    allow_downloading_unscanned_files = true
+    allow_downloading_unscanned_files = false
   }
 }
 ```
