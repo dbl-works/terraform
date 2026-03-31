@@ -160,7 +160,10 @@ data "aws_iam_policy_document" "bucket_policy" {
       condition {
         test     = "StringNotLike"
         variable = "aws:PrincipalArn"
-        values   = [aws_iam_role.guardduty_malware_protection[0].arn]
+        values = [
+          aws_iam_role.guardduty_malware_protection[0].arn,
+          "arn:aws:iam::*:role/gd-backfill-lambda-*"
+        ]
       }
     }
   }
