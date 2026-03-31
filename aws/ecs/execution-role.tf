@@ -1,9 +1,5 @@
 resource "aws_iam_role" "ecs-task-execution" {
   name = "ecs-task-execution-${local.name}"
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-  ]
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -18,6 +14,16 @@ resource "aws_iam_role" "ecs-task-execution" {
       }
     ]
   })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-task-execution" {
+  role       = aws_iam_role.ecs-task-execution.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-task-execution-ecr" {
+  role       = aws_iam_role.ecs-task-execution.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
 locals {
