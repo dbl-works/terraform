@@ -38,8 +38,9 @@ variable "min_capacity" {
 
 variable "seconds_until_auto_pause" {
   type        = number
-  default     = 300
-  description = "[db.serverless] Time in seconds until serverless instances automatically pause (from 5 minutes to 24 hours)."
+  default     = null
+  nullable    = true
+  description = "[db.serverless] Time in seconds before a serverless DB auto-pauses (300–86400). Only applicable when min_capacity is 0. Leave null to omit."
 }
 
 variable "instance_count" {

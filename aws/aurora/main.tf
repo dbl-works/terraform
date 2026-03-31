@@ -41,8 +41,12 @@ resource "aws_rds_cluster" "main" {
     for_each = var.instance_class == "db.serverless" ? [1] : []
 
     content {
-      min_capacity             = var.min_capacity
-      max_capacity             = var.max_capacity
+      min_capacity = var.min_capacity
+      max_capacity = var.max_capacity
+      # Only set seconds_until_auto_pause when explicitly configured.
+      # Auto-pause is only applicable when min_capacity = 0.
+      # AWS returns 0 in state when auto-pause is not applicable,
+      # which causes perpetual drift if a non-null default is used.
       seconds_until_auto_pause = var.seconds_until_auto_pause
     }
   }
