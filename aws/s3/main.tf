@@ -162,7 +162,8 @@ data "aws_iam_policy_document" "bucket_policy" {
         variable = "aws:PrincipalArn"
         values = [
           aws_iam_role.guardduty_malware_protection[0].arn,
-          "arn:aws:iam::*:role/gd-backfill-lambda-*"
+          "arn:aws:iam::*:role/gd-backfill-lambda-*",
+          "arn:aws:sts::*:assumed-role/gd-backfill-lambda-*/*"
         ]
       }
     }
