@@ -295,7 +295,7 @@ variable "aurora_min_capacity" {
 
 variable "aurora_seconds_until_auto_pause" {
   type    = number
-  default = 300
+  default = null
 }
 
 variable "aurora_engine_version" {
