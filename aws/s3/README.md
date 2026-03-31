@@ -53,16 +53,32 @@ module "s3" {
 
 When enabling malware scanning on a bucket that already contains files, follow these steps:
 
-1. **Deploy with scanning enabled** and explicitly set `allow_downloading_unscanned_files = true` (overriding the default `false`). This ensures new uploads are scanned while existing files remain downloadable.
+1. **Deploy with scanning enabled** and explicitly set `allow_downloading_unscanned_files = true` (overriding the default `false`). This ensures new uploads are scanned while existing files remain downloadable:
+   ```hcl
+   file_malwarescanning = {
+     enabled                           = true
+     allow_downloading_unscanned_files = true  # required during backfill
+   }
+   ```
+   Then run `terraform apply`.
 
-2. **Backfill scans for historical files** using the provided script. This creates an S3 Batch Operations job that runs entirely server-side in AWS — you can close your terminal after launching:
+2. **Backfill scans for historical files** using the provided script. The script performs an in-place copy of each object, which triggers GuardDuty to scan it via EventBridge. The job runs entirely server-side in AWS — you can close your terminal after launching:
    ```sh
    export AWS_PROFILE=your-profile
-   ./script/backfill_s3_malware_scan.sh <bucket-name> --region eu-central-1
+   ./script/backfill_s3_malware_scan.sh --bucket <bucket-name> --region eu-central-1
    ```
    Monitor progress in the AWS Console → S3 → Batch Operations.
 
-3. **Once all objects are tagged**, remove the `allow_downloading_unscanned_files` override from your Terraform code, allowing it to fall back to the secure `false` default. Only confirmed clean files will be downloadable from this point on.
+   > **Note:** The script will abort if it detects the strict bucket policy is active. You _must_ complete step 1 first.
+
+3. **Once all objects are tagged**, remove the `allow_downloading_unscanned_files` override from your Terraform code, allowing it to fall back to the secure `false` default:
+   ```hcl
+   file_malwarescanning = {
+     enabled = true
+     # allow_downloading_unscanned_files defaults to false
+   }
+   ```
+   Run `terraform apply` again. Only confirmed clean files will be downloadable from this point on.
 
 ### Pricing
 
