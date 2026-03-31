@@ -101,3 +101,15 @@ variable "writers" {
   }))
   default = []
 }
+
+variable "file_malwarescanning" {
+  description = "Configuration for AWS GuardDuty Malware Protection for S3."
+  type = object({
+    enabled                           = bool
+    allow_downloading_unscanned_files = bool
+  })
+  default = {
+    enabled                           = true
+    allow_downloading_unscanned_files = false
+  }
+}

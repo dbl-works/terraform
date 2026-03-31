@@ -14,6 +14,10 @@ module "s3-shared-client_A" {
   project            = "someproject"
   guest_account_name = "client_A"
   region_name        = "eu-central-1"
+  file_malwarescanning = {
+    enabled                           = true
+    allow_downloading_unscanned_files = false
+  }
 }
 ```
 

@@ -8,6 +8,7 @@ module "s3" {
   versioning           = true
   multi_region_kms_key = false
   enable_encryption    = false
+  file_malwarescanning = var.file_malwarescanning
 }
 
 

@@ -21,6 +21,10 @@ module "s3-frontend" {
   versioning                      = false
   primary_storage_class_retention = 0
   s3_replicas                     = []
+  file_malwarescanning = {
+    enabled                           = true
+    allow_downloading_unscanned_files = false
+  }
 }
 ```
 

@@ -19,3 +19,70 @@ module "s3" {
   multi_region_kms_key        = false  # If true, the KMS key can be used in other regions
 }
 ```
+
+## Malware Scanning
+
+This module supports automatic malware scanning of uploaded objects using [AWS GuardDuty Malware Protection for S3](https://docs.aws.amazon.com/guardduty/latest/ug/malware-protection-s3.html). This feature works independently — it does **not** require enabling the full GuardDuty service.
+
+When enabled, every newly uploaded object is automatically scanned and tagged with a `GuardDutyMalwareScanStatus` tag (`NO_THREATS_FOUND`, `THREATS_FOUND`, `UNSUPPORTED`, etc.).
+
+### Configuration
+
+| Variable | Type | Default | Description |
+|---|---|---|---|
+| `file_malwarescanning.enabled` | `bool` | `true` | Enable GuardDuty Malware Protection for S3 on this bucket. |
+| `file_malwarescanning.allow_downloading_unscanned_files` | `bool` | `false` | If `true`, only blocks downloads of files tagged as `THREATS_FOUND`. If `false` (default for security), blocks any file not explicitly tagged as `NO_THREATS_FOUND`. |
+
+```terraform
+module "s3" {
+  source = "../s3"
+
+  environment = "staging"
+  project     = "someproject"
+  bucket_name = "someproject-staging-uploads"
+
+  # Override defaults if you are migrating an existing bucket
+  file_malwarescanning = {
+    enabled                           = true
+    allow_downloading_unscanned_files = true  # Switch back to false (default) after backfilling scans
+  }
+}
+```
+
+### Enabling on an Existing Bucket
+
+When enabling malware scanning on a bucket that already contains files, follow these steps:
+
+1. **Deploy with scanning enabled** and explicitly set `allow_downloading_unscanned_files = true` (overriding the default `false`). This ensures new uploads are scanned while existing files remain downloadable:
+   ```hcl
+   file_malwarescanning = {
+     enabled                           = true
+     allow_downloading_unscanned_files = true  # required during backfill
+   }
+   ```
+   Then run `terraform apply`.
+
+2. **Backfill scans for historical files** using the provided script. The script performs an in-place copy of each object, which triggers GuardDuty to scan it via EventBridge. The job runs entirely server-side in AWS — you can close your terminal after launching:
+   ```sh
+   export AWS_PROFILE=your-profile
+   ./script/backfill_s3_malware_scan.sh --bucket <bucket-name> --region eu-central-1
+   ```
+   Monitor progress in the AWS Console → S3 → Batch Operations.
+
+   > **Note:** The script will abort if it detects the strict bucket policy is active. You _must_ complete step 1 first.
+
+3. **Once all objects are tagged**, remove the `allow_downloading_unscanned_files` override from your Terraform code, allowing it to fall back to the secure `false` default:
+   ```hcl
+   file_malwarescanning = {
+     enabled = true
+     # allow_downloading_unscanned_files defaults to false
+   }
+   ```
+   Run `terraform apply` again. Only confirmed clean files will be downloadable from this point on.
+
+### Pricing
+
+GuardDuty Malware Protection for S3 costs approximately **~$0.10 per GiB scanned**.
+
+- [GuardDuty Malware Protection for S3 — Pricing](https://docs.aws.amazon.com/guardduty/latest/ug/pricing-malware-protection-for-s3-guardduty.html)
+- [Amazon GuardDuty Malware Protection for S3 — Price Reduction Announcement](https://aws.amazon.com/about-aws/whats-new/2025/02/amazon-guardduty-malware-protection-s3-price-reduction/)

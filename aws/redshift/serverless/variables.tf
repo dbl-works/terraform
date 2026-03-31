@@ -5,7 +5,7 @@ data "aws_secretsmanager_secret_version" "infra" {
 }
 
 locals {
-  name             = "${var.project}-${var.environment}"
+  name              = "${var.project}-${var.environment}"
   infra_credentials = jsondecode(data.aws_secretsmanager_secret_version.infra.secret_string)
 }
 
