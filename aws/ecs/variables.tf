@@ -247,3 +247,12 @@ variable "alb_access_logs" {
   })
   default = null
 }
+
+variable "alb_mtls" {
+  description = "mTLS config for Cloudflare Authenticated Origin Pulls. Requires a Trust Store ARN."
+  type = object({
+    mode            = string # "verify" or "passthrough"
+    trust_store_arn = string
+  })
+  default = null
+}

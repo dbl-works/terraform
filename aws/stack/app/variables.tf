@@ -720,3 +720,32 @@ variable "cloudwatch_logs_retention_in_days" {
   default = 90
 }
 # =============== Cloudwatch ================ #
+
+# =============== mTLS / Authenticated Origin Pulls ================ #
+variable "alb_mtls_ca_certificates_pem" {
+  description = "PEM-encoded root CA cert for ALB Trust Store. Enables mTLS when set."
+  type        = string
+  default     = null
+  sensitive   = true
+}
+
+variable "alb_mtls_mode" {
+  description = "mTLS mode: 'passthrough' (test) or 'verify' (enforce)."
+  type        = string
+  default     = "verify"
+  validation {
+    condition     = contains(["verify", "passthrough"], var.alb_mtls_mode)
+    error_message = "Must be 'verify' or 'passthrough'."
+  }
+}
+
+variable "authenticated_origin_pull" {
+  description = "Cloudflare AOP per-zone config. Leaf cert + key uploaded to Cloudflare."
+  type = object({
+    enabled     = bool
+    certificate = string
+    private_key = string
+  })
+  default = null
+}
+# =============== mTLS / Authenticated Origin Pulls ================ #

@@ -65,6 +65,11 @@ module "ecs" {
   autoscale_metrics_map             = var.autoscale_metrics_map
   cloudwatch_logs_retention_in_days = var.cloudwatch_logs_retention_in_days
   service_discovery_enabled         = var.service_discovery_enabled
+
+  alb_mtls = var.alb_mtls_ca_certificates_pem != null ? {
+    mode            = var.alb_mtls_mode
+    trust_store_arn = module.alb_mtls[0].trust_store_arn
+  } : null
 }
 
 module "cloudwatch" {

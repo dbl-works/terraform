@@ -55,3 +55,13 @@ variable "s3_cloudflare_records" {
   }))
   default = {}
 }
+
+variable "authenticated_origin_pull" {
+  description = "Per-zone Authenticated Origin Pulls config. Certificate/key are the leaf cert uploaded to Cloudflare."
+  type = object({
+    enabled     = bool
+    certificate = string # PEM-encoded leaf certificate
+    private_key = string # PEM-encoded private key for the leaf cert
+  })
+  default = null
+}

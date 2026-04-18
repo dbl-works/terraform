@@ -23,3 +23,20 @@ resource "cloudflare_zone_settings_override" "tls" {
     }
   }
 }
+
+# --- Authenticated Origin Pulls (per-zone, custom CA) ---
+
+resource "cloudflare_authenticated_origin_pulls_certificate" "custom" {
+  count       = var.authenticated_origin_pull != null ? 1 : 0
+  zone_id     = data.cloudflare_zone.default.id
+  certificate = var.authenticated_origin_pull.certificate
+  private_key = var.authenticated_origin_pull.private_key
+  type        = "per-zone"
+}
+
+resource "cloudflare_authenticated_origin_pulls" "main" {
+  count                                  = var.authenticated_origin_pull != null ? 1 : 0
+  zone_id                                = data.cloudflare_zone.default.id
+  enabled                                = var.authenticated_origin_pull.enabled
+  authenticated_origin_pulls_certificate = cloudflare_authenticated_origin_pulls_certificate.custom[0].id
+}
