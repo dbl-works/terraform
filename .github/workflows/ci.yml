@@ -146,6 +146,10 @@ jobs:
           EOF
           fi
 
+          # restore canonical formatting (e.g. column alignment) after the rewrite,
+          # otherwise the fmt -check step fails on the file this step just edited
+          terraform fmt $FILE
+
           cat $FILE
 
       - name: init
