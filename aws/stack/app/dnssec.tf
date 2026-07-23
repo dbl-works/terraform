@@ -8,6 +8,6 @@ module "route53domains_dnssec" {
 
   domain_name       = var.domain_name
   dnssec_algorithm  = tonumber(module.cloudflare[0].dnssec_algorithm)
-  dnssec_key_type   = tonumber(module.cloudflare[0].dnssec_key_type)
+  dnssec_flags      = module.cloudflare[0].dnssec_flags
   dnssec_public_key = module.cloudflare[0].dnssec_public_key
 }

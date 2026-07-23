@@ -52,6 +52,8 @@ openssl req -new -nodes -newkey rsa:4096 -keyout cert.key -out cert.csr -subj "/
 echo "4. Creating extensions file..."
 cat > cert.v3.ext << 'EOF'
 basicConstraints=CA:FALSE
+keyUsage=critical,digitalSignature
+extendedKeyUsage=clientAuth
 EOF
 
 echo "5. Signing the certificate using the Root CA..."

@@ -27,6 +27,11 @@ resource "aws_s3_object" "ca_bundle" {
   key          = "ca-certificates-bundle.pem"
   content      = var.ca_certificates_pem
   content_type = "application/x-pem-file"
+
+  # Referencing only module.s3_bucket.id would not wait for the bucket's
+  # versioning configuration, and an object created before versioning is
+  # enabled has no version_id for the trust store to pin.
+  depends_on = [module.s3_bucket]
 }
 
 # ALB Trust Store — references the CA bundle in S3

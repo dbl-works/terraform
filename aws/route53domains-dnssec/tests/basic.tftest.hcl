@@ -6,7 +6,7 @@ run "registers_cloudflare_ksk_with_route53_domains" {
   variables {
     domain_name       = "example.com"
     dnssec_algorithm  = 13
-    dnssec_key_type   = 257
+    dnssec_flags      = 257
     dnssec_public_key = "mdsswUyr3DPW132mOi8V9xESWEkK2G8gkJ7FZ0PQcqGd9M6FtdV7oNXgYw=="
   }
 

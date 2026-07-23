@@ -57,6 +57,8 @@ openssl req -new -nodes -newkey rsa:4096 -keyout "$CERTS_DIR/cert.key" -out "$CE
 
 cat > "$CERTS_DIR/cert.v3.ext" <<'EOF'
 basicConstraints=CA:FALSE
+keyUsage=critical,digitalSignature
+extendedKeyUsage=clientAuth
 EOF
 
 openssl x509 -req \

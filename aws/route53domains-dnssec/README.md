@@ -18,8 +18,8 @@ module "route53domains_dnssec" {
   }
 
   domain_name       = "example.com"
-  dnssec_algorithm  = module.cloudflare.dnssec_algorithm
-  dnssec_key_type   = module.cloudflare.dnssec_key_type
+  dnssec_algorithm  = tonumber(module.cloudflare.dnssec_algorithm)
+  dnssec_flags      = module.cloudflare.dnssec_flags
   dnssec_public_key = module.cloudflare.dnssec_public_key
 }
 ```

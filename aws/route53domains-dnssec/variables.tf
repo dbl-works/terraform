@@ -18,13 +18,13 @@ variable "dnssec_algorithm" {
   }
 }
 
-variable "dnssec_key_type" {
-  description = "DNSSEC key flags reported by the authoritative DNS provider: 257 for KSK or 256 for ZSK."
+variable "dnssec_flags" {
+  description = "DNSKEY flags reported by the authoritative DNS provider: 257 for KSK or 256 for ZSK."
   type        = number
 
   validation {
-    condition     = contains([256, 257], var.dnssec_key_type)
-    error_message = "dnssec_key_type must be 257 (KSK) or 256 (ZSK)."
+    condition     = contains([256, 257], var.dnssec_flags)
+    error_message = "dnssec_flags must be 257 (KSK) or 256 (ZSK)."
   }
 }
 

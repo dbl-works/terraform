@@ -728,11 +728,12 @@ variable "cloudwatch_logs_retention_in_days" {
 # =============== Cloudwatch ================ #
 
 # =============== mTLS / Authenticated Origin Pulls ================ #
+# Not marked sensitive: a CA certificate is public material, and sensitivity
+# would hide the ALB listener's mutual_authentication diff in plan output.
 variable "alb_mtls_ca_certificates_pem" {
   description = "PEM-encoded root CA cert for ALB Trust Store. Enables mTLS when set."
   type        = string
   default     = null
-  sensitive   = true
 }
 
 variable "alb_mtls_mode" {
