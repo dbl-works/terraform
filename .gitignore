@@ -17,6 +17,7 @@
 
 # Special\Personal dev setup
 /.idea
+docs/
 
 # os
 .DS_Store
