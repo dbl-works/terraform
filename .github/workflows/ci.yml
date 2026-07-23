@@ -44,6 +44,7 @@ jobs:
     strategy:
       matrix:
         module:
+          - alb-mtls
           - autoscaling/ecs
           - aws-transfer
           - aws-transfer/iam-role
@@ -83,6 +84,7 @@ jobs:
           - multi-stack/setup
           - nat
           - rds
+          - route53domains-dnssec
           - s3
           - s3-private
           - s3-public
