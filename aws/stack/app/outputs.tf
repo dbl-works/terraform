@@ -98,6 +98,11 @@ output "dnssec_public_key" {
   value = module.cloudflare[*].dnssec_public_key
 }
 
+output "route53domains_dnssec_key_id" {
+  description = "Route 53 Domains DNSSEC key ID when registrar-side DNSSEC management is enabled."
+  value       = one(module.route53domains_dnssec[*].dnssec_key_id)
+}
+
 output "service_discovery_namespace_id" {
   value = module.ecs.service_discovery_namespace_id
 }

@@ -31,3 +31,7 @@
 cloudwatch-snowflake/dist/tracker.zip
 
 .env
+
+# Local mTLS certificate material
+script/mtls_certs/
+/mtls_certs/

@@ -6,9 +6,10 @@ terraform {
     }
 
     aws = {
-      source                = "hashicorp/aws"
-      version               = ">= 4.0"
-      configuration_aliases = [aws.peer]
+      source  = "hashicorp/aws"
+      version = ">= 5.47"
+      # Route 53 Domains only exposes its domain-registration API in us-east-1.
+      configuration_aliases = [aws.peer, aws.us-east-1]
     }
   }
   required_version = ">= 1.0"

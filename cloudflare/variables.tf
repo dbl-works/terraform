@@ -63,5 +63,6 @@ variable "authenticated_origin_pull" {
     certificate = string # PEM-encoded leaf certificate
     private_key = string # PEM-encoded private key for the leaf cert
   })
-  default = null
+  default   = null
+  sensitive = true
 }

@@ -32,6 +32,10 @@ resource "cloudflare_authenticated_origin_pulls_certificate" "custom" {
   certificate = var.authenticated_origin_pull.certificate
   private_key = var.authenticated_origin_pull.private_key
   type        = "per-zone"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "cloudflare_authenticated_origin_pulls" "main" {

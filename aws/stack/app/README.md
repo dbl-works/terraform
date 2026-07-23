@@ -17,7 +17,25 @@ This is our stack convention which brings all modules together, including:
 ## Getting Started
 
 1. Refer to the [stack/setup module](stack/setup/README.md) on the pre-setup of stack modules
-2. Add the following block to your terraform configurations
+2. Configure the provider aliases used for cross-region resources. Route 53 Domains operations only run in `us-east-1`.
+
+```terraform
+provider "aws" {
+  region = "eu-central-1"
+}
+
+provider "aws" {
+  alias  = "peer"
+  region = "eu-central-1"
+}
+
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+}
+```
+
+3. Add the following block to your terraform configurations
 
 ```terraform
 resource "aws_alb_target_group" "facebook" {
@@ -45,6 +63,12 @@ resource "aws_alb_target_group" "facebook" {
 module "stack" {
   source = "github.com/dbl-works/terraform//aws/stack/app?ref=main"
 
+  providers = {
+    aws           = aws
+    aws.peer      = aws.peer
+    aws.us-east-1 = aws.us-east-1
+  }
+
   project            = "someproject"
   environment        = "staging"
 
@@ -66,6 +90,7 @@ module "stack" {
   # Optional
   region          = "eu-central-1" # Region to deploy the resources
   skip_cloudflare = false # Skip the creation of cloudflare modules
+  route53domains_dnssec_enabled = true # Register Cloudflare's KSK with this Route 53-registered domain
   cdn_worker_script_name = "serve-cdn"
   app_worker_script_name = "serve-app"
   tls_settings = {
@@ -264,6 +289,43 @@ module "stack" {
   remote_cidr_blocks = [] # for peering connections
 }
 ```
+
+### Adopting an existing DNSSEC key
+
+`route53domains_dnssec_enabled` defaults to `false` so existing domains with manually registered DNSSEC keys do not attempt to create duplicates. Import the existing key before enabling it:
+
+```shell
+terraform import 'module.stack.module.route53domains_dnssec[0].aws_route53domains_delegation_signer_record.main' 'example.com,DNSSEC_KEY_ID'
+```
+
+Find `DNSSEC_KEY_ID` under Route 53 → Registered domains → the domain → DNSSEC keys, or with:
+
+```shell
+aws route53domains get-domain-detail --region us-east-1 --domain-name example.com
+```
+
+Do not remove the registrar key and disable Cloudflare DNSSEC in the same apply. Remove the registrar key first, keep Cloudflare signing enabled until the DS TTL has expired (Route 53 recommends up to three days), and only then disable or destroy Cloudflare DNSSEC. Key replacement also requires an overlap period; see the [Route 53 Domains DNSSEC module documentation](../../route53domains-dnssec/README.md#safe-key-replacement-and-removal).
+
+### Securing the Cloudflare-to-ALB connection
+
+Use a custom Cloudflare Authenticated Origin Pulls certificate so the ALB trusts your Cloudflare zone rather than Cloudflare's shared global client certificate:
+
+```terraform
+alb_mtls_ca_certificates_pem = file("${path.root}/certificates/cloudflare-aop-root-ca.crt")
+alb_mtls_mode                = "passthrough"
+
+authenticated_origin_pull = {
+  enabled     = true
+  certificate = file("${path.root}/certificates/cloudflare-aop-client.crt")
+  private_key = file("${path.root}/certificates/cloudflare-aop-client.key")
+}
+```
+
+Deploy Cloudflare and ALB passthrough mode first, verify that Cloudflare presents the client certificate, and then change `alb_mtls_mode` to `"verify"`. Passthrough is diagnostic only; the ALB does not authenticate the certificate until verify mode is active.
+
+The Cloudflare provider stores the client private key in Terraform state. Use an encrypted remote backend with tightly restricted access. Keep the encrypted CA private key outside Terraform in the restricted administrator vault.
+
+The custom Cloudflare client certificate expires and must be rotated. Store the encrypted CA key and its passphrase in the restricted `${project}/terraform/${environment}` vault, configure Cloudflare's AOP expiration notification, and use `script/rotate-mtls-certificates.sh` from the project's CI workflow to issue a replacement leaf certificate before expiry. Do not pass the CA private key or passphrase through Terraform because that would copy them into state. See the [ALB mTLS module documentation](../../alb-mtls/README.md#leaf-certificate-rotation) for the complete rotation workflow.
 
 ```terraform
 # output.tf

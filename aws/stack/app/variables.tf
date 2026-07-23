@@ -27,6 +27,12 @@ variable "skip_cloudflare" {
   default = false
 }
 
+variable "route53domains_dnssec_enabled" {
+  description = "Register Cloudflare's DNSSEC key with Route 53 Domains. Enable for new domains; import an existing manually registered key before enabling."
+  type        = bool
+  default     = false
+}
+
 variable "certificate_arn" {
   type    = string
   default = null
@@ -746,6 +752,7 @@ variable "authenticated_origin_pull" {
     certificate = string
     private_key = string
   })
-  default = null
+  default   = null
+  sensitive = true
 }
 # =============== mTLS / Authenticated Origin Pulls ================ #

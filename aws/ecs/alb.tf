@@ -65,7 +65,7 @@ resource "aws_alb_listener" "https" {
     for_each = var.alb_mtls != null ? [var.alb_mtls] : []
     content {
       mode            = mutual_authentication.value.mode
-      trust_store_arn = mutual_authentication.value.trust_store_arn
+      trust_store_arn = mutual_authentication.value.mode == "verify" ? mutual_authentication.value.trust_store_arn : null
     }
   }
 }

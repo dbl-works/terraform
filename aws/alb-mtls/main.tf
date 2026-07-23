@@ -31,9 +31,10 @@ resource "aws_s3_object" "ca_bundle" {
 
 # ALB Trust Store — references the CA bundle in S3
 resource "aws_lb_trust_store" "main" {
-  name                             = "${var.project}-${var.environment}-${local.name}"
-  ca_certificates_bundle_s3_bucket = module.s3_bucket.id
-  ca_certificates_bundle_s3_key    = aws_s3_object.ca_bundle.key
+  name                                     = "${var.project}-${var.environment}-${local.name}"
+  ca_certificates_bundle_s3_bucket         = module.s3_bucket.id
+  ca_certificates_bundle_s3_key            = aws_s3_object.ca_bundle.key
+  ca_certificates_bundle_s3_object_version = aws_s3_object.ca_bundle.version_id
   tags = {
     Name        = "${var.project}-${var.environment}-${local.name}"
     Project     = var.project
