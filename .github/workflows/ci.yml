@@ -13,7 +13,9 @@ jobs:
       !contains(github.event.head_commit.message, 'skip-ci')
     steps:
       - run: echo "Running tests"
+
   # azure:
+  #   needs: should-run
   #   strategy:
   #     matrix:
   #       module:
@@ -47,6 +49,7 @@ jobs:
   #         tofu fmt -check
 
   aws:
+    needs: should-run
     strategy:
       matrix:
         module:
@@ -170,6 +173,7 @@ jobs:
           terraform fmt -check
 
   tests:
+    needs: should-run
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -190,6 +194,7 @@ jobs:
           terraform validate
 
   misc:
+    needs: should-run
     strategy:
       matrix:
         module:
@@ -221,6 +226,7 @@ jobs:
           terraform fmt -check
 
   security:
+    needs: should-run
     name: Trivy Security Scan
     runs-on: ubuntu-latest
 
