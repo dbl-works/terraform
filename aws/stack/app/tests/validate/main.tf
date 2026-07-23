@@ -1,12 +1,16 @@
+# Consumer simulation: instantiates the stack the way a downstream project
+# does — three-provider wiring, DNSSEC and mTLS enabled — so `terraform
+# validate` catches caller-facing breakage (e.g. a missing provider alias)
+# that validating the module in isolation cannot. Run by CI.
 terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "= 6.55.0"
+      version = "~> 6.0"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "= 4.52.1"
+      version = "~> 4.0"
     }
   }
 }

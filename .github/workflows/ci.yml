@@ -159,6 +159,26 @@ jobs:
           cd ${{ matrix.module }}
           terraform fmt -check
 
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+
+      # terraform test with mock_provider requires Terraform >= 1.7
+      - name: module tests (route53domains-dnssec)
+        run: |
+          cd aws/route53domains-dnssec
+          terraform init
+          terraform test
+
+      # validates the stack as a consumer calls it (provider aliases, mTLS + DNSSEC inputs)
+      - name: stack/app consumer validation
+        run: |
+          cd aws/stack/app/tests/validate
+          terraform init
+          terraform validate
+
   misc:
     strategy:
       matrix:
