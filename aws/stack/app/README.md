@@ -325,7 +325,7 @@ Deploy Cloudflare and ALB passthrough mode first, verify that Cloudflare present
 
 The Cloudflare provider stores the client private key in Terraform state. Use an encrypted remote backend with tightly restricted access. Keep the encrypted CA private key outside Terraform in the restricted administrator vault.
 
-The custom Cloudflare client certificate expires and must be rotated. Store the encrypted CA key and its passphrase in the restricted `${project}/terraform/${environment}` vault, configure Cloudflare's AOP expiration notification, and use `script/rotate-mtls-certificates.sh` from the project's CI workflow to issue a replacement leaf certificate before expiry. Do not pass the CA private key or passphrase through Terraform because that would copy them into state. See the [ALB mTLS module documentation](../../alb-mtls/README.md#leaf-certificate-rotation) for the complete rotation workflow.
+The custom Cloudflare client certificate expires and must be rotated. Store the encrypted CA key and its passphrase in the restricted `${project}/terraform/${environment}` vault, configure Cloudflare's AOP expiration notification, and use `script/rotate-mtls-certificates.sh` from the project's CI workflow to issue a replacement leaf certificate before expiry. With Terraform 1.11 and a compatible AWS provider, use write-only arguments to upload the vault values and an ephemeral resource to read them without persisting them in state. See the [ALB mTLS module documentation](../../alb-mtls/README.md#upload-without-storing-the-values-in-terraform-state) for copy-pasteable setup and the complete rotation workflow.
 
 ```terraform
 # output.tf

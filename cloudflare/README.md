@@ -67,7 +67,7 @@ authenticated_origin_pull = {
 }
 ```
 
-The origin must trust the CA that signed this leaf certificate. Do not upload the CA private key to Cloudflare, AWS, or Terraform.
+The origin must trust the CA that signed this leaf certificate. Do not upload the CA private key to Cloudflare or the ALB trust store. Store the encrypted key in the restricted Terraform Secrets Manager vault; see the [ALB mTLS documentation](../aws/alb-mtls/README.md#upload-without-storing-the-values-in-terraform-state) for a write-only Terraform setup that omits it from state.
 
 The Cloudflare provider stores the client private key in Terraform state even though Terraform masks the value in normal output. Use an encrypted remote backend with tightly restricted access.
 

@@ -38,7 +38,90 @@ For projects using the restricted `${project}/terraform/${environment}` Secrets 
 - `cloudflare_aop_ca_private_key_passphrase`: the encryption passphrase.
 - `cloudflare_aop_ca_certificate_pem`: the public `rootca.crt`, so CI can create renewed leaf certificates without another storage dependency.
 
-The encrypted key and its passphrase may share this vault when access is already limited to the administrators and CI role authorized to manage infrastructure-level credentials. Do not pass the CA private key or its passphrase through a Terraform resource, data source, variable, or output: Terraform would copy the value into state. Create the vault with Terraform, then populate and read these fields through the AWS CLI or Secrets Manager API outside Terraform.
+The encrypted key and its passphrase may share this vault when access is already limited to the administrators and CI role authorized to manage infrastructure-level credentials.
+
+### Upload without storing the values in Terraform state
+
+Terraform 1.11 and AWS provider 5.99.1 introduced write-only arguments. `secret_string_wo` sends the local value to Secrets Manager but omits it from Terraform plan and state files. `sensitive` only redacts terminal output; it does not provide this state protection by itself.
+
+Add these paths to the consuming project's `.gitignore`:
+
+```gitignore
+/.terraform-secrets.json
+/certificates/cloudflare-aop/
+```
+
+Create `.terraform-secrets.json` locally with mode `0600`:
+
+```json
+{
+  "cloudflare_aop_ca_private_key_passphrase": "replace-with-a-strong-passphrase"
+}
+```
+
+Place `rootca.key` and `rootca.crt` in `certificates/cloudflare-aop/`, then create and populate the restricted vault:
+
+```terraform
+terraform {
+  required_version = ">= 1.11"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 5.99.1"
+    }
+  }
+}
+
+locals {
+  terraform_secret_upload = merge(
+    jsondecode(file("${path.root}/.terraform-secrets.json")),
+    {
+      cloudflare_aop_ca_private_key_pem = file("${path.root}/certificates/cloudflare-aop/rootca.key")
+      cloudflare_aop_ca_certificate_pem = file("${path.root}/certificates/cloudflare-aop/rootca.crt")
+    }
+  )
+}
+
+module "terraform_secrets" {
+  source = "github.com/dbl-works/terraform//aws/secrets?ref=main"
+
+  project        = var.project
+  environment    = var.environment
+  application    = "terraform"
+  create_kms_key = true
+  description    = "Infrastructure-level credentials restricted to administrators and Terraform CI."
+}
+
+resource "aws_secretsmanager_secret_version" "terraform" {
+  secret_id = module.terraform_secrets.id
+
+  secret_string_wo         = jsonencode(sensitive(local.terraform_secret_upload))
+  secret_string_wo_version = 1
+}
+```
+
+Increment `secret_string_wo_version` whenever the local values are intentionally changed. Terraform cannot compare a write-only value with the previous version because that value is never stored in state.
+
+Terraform evaluates the local files whenever this configuration is planned. Keep this upload configuration in a dedicated bootstrap root that administrators run only when synchronizing the vault, rather than in every application's normal deployment root. Apply the upload once before adding a consumer that reads the secret ephemerally.
+
+### Read without storing the values in Terraform state
+
+Use the ephemeral Secrets Manager resource rather than the ordinary `data "aws_secretsmanager_secret_version"` data source. The ordinary data source marks `secret_string` as sensitive but still serializes it into state.
+
+```terraform
+ephemeral "aws_secretsmanager_secret_version" "terraform" {
+  secret_id = module.terraform_secrets.id
+}
+
+locals {
+  credentials_terraform = jsondecode(
+    ephemeral.aws_secretsmanager_secret_version.terraform.secret_string
+  )
+}
+```
+
+Values derived from this local remain ephemeral. Terraform permits them only in ephemeral-compatible contexts such as provider configuration, write-only resource arguments, ephemeral child-module inputs and outputs, or provisioner environments. Passing a value into an ordinary resource argument still requires Terraform to persist it and is therefore rejected. See HashiCorp's [sensitive and ephemeral data guidance](https://developer.hashicorp.com/terraform/language/manage-sensitive-data).
 
 ## Leaf certificate rotation
 
