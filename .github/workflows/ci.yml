@@ -114,6 +114,9 @@ jobs:
         run: |
           cd aws
           cd ${{ matrix.module }}
+          # stack/app cannot be pinned to the matrix version: its aurora child module
+          # requires aws >= 6.0, so let terraform resolve the real constraints instead.
+          if [[ "${{ matrix.module }}" == "stack/app" ]]; then exit 0; fi
           FILE=versions.tf
           if test -f "$FILE"; then
             sed -i '/aws = {/,/}/ s/version = "[^"]*/version = "${{ matrix.aws-version }}/' $FILE

@@ -7,8 +7,8 @@ terraform {
 
     aws = {
       source = "hashicorp/aws"
-      # minimum of the ecs, alb-mtls and route53domains-dnssec child modules
-      version = ">= 5.34"
+      # the aurora child module requires 6.x; all other child modules need >= 5.34 or lower
+      version = ">= 6.0"
       # Route 53 Domains only exposes its domain-registration API in us-east-1.
       configuration_aliases = [aws.peer, aws.us-east-1]
     }
