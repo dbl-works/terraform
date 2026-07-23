@@ -7,6 +7,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  should-run:
+    runs-on: ubuntu-latest
+    if: |
+      !contains(github.event.head_commit.message, 'skip-ci')
+    steps:
+      - run: echo "Running tests"
   # azure:
   #   strategy:
   #     matrix:
@@ -119,7 +125,8 @@ jobs:
           if [[ "${{ matrix.module }}" == "stack/app" ]]; then exit 0; fi
           FILE=versions.tf
           if test -f "$FILE"; then
-            sed -i '/aws = {/,/}/ s/version = "[^"]*/version = "${{ matrix.aws-version }}/' $FILE
+            # tolerate column-aligned assignments, e.g. `version   = "..."`
+            sed -i '/aws[[:space:]]*=[[:space:]]*{/,/}/ s/version[[:space:]]*=[[:space:]]*"[^"]*/version = "${{ matrix.aws-version }}/' $FILE
 
             echo "$FILE exists."
           else
