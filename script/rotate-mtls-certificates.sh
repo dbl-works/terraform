@@ -13,6 +13,9 @@ CA_PRIVATE_KEY_FILE=$2
 CA_CERTIFICATE_FILE=$3
 CERTS_DIR=${4:-mtls_certs}
 LEAF_VALIDITY_DAYS=${MTLS_LEAF_VALIDITY_DAYS:-730}
+# Everything in the certificate subject except the common name, so callers can
+# carry their own organisation identity into the issued leaf.
+CERT_SUBJECT_BASE=${MTLS_CERT_SUBJECT_BASE:-/C=US/ST=State/L=City/O=Company}
 
 if [[ ! $LEAF_VALIDITY_DAYS =~ ^[1-9][0-9]*$ ]]; then
   echo "MTLS_LEAF_VALIDITY_DAYS must be a positive integer." >&2
@@ -53,7 +56,7 @@ fi
 mkdir -p "$CERTS_DIR"
 
 echo "Generating a new Cloudflare Authenticated Origin Pulls leaf certificate..."
-openssl req -new -nodes -newkey rsa:4096 -keyout "$CERTS_DIR/cert.key" -out "$CERTS_DIR/cert.csr" -subj "/C=US/ST=State/L=City/O=Company/CN=$CERTIFICATE_COMMON_NAME"
+openssl req -new -nodes -newkey rsa:4096 -keyout "$CERTS_DIR/cert.key" -out "$CERTS_DIR/cert.csr" -subj "$CERT_SUBJECT_BASE/CN=$CERTIFICATE_COMMON_NAME"
 
 cat > "$CERTS_DIR/cert.v3.ext" <<'EOF'
 basicConstraints=CA:FALSE
