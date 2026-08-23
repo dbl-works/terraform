@@ -501,10 +501,13 @@ NOOP_FIXTURE="$(build_fixture noop 3650 700 700)"
 rm -f "$UPLOAD_CAPTURE"
 export MTLS_TEST_VAULT_SOURCE="$NOOP_FIXTURE"
 
+# GitHub Actions runners always export CI=true ambient; this case asserts
+# non-CI behavior, so CI must be explicitly cleared rather than relying on
+# it happening to be unset in the invoking shell.
 set +e
 TMPDIR="$SCRIPT_TMPDIR" PATH="$SUCCESS_SHIM_DIR:$PATH" \
   MTLS_TERRAFORM_ROOT="$FAKE_TERRAFORM_ROOT" \
-  bash "$SCRIPT_UNDER_TEST" \
+  env -u CI bash "$SCRIPT_UNDER_TEST" \
   >"$WORK_DIR/noop-stdout.log" 2>"$WORK_DIR/noop-stderr.log"
 NOOP_EXIT=$?
 set -e
