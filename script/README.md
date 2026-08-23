@@ -55,11 +55,14 @@ Writes an allowlist projection (mode `0600`) and drops everything else:
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `MTLS_ZONES` | *required* | Comma-separated zone slugs, e.g. `production` or `production,staging`. A `=<common-name>` suffix is accepted and ignored, so one value can be shared with `mtls-rotate-leaves.sh`. |
-| `MTLS_VAULT_KEY_PREFIX` | `cloudflare_aop_` | Prefix of the vault keys to read. |
+| `MTLS_ZONES` | *required* | Comma-separated zone slugs, e.g. `production` or `production,staging`. A `=<common-name>` suffix is accepted and ignored, so one value can be shared with `mtls-rotate-leaves.sh`. Slugs are `[A-Za-z0-9_-]+`, and the value must contain no whitespace: a multi-line value (e.g. a YAML block scalar) is rejected rather than silently reduced to its first line. |
+| `MTLS_VAULT_KEY_PREFIX` | `cloudflare_aop_` | Prefix of the vault keys to read. Letters, digits, underscores and hyphens only — it is interpolated into a jq filter, so anything else is a hard error. |
 
-A missing or empty required key is a hard error. Secret values are never
-printed, not even in error paths.
+A missing or empty required key is a hard error. The rendered file is verified
+after the fact — its key set must equal the expected projection and every value
+must be a non-empty string — so a filter bug cannot yield a file of `null`s
+with a zero exit code. Secret values are never printed, not even in error
+paths.
 
 ### `mtls-rotate-leaves.sh`
 
@@ -78,10 +81,11 @@ MTLS_ZONES="production=example.com,staging=staging.example.com" \
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `MTLS_ZONES` | *required* | Comma-separated `slug=common-name` pairs. The slug names the vault keys and the Terraform variables; the common name goes into the certificate subject. |
+| `MTLS_ZONES` | *required* | Comma-separated `slug=common-name` pairs. The slug names the vault keys and the Terraform variables; the common name goes into the certificate subject. Slugs are `[A-Za-z0-9_-]+`; common names must be hostnames, optionally wildcarded (`*.example.com`), so nothing can smuggle extra fields into the openssl subject. The value must contain no whitespace: a multi-line value (e.g. a YAML block scalar) is rejected rather than silently reduced to its first line. |
 | `MTLS_SECRET_ID` | *required* (unless `--vault-file`) | Secrets Manager secret holding the vault document. |
 | `MTLS_TERRAFORM_ROOT` | *required in rotate mode* | The only Terraform root the script may `init`/`plan`/`apply`. |
-| `MTLS_VAULT_KEY_PREFIX` | `cloudflare_aop_` | Prefix of the vault keys. |
+| `MTLS_VAULT_KEY_PREFIX` | `cloudflare_aop_` | Prefix of the vault keys. Letters, digits, underscores and hyphens only. |
+| `MTLS_ROTATION_CHECK_ONLY` | *(unset = rotate)* | Environment equivalent of `--check-only`: `1`, `true` or `yes` only report; `0`, `false`, `no` or unset rotate. Any other value is an error, never a silent real rotation. |
 | `MTLS_ROTATION_THRESHOLD_DAYS` | `60` | Rotate a leaf with less than this remaining. |
 | `MTLS_LEAF_VALIDITY_DAYS` | `730` | Validity of a freshly issued leaf. |
 | `MTLS_CA_MIN_REMAINING_YEARS` | `2` | Fail the run once the CA has less than this remaining. |

@@ -185,6 +185,46 @@ assert "rejection names MTLS_ZONES" \
   $(grep -q "MTLS_ZONES" "$WORK_DIR/no-zones-stderr.log" && echo 0 || echo 1)
 assert "no output file is left behind" $([[ ! -f "$WORK_DIR/no-zones.tfvars.json" ]] && echo 0 || echo 1)
 
+# ---------------------------------------------------------------------------
+# Case 6: a prefix carrying jq syntax must be rejected, not interpolated
+#
+# The projection filter is built by string interpolation, so a prefix such as
+# `x"] | {injected:"yes"} | .["y` could rewrite the filter and write a file
+# full of nulls while still exiting 0.
+# ---------------------------------------------------------------------------
+echo "-- case 6: invalid MTLS_VAULT_KEY_PREFIX"
+INJECTION_OUTPUT="$WORK_DIR/injected.tfvars.json"
+set +e
+MTLS_VAULT_KEY_PREFIX='x"] | {injected: "yes"} | .["y' \
+  bash "$SCRIPT_UNDER_TEST" "$FIXTURE" "$INJECTION_OUTPUT" \
+  >"$WORK_DIR/injection-stdout.log" 2>"$WORK_DIR/injection-stderr.log"
+INJECTION_EXIT=$?
+set -e
+
+assert "a prefix containing jq syntax is rejected" $([[ "$INJECTION_EXIT" -ne 0 ]] && echo 0 || echo 1)
+assert "rejection names MTLS_VAULT_KEY_PREFIX" \
+  $(grep -q "MTLS_VAULT_KEY_PREFIX" "$WORK_DIR/injection-stderr.log" && echo 0 || echo 1)
+assert "no output file is written for an invalid prefix" \
+  $([[ ! -f "$INJECTION_OUTPUT" ]] && echo 0 || echo 1)
+
+# ---------------------------------------------------------------------------
+# Case 7: multi-line MTLS_ZONES fails loudly instead of dropping zones
+# ---------------------------------------------------------------------------
+echo "-- case 7: whitespace in MTLS_ZONES"
+MULTILINE_OUTPUT="$WORK_DIR/multiline.tfvars.json"
+set +e
+MTLS_ZONES="$(printf 'production\nstaging')" \
+  bash "$SCRIPT_UNDER_TEST" "$FIXTURE" "$MULTILINE_OUTPUT" \
+  >"$WORK_DIR/multiline-stdout.log" 2>"$WORK_DIR/multiline-stderr.log"
+MULTILINE_EXIT=$?
+set -e
+
+assert "a multi-line MTLS_ZONES is rejected" $([[ "$MULTILINE_EXIT" -ne 0 ]] && echo 0 || echo 1)
+assert "rejection mentions whitespace" \
+  $(grep -qi "whitespace" "$WORK_DIR/multiline-stderr.log" && echo 0 || echo 1)
+assert "no partial output is written for a multi-line MTLS_ZONES" \
+  $([[ ! -f "$MULTILINE_OUTPUT" ]] && echo 0 || echo 1)
+
 echo ""
 if [[ "$FAILURES" -eq 0 ]]; then
   echo "All checks passed."

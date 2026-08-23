@@ -37,6 +37,11 @@
 #   MTLS_TERRAFORM_ROOT           Required in rotate mode. The ONLY Terraform
 #                                 root this script may init/plan/apply.
 #   MTLS_VAULT_KEY_PREFIX         Vault key prefix. Default "cloudflare_aop_".
+#                                 Letters, digits, underscores, hyphens only.
+#   MTLS_ROTATION_CHECK_ONLY      Env equivalent of --check-only: "1", "true" or
+#                                 "yes" to only report; "0", "false", "no" or
+#                                 unset to rotate. Any other value is an error
+#                                 rather than a silent real rotation.
 #   MTLS_ROTATION_THRESHOLD_DAYS  Rotate a leaf with less than this left. Default 60.
 #   MTLS_LEAF_VALIDITY_DAYS       Validity of a freshly issued leaf. Default 730.
 #   MTLS_CA_MIN_REMAINING_YEARS   Fail the run once the CA has less than this
@@ -78,11 +83,23 @@ Usage: script/mtls-rotate-leaves.sh [--check-only] [--vault-file PATH]
                       certificates, writing the vault, or running Terraform.
   --vault-file PATH   Read the vault document from PATH instead of Secrets
                       Manager. Only permitted together with --check-only.
+
+Environment equivalent: MTLS_ROTATION_CHECK_ONLY=1|true|yes behaves like
+--check-only; 0|false|no or unset rotates. Any other value is rejected.
 USAGE
   exit 1
 }
 
-check_only="${MTLS_ROTATION_CHECK_ONLY:-0}"
+# An unrecognised value must never fall through to a real rotation.
+case "$(printf '%s' "${MTLS_ROTATION_CHECK_ONLY:-0}" | tr '[:upper:]' '[:lower:]')" in
+  1|true|yes) check_only=1 ;;
+  0|false|no|"") check_only=0 ;;
+  *)
+    echo "Error: MTLS_ROTATION_CHECK_ONLY must be one of 1/true/yes or 0/false/no" >&2
+    exit 1
+    ;;
+esac
+
 vault_fixture=""
 
 while [[ $# -gt 0 ]]; do
@@ -120,8 +137,24 @@ for numeric_setting in ROTATION_THRESHOLD_DAYS LEAF_VALIDITY_DAYS CA_MIN_REMAINI
   fi
 done
 
+# The prefix is interpolated literally into the jq projection filter built by
+# mtls-render-terraform-vars.sh, so it is constrained to the same characters
+# the vault keys use.
+[[ "$VAULT_KEY_PREFIX" =~ ^[A-Za-z0-9_-]*$ ]] || {
+  echo "Error: MTLS_VAULT_KEY_PREFIX may only contain letters, digits, underscores and hyphens" >&2
+  exit 1
+}
+
 [[ -n "${MTLS_ZONES:-}" ]] || {
   echo "Error: MTLS_ZONES is required (e.g. \"production=example.com\")" >&2
+  exit 1
+}
+
+# Only the first line of MTLS_ZONES would survive the read below, so a value
+# spanning several lines (e.g. a YAML block scalar) has to fail loudly rather
+# than silently dropping every zone after the first.
+[[ ! "$MTLS_ZONES" =~ [[:space:]] ]] || {
+  echo "Error: MTLS_ZONES must not contain whitespace or newlines" >&2
   exit 1
 }
 
@@ -131,13 +164,17 @@ IFS=',' read -r -a zone_entries <<< "$MTLS_ZONES"
 for entry in "${zone_entries[@]}"; do
   slug="${entry%%=*}"
   common_name="${entry#*=}"
-  slug="${slug//[[:space:]]/}"
-  common_name="${common_name//[[:space:]]/}"
   if [[ -z "$slug" || -z "$common_name" || "$entry" != *=* ]]; then
     echo "Error: MTLS_ZONES entries must look like slug=common-name" >&2
     exit 1
   fi
   [[ "$slug" =~ ^[A-Za-z0-9_-]+$ ]] || { echo "Error: invalid zone slug in MTLS_ZONES: $slug" >&2; exit 1; }
+  # The common name ends up in an openssl -subj argument, where a stray slash
+  # or equals sign would add attacker-chosen subject fields.
+  [[ "$common_name" =~ ^(\*\.)?[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)*$ ]] || {
+    echo "Error: invalid zone common name in MTLS_ZONES: $common_name" >&2
+    exit 1
+  }
   ZONE_SLUGS+=("$slug")
   ZONE_COMMON_NAMES+=("$common_name")
 done

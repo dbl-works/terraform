@@ -18,6 +18,7 @@
 #                           mtls-rotate-leaves.sh); the suffix is ignored here,
 #                           so both scripts can share one MTLS_ZONES value.
 #   MTLS_VAULT_KEY_PREFIX   Vault key prefix. Default "cloudflare_aop_".
+#                           Letters, digits, underscores and hyphens only.
 #
 # Mapping (for MTLS_ZONES="production", default prefix):
 #   cloudflare_aop_ca_certificate_pem          -> aop_ca_certificate_pem
@@ -42,14 +43,28 @@ VAULT_KEY_PREFIX="${MTLS_VAULT_KEY_PREFIX:-cloudflare_aop_}"
 command -v jq >/dev/null 2>&1 || { echo "Error: jq is required but not found on PATH" >&2; exit 1; }
 [[ -f "$INPUT_PATH" ]] || { echo "Error: input file not found: $INPUT_PATH" >&2; exit 1; }
 
+# The prefix is interpolated literally into the jq projection filter below, so
+# anything outside this character class could rewrite the filter itself.
+[[ "$VAULT_KEY_PREFIX" =~ ^[A-Za-z0-9_-]*$ ]] || {
+  echo "Error: MTLS_VAULT_KEY_PREFIX may only contain letters, digits, underscores and hyphens" >&2
+  exit 1
+}
+
 [[ -n "${MTLS_ZONES:-}" ]] || { echo "Error: MTLS_ZONES is required (e.g. \"production\" or \"production,staging\")" >&2; exit 1; }
+
+# Only the first line of MTLS_ZONES would survive the read below, so a value
+# spanning several lines (e.g. a YAML block scalar) has to fail loudly rather
+# than silently dropping every zone after the first.
+[[ ! "$MTLS_ZONES" =~ [[:space:]] ]] || {
+  echo "Error: MTLS_ZONES must not contain whitespace or newlines" >&2
+  exit 1
+}
 
 ZONE_SLUGS=()
 IFS=',' read -r -a zone_entries <<< "$MTLS_ZONES"
 for entry in "${zone_entries[@]}"; do
   # Tolerate the "slug=common-name" form used by mtls-rotate-leaves.sh.
   slug="${entry%%=*}"
-  slug="${slug//[[:space:]]/}"
   [[ -n "$slug" ]] || { echo "Error: MTLS_ZONES contains an empty zone slug" >&2; exit 1; }
   [[ "$slug" =~ ^[A-Za-z0-9_-]+$ ]] || { echo "Error: invalid zone slug in MTLS_ZONES: $slug" >&2; exit 1; }
   ZONE_SLUGS+=("$slug")
@@ -96,6 +111,17 @@ trap cleanup EXIT
 
 if ! jq "$JQ_FILTER" "$INPUT_PATH" > "$TMP_OUTPUT" 2>/dev/null; then
   echo "Error: failed to render terraform vars" >&2
+  exit 1
+fi
+
+# The filter above is built by string interpolation, so the result is verified
+# rather than trusted: every projected variable must be a non-empty string, and
+# nothing beyond the allowlist may appear.
+if ! jq -e --argjson expected "$(printf '%s\n' "${TF_KEYS[@]}" | jq -R . | jq -s .)" '
+    (keys_unsorted | sort) == ($expected | sort)
+    and (to_entries | all(.value | type == "string" and (length > 0)))
+  ' "$TMP_OUTPUT" >/dev/null 2>/dev/null; then
+  echo "Error: rendered terraform vars did not match the expected projection" >&2
   exit 1
 fi
 

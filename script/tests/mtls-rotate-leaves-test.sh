@@ -269,6 +269,73 @@ assert "configuration guards make no external calls" \
   $([[ ! -f "$EXTERNAL_CALL_MARKER" ]] && echo 0 || echo 1)
 
 # ---------------------------------------------------------------------------
+# Case 6b: hostile or ambiguous inputs are rejected before anything happens
+#
+# Each of these would otherwise be silent: a prefix carrying jq syntax
+# rewrites the projection filter, a common name carrying `/O=` adds subject
+# fields to the issued certificate, a multi-line MTLS_ZONES drops every zone
+# after the first, and an unrecognised MTLS_ROTATION_CHECK_ONLY value would
+# fall through to a real rotation.
+# ---------------------------------------------------------------------------
+echo "-- case 6b: input validation"
+
+# run_rejected <log-prefix> <env-assignment>... -> exit code in REJECTED_EXIT
+run_rejected() {
+  local prefix="$1"
+  shift
+  set +e
+  TMPDIR="$SCRIPT_TMPDIR" env "$@" bash "$SCRIPT_UNDER_TEST" \
+    --check-only --vault-file "$FRESH_FIXTURE" \
+    >"$WORK_DIR/$prefix-stdout.log" 2>"$WORK_DIR/$prefix-stderr.log"
+  REJECTED_EXIT=$?
+  set -e
+}
+
+run_rejected bad-prefix 'MTLS_VAULT_KEY_PREFIX=x"] | {injected: "yes"} | .["y'
+assert "a vault key prefix containing jq syntax is rejected" $([[ "$REJECTED_EXIT" -ne 0 ]] && echo 0 || echo 1)
+assert "rejection names MTLS_VAULT_KEY_PREFIX" \
+  $(grep -q "MTLS_VAULT_KEY_PREFIX" "$WORK_DIR/bad-prefix-stderr.log" && echo 0 || echo 1)
+
+run_rejected bad-cn 'MTLS_ZONES=p=good.com/O=Injected-Org'
+assert "a common name carrying extra subject fields is rejected" $([[ "$REJECTED_EXIT" -ne 0 ]] && echo 0 || echo 1)
+assert "rejection names the offending common name" \
+  $(grep -q "invalid zone common name" "$WORK_DIR/bad-cn-stderr.log" && echo 0 || echo 1)
+
+run_rejected multiline-zones "MTLS_ZONES=$(printf 'a=b.com\nc=d.com')"
+assert "a multi-line MTLS_ZONES is rejected" $([[ "$REJECTED_EXIT" -ne 0 ]] && echo 0 || echo 1)
+assert "rejection mentions whitespace in MTLS_ZONES" \
+  $(grep -q "MTLS_ZONES must not contain whitespace" "$WORK_DIR/multiline-zones-stderr.log" && echo 0 || echo 1)
+
+run_rejected bad-check-only 'MTLS_ROTATION_CHECK_ONLY=maybe'
+assert "an unrecognised MTLS_ROTATION_CHECK_ONLY value is rejected" $([[ "$REJECTED_EXIT" -ne 0 ]] && echo 0 || echo 1)
+assert "rejection names MTLS_ROTATION_CHECK_ONLY" \
+  $(grep -q "MTLS_ROTATION_CHECK_ONLY" "$WORK_DIR/bad-check-only-stderr.log" && echo 0 || echo 1)
+
+# A wildcard common name is legitimate and must still be accepted.
+set +e
+TMPDIR="$SCRIPT_TMPDIR" MTLS_ZONES="production=*.example.com,staging=staging.example.com" \
+  bash "$SCRIPT_UNDER_TEST" --check-only --vault-file "$FRESH_FIXTURE" \
+  >"$WORK_DIR/wildcard-stdout.log" 2>"$WORK_DIR/wildcard-stderr.log"
+WILDCARD_EXIT=$?
+set -e
+assert "a wildcard common name is accepted" $([[ "$WILDCARD_EXIT" -eq 0 ]] && echo 0 || echo 1)
+
+# MTLS_ROTATION_CHECK_ONLY=true must behave exactly like --check-only.
+set +e
+TMPDIR="$SCRIPT_TMPDIR" MTLS_ROTATION_CHECK_ONLY=true \
+  bash "$SCRIPT_UNDER_TEST" --vault-file "$FRESH_FIXTURE" \
+  >"$WORK_DIR/env-check-only-stdout.log" 2>"$WORK_DIR/env-check-only-stderr.log"
+ENV_CHECK_ONLY_EXIT=$?
+set -e
+assert "MTLS_ROTATION_CHECK_ONLY=true enables check-only mode" \
+  $([[ "$ENV_CHECK_ONLY_EXIT" -eq 0 ]] && grep -qx "rotation-not-required" "$WORK_DIR/env-check-only-stdout.log" && echo 0 || echo 1)
+
+assert "input validation makes no external calls" \
+  $([[ ! -f "$EXTERNAL_CALL_MARKER" ]] && echo 0 || echo 1)
+assert "input validation leaves no temp directory behind" \
+  $([[ -z "$(ls -A "$SCRIPT_TMPDIR")" ]] && echo 0 || echo 1)
+
+# ---------------------------------------------------------------------------
 # Case 7: full rotation path against succeeding aws/terraform shims
 # ---------------------------------------------------------------------------
 echo "-- case 7: rotation path (production expiring, staging healthy)"
