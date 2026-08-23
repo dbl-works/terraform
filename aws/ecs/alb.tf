@@ -60,6 +60,14 @@ resource "aws_alb_listener" "https" {
     target_group_arn = aws_alb_target_group.ecs.arn
     type             = "forward"
   }
+
+  dynamic "mutual_authentication" {
+    for_each = var.alb_mtls != null ? [var.alb_mtls] : []
+    content {
+      mode            = mutual_authentication.value.mode
+      trust_store_arn = mutual_authentication.value.mode == "verify" ? mutual_authentication.value.trust_store_arn : null
+    }
+  }
 }
 
 # Using SNI to attach multiple certificates to the same load balancer

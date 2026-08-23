@@ -94,8 +94,22 @@ output "dnssec_key_type" {
   value = module.cloudflare[*].dnssec_key_type
 }
 
+output "dnssec_flags" {
+  value = module.cloudflare[*].dnssec_flags
+}
+
 output "dnssec_public_key" {
   value = module.cloudflare[*].dnssec_public_key
+}
+
+output "route53domains_dnssec_key_id" {
+  description = "Route 53 Domains DNSSEC key ID when registrar-side DNSSEC management is enabled."
+  value       = one(module.route53domains_dnssec[*].dnssec_key_id)
+
+  precondition {
+    condition     = !(var.route53domains_dnssec_enabled && var.skip_cloudflare)
+    error_message = "route53domains_dnssec_enabled requires the Cloudflare module: the stack registers Cloudflare's signing key with Route 53 Domains, so there is no key to register when skip_cloudflare is true. To register another DNS provider's key, use the aws/route53domains-dnssec module directly."
+  }
 }
 
 output "service_discovery_namespace_id" {

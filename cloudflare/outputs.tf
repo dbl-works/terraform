@@ -9,8 +9,13 @@ output "dnssec_algorithm" {
 }
 
 output "dnssec_key_type" {
-  description = "key type of the DNSSEC record, e.g. '257 (KSK)'"
+  description = "key type of the DNSSEC record as an algorithm mnemonic, e.g. 'ECDSAP256SHA256'"
   value       = cloudflare_zone_dnssec.main.key_type
+}
+
+output "dnssec_flags" {
+  description = "DNSKEY flags of the DNSSEC record, e.g. 257 for a KSK"
+  value       = cloudflare_zone_dnssec.main.flags
 }
 
 output "dnssec_public_key" {

@@ -17,6 +17,7 @@
 
 # Special\Personal dev setup
 /.idea
+docs/
 
 # os
 .DS_Store
@@ -31,3 +32,7 @@
 cloudwatch-snowflake/dist/tracker.zip
 
 .env
+
+# Local mTLS certificate material
+script/mtls_certs/
+/mtls_certs/

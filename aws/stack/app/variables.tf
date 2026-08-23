@@ -27,6 +27,12 @@ variable "skip_cloudflare" {
   default = false
 }
 
+variable "route53domains_dnssec_enabled" {
+  description = "Register Cloudflare's DNSSEC key with Route 53 Domains. Enable for new domains; import an existing manually registered key before enabling."
+  type        = bool
+  default     = false
+}
+
 variable "certificate_arn" {
   type    = string
   default = null
@@ -720,3 +726,34 @@ variable "cloudwatch_logs_retention_in_days" {
   default = 90
 }
 # =============== Cloudwatch ================ #
+
+# =============== mTLS / Authenticated Origin Pulls ================ #
+# Not marked sensitive: a CA certificate is public material, and sensitivity
+# would hide the ALB listener's mutual_authentication diff in plan output.
+variable "alb_mtls_ca_certificates_pem" {
+  description = "PEM-encoded root CA cert for ALB Trust Store. Enables mTLS when set."
+  type        = string
+  default     = null
+}
+
+variable "alb_mtls_mode" {
+  description = "mTLS mode: 'passthrough' (test) or 'verify' (enforce)."
+  type        = string
+  default     = "verify"
+  validation {
+    condition     = contains(["verify", "passthrough"], var.alb_mtls_mode)
+    error_message = "Must be 'verify' or 'passthrough'."
+  }
+}
+
+variable "authenticated_origin_pull" {
+  description = "Cloudflare AOP per-zone config. Leaf cert + key uploaded to Cloudflare."
+  type = object({
+    enabled     = bool
+    certificate = string
+    private_key = string
+  })
+  default   = null
+  sensitive = true
+}
+# =============== mTLS / Authenticated Origin Pulls ================ #

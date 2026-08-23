@@ -2,12 +2,23 @@ name: ci
 
 on: [push]
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  should-run:
+    runs-on: ubuntu-latest
+    if: |
+      !contains(github.event.head_commit.message, 'skip-ci')
+    steps:
+      - run: echo "Running tests"
+
   # azure:
+  #   needs: should-run
   #   strategy:
   #     matrix:
   #       module:
@@ -41,9 +52,11 @@ jobs:
   #         tofu fmt -check
 
   aws:
+    needs: should-run
     strategy:
       matrix:
         module:
+          - alb-mtls
           - autoscaling/ecs
           - aws-transfer
           - aws-transfer/iam-role
@@ -83,6 +96,7 @@ jobs:
           - multi-stack/setup
           - nat
           - rds
+          - route53domains-dnssec
           - s3
           - s3-private
           - s3-public
@@ -112,9 +126,13 @@ jobs:
         run: |
           cd aws
           cd ${{ matrix.module }}
+          # stack/app cannot be pinned to the matrix version: its aurora child module
+          # requires aws >= 6.0, so let terraform resolve the real constraints instead.
+          if [[ "${{ matrix.module }}" == "stack/app" ]]; then exit 0; fi
           FILE=versions.tf
           if test -f "$FILE"; then
-            sed -i '/aws = {/,/}/ s/version = "[^"]*/version = "${{ matrix.aws-version }}/' $FILE
+            # tolerate column-aligned assignments, e.g. `version   = "..."`
+            sed -i '/aws[[:space:]]*=[[:space:]]*{/,/}/ s/version[[:space:]]*=[[:space:]]*"[^"]*/version = "${{ matrix.aws-version }}/' $FILE
 
             echo "$FILE exists."
           else
@@ -131,6 +149,10 @@ jobs:
           EOF
           fi
 
+          # restore canonical formatting (e.g. column alignment) after the rewrite,
+          # otherwise the fmt -check step fails on the file this step just edited
+          terraform fmt $FILE
+
           cat $FILE
 
       - name: init
@@ -146,6 +168,7 @@ jobs:
           # the stack/app module must have a provider block because the sub-module "vpc-peering" requires a non-standard "provider
           # see: https://github.com/hashicorp/terraform/issues/28490
           if [[ "${{ matrix.module }}" == "stack/app" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> vpc-peering.tf; fi
+          if [[ "${{ matrix.module }}" == "stack/app" ]]; then echo "provider \"aws\" { alias = \"us-east-1\" }" >> dnssec.tf; fi
           if [[ "${{ matrix.module }}" == "stack/global" ]]; then echo "provider \"aws\" { alias = \"us-east-1\" }" >> versions.tf; fi
           if [[ "${{ matrix.module }}" == "vpc-peering" ]]; then echo "provider \"aws\" { alias = \"peer\" }" >> main.tf; fi
           terraform validate
@@ -156,7 +179,45 @@ jobs:
           cd ${{ matrix.module }}
           terraform fmt -check
 
+  tests:
+    needs: should-run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+
+      # terraform test with mock_provider requires Terraform >= 1.7
+      - name: module tests (route53domains-dnssec)
+        run: |
+          cd aws/route53domains-dnssec
+          terraform init
+          terraform test
+
+      # validates the stack as a consumer calls it (provider aliases, mTLS + DNSSEC inputs)
+      - name: stack/app consumer validation
+        run: |
+          cd aws/stack/app/tests/validate
+          terraform init
+          terraform validate
+
+  shell-tests:
+    needs: should-run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The suites shim aws/terraform/curl on PATH, so they need no
+      # credentials and make no external calls.
+      - name: script/tests
+        run: |
+          for suite in script/tests/*.sh; do
+            echo "::group::$suite"
+            bash "$suite"
+            echo "::endgroup::"
+          done
+
   misc:
+    needs: should-run
     strategy:
       matrix:
         module:
@@ -188,8 +249,12 @@ jobs:
           terraform fmt -check
 
   security:
+    needs: should-run
     name: Trivy Security Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
       - name: Checkout code

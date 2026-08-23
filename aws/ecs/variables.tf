@@ -247,3 +247,22 @@ variable "alb_access_logs" {
   })
   default = null
 }
+
+variable "alb_mtls" {
+  description = "mTLS config for Cloudflare Authenticated Origin Pulls. A Trust Store ARN is required in verify mode."
+  type = object({
+    mode            = string # "verify" or "passthrough"
+    trust_store_arn = optional(string)
+  })
+  default = null
+
+  validation {
+    condition     = var.alb_mtls == null ? true : contains(["verify", "passthrough"], var.alb_mtls.mode)
+    error_message = "alb_mtls.mode must be 'verify' or 'passthrough'."
+  }
+
+  validation {
+    condition     = var.alb_mtls == null ? true : var.alb_mtls.mode != "verify" || var.alb_mtls.trust_store_arn != null
+    error_message = "alb_mtls.trust_store_arn is required when mode is 'verify'."
+  }
+}

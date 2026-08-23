@@ -12,8 +12,9 @@ module "cloudflare" {
   s3_cloudflare_records = var.s3_cloudflare_records
 
   # optional
-  bastion_enabled    = true
-  tls_settings       = var.tls_settings
-  hsts_settings      = var.hsts_settings
-  bastion_public_dns = module.ecs.nlb_dns_name
+  bastion_enabled           = true
+  tls_settings              = var.tls_settings
+  hsts_settings             = var.hsts_settings
+  bastion_public_dns        = module.ecs.nlb_dns_name
+  authenticated_origin_pull = var.authenticated_origin_pull
 }

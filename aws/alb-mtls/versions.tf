@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      # aws_lb_listener mutual_authentication requires 5.30; passthrough-mode fix in 5.33
+      # aws_lb_trust_store was added in 5.30; kept consistent with the ecs and route53domains-dnssec modules
       version = ">= 5.34"
     }
   }

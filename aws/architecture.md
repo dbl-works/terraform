@@ -26,7 +26,7 @@ graph TD
 
     %% Connections
     Users -- "HTTPS" --> CF
-    CF -- "HTTPS" --> ALB
+    CF -- "HTTPS (mTLS optional)" --> ALB
     ALB -- "HTTP / HTTPS" --> ECS
     
     ECS -- "PostgreSQL (TCP 5432)" --> RDS
@@ -291,4 +291,31 @@ flowchart TD
     User -- "Requests Download" --> TBAC
     TBAC -- "Allows `s3:GetObject`" --> CleanFile
     TBAC -- "Denies `s3:GetObject`" --> InfectedFile
+```
+
+## Secure Origin Access (mTLS)
+
+To ensure that only traffic proxied through Cloudflare can reach the Application Load Balancer (ALB), we enforce **mutual TLS (mTLS)** via Cloudflare Authenticated Origin Pulls.
+
+Cloudflare is configured to present a custom, per-zone client certificate during the origin pull. The ALB listener requires this client certificate and validates it against a Trust Store that contains the corresponding root CA bundle. This prevents attackers from bypassing Cloudflare by directly hitting the ALB's IP address.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant CF as Cloudflare Edge<br/>(your account)
+    participant ALB as AWS ALB
+    participant ECS as ECS Containers
+
+    User->>CF: HTTPS request to api.example.com
+    Note over CF: Cloudflare presents YOUR<br/>custom leaf certificate
+    CF->>ALB: mTLS handshake (leaf cert signed by your CA)
+    ALB->>ALB: Verify cert chain against Trust Store<br/>(your root CA only)
+    ALB->>ECS: Forward to target group
+    ECS-->>User: Response (via CF)
+
+    Note over User,ALB: Attack scenario — blocked
+    User->>CF: Attacker routes evil.com → ALB IP
+    Note over CF: Cloudflare presents the<br/>SHARED zone-level cert
+    CF->>ALB: mTLS handshake (wrong CA)
+    ALB--xCF: ❌ Trust Store rejects<br/>(not signed by your CA)
 ```
