@@ -48,3 +48,10 @@ To disable DNSSEC or destroy the Cloudflare zone safely:
 4. Only then disable Cloudflare DNSSEC or destroy the Cloudflare resources.
 
 Disabling signing while a DS record still exists can make the entire domain return `SERVFAIL` to validating resolvers. See the [Route 53 DNSSEC key replacement and removal guidance](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-configure-dnssec.html).
+
+## Known provider limitation
+
+The Route 53 Domains API reports installed keys only as a composite key ID, so the AWS provider leaves `signing_attributes.flags` and `signing_attributes.public_key` empty on refresh and import. The resource therefore carries `ignore_changes = [signing_attributes]`; without it every plan after the first refresh proposes a bogus replacement. Consequences:
+
+- Changing the signing attributes in configuration alone will NOT be planned. To rotate the registrar key deliberately, apply with `-replace` targeting this module's resource.
+- If a create times out with an "empty result" read error while the registry operation is still in flight, the key usually IS installed; verify with `aws route53domains get-domain-detail --region us-east-1` and import using `<domain>,<key id>`.
