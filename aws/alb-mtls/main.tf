@@ -40,6 +40,16 @@ resource "aws_lb_trust_store" "main" {
   ca_certificates_bundle_s3_bucket         = module.s3_bucket.id
   ca_certificates_bundle_s3_key            = aws_s3_object.ca_bundle.key
   ca_certificates_bundle_s3_object_version = aws_s3_object.ca_bundle.version_id
+
+  lifecycle {
+    precondition {
+      # AWS rejects trust store names longer than 32 characters; surface the
+      # limit at plan time with the offending value instead of at apply time.
+      condition     = length("${var.project}-${var.environment}-${local.name}") <= 32
+      error_message = "Trust store name '${var.project}-${var.environment}-${local.name}' exceeds the AWS 32-character limit; shorten var.name."
+    }
+  }
+
   tags = {
     Name        = "${var.project}-${var.environment}-${local.name}"
     Project     = var.project
