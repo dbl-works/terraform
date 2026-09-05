@@ -70,8 +70,10 @@ module "cloudflare_zero_trust" {
 - Account-scoped: enable it in one module for each Cloudflare account
 - Other stacks in that account set `one_time_pin_enabled = false` and pass the first stack's `one_time_pin_identity_provider_id` output
 - Applications accept this provider only
-- Cloudflare provider 4.52.9 cannot confirm that a passed ID belongs to this account or to a One-time PIN provider. An incorrect ID fails at apply time
-- To accept every identity provider on the account instead, set `allow_all_identity_providers = true`
+- `allowed_idps` accepts any identity provider ID, and Cloudflare provider 4.52.9 does not check the type
+- A nonexistent or cross-account ID fails at apply. A valid Google or Okta ID from the same account applies successfully and silently replaces the One-time PIN login
+- Verify the provider type before you pass an ID
+- `allow_all_identity_providers = true` overrides the restriction and accepts every identity provider on the account
 
 ## Service tokens
 
