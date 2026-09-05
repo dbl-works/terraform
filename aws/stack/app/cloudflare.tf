@@ -1,5 +1,5 @@
 module "cloudflare" {
-  source = "../../../cloudflare"
+  source = "../../../cloudflare/zone"
   count  = var.skip_cloudflare ? 0 : 1
 
   depends_on = [
