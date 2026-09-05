@@ -221,7 +221,7 @@ jobs:
     strategy:
       matrix:
         module:
-          - cloudflare
+          - cloudflare/zone
           - fivetran
           - fivetran/connectors/google_analytics
           - fivetran/connectors/lambda

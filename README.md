@@ -6,6 +6,7 @@ We create modules here for re-use between projects.
 
 - [aws](aws/README.md) - Terraform modules for Amazon Web Services (AWS).
 - [azure](azure/README.md) - Terraform modules for Microsoft Azure.
+- [cloudflare](cloudflare/README.md) - Terraform modules for Cloudflare.
 - [snowflake-cloud](snowflake/cloud/README.md) - Manage a Snowflake Cloud account
 - [script](script/README.md) - Shared operational scripts, e.g. mTLS certificate rotation.
 
