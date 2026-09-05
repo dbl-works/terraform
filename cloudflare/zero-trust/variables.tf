@@ -18,15 +18,31 @@ variable "one_time_pin_enabled" {
 }
 
 variable "one_time_pin_identity_provider_id" {
-  description = "ID of an existing One-time PIN identity provider. Set it together with one_time_pin_enabled = false to reuse the provider another stack created in this account."
+  description = "ID of an existing One-time PIN identity provider. Set it together with one_time_pin_enabled = false to reuse the provider another stack created in this account. Cloudflare provider 4.52.9 cannot confirm that the ID belongs to this account or to a One-time PIN provider, so an incorrect ID fails only at apply time."
   type        = string
   default     = null
+
+  validation {
+    condition     = var.one_time_pin_identity_provider_id == null || can(regex("\\S", var.one_time_pin_identity_provider_id))
+    error_message = "one_time_pin_identity_provider_id must be null or contain a non-whitespace ID."
+  }
+}
+
+variable "allow_all_identity_providers" {
+  description = "Accept every identity provider on the account instead of restricting the applications to the One-time PIN provider. Required to run without a known provider ID."
+  type        = bool
+  default     = false
 }
 
 variable "service_token_min_days_for_renewal" {
-  description = "Regenerate a service token when an apply runs within this many days of its expiry. 0 disables renewal. Renewal issues a new client secret, so every caller must read the new value."
+  description = "Renew a service token when Terraform refreshes it within this many days of its expiry. 0 disables renewal. Renewal extends the expiry date and keeps the client ID and client secret."
   type        = number
   default     = 0
+
+  validation {
+    condition     = var.service_token_min_days_for_renewal >= 0 && floor(var.service_token_min_days_for_renewal) == var.service_token_min_days_for_renewal
+    error_message = "service_token_min_days_for_renewal must be a whole number of days, 0 or greater."
+  }
 }
 
 variable "applications" {

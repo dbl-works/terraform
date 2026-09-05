@@ -27,4 +27,9 @@ output "one_time_pin_identity_provider_id" {
     condition     = !(var.one_time_pin_enabled && var.one_time_pin_identity_provider_id != null)
     error_message = "Set one_time_pin_identity_provider_id only together with one_time_pin_enabled = false. The module cannot create and reuse the provider at the same time."
   }
+
+  precondition {
+    condition     = var.one_time_pin_enabled || var.one_time_pin_identity_provider_id != null || var.allow_all_identity_providers
+    error_message = "With one_time_pin_enabled = false, set one_time_pin_identity_provider_id, or set allow_all_identity_providers = true to accept every identity provider on the account."
+  }
 }

@@ -9,8 +9,7 @@ resource "cloudflare_zero_trust_access_application" "main" {
   logo_url         = each.value.logo_url
 
   # Without allowed_idps Cloudflare offers every identity provider on the account.
-  # Restrict the application to the One-time PIN provider when this module knows it.
-  allowed_idps = local.one_time_pin_identity_provider_id == null ? null : [local.one_time_pin_identity_provider_id]
+  allowed_idps = local.allowed_idps
 
   # Show the Cloudflare login page instead of jumping straight to a single provider.
   auto_redirect_to_identity = false

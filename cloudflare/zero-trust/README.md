@@ -69,7 +69,9 @@ module "cloudflare_zero_trust" {
 - The code is only sent when the address matches an allow policy
 - Account-scoped: enable it in one module for each Cloudflare account
 - Other stacks in that account set `one_time_pin_enabled = false` and pass the first stack's `one_time_pin_identity_provider_id` output
-- Applications accept this provider only. Without a known provider they accept every identity provider on the account
+- Applications accept this provider only
+- Cloudflare provider 4.52.9 cannot confirm that a passed ID belongs to this account or to a One-time PIN provider. An incorrect ID fails at apply time
+- To accept every identity provider on the account instead, set `allow_all_identity_providers = true`
 
 ## Service tokens
 
@@ -84,8 +86,8 @@ curl https://reports.example.com/export \
 Read both values from the `service_token_client_ids` and `service_token_client_secrets` outputs.
 
 - Tokens expire one year after creation
-- An unchanged apply does not renew a token
-- Set `service_token_min_days_for_renewal` to renew a token during an apply inside that window
-- Renewal issues a new client secret, so update every caller after the apply
+- `service_token_min_days_for_renewal` renews a token when Terraform refreshes it inside that window. `0` disables renewal
+- Renewal runs during any provider refresh, including `terraform plan`, not only during apply
+- Renewal extends the expiry date. The client ID and the client secret stay the same
 
 NOTE: Cloudflare Zero Trust is free for up to 50 users.
