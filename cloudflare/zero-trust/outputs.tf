@@ -18,3 +18,13 @@ output "service_token_client_secrets" {
   value       = { for key, token in cloudflare_zero_trust_access_service_token.main : key => token.client_secret }
   sensitive   = true
 }
+
+output "one_time_pin_identity_provider_id" {
+  description = "ID of the One-time PIN identity provider in use. Pass it to other stacks in this account as one_time_pin_identity_provider_id."
+  value       = local.one_time_pin_identity_provider_id
+
+  precondition {
+    condition     = !(var.one_time_pin_enabled && var.one_time_pin_identity_provider_id != null)
+    error_message = "Set one_time_pin_identity_provider_id only together with one_time_pin_enabled = false. The module cannot create and reuse the provider at the same time."
+  }
+}

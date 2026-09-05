@@ -68,6 +68,8 @@ module "cloudflare_zero_trust" {
 - No password and no external account
 - The code is only sent when the address matches an allow policy
 - Account-scoped: enable it in one module for each Cloudflare account
+- Other stacks in that account set `one_time_pin_enabled = false` and pass the first stack's `one_time_pin_identity_provider_id` output
+- Applications accept this provider only. Without a known provider they accept every identity provider on the account
 
 ## Service tokens
 
@@ -80,6 +82,10 @@ curl https://reports.example.com/export \
 ```
 
 Read both values from the `service_token_client_ids` and `service_token_client_secrets` outputs.
-Service tokens expire after one year. Apply again to create a new token.
+
+- Tokens expire one year after creation
+- An unchanged apply does not renew a token
+- Set `service_token_min_days_for_renewal` to renew a token during an apply inside that window
+- Renewal issues a new client secret, so update every caller after the apply
 
 NOTE: Cloudflare Zero Trust is free for up to 50 users.

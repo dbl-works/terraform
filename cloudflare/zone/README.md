@@ -36,12 +36,19 @@ We cannot check if `bastion_public_dns` is present and use that as a condition t
 # main.tf
 
 module "cloudflare" {
-  source = "github.com/dbl-works/terraform//cloudflare/zone?ref=v2022.05.26"
+  source = "github.com/dbl-works/terraform//cloudflare/zone?ref=v2026.09.05"
 
-  domain                 = "example.com"
-  nlb_dns_name           = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
-  cdn_worker_script_name = "serve-cdn"
-  app_worker_script_name = "serve-app"
+  domain       = "example.com"
+  alb_dns_name = "project-staging-xxxxxxx.eu-central-1.elb.amazonaws.com"
+
+  s3_cloudflare_records = {
+    cdn = {
+      worker_script_name = "serve-cdn"
+    }
+    app = {
+      worker_script_name = "serve-app"
+    }
+  }
 
   # optional
   bastion_enabled    = false # set to true if required
@@ -82,7 +89,7 @@ terraform {
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 3.0"
+      version = "~> 4.0"
     }
   }
   required_version = ">= 1.0"

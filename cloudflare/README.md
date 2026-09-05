@@ -11,7 +11,7 @@ Terraform modules for Cloudflare.
 
 ```terraform
 module "cloudflare" {
-  source = "github.com/dbl-works/terraform//cloudflare/zone?ref=v2022.05.26"
+  source = "github.com/dbl-works/terraform//cloudflare/zone?ref=v2026.09.05"
 
   # ...
 }

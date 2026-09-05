@@ -8,8 +8,9 @@ locals {
 resource "cloudflare_zero_trust_access_service_token" "main" {
   for_each = local.service_token_applications
 
-  account_id = var.account_id
-  name       = "${var.project}-${var.environment}-${each.key}"
+  account_id           = var.account_id
+  name                 = "${var.project}-${var.environment}-${each.key}"
+  min_days_for_renewal = var.service_token_min_days_for_renewal
 }
 
 resource "cloudflare_zero_trust_access_policy" "allow_service_token" {
