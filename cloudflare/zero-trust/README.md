@@ -14,10 +14,13 @@ The module creates:
 
 1. Create a Zero Trust team domain: Zero Trust dashboard -> Settings -> Custom Pages.
 2. Copy the account ID from the zone overview page.
-3. Create an API token with these permissions:
-    - Account - Access: Apps and Policies: Edit
-    - Account - Access: Service Tokens: Edit
-    - Account - Access: Organizations, Identity Providers, and Groups: Edit
+3. Create an API token with the permissions in the table below.
+
+| Scope | Permission | Access level |
+|---|---|---|
+| Account | Access: Apps and Policies | Edit |
+| Account | Access: Service Tokens | Edit |
+| Account | Access: Organizations, Identity Providers, and Groups | Edit |
 
 ```shell
 export CLOUDFLARE_API_TOKEN=xxx
@@ -28,7 +31,7 @@ export CLOUDFLARE_API_TOKEN=xxx
 Access checks requests at the Cloudflare edge only. Make sure the origin accepts requests from Cloudflare only.
 
 - ECS behind an ALB: enable `authenticated_origin_pull` in the [zone](../zone/README.md) module and use [alb-mtls](../../aws/alb-mtls/README.md).
-- Static site in S3: keep the bucket private and serve it through the Cloudflare worker.
+- Static site in S3: keep the bucket private and serve it through a [Cloudflare worker](https://github.com/dbl-works/cloudflare-router). Route the hostname to the worker with `s3_cloudflare_records` in the [zone](../zone/README.md) module.
 
 ## Usage
 
@@ -55,8 +58,16 @@ module "cloudflare_zero_trust" {
 
   # optional
   one_time_pin_enabled = true
-}
 ```
+
+## Login method
+
+`one_time_pin_enabled` creates the email One-time PIN identity provider.
+
+- Cloudflare emails a six-digit code to the address the user enters
+- No password and no external account
+- The code is only sent when the address matches an allow policy
+- Account-scoped: enable it in one module for each Cloudflare account
 
 ## Service tokens
 
