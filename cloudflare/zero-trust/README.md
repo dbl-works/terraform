@@ -1,21 +1,20 @@
 # Terraform Module: Cloudflare Zero Trust
 
 This module puts a Cloudflare Access login in front of one or more hostnames.
-Users log in with an email One-time PIN or with an identity provider that you configure in the Zero Trust dashboard.
-Your application receives only requests from users that match an allow policy. You do not build user management.
+Users log in with an email One-time PIN. Your application does not manage users.
 
 The module creates:
 
-- One Access application per hostname
-- One allow policy per application, based on email addresses and/or email domains
-- Optionally the email One-time PIN identity provider
-- Optionally a service token and a matching policy per application, for CI and scripts
+- One Access application for each hostname
+- One allow policy for each application, by email address or email domain
+- The email One-time PIN identity provider (optional)
+- A service token for machine access (optional)
 
 ## Pre-setup
 
-1. Create a Zero Trust team domain once per account: Zero Trust dashboard -> Settings -> Custom Pages -> Team domain.
-2. Find the account ID: Cloudflare dashboard -> any zone -> Overview -> API section.
-3. Give the API token these permissions:
+1. Create a Zero Trust team domain: Zero Trust dashboard -> Settings -> Custom Pages.
+2. Copy the account ID from the zone overview page.
+3. Create an API token with these permissions:
     - Account - Access: Apps and Policies: Edit
     - Account - Access: Service Tokens: Edit
     - Account - Access: Organizations, Identity Providers, and Groups: Edit
@@ -26,12 +25,10 @@ export CLOUDFLARE_API_TOKEN=xxx
 
 ## Protect the origin
 
-Access checks requests at the Cloudflare edge only. A request that goes to the origin directly skips the check.
-Make sure the origin accepts requests from Cloudflare only:
+Access checks requests at the Cloudflare edge only. Make sure the origin accepts requests from Cloudflare only.
 
-- For an ALB or NLB in front of ECS, enable `authenticated_origin_pull` in the [zone](../zone/README.md) module and use the [alb-mtls](../../aws/alb-mtls/README.md) module.
-- For a static site in S3, keep the bucket private and serve it through the Cloudflare worker that the zone module routes.
-- Optionally verify the `Cf-Access-Jwt-Assertion` header in the application against the `application_auds` output.
+- ECS behind an ALB: enable `authenticated_origin_pull` in the [zone](../zone/README.md) module and use [alb-mtls](../../aws/alb-mtls/README.md).
+- Static site in S3: keep the bucket private and serve it through the Cloudflare worker.
 
 ## Usage
 
@@ -51,7 +48,7 @@ module "cloudflare_zero_trust" {
     reports = {
       hostname              = "reports.example.com"
       session_duration      = "12h"
-      allowed_emails        = ["alice@example.com", "bob@example.com"]
+      allowed_emails        = ["alice@example.com"]
       service_token_enabled = true
     }
   }
@@ -63,16 +60,15 @@ module "cloudflare_zero_trust" {
 
 ## Service tokens
 
-A service token replaces the interactive login for machines. Send the two headers with each request:
+Send these two headers to skip the interactive login:
 
 ```shell
 curl https://reports.example.com/export \
-  -H "CF-Access-Client-Id: $(terraform output -json service_token_client_ids | jq -r .reports)" \
-  -H "CF-Access-Client-Secret: $(terraform output -json service_token_client_secrets | jq -r .reports)"
+  -H "CF-Access-Client-Id: <client_id>" \
+  -H "CF-Access-Client-Secret: <client_secret>"
 ```
 
-Service tokens expire after one year. Terraform recreates a token when it expires and you apply again.
+Read both values from the `service_token_client_ids` and `service_token_client_secrets` outputs.
+Service tokens expire after one year. Apply again to create a new token.
 
-## Cost
-
-Cloudflare Zero Trust is free for up to 50 users per account.
+NOTE: Cloudflare Zero Trust is free for up to 50 users.
