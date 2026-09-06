@@ -30,8 +30,7 @@ variable "key_vault_config" {
     # wrapKey: Use the key to protect a symmetric key
     # verify: Use the key to verify digests
     # sign: Use the key to sign digests
-    key_opts = optional(list(string), [])
-    # https://en.wikipedia.org/wiki/ISO_8601#Durations
+    key_opts                     = optional(list(string), [])
     rotate_before_expiry_in_days = optional(string, "30")
     expired_in_days              = optional(string, "90")
     notify_before_expiry         = optional(string, "90")

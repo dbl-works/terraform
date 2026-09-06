@@ -62,7 +62,7 @@ To verify everything is setup correctly, you can view the current server status:
 curl --insecure $API_URL/server
 ```
 
-Find the full documentation of Outline's API [here](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/shadowbox/server/api.yml)
+Find the full documentation of Outline's API [here](https://github.com/Jigsaw-Code/outline-server/blob/master/src/shadowbox/server/api.yml)
 
 
 

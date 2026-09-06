@@ -1,4 +1,3 @@
-# https://circleci.com/blog/azure-custom-images
 module "container-registry" {
   source = "../../container-registry"
 
