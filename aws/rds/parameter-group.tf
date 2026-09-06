@@ -27,7 +27,7 @@ resource "aws_db_parameter_group" "current" {
   parameter {
     name  = "rds.force_ssl"
     value = 1
-    # https://stackoverflow.com/questions/71640985/why-does-terraform-keeps-updating-parameter-group-of-rds-cluster
+    # Static parameters need pending-reboot. Otherwise Terraform repeats the same in-place update.
     apply_method = "pending-reboot"
   }
 

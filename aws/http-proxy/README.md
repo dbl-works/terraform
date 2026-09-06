@@ -126,7 +126,7 @@ http_proxy=http://usr:password@EIP:8888
 
 If you are using Ruby and have a Rack-based app (e.g. Rails), setting the ENV var `http_proxy` is sufficient.
 
-If you want to limit outbound traffic through the fixed IP to certain requests, you can also use e.g. [net/ssh/proxy/http](https://net-ssh.github.io/ssh/v2/api/classes/Net/SSH/Proxy/HTTP.html).
+If you want to limit outbound traffic through the fixed IP to certain requests, you can also use e.g. the Ruby `Net::SSH::Proxy::HTTP` class.
 
 Example usage to assume static IP to access a FTP server:
 

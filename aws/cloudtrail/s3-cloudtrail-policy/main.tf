@@ -3,7 +3,6 @@ resource "aws_s3_bucket_policy" "allow_access_from_cloudtrail_only" {
   policy = data.aws_iam_policy_document.allow_access_from_cloudtrail_only.json
 }
 
-# https://stackoverflow.com/questions/73159162/cloudtrail-insufficient-permissions-to-access-s3-bucket
 data "aws_iam_policy_document" "allow_access_from_cloudtrail_only" {
   statement {
     sid     = "AllowCloudtrailWrite"

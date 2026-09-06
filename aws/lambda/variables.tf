@@ -43,7 +43,7 @@ variable "source_dir" {
 
 variable "aws_lambda_layer_arns" {
   type        = list(string)
-  description = "Get a list of available layers here: https://github.com/keithrozario/Klayers"
+  description = "Lambda layer ARNs to attach. Public ARNs for common Python packages come from the Klayers project."
   default     = []
 }
 
