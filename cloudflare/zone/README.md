@@ -2,11 +2,10 @@
 
 This module will do the following:
 
-- Route to defaults routes
-    - api.my-project.com to the NLB
-    - bastion.my-project.com
-    - cdn.my-project.com to the S3-Bucket (using Cloudflare Workers)
-    - xx.my-project.com to the S3-Bucket (using Cloudflare Workers) for any subdomain needed
+- Create the default DNS records
+    - `api.my-project.com` to the ALB, proxied
+    - `bastion.my-project.com` to `bastion_public_dns`, not proxied. Optional and rarely needed. Set `bastion_enabled` to use it for SSH traffic through an NLB
+    - One record for each key in `s3_cloudflare_records`, proxied to the S3 bucket through a Cloudflare worker
 
 ## Pre-setup
 1. Setup the domain in Cloudflare
@@ -14,7 +13,6 @@ This module will do the following:
 - Some useful references:
   - Quickstart: https://developers.cloudflare.com/workers/get-started/quickstarts/
   - Cloudflare CDN tutorials: https://developers.cloudflare.com/workers/tutorials/configure-your-cdn/
-  - Introduction to Cloudflare Worker: https://egghead.io/courses/introduction-to-cloudflare-workers-5aa3
   - Cloudflare Router: https://github.com/dbl-works/cloudflare-router
 
 3. Make sure you have created an API token in your Cloudflare account with sufficient permissions
@@ -30,7 +28,7 @@ export CLOUDFLARE_API_TOKEN=xxx
 
 ## Usage
 
-We cannot check if `bastion_public_dns` is present and use that as a condition to set up bastion (or not), since the DNS is unknown at the time of creation.
+`bastion_enabled` is a separate flag. `count` cannot depend on `bastion_public_dns`, because Terraform does not know that value until apply.
 
 ```terraform
 # main.tf
