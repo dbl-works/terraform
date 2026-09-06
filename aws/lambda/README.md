@@ -25,8 +25,7 @@ module "lambda" {
     "subnet-456",
   ]
 
-  # You can get the list of available lambda layers here
-  # https://github.com/keithrozario/Klayers
+  # Public layer ARNs for common Python packages come from the Klayers project.
   aws_lambda_layer_arns = [
     "arn:aws:lambda:eu-central-1:770693421928:layer:Klayers-p39-psycopg2-binary:1"
   ]

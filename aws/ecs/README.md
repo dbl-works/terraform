@@ -166,9 +166,7 @@ module "ecs" {
 If you run apps in many different cloud environments (e.g. Heroku, RKE, EKS, ECS, Lambda, Cloud66), you want consistent health checks implemented for consistency.
 
 Kubernetes have an excellent methodology where they name their health check `/livez` and `/readyz` to not conflict with any other potential resource endpoint.
-The below documentation mentions `/healthz` (and this is also what we used previoulsy) but since Kubernetes 1.16 deprecated this endpoint, this terminology will be phased out.
-
-[https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request)
+Kubernetes 1.16 deprecated the older `/healthz` endpoint, which we used previously, so that terminology will be phased out.
 
 We should aim to have the following endpoint(s) implemented on all projects to work across any deployed environment:
 
