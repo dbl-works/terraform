@@ -221,7 +221,8 @@ jobs:
     strategy:
       matrix:
         module:
-          - cloudflare
+          - cloudflare/zone
+          - cloudflare/zero-trust
           - fivetran
           - fivetran/connectors/google_analytics
           - fivetran/connectors/lambda
