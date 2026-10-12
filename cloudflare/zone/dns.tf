@@ -1,4 +1,4 @@
-# api.my-project.com to the NLB
+# api.my-project.com to the ALB
 resource "cloudflare_record" "api" {
   zone_id = data.cloudflare_zone.default.id
   name    = "api"
