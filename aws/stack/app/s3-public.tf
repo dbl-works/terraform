@@ -14,4 +14,5 @@ module "s3-frontend" {
   versioning                      = each.value.versioning
   primary_storage_class_retention = each.value.primary_storage_class_retention
   s3_replicas                     = each.value.replicas
+  file_malwarescanning            = each.value.file_malwarescanning
 }

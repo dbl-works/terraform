@@ -100,6 +100,10 @@ variable "private_buckets_list" {
     versioning                      = bool
     primary_storage_class_retention = number
     sse_algorithm                   = optional(string, "AES256")
+    file_malwarescanning = optional(object({
+      enabled                           = bool
+      allow_downloading_unscanned_files = bool
+    }))
     replicas = optional(list(object({
       bucket_arn = string
       kms_arn    = optional(string, null)
@@ -117,6 +121,10 @@ variable "public_buckets_list" {
     bucket_name                     = string
     versioning                      = bool
     primary_storage_class_retention = number
+    file_malwarescanning = optional(object({
+      enabled                           = bool
+      allow_downloading_unscanned_files = bool
+    }))
     replicas = optional(list(object({
       bucket_arn = string
     })), [])
