@@ -44,6 +44,27 @@ variable "primary_storage_class_retention" {
   description = "Number of days before objects stay in the primary storage class"
 }
 
+# Move current objects to S3 Intelligent-Tiering after this many days (0 = on the next lifecycle run).
+# null disables the rule. Objects at or below intelligent_tiering_min_object_size stay where they are,
+# because Intelligent-Tiering never tiers them but still charges the per-object monitoring fee.
+variable "intelligent_tiering_transition_days" {
+  default     = null
+  type        = number
+  description = "Days after creation before current objects transition to INTELLIGENT_TIERING. null disables the rule."
+}
+
+variable "intelligent_tiering_min_object_size" {
+  default     = 131072
+  type        = number
+  description = "Only objects larger than this many bytes transition to INTELLIGENT_TIERING."
+}
+
+variable "abort_incomplete_multipart_upload_days" {
+  default     = null
+  type        = number
+  description = "Days after initiation before incomplete multipart uploads are aborted. null disables the rule."
+}
+
 variable "s3_replicas" {
   # eg. [
   #   {
