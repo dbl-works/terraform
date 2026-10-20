@@ -45,8 +45,13 @@ variable "primary_storage_class_retention" {
 }
 
 # Move current objects to S3 Intelligent-Tiering after this many days (0 = on the next lifecycle run).
-# null disables the rule. Objects at or below intelligent_tiering_min_object_size stay where they are,
-# because Intelligent-Tiering never tiers them but still charges the per-object monitoring fee.
+# null disables the rule.
+#
+# The 131072 bytes (128 KiB) default for intelligent_tiering_min_object_size follows the AWS docs:
+# > S3 Intelligent-Tiering has no minimum eligible object size, but objects smaller than 128 KB are not
+# > eligible for auto tiering.
+# https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering-overview.html
+# Smaller objects never get cheaper, so moving them only adds the per-object transition request cost.
 variable "intelligent_tiering_transition_days" {
   default     = null
   type        = number
