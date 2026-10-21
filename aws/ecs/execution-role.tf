@@ -69,7 +69,9 @@ locals {
       "s3:ListBucketVersions",
       "s3:ListObjectVersions",
       "s3:GetObject",
-      "s3:GetObjectVersion"
+      "s3:GetObjectVersion",
+      "s3:GetObjectTagging",
+      "s3:GetObjectVersionTagging"
     ],
     "Resource" : sort(flatten([
       var.grant_read_access_to_s3_arns,
@@ -83,6 +85,8 @@ locals {
       "s3:ListBucket",
       "s3:GetObject",
       "s3:GetObjectVersion",
+      "s3:GetObjectTagging",
+      "s3:GetObjectVersionTagging",
       "s3:PutObject",
       "s3:PutObjectAcl",
       "s3:PutObjectVersion",

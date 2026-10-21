@@ -18,4 +18,5 @@ module "s3-storage" {
   regional                        = true
   sse_algorithm                   = each.value.sse_algorithm
   s3_replicas                     = each.value.replicas
+  file_malwarescanning            = each.value.file_malwarescanning
 }

@@ -29,6 +29,9 @@ module "s3-storage" {
   multi_region_kms_key             = false  # If true, the KMS key can be used in other regions
   name                             = ""     # used for policies, if null "project-environment-region" is used
   primary_storage_class_retention  = 0
+  intelligent_tiering_transition_days    = null   # e.g. 0 to move current objects to INTELLIGENT_TIERING right away
+  intelligent_tiering_min_object_size    = 131072 # bytes; smaller objects are not transitioned
+  abort_incomplete_multipart_upload_days = null   # e.g. 7
   s3_replicas                      = [
     {
       bucket_arn = "arn:aws:s3:::staging-storage-us-east-1"

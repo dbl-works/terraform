@@ -44,6 +44,32 @@ variable "primary_storage_class_retention" {
   description = "Number of days before objects stay in the primary storage class"
 }
 
+# Move current objects to S3 Intelligent-Tiering after this many days (0 = on the next lifecycle run).
+# null disables the rule.
+#
+# The 131072 bytes (128 KiB) default for intelligent_tiering_min_object_size follows the AWS docs:
+# > S3 Intelligent-Tiering has no minimum eligible object size, but objects smaller than 128 KB are not
+# > eligible for auto tiering.
+# https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering-overview.html
+# Smaller objects never get cheaper, so moving them only adds the per-object transition request cost.
+variable "intelligent_tiering_transition_days" {
+  default     = null
+  type        = number
+  description = "Days after creation before current objects transition to INTELLIGENT_TIERING. null disables the rule."
+}
+
+variable "intelligent_tiering_min_object_size" {
+  default     = 131072
+  type        = number
+  description = "Only objects larger than this many bytes transition to INTELLIGENT_TIERING."
+}
+
+variable "abort_incomplete_multipart_upload_days" {
+  default     = null
+  type        = number
+  description = "Days after initiation before incomplete multipart uploads are aborted. null disables the rule."
+}
+
 variable "s3_replicas" {
   # eg. [
   #   {
@@ -108,6 +134,7 @@ variable "file_malwarescanning" {
     enabled                           = bool
     allow_downloading_unscanned_files = bool
   })
+  nullable = false
   default = {
     enabled                           = true
     allow_downloading_unscanned_files = false
