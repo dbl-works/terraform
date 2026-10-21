@@ -24,6 +24,39 @@ resource "aws_s3_bucket_lifecycle_configuration" "main-bucket-lifecycle-rule" {
       storage_class   = "STANDARD_IA"
     }
   }
+
+  dynamic "rule" {
+    for_each = var.intelligent_tiering_transition_days == null ? [] : [1]
+
+    content {
+      id     = "intelligent-tiering"
+      status = "Enabled"
+
+      filter {
+        object_size_greater_than = var.intelligent_tiering_min_object_size
+      }
+
+      transition {
+        days          = var.intelligent_tiering_transition_days
+        storage_class = "INTELLIGENT_TIERING"
+      }
+    }
+  }
+
+  dynamic "rule" {
+    for_each = var.abort_incomplete_multipart_upload_days == null ? [] : [1]
+
+    content {
+      id     = "abort-incomplete-multipart-upload"
+      status = "Enabled"
+
+      filter {}
+
+      abort_incomplete_multipart_upload {
+        days_after_initiation = var.abort_incomplete_multipart_upload_days
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket_cors_configuration" "main-bucket-cors-configuration" {
