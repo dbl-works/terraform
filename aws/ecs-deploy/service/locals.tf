@@ -8,7 +8,7 @@ data "aws_region" "current" {}
 locals {
   name       = var.cluster_name != null ? var.cluster_name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
   account_id = data.aws_caller_identity.current.account_id
-  region     = data.aws_region.current.name
+  region     = data.aws_region.current.region
   image_name = var.app_config.image_name == null ? "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/${var.app_config.ecr_repo_name}" : var.app_config.image_name
 
   environment_variables = flatten([
@@ -48,7 +48,7 @@ locals {
     NAME                  = var.app_config.name
     PORT_MAPPINGS         = jsonencode(local.app_port_mappings)
     PROJECT               = var.project
-    REGION                = data.aws_region.current.name
+    REGION                = data.aws_region.current.region
     SECRETS_LIST          = jsonencode(local.secrets)
     ULIMITS               = jsonencode(var.ulimits)
   })
