@@ -61,7 +61,7 @@ module "iam_ecs_policies" {
 
   username       = each.value["iam"]
   project_access = each.value["project_access"]
-  region         = data.aws_region.current.name
+  region         = data.aws_region.current.region
 
   # optional
   allow_listing_ecs = true
