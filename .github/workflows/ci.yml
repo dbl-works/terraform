@@ -114,6 +114,7 @@ jobs:
           - vpc
           - vpc-peering
           - vpn
+          - waf
           - xray
         aws-version: ["~> 5.0"]
       fail-fast: false
@@ -190,6 +191,12 @@ jobs:
       - name: module tests (route53domains-dnssec)
         run: |
           cd aws/route53domains-dnssec
+          terraform init
+          terraform test
+
+      - name: module tests (waf)
+        run: |
+          cd aws/waf
           terraform init
           terraform test
 
