@@ -116,7 +116,7 @@ jobs:
           - vpn
           - waf
           - xray
-        aws-version: ["~> 5.0"]
+        aws-version: ["~> 5.0", "~> 6.0"]
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
@@ -124,13 +124,19 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
 
       - name: Set AWS Provider Version
+        id: provider
         run: |
           cd aws
           cd ${{ matrix.module }}
-          # stack/app cannot be pinned to the matrix version: its aurora child module
-          # requires aws >= 6.0, so let terraform resolve the real constraints instead.
-          if [[ "${{ matrix.module }}" == "stack/app" ]]; then exit 0; fi
           FILE=versions.tf
+          # a module that declares `aws >= 6.0` makes no promise about 5.x, so there is nothing to validate
+          FLOOR=$(test -f "$FILE" && sed -nE '/aws[[:space:]]*=[[:space:]]*\{/,/\}/ s/.*version[[:space:]]*=[[:space:]]*">=[[:space:]]*([0-9]+).*/\1/p' $FILE || true)
+          MATRIX=$(echo "${{ matrix.aws-version }}" | grep -oE '[0-9]+' | head -1)
+          if [[ -n "$FLOOR" && "$MATRIX" -lt "$FLOOR" ]]; then
+            echo "skip: ${{ matrix.module }} requires aws >= $FLOOR"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if test -f "$FILE"; then
             # tolerate column-aligned assignments, e.g. `version   = "..."`
             sed -i '/aws[[:space:]]*=[[:space:]]*{/,/}/ s/version[[:space:]]*=[[:space:]]*"[^"]*/version = "${{ matrix.aws-version }}/' $FILE
@@ -157,12 +163,14 @@ jobs:
           cat $FILE
 
       - name: init
+        if: steps.provider.outputs.skip != 'true'
         run: |
           cd aws
           cd ${{ matrix.module }}
           terraform init
 
       - name: validate
+        if: steps.provider.outputs.skip != 'true'
         run: |
           cd aws
           cd ${{ matrix.module }}
@@ -175,6 +183,7 @@ jobs:
           terraform validate
 
       - name: fmt -check
+        if: steps.provider.outputs.skip != 'true'
         run: |
           cd aws
           cd ${{ matrix.module }}
