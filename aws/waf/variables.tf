@@ -67,6 +67,12 @@ variable "waf_rules" {
       negate                = optional(bool, false) # Wraps the statement in not_statement
     })), [])
 
+    # Response returned instead of the default 403. Applies only while action_type = "BLOCK".
+    custom_response = optional(object({
+      response_code            = number                    # 200-599
+      custom_response_body_key = optional(string)          # Key in var.custom_response_bodies
+      response_headers         = optional(map(string), {}) # Header name => value
+    }))
   }))
   default = [
     {
@@ -85,6 +91,15 @@ variable "waf_rules" {
     ])
     error_message = "Rules with rule_type = \"or_statement\" must include at least two or_statements."
   }
+}
+
+variable "custom_response_bodies" {
+  description = "Response bodies that BLOCK rules can return, keyed by the name a rule's custom_response.custom_response_body_key refers to."
+  type = map(object({
+    content      = string # Up to 4 KB
+    content_type = string # "APPLICATION_JSON", "TEXT_HTML" or "TEXT_PLAIN"
+  }))
+  default = {}
 }
 
 locals {

@@ -250,6 +250,39 @@ Match any of the provided byte match statements:
 }
 ```
 
+## Custom Responses
+
+A `BLOCK` rule answers with a plain 403 by default. Set `custom_response` to return another status code, a body, or extra headers. Define each body once in `custom_response_bodies` and refer to it by key from any rule.
+
+```hcl
+custom_response_bodies = {
+  unauthorized = {
+    content      = jsonencode({ errors = [{ code = "not_authorized", detail = "Authentication failed" }] })
+    content_type = "APPLICATION_JSON" # or "TEXT_HTML", "TEXT_PLAIN"
+  }
+}
+
+waf_rules = [
+  {
+    name           = "BlockApiWithoutCredentials"
+    priority       = 6
+    action_type    = "BLOCK"
+    field_to_match = "uri_path"
+    match_value    = "/v2/"
+    custom_response = {
+      response_code            = 401
+      custom_response_body_key = "unauthorized"
+      response_headers         = { "x-blocked-by" = "waf" } # optional
+    }
+  },
+]
+```
+
+Notes:
+- `custom_response` applies only while `action_type = "BLOCK"`. A rule set to `COUNT` keeps the field and ignores it, so a rollback changes one word.
+- The status code must be between 200 and 599. A body can hold up to 4 KB.
+- Managed rule groups do not use `custom_response`.
+
 
 ## Rules
 
