@@ -64,6 +64,10 @@ resource "aws_rds_cluster" "main" {
       master_username,
       master_password,
       snapshot_identifier,
+      # Set by AWS when this cluster joins or is promoted into an Aurora Global Database
+      # (aws_rds_global_cluster with source_db_cluster_identifier). Without this, every later
+      # apply would try to detach the cluster from the global database.
+      global_cluster_identifier,
     ]
   }
 }
