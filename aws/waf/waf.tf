@@ -7,6 +7,15 @@ resource "aws_wafv2_web_acl" "main" {
     block {}
   }
 
+  dynamic "custom_response_body" {
+    for_each = var.custom_response_bodies
+    content {
+      key          = custom_response_body.key
+      content      = custom_response_body.value.content
+      content_type = custom_response_body.value.content_type
+    }
+  }
+
   dynamic "rule" {
     for_each = local.waf_rules_normalized
     content {
@@ -25,7 +34,23 @@ resource "aws_wafv2_web_acl" "main" {
 
           dynamic "block" {
             for_each = rule.value.action_type == "BLOCK" ? [1] : []
-            content {}
+            content {
+              dynamic "custom_response" {
+                for_each = rule.value.custom_response != null ? [rule.value.custom_response] : []
+                content {
+                  response_code            = custom_response.value.response_code
+                  custom_response_body_key = custom_response.value.custom_response_body_key
+
+                  dynamic "response_header" {
+                    for_each = custom_response.value.response_headers
+                    content {
+                      name  = response_header.key
+                      value = response_header.value
+                    }
+                  }
+                }
+              }
+            }
           }
 
           dynamic "count" {
