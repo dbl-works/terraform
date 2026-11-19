@@ -53,7 +53,7 @@ module "fivetran" {
     ## NOTES: Fivetran connector needs this value to know which aws region code that lambda is deployed from
     ## If you would like to deploy the lambda connector to region other than the default aws region, please refer
     ## to the example below.
-    aws_region_code        = data.aws_region.current.name
+    aws_region_code        = data.aws_region.current.region
     script_env             = {
       RESOURCES_DATA = {
         projectName      = "facebook"

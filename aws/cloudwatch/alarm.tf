@@ -205,6 +205,45 @@ resource "aws_cloudwatch_metric_alarm" "db_replica_lag" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "db_ebs_byte_balance" {
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-ebsbytebalance"
+  comparison_operator = "LessThanThreshold"
+  period              = var.alarm_period
+  evaluation_periods  = var.alarm_evaluation_periods
+  metric_name         = "EBSByteBalance%"
+  namespace           = "AWS/RDS"
+  statistic           = "Average"
+  threshold           = 20
+  alarm_description   = "Alert when EBSByteBalance% drops below 20%"
+  treat_missing_data  = var.treat_missing_data
+  alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
+  datapoints_to_alarm = var.datapoints_to_alarm
+  dimensions = {
+    DBInstanceIdentifier = var.database_identifiers[count.index]
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "db_ebs_io_balance" {
+  count               = length(var.database_identifiers)
+  alarm_name          = "${var.project}-${var.environment}-db-${var.database_identifiers[count.index]}-ebsiobalance"
+  comparison_operator = "LessThanThreshold"
+  period              = var.alarm_period
+  evaluation_periods  = var.alarm_evaluation_periods
+  metric_name         = "EBSIOBalance%"
+  namespace           = "AWS/RDS"
+  statistic           = "Average"
+  threshold           = 20
+  alarm_description   = "Alert when EBSIOBalance% drops below 20%"
+  treat_missing_data  = var.treat_missing_data
+  alarm_actions       = var.sns_topic_arns
+  ok_actions          = var.sns_topic_arns
+  datapoints_to_alarm = var.datapoints_to_alarm
+  dimensions = {
+    DBInstanceIdentifier = var.database_identifiers[count.index]
+  }
+}
 
 resource "aws_cloudwatch_metric_alarm" "redis_cpu" {
   count               = length(var.elasticache_cluster_names)
