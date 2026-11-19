@@ -91,8 +91,14 @@ module "stack" {
   region          = "eu-central-1" # Region to deploy the resources
   skip_cloudflare = false # Skip the creation of cloudflare modules
   route53domains_dnssec_enabled = true # Register Cloudflare's KSK with this Route 53-registered domain
-  cdn_worker_script_name = "serve-cdn"
-  app_worker_script_name = "serve-app"
+  s3_cloudflare_records = {
+    cdn = {
+      worker_script_name = "serve-cdn"
+    }
+    app = {
+      worker_script_name = "serve-app"
+    }
+  }
   tls_settings = {
     tls_1_3                  = "on"
     automatic_https_rewrites = "on"

@@ -13,5 +13,6 @@ terraform {
       configuration_aliases = [aws.peer, aws.us-east-1]
     }
   }
-  required_version = ">= 1.0"
+  # optional() with a default in variable types requires 1.3
+  required_version = ">= 1.3"
 }

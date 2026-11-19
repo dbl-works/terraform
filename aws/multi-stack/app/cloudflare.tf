@@ -1,6 +1,6 @@
 module "cloudflare" {
   for_each = var.project_settings
-  source   = "../../../cloudflare"
+  source   = "../../../cloudflare/zone"
 
   depends_on = [
     module.ecs,
