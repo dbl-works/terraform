@@ -124,7 +124,6 @@ module "redshift_serverless" {
 | `min_capacity` | Minimum Aurora Serverless v2 capacity in ACUs | `number` | `0.0` | no |
 | `max_capacity` | Maximum Aurora Serverless v2 capacity in ACUs | `number` | `2.0` | no |
 | `seconds_until_auto_pause` | Idle seconds before Serverless v2 auto-pause (300 to 86400, requires `min_capacity = 0`) | `number` | `null` | no |
-| `keep_serverlessv2_scaling_configuration` | Retain `serverlessv2_scaling_configuration` when no instance uses `db.serverless` | `bool` | `false` | no |
 | `engine_version` | Aurora PostgreSQL engine version | `string` | `"17.4"` | no |
 | `enable_replication` | Enable logical replication for zero-ETL | `bool` | `false` | no |
 | `backup_retention_period` | Backup retention period in days | `number` | `7` | no |
@@ -213,21 +212,21 @@ resource "something" {
 
 ## I/O-Optimized storage and rolling provisioned cutover
 
-Set `storage_type = "aurora-iopt1"` to switch an existing cluster from Aurora Standard to Aurora I/O-Optimized storage in place. AWS enforces a 30-day cooldown before switching `storage_type` back to `"aurora"`. Leave `storage_type` unset (`null`) when AWS manages the default.
+Set `storage_type = "aurora-iopt1"` to switch an existing cluster from Aurora Standard to Aurora I/O-Optimized storage in place. You can switch back to `"aurora"` (Standard) at any time, and AWS enforces a 30-day cooldown before switching into `"aurora-iopt1"` again. Leave `storage_type` unset (`null`) when AWS manages the default.
 
-The `instances` variable accepts an ordered list of `{ instance_class, promotion_tier }` objects and keeps `count`-indexed `aws_rds_cluster_instance.cluster_instances[N]` state addresses intact without state moves. While any entry uses `"db.serverless"`, the module keeps `serverlessv2_scaling_configuration` on the cluster. Once all entries are provisioned classes, the block is omitted unless `keep_serverlessv2_scaling_configuration = true`.
+The `instances` variable accepts an ordered list of `{ instance_class, promotion_tier }` objects and keeps `count`-indexed `aws_rds_cluster_instance.cluster_instances[N]` state addresses intact without state moves. While any entry uses `"db.serverless"`, the module keeps `serverlessv2_scaling_configuration` on the cluster. Once all entries are provisioned classes, the block is omitted.
 
-To migrate a two-node Serverless v2 cluster (`[0]` and `[1]`) to provisioned instances with minimal downtime, run five applies in order.
+To migrate a two-node Serverless v2 cluster (`[0]` and `[1]`) to provisioned instances with minimal downtime, check `DBClusterMembers[].IsClusterWriter` before every apply and run five applies in order.
 
 1. **Expand.** Replace `instance_count` and `instance_class` with `instances`. Keep `[0]` and `[1]` as `"db.serverless"` with `promotion_tier = 2`, and append `[2]` as a temporary provisioned reader with `promotion_tier = 1`.
-2. **Convert reader.** Change the existing serverless reader index to its target provisioned class at `promotion_tier = 0` so AWS modifies it while it serves no writes.
-3. **Planned failover.** Trigger a manual RDS cluster failover to promote a provisioned reader to writer. The old serverless writer becomes a reader.
-4. **Convert writer.** Change the demoted serverless index to its target provisioned class.
-5. **Contract.** Drop the temporary `[2]` entry from `instances` and set the steady-state `promotion_tier` values on `[0]` and `[1]`.
+2. **Convert reader.** Change the verified serverless reader index to its target provisioned writer class at `promotion_tier = 0` so AWS modifies it while it serves no writes.
+3. **Planned failover.** Trigger a manual RDS cluster failover targeting the converted provisioned reader. Verify the old serverless writer is now a reader.
+4. **Convert demoted writer.** Change the verified demoted serverless index to its target provisioned reader class.
+5. **Contract.** Verify `[2]` is not the writer, drop `[2]` from `instances`, and set steady-state `promotion_tier` values on `[0]` and `[1]`.
 
 ```terraform
 module "aurora" {
-  source = "github.com/dbl-works/terraform//aws/aurora?ref=v2021.07.01"
+  source = "github.com/dbl-works/terraform//aws/aurora?ref=v2026.11.18"
 
   # ... networking, security, credentials ...
 

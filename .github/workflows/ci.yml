@@ -203,6 +203,12 @@ jobs:
           terraform init
           terraform test
 
+      - name: module tests (aurora)
+        run: |
+          cd aws/aurora
+          terraform init
+          terraform test
+
       - name: module tests (waf)
         run: |
           cd aws/waf

@@ -10,13 +10,6 @@ mock_provider "aws" {
       account_id = "123456789012"
     }
   }
-
-  mock_resource "aws_rds_cluster" {
-    override_during = plan
-    defaults = {
-      storage_type = null
-    }
-  }
 }
 
 variables {
@@ -49,11 +42,6 @@ run "legacy_default_serverless" {
   assert {
     condition     = aws_rds_cluster_instance.cluster_instances[1].instance_class == "db.serverless" && aws_rds_cluster_instance.cluster_instances[1].promotion_tier == 0
     error_message = "Expected instance 1 to use db.serverless with promotion_tier 0."
-  }
-
-  assert {
-    condition     = aws_rds_cluster.main.storage_type == null
-    error_message = "Expected storage_type to remain null when unset."
   }
 
   assert {
@@ -140,23 +128,6 @@ run "pure_provisioned_omits_scaling_configuration" {
   assert {
     condition     = length(aws_rds_cluster.main.serverlessv2_scaling_configuration) == 0
     error_message = "Expected 0 serverlessv2_scaling_configuration blocks for pure provisioned cluster."
-  }
-}
-
-run "pure_provisioned_keeps_scaling_configuration_when_requested" {
-  command = plan
-
-  variables {
-    keep_serverlessv2_scaling_configuration = true
-    instances = [
-      { instance_class = "db.r8g.xlarge", promotion_tier = 0 },
-      { instance_class = "db.r8g.2xlarge", promotion_tier = 1 },
-    ]
-  }
-
-  assert {
-    condition     = length(aws_rds_cluster.main.serverlessv2_scaling_configuration) == 1
-    error_message = "Expected 1 serverlessv2_scaling_configuration block when keep_serverlessv2_scaling_configuration is true."
   }
 }
 

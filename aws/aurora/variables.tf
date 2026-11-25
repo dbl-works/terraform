@@ -88,13 +88,6 @@ variable "instances" {
   }
 }
 
-variable "keep_serverlessv2_scaling_configuration" {
-  type        = bool
-  default     = false
-  nullable    = false
-  description = "Retain the serverlessv2_scaling_configuration block on the cluster even when no instance uses db.serverless."
-}
-
 variable "engine_version" {
   default     = "17.4"
   type        = string

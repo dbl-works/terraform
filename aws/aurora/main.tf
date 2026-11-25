@@ -48,7 +48,7 @@ resource "aws_rds_cluster" "main" {
   iam_database_authentication_enabled = true
 
   dynamic "serverlessv2_scaling_configuration" {
-    for_each = local.has_serverless_instance || var.keep_serverlessv2_scaling_configuration ? [1] : []
+    for_each = local.has_serverless_instance ? [1] : []
 
     content {
       min_capacity = var.min_capacity
