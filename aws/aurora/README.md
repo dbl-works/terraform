@@ -118,8 +118,14 @@ module "redshift_serverless" {
 | `username` | Master username | `string` | `"root"` | no |
 | `password` | Master password | `string` | n/a | yes |
 | `instance_count` | Number of Aurora instances | `number` | `1` | no |
-| `instance_class` | Instance class for Aurora instances | `string` | `"db.r6g.large"` | no |
-| `engine_version` | Aurora PostgreSQL engine version | `string` | `"16.4"` | no |
+| `instance_class` | Instance class for Aurora instances | `string` | `"db.serverless"` | no |
+| `instances` | Per-instance class and optional failover promotion tier list (overrides `instance_count` and `instance_class`) | `list(object({ instance_class = string, promotion_tier = optional(number, 0) }))` | `null` | no |
+| `storage_type` | Aurora storage configuration (`"aurora"` or `"aurora-iopt1"`) | `string` | `null` | no |
+| `min_capacity` | Minimum Aurora Serverless v2 capacity in ACUs | `number` | `0.0` | no |
+| `max_capacity` | Maximum Aurora Serverless v2 capacity in ACUs | `number` | `2.0` | no |
+| `seconds_until_auto_pause` | Idle seconds before Serverless v2 auto-pause (300 to 86400, requires `min_capacity = 0`) | `number` | `null` | no |
+| `keep_serverlessv2_scaling_configuration` | Retain `serverlessv2_scaling_configuration` when no instance uses `db.serverless` | `bool` | `false` | no |
+| `engine_version` | Aurora PostgreSQL engine version | `string` | `"17.4"` | no |
 | `enable_replication` | Enable logical replication for zero-ETL | `bool` | `false` | no |
 | `backup_retention_period` | Backup retention period in days | `number` | `7` | no |
 | `allow_from_cidr_blocks` | CIDR blocks allowed to connect | `list(string)` | `[]` | no |
@@ -202,6 +208,34 @@ module "aurora" {
 resource "something" {
   database_url = module.aurora.database_url        # Points to cluster_endpoint
   security_group = module.aurora.database_security_group_id  # Points to security_group_id
+}
+```
+
+## I/O-Optimized storage and rolling provisioned cutover
+
+Set `storage_type = "aurora-iopt1"` to switch an existing cluster from Aurora Standard to Aurora I/O-Optimized storage in place. AWS enforces a 30-day cooldown before switching `storage_type` back to `"aurora"`. Leave `storage_type` unset (`null`) when AWS manages the default.
+
+The `instances` variable accepts an ordered list of `{ instance_class, promotion_tier }` objects and keeps `count`-indexed `aws_rds_cluster_instance.cluster_instances[N]` state addresses intact without state moves. While any entry uses `"db.serverless"`, the module keeps `serverlessv2_scaling_configuration` on the cluster. Once all entries are provisioned classes, the block is omitted unless `keep_serverlessv2_scaling_configuration = true`.
+
+To migrate a two-node Serverless v2 cluster (`[0]` and `[1]`) to provisioned instances with minimal downtime, run five applies in order.
+
+1. **Expand.** Replace `instance_count` and `instance_class` with `instances`. Keep `[0]` and `[1]` as `"db.serverless"` with `promotion_tier = 2`, and append `[2]` as a temporary provisioned reader with `promotion_tier = 1`.
+2. **Convert reader.** Change the existing serverless reader index to its target provisioned class at `promotion_tier = 0` so AWS modifies it while it serves no writes.
+3. **Planned failover.** Trigger a manual RDS cluster failover to promote a provisioned reader to writer. The old serverless writer becomes a reader.
+4. **Convert writer.** Change the demoted serverless index to its target provisioned class.
+5. **Contract.** Drop the temporary `[2]` entry from `instances` and set the steady-state `promotion_tier` values on `[0]` and `[1]`.
+
+```terraform
+module "aurora" {
+  source = "github.com/dbl-works/terraform//aws/aurora?ref=v2021.07.01"
+
+  # ... networking, security, credentials ...
+
+  storage_type = "aurora-iopt1"
+  instances = [
+    { instance_class = "db.r8g.xlarge", promotion_tier = 0 },
+    { instance_class = "db.r8g.xlarge", promotion_tier = 1 },
+  ]
 }
 ```
 
