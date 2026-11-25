@@ -3,6 +3,15 @@ locals {
   final_snapshot_identifier = "final-snapshot-${var.project}-${var.environment}"
   cluster_name              = "${var.project}-${var.environment}-cluster"
   name                      = var.name != null ? var.name : "${var.project}-${var.environment}${var.regional ? "-${var.region}" : ""}"
+  effective_instances = var.instances != null ? var.instances : [
+    for _ in range(var.instance_count) : {
+      instance_class = var.instance_class
+      promotion_tier = 0
+    }
+  ]
+  has_serverless_instance = anytrue([
+    for inst in local.effective_instances : inst.instance_class == "db.serverless"
+  ])
 }
 
 # Aurora PostgreSQL Cluster
@@ -22,6 +31,7 @@ resource "aws_rds_cluster" "main" {
   backup_retention_period      = var.backup_retention_period
   preferred_backup_window      = "03:00-04:00"
   preferred_maintenance_window = "sun:04:00-sun:05:00"
+  storage_type                 = var.storage_type
   storage_encrypted            = true
   kms_key_id                   = var.kms_key_arn
   deletion_protection          = true
@@ -38,7 +48,7 @@ resource "aws_rds_cluster" "main" {
   iam_database_authentication_enabled = true
 
   dynamic "serverlessv2_scaling_configuration" {
-    for_each = var.instance_class == "db.serverless" ? [1] : []
+    for_each = local.has_serverless_instance ? [1] : []
 
     content {
       min_capacity = var.min_capacity
@@ -74,11 +84,12 @@ resource "aws_rds_cluster" "main" {
 
 # Aurora PostgreSQL Cluster Instances with updated naming
 resource "aws_rds_cluster_instance" "cluster_instances" {
-  count = var.instance_count
+  count = length(local.effective_instances)
 
   identifier              = "${var.project}-${var.environment}-node-${count.index}"
   cluster_identifier      = aws_rds_cluster.main.cluster_identifier
-  instance_class          = var.instance_class
+  instance_class          = local.effective_instances[count.index].instance_class
+  promotion_tier          = local.effective_instances[count.index].promotion_tier
   engine                  = aws_rds_cluster.main.engine
   engine_version          = aws_rds_cluster.main.engine_version
   db_parameter_group_name = aws_db_parameter_group.instance.name

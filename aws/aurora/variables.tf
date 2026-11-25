@@ -49,6 +49,45 @@ variable "instance_count" {
   description = "Number of Nodes in the Aurora cluster. Use 2 for separate writer/reader nodes."
 }
 
+variable "storage_type" {
+  type        = string
+  default     = null
+  nullable    = true
+  description = "Aurora cluster storage configuration ('aurora' for Aurora Standard or 'aurora-iopt1' for Aurora I/O-Optimized). Leave null to let AWS manage the default."
+
+  validation {
+    condition     = var.storage_type == null ? true : contains(["aurora", "aurora-iopt1"], var.storage_type)
+    error_message = "storage_type must be null, \"aurora\", or \"aurora-iopt1\"."
+  }
+}
+
+variable "instances" {
+  type = list(object({
+    instance_class = string
+    promotion_tier = optional(number, 0)
+  }))
+  default     = null
+  nullable    = true
+  description = "Per-instance class and failover promotion tier list. Overrides instance_count and instance_class while preserving count-indexed state addresses."
+
+  validation {
+    condition     = var.instances == null ? true : length(var.instances) > 0
+    error_message = "instances must contain at least one element when non-null."
+  }
+
+  validation {
+    condition     = var.instances == null ? true : alltrue([for i in var.instances : trimspace(i.instance_class) != ""])
+    error_message = "Every entry in instances must specify a non-empty instance_class."
+  }
+
+  validation {
+    condition = var.instances == null ? true : alltrue([
+      for i in var.instances : i.promotion_tier >= 0 && i.promotion_tier <= 15 && floor(i.promotion_tier) == i.promotion_tier
+    ])
+    error_message = "Every entry in instances must specify an integer promotion_tier between 0 and 15."
+  }
+}
+
 variable "engine_version" {
   default     = "17.4"
   type        = string
